@@ -9,6 +9,7 @@ include('../../../layout/admin/datos_sesion_user.php');
 
 //$id = $_POST['id'];
 $id_stc = $_POST['idstc'];
+$usuario = $_POST['usuario'];
 $fecha_ingreso = $_POST['fechaingreso'];
 $medio_ingreso = $_POST['medio_ingreso'];
 $ticket_externo = $_POST['ticketexterno'];
@@ -25,7 +26,16 @@ $medio_contacto = $_POST['medio_contacto'];
 $anio_mes = $_POST['anio_mes'];
 $contador = $_POST['contador'];
 
-$sql = "INSERT INTO stc (id_stc, fecha_ingreso, medio_ingreso, ticket_externo, tipo_servicio, id_producto, falla, observacion, cliente, ciudad, proyecto, estado, persona_contacto, email_contacto, anio_mes, contador) VALUES (:id_stc, :fechaingreso, :medio_ingreso, :ticket_externo, :servicio, :id_producto, :falla, :observacion, :cliente, :ciudad, :proyecto, :estado, :persona_contacto, :medio_contacto, :anio_mes, :contador)";
+
+$evidencias = $_POST['archivo_adjunto'];
+$nombreDelArchivo = date( "Y-m-d-h-i-s");
+$filename = $nombreDelArchivo."__".$_FILES['archivo_adjunto']['name'];
+$location = "../../../img_uploads/".$filename;
+
+move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'],$location);
+
+
+$sql = "INSERT INTO stc (id_stc, fecha_ingreso, medio_ingreso, ticket_externo, tipo_servicio, id_producto, falla, observacion, cliente, ciudad, proyecto, estado, persona_contacto, email_contacto, anio_mes, contador, id_usuario, evidencias) VALUES (:id_stc, :fechaingreso, :medio_ingreso, :ticket_externo, :servicio, :id_producto, :falla, :observacion, :cliente, :ciudad, :proyecto, :estado, :persona_contacto, :medio_contacto, :anio_mes, :contador, :usuario, :evidencias)";
 
 
 $sentencia = $pdo->prepare($sql);
@@ -46,6 +56,8 @@ $sentencia->bindParam(':persona_contacto', $persona_contacto);
 $sentencia->bindParam(':medio_contacto', $medio_contacto);
 $sentencia->bindParam(':anio_mes', $anio_mes);
 $sentencia->bindParam(':contador', $contador);
+$sentencia->bindParam(':usuario', $usuario);
+$sentencia->bindParam(':evidencias', $filename);
 
 if($sentencia->execute()){
 //echo "¡Usuario creado exitosamente!"; // O maneja el mensaje/logica de éxito

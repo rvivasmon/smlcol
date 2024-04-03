@@ -433,6 +433,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Crear Usuario</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="<?php echo $URL;?>admin/ti_usuarios/index_cargos.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Listado de Cargos</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo $URL;?>admin/ti_usuarios/create_cargo.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Crear Cargo</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item">
