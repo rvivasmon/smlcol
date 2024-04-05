@@ -16,13 +16,13 @@ include('controller_show.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Crear Nuevo Usuario</h1>
+                    <h1 class="m-0">Visor de Usuarios</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
-            <div class="card card-blue">
+            <div class="card card-info">
                 <div class="card-header">
-                    Introduzca la información correspondiente
+                    Detalle de Usuario
                 </div>
                 <div class="card-body">
                         <div class="row">

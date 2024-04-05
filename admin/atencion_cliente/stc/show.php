@@ -20,115 +20,197 @@ include('controller_show.php');
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
-            <div class="card card-blue">
+            <div class="card card-info">
                 <div class="card-header">
                     Detalle del Ticket
                 </div>
                 <div class="card-body">
-                <div class="row">
-                            <div class="col-md-0">
-                                <div class="form-group">
-                                    <label for=""></label>
-                                    <input type="text" name="idstc" class="form-control" value="<?php echo $id_stc; ?>" hidden>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-0">
+                                        <div class="form-group">
+                                            <label for=""></label>
+                                            <input type="text" name="idstc" class="form-control" value="<?php echo $id_stc; ?>" hidden>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1.5">
+                                        <div class="form-group">
+                                            <label for="">Fecha de Ingreso</label>
+                                            <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value= "<?php echo $fecha_ingreso; ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="">Medio de Ingreso</label>
+                                            <input class="form-control"  id="medio_ingreso" name="medio_ingreso" value="<?php echo $medio_ingreso; ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="">Ticket Externo</label>
+                                            <input type="text" name="ticketexterno" class="form-control" value="<?php echo $ticket_externo; ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="">Tipo de Servicio</label>
+                                            <input name="tiposervicio" id="tiposervicio" class="form-control"  value="<?php echo $servicio; ?>" disabled>                                      
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="">ID Producto</label>
+                                            <input type="text" name="idproducto" class="form-control" value="<?php echo $id_producto; ?>" disabled>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-1.5">
-                                <div class="form-group">
-                                    <label for="">Fecha de Ingreso</label>
-                                    <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value= "<?php echo $fecha_ingreso; ?>" disabled>
+                            
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="">Cliente</label>
+                                            <input name="idcliente" id="idcliente" class="form-control" value="<?php echo $cliente; ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="">Ciudad</label>
+                                            <input name="idciudad" id="idciudad" class="form-control" value="<?php echo $ciudad; ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="">Proyecto</label>
+                                            <input type="text" name="proyecto" class="form-control" value="<?php echo $proyecto; ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="">Estado</label>
+                                            <input name="idestado" id="idestado" class="form-control" value="<?php echo $estado; ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="">Persona Contacto</label>
+                                            <input type="text" name="personacontacto" class="form-control" value="<?php echo $persona_contacto; ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="">Medio de Contacto</label>
+                                            <input type="text" name="medio_contacto" class="form-control" value="<?php echo $medio_contacto; ?>" disabled>
+                                        </div>
+                                    </div>                            
                                 </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="">Medio de Ingreso</label>
-                                    <input class="form-control"  id="medio_ingreso" name="medio_ingreso" value="<?php echo $medio_ingreso; ?>" disabled>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="">Ticket Externo</label>
-                                    <input type="text" name="ticketexterno" class="form-control" value="<?php echo $ticket_externo; ?>" disabled>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="">Tipo de Servicio</label>
-                                    <input name="tiposervicio" id="tiposervicio" class="form-control"  value="<?php echo $servicio; ?>" disabled>                                      
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="">ID Producto</label>
-                                    <input type="text" name="idproducto" class="form-control" value="<?php echo $id_producto; ?>" disabled>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Falla</label>
+                                            <textarea name="falla" id="" cols="30" rows="4" class="form-control" disabled><?php echo $falla; ?></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Observación</label>
+                                            <textarea name="observacion" id="" cols="30" rows="4" class="form-control" disabled><?php echo $observacion; ?></textarea>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="archivo_adjunto">Archivo Adjunto</label>
+                                        <br>
+                                        <output id="list" style="position: relative; width: 200px; height: 200px; overflow: hidden;"></output>
 
-                        <div class="row">
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="">Cliente</label>
-                                    <input name="idcliente" id="idcliente" class="form-control" value="<?php echo $cliente; ?>" disabled>
+                                        <script>
+                                            var currentImageIndex = 0; // Índice de la imagen actual
+
+                                            function archivo(evt) {
+                                            var files = evt.dataTransfer.files; // FileList object
+
+                                            for (var i = 0, f; f = files[i]; i++) {
+                                            var reader = new FileReader();
+                                            // Si el archivo es una imagen
+                                                if (f.type.match('image.*')) {
+                                                    reader.onload = (function(theFile) {
+                                                        return function(e) {
+                                                        // Insertamos la imagen
+                                                        var img = document.createElement('img');
+                                                        img.src = e.target.result;
+                                                        img.width = 200; // Tamaño de la imagen
+                                                        img.style.display = "none"; // Ocultamos la imagen
+                                                        document.getElementById("list").appendChild(img);
+                                                    };
+                                                        })(f);
+                                                    }
+                                                        // Lectura del archivo
+                                                        reader.readAsDataURL(f);
+                                                    }
+                                                        showImage(currentImageIndex); // Mostramos la primera imagen
+                                                        }
+
+                                                        document.getElementById('file').addEventListener('change', archivo, false);
+
+                                                        function showImage(index) {
+                                                        var images = document.getElementById("list").getElementsByTagName("img");
+                                                        for (var i = 0; i < images.length; i++) {
+                                                        images[i].style.display = "none"; // Ocultamos todas las imágenes
+                                                        }
+                                                        images[index].style.display = "block"; // Mostramos la imagen actual
+                                                        }
+
+                                                    function nextImage() {
+                                                    var images = document.getElementById("list").getElementsByTagName("img");
+                                                    currentImageIndex = (currentImageIndex + 1) % images.length; // Avanzamos al siguiente índice circularmente
+                                                        showImage(currentImageIndex);
+                                                }
+
+                                                    function prevImage() {
+                                                        var images = document.getElementById("list").getElementsByTagName("img");
+                                                        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Retrocedemos al índice anterior circularmente
+                                                    showImage(currentImageIndex);
+                                                }
+                                        </script>
+
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="">Ciudad</label>
-                                    <input name="idciudad" id="idciudad" class="form-control" value="<?php echo $ciudad; ?>" disabled>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="">Proyecto</label>
-                                    <input type="text" name="proyecto" class="form-control" value="<?php echo $proyecto; ?>" disabled>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="">Estado</label>
-                                    <input name="idestado" id="idestado" class="form-control" value="<?php echo $estado; ?>" disabled>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="">Persona Contacto</label>
-                                    <input type="text" name="personacontacto" class="form-control" value="<?php echo $persona_contacto; ?>" disabled>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="">Medio de Contacto</label>
-                                    <input type="text" name="medio_contacto" class="form-control" value="<?php echo $medio_contacto; ?>" disabled>
-                                </div>
-                            </div>                            
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Falla</label>
-                                    <textarea name="falla" id="" cols="30" rows="4" class="form-control" disabled><?php echo $falla; ?></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Observación</label>
-                                    <textarea name="observacion" id="" cols="30" rows="4" class="form-control" disabled><?php echo $observacion; ?></textarea>
-                                </div>
-                            </div>
-                        </div>
+                        </div>                      
+                    </div>
+
                         <hr>
 
-                        <div class="row">
-                            <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="form-group">
                                 <a href="<?php echo $URL."admin/atencion_cliente/stc"; ?>" class="btn btn-default btn-block">Volver</a>
                             </div>
-                            <div class="col-md-2">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6">                                
+                                        <button type="button" class="btn btn-default" onclick="prevImage()">Anterior</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="button" class="btn btn-default" onclick="nextImage()">Siguiente</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
                 </div>
-            </div>
+            </div>    
         </div><!-- /.container-fluid -->
     </div>
 </div>
+
 <?php include('../../../layout/admin/parte2.php');?>

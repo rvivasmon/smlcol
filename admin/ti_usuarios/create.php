@@ -64,7 +64,7 @@ include('../../layout/admin/parte1.php');
                                     <label for="">Cargo</label>
                                     <select name="id_cargo" id="id_cargo" class="form-control" required>
                                         <?php 
-                                        $query_cargo = $pdo->prepare('SELECT * FROM cargo');
+                                        $query_cargo = $pdo->prepare('SELECT * FROM cargo ORDER BY descripcion ASC');
                                         $query_cargo->execute();
                                         $cargos = $query_cargo->fetchAll(PDO::FETCH_ASSOC);
                                         foreach($cargos as $cargo) {

@@ -28,6 +28,7 @@ $contador = $_POST['contador'];
 
 
 $evidencias = $_POST['archivo_adjunto'];
+
 $nombreDelArchivo = date( "Y-m-d-h-i-s");
 $filename = $nombreDelArchivo."__".$_FILES['archivo_adjunto']['name'];
 $location = "../../../img_uploads/".$filename;

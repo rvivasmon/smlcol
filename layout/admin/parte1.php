@@ -501,6 +501,76 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </ul>
           </li>
           <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                MENÚ PLANTA
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo $URL;?>admin/planta" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Listado ID Producto</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo $URL;?>admin/planta/create.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Crear ID Producto</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo $URL;?>admin/ti_usuarios/index_cargos.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>QQQQQQQQQQQQQQQQQQQQ</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo $URL;?>admin/ti_usuarios/create_cargo.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>QQQQQQQQQQQQQQQQQQQ</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                MENÚ TÉCNICO
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo $URL;?>admin/ti_usuarios" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Listado OST Asignadas</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo $URL;?>admin/ti_usuarios/create.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Crear Usuario</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo $URL;?>admin/ti_usuarios/index_cargos.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Listado de Cargos</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo $URL;?>admin/ti_usuarios/create_cargo.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Crear Cargo</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
             <a href="<?php echo $URL;?>/login/controller_cerrar_sesion.php" class="nav-link" style="background-color: #ca0a0b">
               <i class="nav-icon fas fa-door-closed"></i>
               <p>

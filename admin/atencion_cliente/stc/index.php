@@ -109,6 +109,7 @@ include('../../../app/config/conexion.php');
                                     <th>Estado</th>
                                     <th>Persona Contacto</th>
                                     <th>Medio de Contacto</th>
+                                    <th>Archivos Adjuntos</th>
                                     <th><center>Acciones</center></th>
                                 </tr>
                             </thead>
@@ -135,6 +136,7 @@ include('../../../app/config/conexion.php');
                                     $estado = $stc['nombre_estado'];
                                     $persona_contacto = $stc['persona_contacto'];
                                     $medio_contacto = $stc['email_contacto'];
+                                    $evidencia = $stc['evidencias'];
                                     $contador = $contador + 1;
                                 ?>
                                     <tr>
@@ -153,6 +155,8 @@ include('../../../app/config/conexion.php');
                                         <td><?php echo $estado; ?></td>
                                         <td><?php echo $persona_contacto; ?></td>
                                         <td><?php echo $medio_contacto; ?></td>
+                                        <!--<td><?php echo $evidencia; ?></td>-->
+                                        <td><img src="<?php echo $URL."/img_uploads/". $stc['evidencias'];?>" width="50px" alt=""></td>
                                         <td>
                                             <center>
                                                 <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
