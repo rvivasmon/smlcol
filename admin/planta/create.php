@@ -178,6 +178,27 @@ include('../../layout/admin/datos_sesion_user.php');
                                     <br>
                                     <output id="list" style="position: relative; width: 200px; height: 200px; overflow: hidden;"></output>
                                     <input type="file" name="archivo_adjunto" id="file" class="form-control-file" multiple>
+                                    
+                                    <?php
+// Generar el código de barras
+$barcode_value = 'www.example.com'; // Cambia esto por el valor deseado del código de barras
+$barcode_style = array(
+    'border' => 2,
+    'vpadding' => 'auto',
+    'hpadding' => 'auto',
+    'fgcolor' => array(0,0,0),
+    'bgcolor' => false,
+    'module_width' => 1,
+    'module_height' => 1
+);
+$pdf->write1DBarcode($barcode_value, 'C39', 20, 100, '', 40, 0.2, $barcode_style, 'N');
+
+// Generar el código QR
+$qr_code_value = 'www.example.com'; // Cambia esto por el valor deseado del código QR
+$pdf->write2DBarcode($qr_code_value, 'QRCODE,L', 20, 150, 40, 40, $style, 'N');
+?>
+
+
 
                                     <script>
                                             var currentImageIndex = 0; // Índice de la imagen actual

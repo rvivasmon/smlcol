@@ -127,58 +127,9 @@ include('controller_show.php');
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="archivo_adjunto">Archivo Adjunto</label>
-                                        <br>
-                                        <output id="list" style="position: relative; width: 200px; height: 200px; overflow: hidden;"></output>
-
-                                        <script>
-                                            var currentImageIndex = 0; // Índice de la imagen actual
-
-                                            function archivo(evt) {
-                                            var files = evt.dataTransfer.files; // FileList object
-
-                                            for (var i = 0, f; f = files[i]; i++) {
-                                            var reader = new FileReader();
-                                            // Si el archivo es una imagen
-                                                if (f.type.match('image.*')) {
-                                                    reader.onload = (function(theFile) {
-                                                        return function(e) {
-                                                        // Insertamos la imagen
-                                                        var img = document.createElement('img');
-                                                        img.src = e.target.result;
-                                                        img.width = 200; // Tamaño de la imagen
-                                                        img.style.display = "none"; // Ocultamos la imagen
-                                                        document.getElementById("list").appendChild(img);
-                                                    };
-                                                        })(f);
-                                                    }
-                                                        // Lectura del archivo
-                                                        reader.readAsDataURL(f);
-                                                    }
-                                                        showImage(currentImageIndex); // Mostramos la primera imagen
-                                                        }
-
-                                                        document.getElementById('file').addEventListener('change', archivo, false);
-
-                                                        function showImage(index) {
-                                                        var images = document.getElementById("list").getElementsByTagName("img");
-                                                        for (var i = 0; i < images.length; i++) {
-                                                        images[i].style.display = "none"; // Ocultamos todas las imágenes
-                                                        }
-                                                        images[index].style.display = "block"; // Mostramos la imagen actual
-                                                        }
-
-                                                    function nextImage() {
-                                                    var images = document.getElementById("list").getElementsByTagName("img");
-                                                    currentImageIndex = (currentImageIndex + 1) % images.length; // Avanzamos al siguiente índice circularmente
-                                                        showImage(currentImageIndex);
-                                                }
-
-                                                    function prevImage() {
-                                                        var images = document.getElementById("list").getElementsByTagName("img");
-                                                        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Retrocedemos al índice anterior circularmente
-                                                    showImage(currentImageIndex);
-                                                }
-                                        </script>
+                                        <center>
+                                            <img src="<?php echo $URL."/img_uploads/".$evidencia;?>" width="200%" alt="">
+                                        </center>
 
                                     </div>
                                 </div>
@@ -191,7 +142,7 @@ include('controller_show.php');
                     <div class="row">
                         <div class="col-md-9">
                             <div class="form-group">
-                                <a href="<?php echo $URL."admin/atencion_cliente/stc"; ?>" class="btn btn-default btn-block">Volver</a>
+                                <a href="<?php echo $URL."admin/atencion_cliente/stc"; ?>" class="btn btn-default btn-block-secondary">Volver</a>
                             </div>
                         </div>
                         <div class="col-md-3">
