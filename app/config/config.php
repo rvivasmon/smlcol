@@ -23,7 +23,7 @@ define('BD_SISTEMA','smartled_BD_SIGCP_2024');
 //$URL = 'http://192.168.1.8/www.smlcol.com/';
 
 // SmartLed3 LAN
-$URL = 'http://192.168.0.100/www.smlcol.com/';
+$URL = 'http://192.168.0.234/www.smlcol.com/';
 
 // SmartLed
 //$URL = 'http://192.168.0.124/www.smlcol.com/';
@@ -45,5 +45,9 @@ if(isset($_SESSION['mensaje'])){
 <?php
 unset($_SESSION['mensaje']);
 }
-?>
 
+
+$fecha_actual = date(format: 'Y-m-d');
+$dia_actual = date(format: 'd');
+$mes_actual = date(format: 'm');
+$anio_actual = date(format: 'Y');

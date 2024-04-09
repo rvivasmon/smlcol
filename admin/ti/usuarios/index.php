@@ -14,7 +14,7 @@ include('../../layout/admin/datos_sesion_user.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Cargos SML</h1>
+                <h1 class="m-0">Usuarios SML</h1>
                     <div class="card card-blue">
                         <div class="card-header">
                             ACTIVOS
@@ -25,25 +25,37 @@ include('../../layout/admin/datos_sesion_user.php');
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Cargos</th>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Usuario</th>
+                                    <th>Cargo</th>
+                                    <th>Estado</th>
                                     <th><center>Acciones</center></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 $contador = 0;
-                                $query = $pdo->prepare('SELECT * FROM cargo');
+                                $query = $pdo->prepare('SELECT usuarios.*, cargo.descripcion AS nombre_cargo, estado.estado_general as estado_general FROM usuarios JOIN cargo ON usuarios.id_cargo = cargo.id_cargo JOIN estado ON usuarios.estado = estado.id /*WHERE estado = "1"*/');
 
                                 $query->execute();
-                                $cargos = $query->fetchAll(PDO::FETCH_ASSOC);
-                                foreach ($cargos as $cargo){
-                                    $id = $cargo['id_cargo'];
-                                    $descripcion = $cargo['descripcion'];
+                                $usuarios = $query->fetchAll(PDO::FETCH_ASSOC);
+                                foreach ($usuarios as $usuario){
+                                    $id = $usuario['id'];
+                                    $nombres = $usuario['nombre'];
+                                    $correos = $usuario['email'];
+                                    $usuario_uso = $usuario['usuario'];
+                                    $cargo = $usuario['nombre_cargo'];
+                                    $estado = $usuario['estado_general'];
                                     $contador = $contador + 1;
                                 ?>
                                     <tr>
                                         <td><?php echo $contador; ?></td>
-                                        <td><?php echo $descripcion; ?></td>
+                                        <td><?php echo $nombres; ?></td>
+                                        <td><?php echo $correos; ?></td>
+                                        <td><?php echo $usuario_uso; ?></td>
+                                        <td><?php echo $cargo; ?></td>
+                                        <td><?php echo $estado; ?></td>
                                         <td>
                                             <center>
                                                 <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
@@ -74,7 +86,7 @@ include('../../layout/admin/datos_sesion_user.php');
             "pageLength": 5,
             "language": {
                 "emptyTable": "No hay información",
-                "info": "Mostrando_START_ a _END_ de _TOTAL_ Usuarios",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Usuarios",
                 "infoEmpty": "Mostrando 0 a 0 de 0 Usuarios",
                 "infoFiltered": "(Filtrado de _MAX_ total Usuarios)",
                 "infoPostFix": "",

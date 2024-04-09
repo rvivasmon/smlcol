@@ -38,7 +38,7 @@ include('../../layout/admin/parte1.php');
 
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/ti_usuarios";?>" class="btn btn-default btn-block">Cancelar</a>
+                                <a href="<?php echo $URL."admin/ti_usuarios/index_cargos.php";?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Registrar Cargo</button>

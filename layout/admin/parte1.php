@@ -57,7 +57,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Brand Logo -->
     <a href="<?php echo $URL?>/admin" class="brand-link">
       <img src="<?php echo $URL?>/public/dist/img/smlblancoovalado.png" alt="SML Logo" class="brand-image img-circle elevation-3" style="opacity: 1.9">
-      <span class="brand-text font-weight-light">SML Col</span>
+      <span class="brand-text font-weight-light">SML Col</span> 
     </a>
 
     <!-- Sidebar -->
@@ -576,8 +576,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <p>
                 Cerrar Sesión
               </p>
-            </a>
-            
+            </a>            
           </li>
         </ul>
       </nav>
