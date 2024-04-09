@@ -1,14 +1,14 @@
 <?php 
 
-include('../../app/config/config.php');
-include('../../app/config/conexion.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
 
-include('../../layout/admin/sesion.php');
-include('../../layout/admin/datos_sesion_user.php');
+include('../../../layout/admin/sesion.php');
+include('../../../layout/admin/datos_sesion_user.php');
 
 ?>
 
-<?php include('../../layout/admin/parte1.php');?>
+<?php include('../../../layout/admin/parte1.php');?>
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
@@ -46,9 +46,9 @@ include('../../layout/admin/datos_sesion_user.php');
                                                 <td><?php echo $descripcion; ?></td>
                                                 <td>
                                                     <center>
-                                                        <a href="show_cargo.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                        <a href="edit_cargo.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
-                                                        <a href="delete_cargo.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
+                                                        <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
+                                                        <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
+                                                        <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
                                                     </center>
                                                 </td>
                                             </tr>
@@ -66,7 +66,7 @@ include('../../layout/admin/datos_sesion_user.php');
     </div>
 </div>
 
-<?php include('../../layout/admin/parte2.php');?>
+<?php include('../../../layout/admin/parte2.php');?>
 
 <script>
     $(function () {

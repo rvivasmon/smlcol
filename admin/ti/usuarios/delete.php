@@ -1,14 +1,14 @@
 <?php 
 
-include('../../app/config/config.php');
-include('../../app/config/conexion.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
 
-include('../../layout/admin/sesion.php');
-include('../../layout/admin/datos_sesion_user.php');
+include('../../../layout/admin/sesion.php');
+include('../../../layout/admin/datos_sesion_user.php');
 
 ?>
 
-<?php include('../../layout/admin/parte1.php');
+<?php include('../../../layout/admin/parte1.php');
 
 $id_get = $_GET['id'];
 
@@ -96,7 +96,7 @@ foreach ($usuarios as $usuario){
 
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/ti_usuarios/";?>" class="btn btn-default btn-block">Cancelar</a>
+                                <a href="<?php echo $URL."admin/ti/usuarios/";?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" onclick="return confirm('¿Seguro de querer eliminar al usuario?')" class="btn btn-danger btn-block">Eliminar Usuario</button>
@@ -110,4 +110,4 @@ foreach ($usuarios as $usuario){
         </div><!-- /.container-fluid -->
     </div>
 </div>
-<?php include('../../layout/admin/parte2.php');?>
+<?php include('../../../layout/admin/parte2.php');?>

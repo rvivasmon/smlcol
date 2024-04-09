@@ -1,10 +1,10 @@
 <?php 
 
-include('../../app/config/config.php');
-include('../../app/config/conexion.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
 
-include('../../layout/admin/sesion.php');
-include('../../layout/admin/datos_sesion_user.php');
+include('../../../layout/admin/sesion.php');
+include('../../../layout/admin/datos_sesion_user.php');
 
 $nombre = $_POST['nombre'];
 $email = $_POST['email'];
@@ -35,7 +35,7 @@ if($sentencia->execute()){
             'text' => '¡Usuario creado exitosamente!',
             'icon' => 'success'
         );
-        header('Location: '.$URL.'admin/ti_usuarios/');
+        header('Location: '.$URL.'admin/ti/usuarios/');
         exit;
 }else{
     session_start();
@@ -44,7 +44,7 @@ if($sentencia->execute()){
             'text' => 'Error al introducir la información',
             'icon' => 'error'
         );
-        header('Location: '.$URL.'admin/ti_usuarios/create.php');
+        header('Location: '.$URL.'admin/ti/usuarios/create.php');
     exit;
 }
 }else{
@@ -55,7 +55,7 @@ if($sentencia->execute()){
         'text' => 'Las contraseñas no coinciden',
         'icon' => 'error'
     );
-    header('Location: '.$URL.'admin/ti_usuarios/create.php'); // Redirigir de vuelta a la página anterior
+    header('Location: '.$URL.'admin/ti/usuarios/create.php'); // Redirigir de vuelta a la página anterior
     exit;
 }
 

@@ -1,7 +1,7 @@
 <?php
 
-include('../../app/config/config.php');
-include('../../app/config/conexion.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
 
 $id_usuario = $_POST['id_usuario'];
 $estado_inactivo = '2';
