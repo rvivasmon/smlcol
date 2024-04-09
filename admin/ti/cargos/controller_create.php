@@ -1,10 +1,10 @@
 <?php 
 
-include('../../app/config/config.php');
-include('../../app/config/conexion.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
 
-include('../../layout/admin/sesion.php');
-include('../../layout/admin/datos_sesion_user.php');
+include('../../../layout/admin/sesion.php');
+include('../../..7layout/admin/datos_sesion_user.php');
 
 $cargo = $_POST['cargo'];
 
@@ -23,7 +23,7 @@ if($sentencia->execute()){
             'text' => '¡Usuario creado exitosamente!',
             'icon' => 'success'
         );
-        header('Location: '.$URL.'admin/ti_usuarios/index_cargos.php');
+        header('Location: '.$URL.'admin/ti/cargos/index.php');
         exit;
 }else{
     session_start();
@@ -32,7 +32,7 @@ if($sentencia->execute()){
             'text' => 'Error al introducir la información',
             'icon' => 'error'
         );
-        header('Location: '.$URL.'admin/ti_usuarios/create_cargo.php');
+        header('Location: '.$URL.'admin/ti/cargos/create.php');
     exit;
 }
 
