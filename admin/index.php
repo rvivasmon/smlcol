@@ -6,7 +6,7 @@ include('../app/config/conexion.php');
 include('../layout/admin/sesion.php');
 include('../layout/admin/datos_sesion_user.php');
 
-include('ti_usuarios/controller_index.php');
+include('controller_index.php');
 
 ?>
 
