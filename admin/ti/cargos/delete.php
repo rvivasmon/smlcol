@@ -17,11 +17,7 @@ $query = $pdo->prepare("SELECT usuarios.*, cargo.descripcion AS nombre_cargo, es
 $query->execute();
 $usuarios = $query->fetchAll(PDO::FETCH_ASSOC);
 foreach ($usuarios as $usuario){
-    $id = $usuario['id'];
-    $nombres = $usuario['nombre'];
-    $correos = $usuario['email'];
-    $usuario_uso = $usuario['usuario'];
-    $cargo = $usuario['nombre_cargo'];
+    $rol = $usuario['nombre_cargo'];
     $estado = $usuario['nombre_estado'];
     $valor_actual_en_edicion = $usuario['id_cargo'];
 
@@ -48,50 +44,12 @@ foreach ($usuarios as $usuario){
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Nombre</label>
-                                    <input type="text" name="nombre" value="<?php echo $nombres;?>" class="form-control" placeholder="Nombre Completo" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Correo Electrónico</label>
-                                    <input type="text" name="email" value="<?php echo $correos;?>" class="form-control" placeholder="Email" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Usuario</label>
-                                    <input type="text" name="usuario" value="<?php echo $usuario_uso;?>" class="form-control" placeholder="Usuario" readonly>
-                                    <input type="text" name="id_usuario" value="<?php echo $id_get;?>" hidden>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
                                     <label for="">Cargo</label>
-                                    <select name="id_cargo" id="id_cargo" class="form-control" readonly>
-                                        
-                                        <?php
-                                        $query_cargo = $pdo->prepare('SELECT * FROM cargo');
-                                        $query_cargo->execute();
-                                        $cargos = $query_cargo->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach($cargos as $cargo) {
-
-                                            $id_cargo = $cargo['id_cargo'];
-                                            $cargo_descripcion = $cargo['descripcion'];
-                                            $selected = ($id_cargo == $valor_actual_en_edicion) ? 'selected' : '';
-                                            ?>
-                                            <option value="<?php echo $id_cargo; ?>" <?php echo $selected; ?>><?php echo $cargo_descripcion; ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
+                                    <input type="text" name="cargo" value="<?php echo $rol;?>" class="form-control" placeholder="Nombre Completo" readonly>
                                 </div>
                             </div>
-                        
                         </div>
+
                         <hr>
 
                         <div class="row">
