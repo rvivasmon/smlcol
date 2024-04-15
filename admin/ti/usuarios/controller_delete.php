@@ -18,7 +18,7 @@ if ($sentencia->execute()) {
 } else {
     // Maneja los posibles errores durante la ejecución
     $errorInfo = $sentencia->errorInfo();
-          echo "Error al eliminar al usuario: " . $errorInfo[2]; // Mensaje de error con detalles
+        echo "Error al eliminar al usuario: " . $errorInfo[2]; // Mensaje de error con detalles
 }
 
 

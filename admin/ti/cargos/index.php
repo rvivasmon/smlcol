@@ -6,9 +6,10 @@ include('../../../app/config/conexion.php');
 include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
 
+include('../../../layout/admin/parte1.php');
+
 ?>
 
-<?php include('../../../layout/admin/parte1.php');?>
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
@@ -32,7 +33,7 @@ include('../../../layout/admin/datos_sesion_user.php');
                                     <tbody>
                                         <?php
                                         $contador = 0;
-                                        $query = $pdo->prepare('SELECT * FROM cargo');
+                                        $query = $pdo->prepare('SELECT * FROM cargo WHERE estado = "1"');
 
                                         $query->execute();
                                         $cargos = $query->fetchAll(PDO::FETCH_ASSOC);

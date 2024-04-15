@@ -12,14 +12,13 @@ include('../../../layout/admin/datos_sesion_user.php');
 
 $id_get = $_GET['id'];
 
-$query = $pdo->prepare("SELECT usuarios.*, cargo.descripcion AS nombre_cargo, estado.estado_general AS nombre_estado FROM usuarios JOIN cargo ON usuarios.id_cargo = cargo.id_cargo JOIN estado ON usuarios.estado = estado.id WHERE usuarios.id = '$id_get'");
+$query = $pdo->prepare("SELECT * FROM cargo WHERE id_cargo = '$id_get'");
 
 $query->execute();
-$usuarios = $query->fetchAll(PDO::FETCH_ASSOC);
-foreach ($usuarios as $usuario){
-    $rol = $usuario['nombre_cargo'];
-    $estado = $usuario['nombre_estado'];
-    $valor_actual_en_edicion = $usuario['id_cargo'];
+$cargos = $query->fetchAll(PDO::FETCH_ASSOC);
+foreach ($cargos as $cargo){
+    $id = $cargo['id_cargo'];
+    $rol = $cargo['descripcion'];
 
 }
 
@@ -41,11 +40,13 @@ foreach ($usuarios as $usuario){
                 </div>
                 <div class="card-body">
                     <form action="controller_delete.php" method="post">
+
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="">Cargo</label>
-                                    <input type="text" name="cargo" value="<?php echo $rol;?>" class="form-control" placeholder="Nombre Completo" readonly>
+                                    <label for="">Rol o Cargo</label>
+                                    <input type="text" name="rol" value="<?php echo $rol;?>" class="form-control" readonly>
+                                    <input type="text" name='id_cargo' value="<?php echo $id_get;?>" hidden>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +55,7 @@ foreach ($usuarios as $usuario){
 
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/ti/cargos/index.php";?>" class="btn btn-default btn-block">Cancelar</a>
+                                <a href="<?php echo $URL."admin/ti/cargos/";?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" onclick="return confirm('¿Seguro de querer eliminar al usuario?')" class="btn btn-danger btn-block">Eliminar Usuario</button>
