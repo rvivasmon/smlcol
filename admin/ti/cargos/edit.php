@@ -15,7 +15,9 @@ $query = $pdo->prepare("SELECT * FROM cargo WHERE id_cargo = '$id_get'");
 $query->execute();
 $cargos = $query->fetchAll(PDO::FETCH_ASSOC);
 foreach ($cargos as $cargo){
+    $id = $cargo['id_cargo'];
     $rol = $cargo['descripcion'];
+
 }
 
 ?>
@@ -36,23 +38,25 @@ foreach ($cargos as $cargo){
                 </div>
                 <div class="card-body">
                     <form action="controller_edit.php" method="post">
+
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="">Cargo</label>
-                                    <input type="text" name="descripcioncargo" value="<?php echo $rol;?>" class="form-control" required>
+                                    <label for="">Rol o Cargo</label>
+                                    <input type="text" name="rol" value="<?php echo $rol;?>" class="form-control" placeholder="Usuario">
+                                    <input type="text" name="id_cargo" value="<?php echo $id_get;?>" hidden>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <hr>
 
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/ti/cargos/index.php";?>" class="btn btn-default btn-block">Cancelar</a>
+                                <a href="<?php echo $URL."admin/ti/cargos/";?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
-                                <button type="submit" onclick="return confirm('Asegurese de diligenciar correctamente los datos')" class="btn btn-success btn-block">Actualizar Rol</button>
+                                <button type="submit" onclick="return confirm('Asegurese de diligenciar correctamente los datos')" class="btn btn-success btn-block">Actualizar Usuario</button>
                             </div>
                         </div>
 

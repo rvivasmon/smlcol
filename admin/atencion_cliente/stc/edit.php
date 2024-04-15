@@ -6,9 +6,7 @@ include('../../../app/config/conexion.php');
 include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
 
-?>
-
-<?php include('../../../layout/admin/parte1.php');
+include('../../../layout/admin/parte1.php');
 
 $id_get = $_GET['id'];
 
@@ -194,7 +192,7 @@ foreach ($stcs as $stc){
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Falla</label>
-                                    <textarea name="observacion" id="" cols="30" rows="4" class="form-control" required><?php echo $falla; ?></textarea>
+                                    <textarea name="falla" id="" cols="30" rows="4" class="form-control" required><?php echo $falla; ?></textarea>
                                     <input type="text" name="id_usuario" value="<?php echo $id_get;?>" hidden>
                                 </div>
                             </div>
