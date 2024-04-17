@@ -21,10 +21,11 @@ $proyecto = $_POST['proyecto'];
 $estado = $_POST['idestado'];
 $persona_contacto = $_POST['personacontacto'];
 $medio_contacto = $_POST['medio_contacto'];
+$evidencia = $_POST['evidencias'];
 
 
 
-$sql = "UPDATE stc SET id_stc = :id_stc, fecha_ingreso = :fecha_ingreso, medio_ingreso = :medio_ingreso, ticket_externo = :ticket_externo, tipo_servicio = :servicio, id_producto = :id_producto, falla = :falla, observacion = :observacion, cliente = :cliente, ciudad = :ciudad, proyecto = :proyecto, estado = :estado, persona_contacto = :persona_contacto, email_contacto = :medio_contacto WHERE id = :id_usuario";
+$sql = "UPDATE stc SET id_stc = :id_stc, fecha_ingreso = :fecha_ingreso, medio_ingreso = :medio_ingreso, ticket_externo = :ticket_externo, tipo_servicio = :servicio, id_producto = :id_producto, falla = :falla, observacion = :observacion, cliente = :cliente, ciudad = :ciudad, proyecto = :proyecto, estado = :estado, persona_contacto = :persona_contacto, email_contacto = :medio_contacto, evidencias = :evidencia WHERE id = :id_usuario";
 
 $sentencia = $pdo->prepare($sql);
 
@@ -43,6 +44,7 @@ $sentencia->bindParam(':proyecto', $proyecto);
 $sentencia->bindParam(':estado', $estado);
 $sentencia->bindParam(':persona_contacto', $persona_contacto);
 $sentencia->bindParam(':medio_contacto', $medio_contacto);
+$sentencia->bindParam(':evidencia', $evidencia);
 
 if ($sentencia->execute()) {
   echo "Usuario actualizado exitosamente"; // Mensaje de éxito
