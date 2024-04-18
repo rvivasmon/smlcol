@@ -7,6 +7,8 @@ include('../app/config/conexion.php');
 
 <!DOCTYPE html>
 <html lang="es">
+
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,8 +24,17 @@ include('../app/config/conexion.php');
   <link rel="stylesheet" href="<?php echo $URL?>/public/dist/css/adminlte.min.css">
   <!-- Icon Logo -->
   <link rel="icon" type="image/ico" href="../public/images/Logo.png">
+
+  <style>
+
+
+
+  </style>
 </head>
+
+
 <body class="hold-transition login-page">
+
 <div class="login-box">
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
@@ -38,6 +49,7 @@ include('../app/config/conexion.php');
         <br>
 
       <form action="controller_login.php" method="post">
+      
       <label for="">Correo Electrónico</label>
         <div class="input-group mb-3">
           <input type="email" class="form-control" name="correo" placeholder="Email">
@@ -47,7 +59,8 @@ include('../app/config/conexion.php');
             </div>
           </div>
         </div>
-        <label for="">Contraseña</label>
+
+      <label for="">Contraseña</label>
         <div class="input-group mb-3">
           <input type="password" class="form-control" name="password" placeholder="Password">
           <div class="input-group-append">
@@ -56,14 +69,28 @@ include('../app/config/conexion.php');
             </div>
           </div>
         </div>
-
-        <div>
         
-        <div class="form-group">
-          <a href="" class="btn btn-default btn-block">Cancelar</a>
-          <button type="submit" class= "btn btn-primary btn-block">Ingresar</button>
+      <label for="">Captcha</label>
+        <div class="input-group mb-3">
+          <input type="captcha" class="form-control" name="captcha" placeholder="Captcha">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <div class="mb-3">
+                  <img src="funcs/genera_codigo.php" alt="Código de Verificación" id="img-codigo">
+                  &nbsp;
+                  <button type="button" class="btn btn-secondary btn-sm" id="regenera">+</button>
+                  &nbsp;
+                  Generar nuevo
+                </div>
+              </div>
+            </div>
         </div>
-        
+
+        <div>        
+          <div class="form-group">
+            <a href="" class="btn btn-default btn-block">Cancelar</a>
+            <button type="submit" class= "btn btn-primary btn-block">Ingresar</button>
+          </div>        
         </div>
 
         <!--
@@ -100,9 +127,9 @@ include('../app/config/conexion.php');
       </p>
       <p class="mb-0">
         <a href="register.html" class="text-center">Register a new membership</a>
-      </p>
+      </p> -->
     </div>
-    <!- /.card-body -->
+    <!-- /.card-body -->
   </div>
   <!-- /.card -->
 </div>
@@ -114,5 +141,23 @@ include('../app/config/conexion.php');
 <script src="<?php echo $URL?>/public/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo $URL?>/public/dist/js/adminlte.min.js"></script>
+
+<script>
+  const imgCodigo = document.getElementById('img-codigo')
+  const btnGenera = document.getElementById('regenera')
+  btnGenera.addEventListener('click', generaCodigo, false)
+
+  function generaCodigo(){
+    let url = 'funcs/genera_codigo.php'
+
+    fetch(url)
+    .then(response => response.blob())
+    .then(data => {
+      if(data){
+        imgCodigo.src = URL.createObjectURL(data)
+      }
+    })
+  }
+</script>
 </body>
 </html>

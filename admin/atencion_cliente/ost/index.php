@@ -26,10 +26,10 @@ include('../../../layout/admin/datos_sesion_user.php');
                                     <tr>
                                         <th>ID</th>
                                         <th>ID STC</th>
-                                        <th>Fecha de Ingreso</th>
-                                        <th>Medio de ingreso</th>
+                                        <th>Fecha Ingreso</th>
+                                        <th>Medio Ingreso</th>
                                         <th>Ticket Externo</th>
-                                        <th>Tipo de Servicio</th>
+                                        <th>Tipo Servicio</th>
                                         <th>ID Producto</th>
                                         <th>Falla</th>
                                         <th>Observación</th>

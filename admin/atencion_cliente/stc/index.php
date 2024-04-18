@@ -97,9 +97,9 @@ include('../../../app/config/conexion.php');
                                     <th>ID</th>
                                     <th>ID STC</th>
                                     <th>Fecha Ingreso</th>
-                                    <th>Medio de Ingreso</th>
+                                    <th>Medio Ingreso</th>
                                     <th>Ticket Externo</th>
-                                    <th>Tipo de Servicio</th>
+                                    <th>Tipo Servicio</th>
                                     <th>ID Producto</th>
                                     <th>Falla</th>
                                     <th>Observación</th>

@@ -27,10 +27,10 @@ include('../../../layout/admin/datos_sesion_user.php');
                                     <th>ID</th>
                                     <th>ID STC</th>
                                     <th>ID OST</th>
-                                    <th>Fecha de Ingreso</th>
-                                    <th>Medio de ingreso</th>
+                                    <th>Fecha Ingreso</th>
+                                    <th>Medio Ingreso</th>
                                     <th>Ticket Externo</th>
-                                    <th>Tipo de Servicio</th>
+                                    <th>Tipo Servicio</th>
                                     <th>ID Producto</th>
                                     <th>Falla</th>
                                     <th>Observación</th>
@@ -39,7 +39,7 @@ include('../../../layout/admin/datos_sesion_user.php');
                                     <th>Proyecto</th>
                                     <th>Estado</th>
                                     <th>Persona Contacto</th>
-                                    <th>Medio de Contacto</th>
+                                    <th>Medio Contacto</th>
                                     <th>Técnico Tratante</th>
                                     <th>Detalle Solución</th>
                                     <th><center>Acciones</center></th>

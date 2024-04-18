@@ -3,8 +3,26 @@
 include('../app/config/config.php');
 include('../app/config/conexion.php');
 
-$correo = $_POST['correo'];
-$password = $_POST['password'];
+session_start();
+
+$codigoVerificacion = isset($_SESSION['codigo_verificacion']) ? $_SESSION['codigo_verificacion'] : '';
+
+$correo =  isset($_POST['correo']) ? $_POST['correo'] : '';
+$password = isset($_POST['password']) ? $_POST['password'] : '';
+$captcha1 = isset($_POST['captcha']) ? $_POST['captcha'] : '';
+
+if($correo == '' || $password == ''){
+    echo "Debe llenar todos los datos";
+    exit;
+}
+
+$captcha = sha1($captcha1);
+
+if($codigoVerificacion != $captcha){
+    $_SESSION['codigo_verificacion'] = '';
+    echo "Codigo de verificación es incorrecto";
+    exit;
+}
 
 //echo "El correo del usuario es: ".$correo;
 //echo "La contraseña del usuario es: ".$password;
