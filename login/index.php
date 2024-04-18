@@ -3,6 +3,10 @@
 include('../app/config/config.php');
 include('../app/config/conexion.php');
 
+session_start();
+
+include('funcs/funcs.php');
+
 ?>
 
 <!DOCTYPE html>
@@ -48,6 +52,15 @@ include('../app/config/conexion.php');
         
         <br>
 
+        <?php 
+        if($mensaje = getFlashData('error')) {
+        ?>
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <?php echo $mensaje; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <?php } ?>
+
       <form action="controller_login.php" method="post">
       
       <label for="">Correo Electrónico</label>
@@ -72,16 +85,19 @@ include('../app/config/conexion.php');
         
       <label for="">Captcha</label>
         <div class="input-group mb-3">
-          <input type="captcha" class="form-control" name="captcha" placeholder="Captcha">
+          <input type="password" class="form-control" name="captcha" placeholder="Captcha">
             <div class="input-group-append">
-              <div class="input-group-text">
-                <div class="mb-3">
+              <div class="input-group-text">                
                   <img src="funcs/genera_codigo.php" alt="Código de Verificación" id="img-codigo">
                   &nbsp;
-                  <button type="button" class="btn btn-secondary btn-sm" id="regenera">+</button>
+                  <button type="button" class="btn btn-secondary btn-sm" id="regenera">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                      <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
+                      <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
+                    </svg>
+                  </button>
                   &nbsp;
-                  Generar nuevo
-                </div>
+                  Generar nuevo                
               </div>
             </div>
         </div>

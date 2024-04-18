@@ -5,6 +5,8 @@ include('../app/config/conexion.php');
 
 session_start();
 
+include_once('funcs/funcs.php');
+
 $codigoVerificacion = isset($_SESSION['codigo_verificacion']) ? $_SESSION['codigo_verificacion'] : '';
 
 $correo =  isset($_POST['correo']) ? $_POST['correo'] : '';
@@ -12,16 +14,18 @@ $password = isset($_POST['password']) ? $_POST['password'] : '';
 $captcha1 = isset($_POST['captcha']) ? $_POST['captcha'] : '';
 
 if($correo == '' || $password == ''){
-    echo "Debe llenar todos los datos";
-    exit;
+    setFlashData('error', 'Debe llenar todos los datos');
+    redirect('index.php');
+
 }
 
 $captcha = sha1($captcha1);
 
 if($codigoVerificacion != $captcha){
     $_SESSION['codigo_verificacion'] = '';
-    echo "Codigo de verificación es incorrecto";
-    exit;
+    setFlashData('error', 'El codigo de verificación es incorrecto');
+    redirect('index.php');
+
 }
 
 //echo "El correo del usuario es: ".$correo;
