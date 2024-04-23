@@ -47,6 +47,55 @@ include('../../../layout/admin/parte1.php');
                                                 <td><?php echo $descripcion; ?></td>
                                                 <td>
                                                     <center>
+                                                        <!-- Button trigger modal -->
+                                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal_asignacion<?=$id;?>">Asignar <i class="fas fa-check-circle"></i></button>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="modal_asignacion<?=$id;?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header" style="background-color:goldenrod">
+                                                                        <h5 class="modal-title" id="exampleModalLabel">Asignación de Roles</h5>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                    
+                                                                    <form class="form-inline" action="" method="POST">
+                                                                        <div class="form-group mb-2">
+                                                                            <label>Rol: <?=$cargo['descripcion'];?></label>
+                                                                        </div>
+                                                                        <div class="form-group mx-sm-4 mb-2">
+                                                                            <select name="" id="" class="form-control">
+                                                                                <?php
+                                                                                $sql_permisos = "SELECT * FROM permisos WHERE estado = '1' ORDER BY nombre_url ASC";
+                                                                                $query_permisos = $pdo->prepare($sql_permisos);
+                                                                                $query_permisos-> execute();
+                                                                                $permisos = $query_permisos->fetchAll(PDO::FETCH_ASSOC);
+                                                                            foreach ($permisos as $permiso){
+                                                                                $id = $permiso['id_permisos'];
+                                                                                $nombre_url = $permiso['nombre_url'];
+                                                                                $url = $permiso['url'];?>
+
+                                                                                <option value="<?=$id?>"><?=$nombre_url?></option>
+
+                                                                                <?php
+                                                                                    }
+                                                                                ?>
+                                                                            </select>
+                                                                        </div>
+                                                                        <button type="submit" class="btn btn-warning mb-2">Asignar</button>
+                                                                    </form>
+
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                        <button type="button" class="btn btn-warning">Save changes</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
                                                         <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
                                                         <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>

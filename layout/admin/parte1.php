@@ -169,7 +169,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                MENÚ ATENCIÓN AL CLIENTE
+                MENÚ <br> ATENCIÓN CLIENTE
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -257,7 +257,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                MENÚ DISEÑO iNDUSTRIAL
+                MENÚ <br> DISEÑO INDUSTRIAL
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -399,7 +399,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc/index.php" class="nav-link">
+                <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>STC CLIENTE</p>
                 </a>
@@ -434,7 +434,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/ti/cargos/index.php" class="nav-link">
+                <a href="<?php echo $URL;?>admin/ti/permisos" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Listado de Permisos</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo $URL;?>admin/ti/permisos/create.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Crear Permisos</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo $URL;?>admin/ti/cargos" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Listado de Cargos</p>
                 </a>
@@ -573,9 +585,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <li class="nav-item">
             <a href="<?php echo $URL;?>/login/controller_cerrar_sesion.php" class="nav-link" style="background-color: #ca0a0b">
               <i class="nav-icon fas fa-door-closed"></i>
-              <p>
-                Cerrar Sesión
-              </p>
+              <p>Cerrar Sesión</p>
             </a>            
           </li>
         </ul>
