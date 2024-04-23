@@ -61,37 +61,46 @@ include('../../../layout/admin/parte1.php');
                                                                             </button>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                    
-                                                                    <form class="form-inline" action="" method="POST">
-                                                                        <div class="form-group mb-2">
-                                                                            <label>Rol: <?=$cargo['descripcion'];?></label>
+                                                                        <div class="row">
+                                                                            
+                                                                            <div class="col-md-3">
+                                                                                <input type="hidden" name="rol_id" id="rol_id<?=$id;?>" value="<?=$id;?>">
+                                                                                <label>Rol: <?=$cargo['descripcion'];?></label>
+                                                                            </div>
+
+                                                                            <div class="col-md-6">
+                                                                                <select name="permiso_id" id="permiso_id<?=$id;?>" class="form-control">
+                                                                                    <?php
+                                                                                    $sql_permisos = "SELECT * FROM permisos WHERE estado = '1' ORDER BY nombre_url ASC";
+                                                                                    $query_permisos = $pdo->prepare($sql_permisos);
+                                                                                    $query_permisos-> execute();
+                                                                                    $permisos = $query_permisos->fetchAll(PDO::FETCH_ASSOC);
+                                                                                foreach ($permisos as $permiso){
+                                                                                    $id = $permiso['id_permisos'];
+                                                                                    $nombre_url = $permiso['nombre_url'];
+                                                                                    $url = $permiso['url'];?>
+
+                                                                                    <option value="<?=$id?>"><?=$permiso['nombre_url'];?></option>
+
+                                                                                    <?php
+                                                                                        }
+                                                                                    ?>
+                                                                                </select>
+
+                                                                            </div>
+
+                                                                            <div class="col-md-3">
+                                                                                <button type="submit" class="btn btn-warning mb-2 btn_reg" data-id="<?=$id;?>">Asignar</button>
+                                                                            </div>
+                                                                            <div id="respuesta<?=$id;?>">
+                                                                            </div>
+
                                                                         </div>
-                                                                        <div class="form-group mx-sm-4 mb-2">
-                                                                            <select name="" id="" class="form-control">
-                                                                                <?php
-                                                                                $sql_permisos = "SELECT * FROM permisos WHERE estado = '1' ORDER BY nombre_url ASC";
-                                                                                $query_permisos = $pdo->prepare($sql_permisos);
-                                                                                $query_permisos-> execute();
-                                                                                $permisos = $query_permisos->fetchAll(PDO::FETCH_ASSOC);
-                                                                            foreach ($permisos as $permiso){
-                                                                                $id = $permiso['id_permisos'];
-                                                                                $nombre_url = $permiso['nombre_url'];
-                                                                                $url = $permiso['url'];?>
+                                                                        <div class="row">
+                                                                            <table>
 
-                                                                                <option value="<?=$id?>"><?=$nombre_url?></option>
-
-                                                                                <?php
-                                                                                    }
-                                                                                ?>
-                                                                            </select>
+                                                                            </table>
                                                                         </div>
-                                                                        <button type="submit" class="btn btn-warning mb-2">Asignar</button>
-                                                                    </form>
-
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                        <button type="button" class="btn btn-warning">Save changes</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -116,12 +125,40 @@ include('../../../layout/admin/parte1.php');
     </div>
 </div>
 
+
+
+
 <?php include('../../../layout/admin/parte2.php');?>
+
+<script>
+$(document).ready(function () {
+    // Cuando se hace clic en el botón para abrir el modal
+    $(".btn-warning").click(function () {
+        // Obtener el ID del botón que se ha hecho clic
+        var id = $(this).data('id');
+        
+        // Obtener los valores necesarios para la solicitud AJAX
+        var a = $(this).closest('tr').find('input[name="rol_id"]').val();
+        var b = $(this).closest('tr').find('select[name="permiso_id"]').val();
+
+        // Realizar la solicitud AJAX
+        var url = "../permisos/controller_index_roles_permisos.php";
+        $.get(url, {rol_id:a, permiso_id:b}, function (datos) {
+            // Actualizar el contenido del contenedor de respuesta
+            $('#respuesta' + id).html(datos);
+            
+            // Abrir el modal
+            $('#modal_asignacion' + id).modal('show');
+            
+        });
+    });
+});
+</script>
 
 <script>
     $(function () {
         $("#table_usuarios").DataTable({
-            "pageLength": 5,
+            "pageLength": 10,
             "language": {
                 "emptyTable": "No hay información",
                 "info": "Mostrando _START_ a _END_ de _TOTAL_ Usuarios",
@@ -170,3 +207,4 @@ include('../../../layout/admin/parte1.php');
         }).buttons().container().appendTo('#table_usuarios_wrapper .col-md-6:eq(0)');
     });
 </script>
+
