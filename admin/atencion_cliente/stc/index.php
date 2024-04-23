@@ -219,7 +219,7 @@ include('../../../app/config/conexion.php');
 <script>
     $(function () {
         $("#table_stcs").DataTable({
-            "pageLength": 5,
+            "pageLength": 10,
             "language": {
                 "emptyTable": "No hay información",
                 "info": "Mostrando_START_ a _END_ de _TOTAL_ Órdenes",

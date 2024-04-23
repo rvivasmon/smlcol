@@ -116,7 +116,7 @@ include('../../../layout/admin/datos_sesion_user.php');
 <script>
     $(function () {
         $("#table_traost").DataTable({
-            "pageLength": 5,
+            "pageLength": 10,
             "language": {
                 "emptyTable": "No hay información",
                 "info": "Mostrando_START_ a _END_ de _TOTAL_ Órdenes",
