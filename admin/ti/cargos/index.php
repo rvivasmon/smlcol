@@ -8,6 +8,7 @@ include('../../../layout/admin/datos_sesion_user.php');
 
 include('../../../layout/admin/parte1.php');
 
+
 ?>
 
 <div class="content-wrapper">
@@ -32,26 +33,26 @@ include('../../../layout/admin/parte1.php');
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $contador = 0;
+                                        $contador1 = 0;
                                         $query = $pdo->prepare('SELECT * FROM cargo WHERE estado = "1"');
 
                                         $query->execute();
                                         $cargos = $query->fetchAll(PDO::FETCH_ASSOC);
                                         foreach ($cargos as $cargo){
-                                            $id = $cargo['id_cargo'];
+                                            $id_rol = $cargo['id_cargo'];
                                             $descripcion = $cargo['descripcion'];
-                                            $contador = $contador + 1;
+                                            $contador1 = $contador1 + 1;
                                         ?>
                                             <tr>
-                                                <td><?php echo $contador; ?></td>
+                                                <td><?php echo $contador1; ?></td>
                                                 <td><?php echo $descripcion; ?></td>
                                                 <td>
                                                     <center>
                                                         <!-- Button trigger modal -->
-                                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal_asignacion<?=$id;?>">Asignar <i class="fas fa-check-circle"></i></button>
+                                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal_asignacion<?=$id_rol;?>">Asignar <i class="fas fa-check-circle"></i></button>
 
                                                         <!-- Modal -->
-                                                        <div class="modal fade" id="modal_asignacion<?=$id;?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal fade" id="modal_asignacion<?=$id_rol;?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                             <div class="modal-dialog modal-lg">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header" style="background-color:goldenrod">
@@ -64,23 +65,23 @@ include('../../../layout/admin/parte1.php');
                                                                         <div class="row">
                                                                             
                                                                             <div class="col-md-3">
-                                                                                <input type="hidden" name="rol_id" id="rol_id<?=$id;?>" value="<?=$id;?>">
+                                                                                <input type="hidden" name="rol_id" id="rol_id<?=$id_rol;?>" value="<?=$id_rol;?>">
                                                                                 <label>Rol: <?=$cargo['descripcion'];?></label>
                                                                             </div>
 
                                                                             <div class="col-md-6">
-                                                                                <select name="permiso_id" id="permiso_id<?=$id;?>" class="form-control">
+                                                                                <select name="permiso_id" id="permiso_id<?=$id_rol;?>" class="form-control">
                                                                                     <?php
                                                                                     $sql_permisos = "SELECT * FROM permisos WHERE estado = '1' ORDER BY nombre_url ASC";
                                                                                     $query_permisos = $pdo->prepare($sql_permisos);
                                                                                     $query_permisos-> execute();
                                                                                     $permisos = $query_permisos->fetchAll(PDO::FETCH_ASSOC);
                                                                                 foreach ($permisos as $permiso){
-                                                                                    $id = $permiso['id_permisos'];
+                                                                                    $id_permiso = $permiso['id_permisos'];
                                                                                     $nombre_url = $permiso['nombre_url'];
                                                                                     $url = $permiso['url'];?>
 
-                                                                                    <option value="<?=$id?>"><?=$permiso['nombre_url'];?></option>
+                                                                                    <option value="<?=$id_permiso?>"><?=$permiso['nombre_url'];?></option>
 
                                                                                     <?php
                                                                                         }
@@ -90,24 +91,54 @@ include('../../../layout/admin/parte1.php');
                                                                             </div>
 
                                                                             <div class="col-md-3">
-                                                                                <button type="submit" class="btn btn-warning mb-2 btn_reg" data-id="<?=$id;?>">Asignar</button>
+                                                                                <button type="submit" class="btn btn-success mb-2 btn_reg" data-id="<?=$id_rol;?>">Confirmar</button>
                                                                             </div>
-                                                                            <div id="respuesta<?=$id;?>">
-                                                                            </div>
-
                                                                         </div>
-                                                                        <div class="row">
-                                                                            <table>
 
+                                                                        <hr>
+                                                                        <div id="respuesta<?=$id_rol;?>"></div>
+                                                                        <div class="row"  id="tabla1<?=$id_rol;?>">
+                                                                            <table class="table table-bordered table-sm table-striped table-hover">
+                                                                                <tr>
+                                                                                    <th style="text-align: center; background-color: goldenrod">Nro</th>
+                                                                                    <th style="text-align: center; background-color: goldenrod">Rol</th>
+                                                                                    <th style="text-align: center; background-color: goldenrod">Permiso</th>
+                                                                                    <th style="text-align: center; background-color: goldenrod">Acción</th>
+                                                                                </tr>
+                                                                                <?php
+
+                                                                                $contador2 = 0;
+                                                                                $sql_roles_permisos = "SELECT * FROM roles_permisos AS rolper INNER JOIN permisos AS per ON per.id_permisos = rolper.permiso_id INNER JOIN cargo AS rol ON rol.id_cargo = rolper.rol_id WHERE rolper.estado = '1' ORDER BY per.nombre_url ASC";
+                                                                                $query_roles_permisos = $pdo->prepare($sql_roles_permisos);
+                                                                                $query_roles_permisos-> execute();
+                                                                                $roles_permisos = $query_roles_permisos->fetchAll(PDO::FETCH_ASSOC);
+                                                                                    
+                                                                                    foreach ($roles_permisos as $rol_permiso) {
+                                                                                        if($id_rol == $rol_permiso['rol_id']) {
+                                                                                            $id_rol_permiso = $rol_permiso['id_rol_permiso'];
+                                                                                            $contador2 = $contador2 + 1;
+                                                                                ?>
+                                                                                    <tr>
+                                                                                        <td><center><?=$contador2;?></center></td>
+                                                                                        <td><center><?=$rol_permiso['descripcion'];?></center></td>
+                                                                                        <td><?=$rol_permiso['nombre_url'];?></td>
+                                                                                        <td>
+
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <?php
+                                                                                        }
+                                                                                    }
+                                                                                    ?>
                                                                             </table>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                        <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
-                                                        <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
+                                                        <a href="show.php?id=<?php echo $id_rol; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
+                                                        <a href="edit.php?id=<?php echo $id_rol; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
+                                                        <a href="delete.php?id=<?php echo $id_rol; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
                                                     </center>
                                                 </td>
                                             </tr>
@@ -131,9 +162,10 @@ include('../../../layout/admin/parte1.php');
 <?php include('../../../layout/admin/parte2.php');?>
 
 <script>
+    
 $(document).ready(function () {
     // Cuando se hace clic en el botón para abrir el modal
-    $(".btn-warning").click(function () {
+    $(".btn-success").click(function () {
         // Obtener el ID del botón que se ha hecho clic
         var id = $(this).data('id');
         
@@ -142,17 +174,26 @@ $(document).ready(function () {
         var b = $(this).closest('tr').find('select[name="permiso_id"]').val();
 
         // Realizar la solicitud AJAX
-        var url = "../permisos/controller_index_roles_permisos.php";
+        var url = "controller_index_roles_permisos.php";
         $.get(url, {rol_id:a, permiso_id:b}, function (datos) {
             // Actualizar el contenido del contenedor de respuesta
             $('#respuesta' + id).html(datos);
-            
-            // Abrir el modal
-            $('#modal_asignacion' + id).modal('show');
-            
+            $('#tabla1<?=$id_rol;?>').css('display', 'none');
+
         });
     });
-});
+
+        $(".btn_reg").click(function () {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Permiso asignado",
+                showConfirmButton: false,
+                timer: 5000
+                });
+            });
+        });
+
 </script>
 
 <script>
