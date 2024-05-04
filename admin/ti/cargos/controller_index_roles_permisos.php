@@ -49,6 +49,7 @@ if($id_rol == $rol_permiso['rol_id']) {
         <td><center><?=$contador2;?></center></td>
         <td><center><?=$rol_permiso['descripcion'];?></center></td>
         <td><?=$rol_permiso['nombre_url'];?></td>
+        <a href="delete.php?id=<?php echo $id_rol; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
     </tr>
 <?php
     }

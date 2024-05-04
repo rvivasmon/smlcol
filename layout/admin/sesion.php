@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 if (isset($_SESSION['sesion_email'])) {
     //echo "Existe sesión, y ha pasado por el Login";

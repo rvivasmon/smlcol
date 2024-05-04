@@ -34,7 +34,7 @@ include('../../../layout/admin/parte1.php');
                                     <tbody>
                                         <?php
                                         $contador1 = 0;
-                                        $query = $pdo->prepare('SELECT * FROM cargo WHERE estado = "1"');
+                                        $query = $pdo->prepare('SELECT * FROM cargo WHERE estado = "1" ORDER BY descripcion ASC');
 
                                         $query->execute();
                                         $cargos = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -96,7 +96,8 @@ include('../../../layout/admin/parte1.php');
                                                                         </div>
 
                                                                         <hr>
-                                                                        <div id="respuesta<?=$id_rol;?>"></div>
+                                                                        <div id="respuesta<?=$id_rol;?>">
+                                                                        </div>
                                                                         <div class="row"  id="tabla1<?=$id_rol;?>">
                                                                             <table class="table table-bordered table-sm table-striped table-hover">
                                                                                 <tr>
@@ -121,9 +122,32 @@ include('../../../layout/admin/parte1.php');
                                                                                     <tr>
                                                                                         <td><center><?=$contador2;?></center></td>
                                                                                         <td><center><?=$rol_permiso['descripcion'];?></center></td>
-                                                                                        <td><?=$rol_permiso['nombre_url'];?></td>
-                                                                                        <td>
-
+                                                                                        <td><center><?=$rol_permiso['nombre_url'];?></center></td>
+                                                                                        <td><center>
+                                                                                            <form action="controller_delete_rol_permiso.php" onclick="preguntar<?=$id_rol_permiso;?>(event)" method="post" id="miFormulario<?=$id_rol_permiso;?>">
+                                                                                                <input type="text" name="id_rol_permiso" value="<?=$id_rol_permiso;?>" hidden>
+                                                                                                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Borrar</button>
+                                                                                            </form>
+                                                                                            </center>
+                                                                                            <script>
+                                                                                                function preguntar<?=$id_rol_permiso;?>(event) {
+                                                                                                    event.preventDefault();
+                                                                                                    swal.fire({
+                                                                                                        title: 'Eliminar registro',
+                                                                                                        text: '¿Desea eliminar este registro?',
+                                                                                                        icon: 'question',
+                                                                                                        showDenyButton: true,
+                                                                                                        confirmButtonText: 'Eliminar',
+                                                                                                        confirmButtonColor: '#a5161d',
+                                                                                                        denyButtonColor: '#270a0a',
+                                                                                                    }).then((result) => {
+                                                                                                        if (result.isConfirmed) {
+                                                                                                        var form = $('#miFormulario<?=$id_rol_permiso;?>');
+                                                                                                        form.submit ();
+                                                                                                        }
+                                                                                                    });
+                                                                                                }
+                                                                                            </script>
                                                                                         </td>
                                                                                     </tr>
                                                                                     <?php
@@ -178,7 +202,7 @@ $(document).ready(function () {
         $.get(url, {rol_id:a, permiso_id:b}, function (datos) {
             // Actualizar el contenido del contenedor de respuesta
             $('#respuesta' + id).html(datos);
-            $('#tabla1<?=$id_rol;?>').css('display', 'none');
+            $('#tabla1'+ id).hide();
 
         });
     });

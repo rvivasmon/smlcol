@@ -1,3 +1,31 @@
+<?php 
+
+
+  $query_sesion = $pdo->prepare("SELECT * FROM usuarios as usu INNER JOIN cargo as rol ON rol.id_cargo = usu.id WHERE usu.email = '$email_sesion' AND usu.estado = '1'");
+
+  $query_sesion->execute();
+
+  $datos_sesion_usuarios = $query_sesion->fetchAll(PDO::FETCH_ASSOC);
+  foreach ($datos_sesion_usuarios as $dato_sesion_usuario);
+    $nombre_sesion_usuario = $dato_sesion_usuario['email'];
+    $id_rol_sesion_usuario = $dato_sesion_usuario['id_cargo'];
+    $rol_sesion_usuario = $dato_sesion_usuario['descripcion'];
+    $nombres_sesion_usuario = $dato_sesion_usuario['nombre'];
+
+
+
+
+$url = $_SERVER["PHP_SELF"];
+$conta = strlen($url);
+$rest = substr($url, 22, $conta);
+
+echo $id_rol_sesion_usuario;
+
+
+?>
+
+
+
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from

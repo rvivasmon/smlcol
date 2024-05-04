@@ -20,10 +20,10 @@ define('BD_SISTEMA','smartled_BD_SIGCP_2024');
 //$URL = 'http://localhost/www.smlcol.com/';
 
 // Smartled TI LAN
-//$URL = 'http://192.168.88.26/www.smlcol.com/';
+//$URL = 'http://192.168.1.105/www.smlcol.com/';
 
 // SmartLed3 LAN
-//$URL = 'http://192.168.88.26/www.smlcol.com/';
+//$URL = 'http://192.168.88.126/www.smlcol.com/';
 
 // House
 $URL = 'http://192.168.1.8/www.smlcol.com/';
