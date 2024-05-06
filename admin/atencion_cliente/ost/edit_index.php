@@ -6,9 +6,28 @@ include('../../../app/config/conexion.php');
 include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
 
-?>
+// Colocas el código para generar el ID OST
+// Obtener el año y el mes actuales en formato YYYYMM
+$anio_mes_ost = date('Ym');
 
-<?php include('../../../layout/admin/parte1.php');
+// Obtener el último registro de la base de datos ordenado por contador de forma descendente
+$query_ultimo_registro_ost = $pdo->prepare('SELECT * FROM ost ORDER BY contador_ost DESC LIMIT 1');
+$query_ultimo_registro_ost->execute();
+$ultimo_registro_ost = $query_ultimo_registro_ost->fetch(PDO::FETCH_ASSOC);
+
+// Inicializar el contador en 1 por defecto
+$contador_ost = 1;
+
+// Verificar si hay un último registro
+if($ultimo_registro_ost) {
+    // Si hay un último registro, continuar con el contador
+    $contador_ost = $ultimo_registro_ost['contador_ost'] + 1;
+}
+
+// Crea el ID OST utilizando el año_mes y el contador
+$id_ost = 'OST-' . $anio_mes_ost . '-' . sprintf('%03d', $contador_ost);
+
+// Fin del código para generar el ID OST
 
 $id_get = $_GET['id'];
 
@@ -33,6 +52,9 @@ foreach ($stcs as $stc){
     $persona_contacto = $stc['persona_contacto'];
     $medio_contacto = $stc['email_contacto'];
 }
+
+include('../../../layout/admin/parte1.php');
+
 ?>
 
 <div class="content-wrapper">
@@ -54,8 +76,9 @@ foreach ($stcs as $stc){
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="">ID STC</label>
-                                    <input type="text" name="id_stc" value="<?php echo $id_stc;?>" class="form-control" readonly>
+                                    <label for="">ID OST</label>
+                                    <input type="text" name="id_ost" value="<?php echo $id_ost;?>" class="form-control" readonly>
+                                    <input type="hidden" name="id_ost" value="<?php echo $id_ost; ?>">
                                 </div>
                             </div>
                             

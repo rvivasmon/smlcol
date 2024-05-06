@@ -45,7 +45,8 @@ include('../../../layout/admin/datos_sesion_user.php');
                             <tbody>
                                 <?php
                                 $contador = 0;
-                                $query = $pdo->prepare('SELECT stc.*, tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_clientes, ciudad.ciudad AS nombre_ciudad, estado.estadostc AS nombre_estado FROM stc JOIN tipo_servicio ON stc.tipo_servicio = tipo_servicio.id JOIN estado ON stc.estado = estado.id JOIN clientes ON stc.cliente = clientes.id JOIN ciudad ON stc.ciudad = ciudad.id WHERE stc.tipo_servicio = "3"');
+
+                                $query = $pdo->prepare('SELECT ost.*, tipo_servicio.servicio_ost AS nombre_servicio, estado.estadoost AS nombre_estado FROM ost JOIN tipo_servicio ON ost.tipo_servicio = tipo_servicio.id JOIN estado ON ost.estado = estado.id WHERE ost.tipo_servicio = "3"');
 
                                 $query->execute();
                                 $stcs = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -86,7 +87,7 @@ include('../../../layout/admin/datos_sesion_user.php');
                                         <td>
                                             <center>
                                                 <a href="show_index.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                <a href="edit_index.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
+                                                <a href="edit_index.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Crear OST<i class="fas fa-pen"></i></a>
                                                 <a href="delete_index.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
                                             </center>
                                         </td>

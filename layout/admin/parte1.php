@@ -1,7 +1,9 @@
 <?php 
 
+$email_sesion = $_SESSION['sesion_email'];
 
-  $query_sesion = $pdo->prepare("SELECT * FROM usuarios as usu INNER JOIN cargo as rol ON rol.id_cargo = usu.id WHERE usu.email = '$email_sesion' AND usu.estado = '1'");
+
+  $query_sesion = $pdo->prepare("SELECT * FROM usuarios as usu INNER JOIN cargo as rol ON rol.id_cargo = usu.id_cargo WHERE usu.email = '$email_sesion' AND usu.estado = '1'");
 
   $query_sesion->execute();
 
@@ -13,14 +15,33 @@
     $nombres_sesion_usuario = $dato_sesion_usuario['nombre'];
 
 
-
-
 $url = $_SERVER["PHP_SELF"];
 $conta = strlen($url);
 $rest = substr($url, 22, $conta);
 
-echo $id_rol_sesion_usuario;
 
+$sql_roles_permisos = "SELECT * FROM roles_permisos AS rolper INNER JOIN permisos AS per ON per.id_permisos = rolper.permiso_id INNER JOIN cargo AS rol ON rol.id_cargo = rolper.rol_id WHERE rolper.estado = '1' ";
+$query_roles_permisos = $pdo->prepare($sql_roles_permisos);
+$query_roles_permisos-> execute();
+$roles_permisos = $query_roles_permisos->fetchAll(PDO::FETCH_ASSOC);
+$contadorpermiso = 0;
+
+foreach ($roles_permisos as $rol_permiso) {
+  if($id_rol_sesion_usuario == $rol_permiso['rol_id']) {
+      $contadorpermiso = $contadorpermiso + 1;
+        echo $rol_permiso['url'];
+        echo "<br>";
+        echo $rest;
+
+      if($rest == $rol_permiso['url']) {
+        //echo "Permiso autorizado - ";
+        //$contadorpermiso = $contadorpermiso + 1;
+      //}else{
+        //echo "Permiso no autorizado";
+      }
+  }
+  echo $contadorpermiso;
+}
 
 ?>
 

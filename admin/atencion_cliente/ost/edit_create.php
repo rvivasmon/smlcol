@@ -54,14 +54,14 @@ foreach ($stcs as $stc){
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="">ID STC</label>
-                                    <input type="text" name="id_stc" value="<?php echo $id_stc;?>" class="form-control" readonly>
+                                    <label for="">ID OST</label>
+                                    <input type="text" name="id_ost" value="<?php echo $id_ost;?>" class="form-control" readonly>
                                 </div>
                             </div>
                             
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="fecha_ingreso">Fecha Ingreso</label>
+                                    <label for="fecha_ingreso"> Ingreso</label>
                                     <input type="date" name="fecha_ingreso" value="<?php echo $fecha_ingreso;?>" class="form-control" value="<?php echo date("Y-m-d"); ?>" readonly>
                                 </div>
                             </div>

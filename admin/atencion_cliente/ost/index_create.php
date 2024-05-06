@@ -74,6 +74,7 @@ include('../../../layout/admin/datos_sesion_user.php');
                                     <tr>
                                         <td><?php echo $contador; ?></td>
                                         <td><?php echo $id_stc; ?></td>
+                                        <td><?php echo $id_ost; ?></td>
                                         <td><?php echo $fechaingreso; ?></td>
                                         <td><?php echo $medioingreso; ?></td>
                                         <td><?php echo $ticketexterno; ?></td>
@@ -88,8 +89,7 @@ include('../../../layout/admin/datos_sesion_user.php');
                                         <td><?php echo $personacontacto; ?></td>
                                         <td><?php echo $mediocontacto; ?></td>
                                         <td></td>
-                                        <td></td>
-                                        <td></td>                                        
+                                        <td></td>                                       
                                         <td>
                                             <center>
                                                 <a href="show_create.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
