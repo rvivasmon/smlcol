@@ -7,7 +7,7 @@ include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
 
 include('../../../layout/admin/parte1.php');
-include('controller_show_index.php');
+include('controller_show_create.php');
 
 ?>
 
@@ -29,7 +29,7 @@ include('controller_show_index.php');
                             <div class="col-md-0">
                                 <div class="form-group">
                                     <label for=""></label>
-                                    <input type="text" name="idstc" class="form-control" value="<?php echo $id_stc; ?>" hidden>
+                                    <input type="text" name="idost" class="form-control" value="<?php echo $id_ost; ?>" hidden>
                                 </div>
                             </div>
                             <div class="col-md-1.5">
@@ -60,6 +60,12 @@ include('controller_show_index.php');
                                 <div class="form-group">
                                     <label for="">ID Producto</label>
                                     <input type="text" name="idproducto" class="form-control" value="<?php echo $id_producto; ?>" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="">N° OST</label>
+                                    <input type="text" name="numost" class="form-control" value="<?php echo $num_ost; ?>" disabled>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +127,7 @@ include('controller_show_index.php');
 
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/atencion_cliente/ost"; ?>" class="btn btn-default btn-block">Volver</a>
+                                <a href="<?php echo $URL."admin/atencion_cliente/ost/index_create.php"; ?>" class="btn btn-default btn-block">Volver</a>
                             </div>
                             <div class="col-md-2">
                             </div>

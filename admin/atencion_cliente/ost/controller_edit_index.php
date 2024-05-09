@@ -10,7 +10,7 @@ include('../../../layout/admin/datos_sesion_user.php');
 // Verifica si se enviaron los datos del formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtiene el ID STC y el nuevo valor para tipo_servicio
-    $id_stc = $_POST['id_stc'];
+    $id_stc = $_POST['id_1'];
     $nuevo_tipo_servicio = 4; // Cambiar según sea necesario
 
     // Actualiza el tipo de servicio en la tabla STC
@@ -27,34 +27,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tipo_servicio = $_POST['tipo_servicio'];
     $id_producto = $_POST['id_producto'];
     $proyecto = $_POST['proyecto'];
-    $ciudad = $_POST['ciudad'];
-    $cliente = $_POST['clientes'];
+    $ciudade = $_POST['ciudad1'];
+    $Clientes = $_POST['cliente1'];
     $falla = $_POST['falla'];
     $persona_contacto = $_POST['persona_contacto'];
     $medio_contacto = $_POST['email_contacto'];
     $estado = $_POST['estado'];
     $observacion = $_POST['observacion'];
+    $contador_ost = $_POST['contador_ost'];
+    $anio_mes_ost = $_POST['anio_mes_ost'];
 
     
     // Inserta los datos en la tabla OST
-    $sql = "INSERT INTO ost (id_ost, fecha_ost, ticket_externo, medio_ingreso, tipo_servicio, id_producto, proyecto, ciudad, cliente, falla, persona_contacto, email_contacto, estado, observacion) VALUES (:id_ost, :fecha_ost, :ticket_externo, :medio_ingreso, :tipo_servicio, :id_producto, :proyecto, :ciudad, :cliente, :falla, :persona_contacto, :medio_contacto, :estado, :observacion)";
+    $sql = "INSERT INTO ost (id_ost, fecha_ost, ticket_externo, medio_ingreso, tipo_servicio, id_producto, proyecto, ciudad, cliente, falla, persona_contacto, email_contacto, estado, observacion, contador_ost, anio_mes_ost) VALUES (:id_ost, :fecha_ost, :ticket_externo, :medio_ingreso, :tipo_servicio, :id_producto, :proyecto, :ciudade, :Clientes, :falla, :persona_contacto, :medio_contacto, :estado, :observacion, :contador_ost, :anio_mes_ost)";
 
 
     $sentencia = $pdo->prepare($sql);
     $sentencia->bindParam(':id_ost', $id_ost);
     $sentencia->bindParam(':fecha_ost', $fecha_ost);
-    $sentencia->bindParam(':medio_ingreso', $medio_ingreso);
     $sentencia->bindParam(':ticket_externo', $ticket_externo);
+    $sentencia->bindParam(':medio_ingreso', $medio_ingreso);
     $sentencia->bindParam(':tipo_servicio', $tipo_servicio);
     $sentencia->bindParam(':id_producto', $id_producto);
     $sentencia->bindParam(':proyecto', $proyecto);
-    $sentencia->bindParam(':ciudad', $ciudad);
-    $sentencia->bindParam(':cliente', $cliente);
+    $sentencia->bindParam(':ciudade', $ciudade);
+    $sentencia->bindParam(':Clientes', $Clientes);
     $sentencia->bindParam(':falla', $falla);
     $sentencia->bindParam(':persona_contacto', $persona_contacto);
     $sentencia->bindParam(':medio_contacto', $medio_contacto);
     $sentencia->bindParam(':estado', $estado);
     $sentencia->bindParam(':observacion', $observacion);
+    $sentencia->bindParam(':contador_ost', $contador_ost);
+    $sentencia->bindParam(':anio_mes_ost', $anio_mes_ost);
+
 
 
 

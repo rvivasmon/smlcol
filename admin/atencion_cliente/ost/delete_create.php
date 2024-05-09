@@ -6,32 +6,30 @@ include('../../../app/config/conexion.php');
 include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
 
-?>
-
-<?php include('../../../layout/admin/parte1.php');
+include('../../../layout/admin/parte1.php');
 
 $id_get = $_GET['id'];
 
-$query = $pdo->prepare("SELECT stc.*, tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_cliente, ciudad.ciudad AS nombre_ciudad, estado.estadostc AS nombre_estado FROM stc JOIN tipo_servicio ON stc.tipo_servicio = tipo_servicio.id JOIN clientes ON stc.cliente = clientes.id JOIN ciudad ON stc.ciudad = ciudad.id JOIN estado ON stc.estado = estado.id  WHERE stc.id = '$id_get'");
+$query = $pdo->prepare("SELECT ost.*, tipo_servicio.servicio_ost AS nombre_servicio, estado.estadoost AS nombre_estado FROM ost JOIN tipo_servicio ON ost.tipo_servicio = tipo_servicio.id JOIN estado ON ost.estado = estado.id  WHERE ost.id = '$id_get'");
 
 $query->execute();
-$stcs = $query->fetchAll(PDO::FETCH_ASSOC);
-foreach ($stcs as $stc){
-    $id = $stc['id'];
-    $id_stc = $stc['id_stc'];
-    $fecha_ingreso = $stc['fecha_ingreso'];
-    $medio_ingreso = $stc['medio_ingreso'];
-    $ticket_externo = $stc['ticket_externo'];
-    $servicio = $stc['nombre_servicio'];
-    $id_producto = $stc['id_producto'];
-    $falla = $stc['falla'];
-    $observacion = $stc['observacion'];
-    $cliente = $stc['nombre_cliente'];
-    $ciudad = $stc['nombre_ciudad'];
-    $proyecto = $stc['proyecto'];
-    $estado = $stc['nombre_estado'];
-    $persona_contacto = $stc['persona_contacto'];
-    $medio_contacto = $stc['email_contacto'];
+$osts = $query->fetchAll(PDO::FETCH_ASSOC);
+foreach ($osts as $ost){
+    $id = $ost['id'];
+    $id_ost = $ost['id_ost'];
+    $fecha_ingreso = $ost['fecha_ost'];
+    $medio_ingreso = $ost['medio_ingreso'];
+    $ticket_externo = $ost['ticket_externo'];
+    $servicio = $ost['nombre_servicio'];
+    $id_producto = $ost['id_producto'];
+    $falla = $ost['falla'];
+    $observacion = $ost['observacion'];
+    $cliente = $ost['cliente'];
+    $ciudad = $ost['ciudad'];
+    $proyecto = $ost['proyecto'];
+    $estado = $ost['nombre_estado'];
+    $persona_contacto = $ost['persona_contacto'];
+    $medio_contacto = $ost['email_contacto'];
 
 }
 
@@ -52,12 +50,12 @@ foreach ($stcs as $stc){
                     ¿DESEA ELIMINAR LA ORDEN?
                 </div>
                 <div class="card-body">
-                    <form action="controller_delete_index.php" method="post">
+                    <form action="controller_delete_create.php" method="post">
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="">ID STC</label>
-                                    <input type="text" name="idstc" class="form-control" value="<?php echo $id_stc; ?>" placeholder="ID STC" readonly>
+                                    <label for="">ID OST</label>
+                                    <input type="text" name="idost" class="form-control" value="<?php echo $id_ost; ?>" placeholder="ID OST" readonly>
                                 </div>
                             </div>
                             <div class="col-md-1.5">
@@ -69,7 +67,7 @@ foreach ($stcs as $stc){
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Medio de Ingreso</label>
-                                    <input type="text" name="medioingreso" class="form-control" value="<?php echo $medio_ingreso; ?>" placeholder="Medio de Ingreso" readonly>
+                                    <input type="text" name="medioingreso" class="form-control" value="<?php echo $medio_ingreso; ?>" readonly>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -81,20 +79,7 @@ foreach ($stcs as $stc){
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Tipo de Servicio</label>
-                                    <select name="tiposervicio" id="tiposervicio" class="form-control" readonly>
-                                        <?php 
-                                        $query_servicio = $pdo->prepare('SELECT * FROM tipo_servicio');
-                                        $query_servicio->execute();
-                                        $servicios = $query_servicio->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach($servicios as $servicio) {
-                                            $id_servicio = $servicio['id'];
-                                            $servicio = $servicio['servicio_stc'];
-                                            ?>
-                                            <option value="<?php echo $id_servicio; ?>"><?php echo $servicio; ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
+                                    <input type="text" name="tiposervicio" class="form-control" value="<?php echo $servicio; ?>" readonly>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -109,39 +94,13 @@ foreach ($stcs as $stc){
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Cliente</label>
-                                    <select name="idcliente" id="idcliente" class="form-control" readonly>
-                                        <?php 
-                                        $query_cliente = $pdo->prepare('SELECT * FROM clientes');
-                                        $query_cliente->execute();
-                                        $clientes = $query_cliente->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach($clientes as $cliente) {
-                                            $id_cliente = $cliente['id'];
-                                            $cliente = $cliente['nombre_comercial'];
-                                            ?>
-                                            <option value="<?php echo $id_cliente; ?>"><?php echo $cliente; ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
+                                    <input type="text" name="idcliente" class="form-control" value="<?php echo $cliente; ?>" readonly>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Ciudad</label>
-                                    <select name="idciudad" id="idciudad" class="form-control" readonly>
-                                        <?php 
-                                        $query_ciudad = $pdo->prepare('SELECT * FROM ciudad');
-                                        $query_ciudad->execute();
-                                        $ciudades = $query_ciudad->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach($ciudades as $ciudad) {
-                                            $id_ciudad = $ciudad['id'];
-                                            $ciudad = $ciudad['ciudad'];
-                                            ?>
-                                            <option value="<?php echo $id_ciudad; ?>"><?php echo $ciudad; ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
+                                    <input type="text" name="idciudad" class="form-control" value="<?php echo $ciudad; ?>" readonly>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -153,20 +112,7 @@ foreach ($stcs as $stc){
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Estado</label>
-                                    <select name="idestado" id="idestado" class="form-control" readonly>
-                                        <?php 
-                                        $query_estado = $pdo->prepare('SELECT * FROM estado');
-                                        $query_estado->execute();
-                                        $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach($estados as $estado) {
-                                            $id_estado = $estado['id'];
-                                            $estado = $estado['estadostc'];
-                                            ?>
-                                            <option value="<?php echo $id_estado; ?>"><?php echo $estado; ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
+                                    <input type="text" name="estado" class="form-control" value="<?php echo $estado; ?>" readonly>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -202,7 +148,7 @@ foreach ($stcs as $stc){
 
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/atencion_cliente/ost";?>" class="btn btn-default btn-block">Cancelar</a>
+                                <a href="<?php echo $URL."admin/atencion_cliente/ost/index_create.php";?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" onclick="return confirm('¿Seguro de querer eliminar el Ticket?')" class="btn btn-danger btn-block">Eliminar STC</button>

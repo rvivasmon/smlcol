@@ -93,8 +93,8 @@ include('../../../layout/admin/datos_sesion_user.php');
                                         <td>
                                             <center>
                                                 <a href="show_create.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                <a href="edit_create.php?id=<?php echo $id;?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
-                                                <a href="" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
+                                                <a href="edit_create.php?id=<?php echo $id;?>" class="btn btn-success btn-sm">Tratar <i class="fas fa-pen"></i></a>
+                                                <a href="delete_create.php?id=<?php echo $id;?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
                                             </center>
                                         </td>
                                     </tr>

@@ -79,6 +79,7 @@ include('../../../layout/admin/parte1.php');
                                     <label for="">ID OST</label>
                                     <input type="text" name="id_ost" value="<?php echo $id_ost;?>" class="form-control" readonly>
                                     <input type="hidden" name="id_ost" value="<?php echo $id_ost; ?>">
+                                    <input type="hidden" name="id_1" value="<?php echo $id; ?>">
                                 </div>
                             </div>
                             
@@ -92,12 +93,14 @@ include('../../../layout/admin/parte1.php');
                                 <div class="form-group">
                                     <label for="">Medio Ingreso</label>
                                     <input type="text" name="medio_ingreso" value="<?php echo $medio_ingreso;?>" class="form-control" readonly>
+                                    <input type="hidden" name="contador_ost" value="<?php echo $contador_ost; ?>">
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Ticket Externo</label>
                                     <input type="text" name="ticket_externo" value="<?php echo $ticket_externo;?>" class="form-control" readonly>
+                                    <input type="hidden" name="anio_mes_ost" value="<?php echo $anio_mes_ost; ?>">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -140,13 +143,17 @@ include('../../../layout/admin/parte1.php');
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Ciudad</label>
-                                    <input type="text" name="ciudad" value="<?php echo $nombre_ciudad; ?>" id="ciudad" class="form-control" readonly>                                    
+                                    <input type="text" name="ciudade" value="<?php echo $nombre_ciudad; ?>" id="ciudade" class="form-control" readonly>
+                                    <!-- Campo oculto adicional para enviar el valor -->
+                                    <input type="hidden" name="ciudad1" value="<?php echo $nombre_ciudad; ?>">                                    
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Cliente</label>
-                                    <input type="text" name="clientes" value="<?php echo $nombre_cliente; ?>" id="clientes" class="form-control" readonly>
+                                    <input type="text" name="Clientes" value="<?php echo $nombre_cliente; ?>" id="Clientes" class="form-control" readonly>
+                                    <!-- Campo oculto adicional para enviar el valor -->
+                                    <input type="hidden" name="cliente1" value="<?php echo $nombre_cliente; ?>">
                                 </div>
                             </div>
                             <div class="col-md-4">

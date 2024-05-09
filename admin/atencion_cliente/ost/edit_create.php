@@ -12,26 +12,26 @@ include('../../../layout/admin/datos_sesion_user.php');
 
 $id_get = $_GET['id'];
 
-$query = $pdo->prepare("SELECT stc.*, tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_clientes, ciudad.ciudad AS nombre_ciudad, estado.estadostc AS nombre_estado FROM stc JOIN tipo_servicio ON stc.tipo_servicio = tipo_servicio.id JOIN estado ON stc.estado = estado.id JOIN clientes ON stc.cliente = clientes.id JOIN ciudad ON stc.ciudad = ciudad.id WHERE stc.id = :id_get");
+$query = $pdo->prepare("SELECT ost.*, tipo_servicio.servicio_ost AS nombre_servicio, estado.estadoost AS nombre_estado FROM ost JOIN tipo_servicio ON ost.tipo_servicio = tipo_servicio.id JOIN estado ON ost.estado = estado.id WHERE ost.id = :id_get");
 
 $query->execute( [":id_get" => $id_get]);
-$stcs = $query->fetchAll(PDO::FETCH_ASSOC);
-foreach ($stcs as $stc){
-    $id = $stc['id'];
-    $id_stc = $stc['id_stc'];
-    $fecha_ingreso = $stc['fecha_ingreso'];
-    $medio_ingreso = $stc['medio_ingreso'];
-    $ticket_externo = $stc['ticket_externo'];
-    $nombre_servicio = $stc['nombre_servicio'];
-    $id_producto = $stc['id_producto'];
-    $falla = $stc['falla'];
-    $observacion = $stc['observacion'];
-    $nombre_cliente = $stc['nombre_clientes'];
-    $nombre_ciudad = $stc['nombre_ciudad'];
-    $proyecto = $stc['proyecto'];
-    $nombre_estado = $stc['nombre_estado'];
-    $persona_contacto = $stc['persona_contacto'];
-    $medio_contacto = $stc['email_contacto'];
+$osts = $query->fetchAll(PDO::FETCH_ASSOC);
+foreach ($osts as $ost){
+    $id = $ost['id'];
+    $id_ost = $ost['id_ost'];
+    $fecha_ingreso = $ost['fecha_ost'];
+    $medio_ingreso = $ost['medio_ingreso'];
+    $ticket_externo = $ost['ticket_externo'];
+    $nombre_servicio = $ost['nombre_servicio'];
+    $id_producto = $ost['id_producto'];
+    $falla = $ost['falla'];
+    $observacion = $ost['observacion'];
+    $nombre_cliente = $ost['cliente'];
+    $nombre_ciudad = $ost['ciudad'];
+    $proyecto = $ost['proyecto'];
+    $nombre_estado = $ost['nombre_estado'];
+    $persona_contacto = $ost['persona_contacto'];
+    $medio_contacto = $ost['email_contacto'];
 }
 ?>
 
@@ -188,7 +188,7 @@ foreach ($stcs as $stc){
 
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/atencion_cliente/ost";?>" class="btn btn-default btn-block">Cancelar</a>
+                                <a href="<?php echo $URL."admin/atencion_cliente/ost/index_create.php";?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-success btn-block">Activar OST</button>

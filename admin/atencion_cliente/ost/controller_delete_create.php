@@ -6,7 +6,7 @@ include('../../../app/config/conexion.php');
 $id_usuario = $_POST['id_usuario'];
 $estado_inactivo = '2';
 
-$sql = "UPDATE stc SET estado_ticket = '$estado_inactivo' WHERE id = :id_usuario";
+$sql = "UPDATE ost SET estado_ticket = '$estado_inactivo' WHERE id = :id_usuario";
 
 $sentencia = $pdo->prepare($sql);
 
