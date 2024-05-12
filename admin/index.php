@@ -27,21 +27,21 @@ include('controller_index.php');
               <thead>
                 <tr>
                   <th scope="col">Nombre</th>
-                  <td scope="col"><?php echo $sesion_nombre?></td>
+                  <td scope="col" class="align-middle"><?php echo $sesion_nombre?></td>
                 </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <th scope="row">Email</th>
-                    <td><?php echo $sesion_email?></td>
+                    <td class="align-middle"><?php echo $sesion_email?></td>
                   </tr>
                   <tr>
                     <th scope="row">ID Cargo</th>
-                    <td><?php echo $sesion_cargo?></td>
+                    <td class="align-middle"><?php echo $sesion_cargo?></td>
                   </tr>
                   <tr>
                     <th scope="row">Estado</th>
-                    <td><?php echo $sesion_estado?></td>
+                    <td class="align-middle"><?php echo $sesion_estado?></td>
                   </tr>
                 </tbody>
             </table>

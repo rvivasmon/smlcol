@@ -21,7 +21,7 @@ $proyecto = $_POST['proyecto'];
 $estado = $_POST['idestado'];
 $persona_contacto = $_POST['personacontacto'];
 $medio_contacto = $_POST['medio_contacto'];
-$evidencia = $_POST['evidencias'];
+$evidencia = $_POST['archivo_adjunto'];
 
 
 

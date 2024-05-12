@@ -98,7 +98,18 @@ include('../../../layout/admin/datos_sesion_user.php');
                                                 <label for="">Tipo de Servicio</label>
                                                 <select name="tiposervicio" id="tiposervicio" class="form-control" required>
                                                     <option value="">Seleccionat Tipo de Servicio</option>
-                                                    <?php 
+                                                    
+                                                    <?php
+
+                                                    $query_servicio = $pdo->prepare('SELECT * FROM tipo_servicio WHERE id = 5'); // Modificación en la consulta SQL para obtener solo el servicio con ID 5
+                                                    $query_servicio->execute();
+                                                    $servicio = $query_servicio->fetch(PDO::FETCH_ASSOC); // Utilizamos fetch en lugar de fetchAll, ya que esperamos solo una fila
+                                                    $id_servicio = $servicio['id']; // Obtenemos el ID del servicio
+                                                    $servicio_nombre = $servicio['servicio_stc']; // Obtenemos el nombre del servicio
+
+                                                    $selected = 'selected'; // Marcamos esta opción como seleccionada, ya que solo hay una opción
+
+                                                    /*
                                                     $query_servicio = $pdo->prepare('SELECT * FROM tipo_servicio');
                                                     $query_servicio->execute();
                                                     $servicios = $query_servicio->fetchAll(PDO::FETCH_ASSOC);
@@ -107,12 +118,9 @@ include('../../../layout/admin/datos_sesion_user.php');
                                                         $servicio = $servicio['servicio_stc'];
                                                         $selected = ($id_servicio == 5) ? 'selected' : '';
                                                         if($id_servicio !=4) {
+                                                    */
                                                     ?>
-                                                        <option value="<?php echo $id_servicio; ?>" <?php echo $selected; ?>><?php echo $servicio; ?></option>
-                                                    <?php
-                                                        }
-                                                    }
-                                                    ?>
+                                                        <option value="<?php echo $id_servicio; ?>" <?php echo $selected; ?>><?php echo $servicio_nombre; ?></option>
                                                 </select>
                                             </div>
                                         </div>

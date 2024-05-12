@@ -59,25 +59,25 @@ foreach ($stcs as $stc){
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">ID STC</label>
-                                                <input type="text" name="idstc" class="form-control" value="<?php echo $id_stc; ?>" placeholder="ID STC" required>
+                                                <input type="text" name="idstc" class="form-control" value="<?php echo $id_stc; ?>" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">Fecha de Ingreso</label>
-                                                <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value="<?php echo $fecha_ingreso; ?>">
+                                                <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value="<?php echo $fecha_ingreso; ?>" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">Medio de Ingreso</label>
-                                                <input type="text" name="medioingreso" class="form-control" value="<?php echo $medio_ingreso; ?>" placeholder="Medio de Ingreso"required>
+                                                <input type="text" name="medioingreso" class="form-control" value="<?php echo $medio_ingreso; ?>" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">Ticket Externo</label>
-                                                <input type="text" name="ticketexterno" class="form-control" value="<?php echo $ticket_externo; ?>" placeholder="Ticket Externo">
+                                                <input type="text" name="ticketexterno" class="form-control" value="<?php echo $ticket_externo; ?>" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -104,7 +104,7 @@ foreach ($stcs as $stc){
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">ID Producto</label>
-                                                <input type="text" name="idproducto" class="form-control" value="<?php echo $id_producto; ?>" placeholder="ID Producto" required>
+                                                <input type="text" name="idproducto" class="form-control" value="<?php echo $id_producto; ?>" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -112,49 +112,21 @@ foreach ($stcs as $stc){
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">Cliente</label>
-                                                <select name="idcliente" id="idcliente" class="form-control" required>
-                                                    <?php
-                                                    $valor_actual_en_edicion = $stc['cliente'];
-                                                    $query_cliente = $pdo->prepare('SELECT * FROM clientes');
-                                                    $query_cliente->execute();
-                                                    $clientes = $query_cliente->fetchAll(PDO::FETCH_ASSOC);
-                                                    foreach($clientes as $cliente) {
-                                                        $id_cliente = $cliente['id'];
-                                                        $cliente = $cliente['nombre_comercial'];
-                                                        $selected = ($id_cliente == $valor_actual_en_edicion) ? 'selected' : '';
-                                                        ?>
-                                                        <option value="<?php echo $id_cliente; ?>" <?php echo $selected; ?>><?php echo $cliente; ?></option>
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                </select>
+                                                <input type="text" name="cliente" class="form-control" value="<?php echo $cliente; ?>" readonly>
+                                                <input type="hidden" name="idcliente" value="<?php echo $stc['cliente']; ?>">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">Ciudad</label>
-                                                <select name="idciudad" id="idciudad" class="form-control" required>
-                                                    <?php
-                                                    $valor_actual_en_edicion = $stc['ciudad'];
-                                                    $query_ciudad = $pdo->prepare('SELECT * FROM ciudad');
-                                                    $query_ciudad->execute();
-                                                    $ciudades = $query_ciudad->fetchAll(PDO::FETCH_ASSOC);
-                                                    foreach($ciudades as $ciudad) {
-                                                        $id_ciudad = $ciudad['id'];
-                                                        $ciudad = $ciudad['ciudad'];
-                                                        $selected = ($id_ciudad == $valor_actual_en_edicion) ? 'selected' : '';
-                                                        ?>
-                                                        <option value="<?php echo $id_ciudad; ?>" <?php echo $selected; ?>><?php echo $ciudad; ?></option>
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                </select>
+                                                <input type="text" name="ciudad" class="form-control" value="<?php echo $ciudad; ?>" readonly>
+                                                <input type="hidden" name="idciudad" value="<?php echo $stc['ciudad']; ?>">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">Proyecto</label>
-                                                <input type="text" name="proyecto" class="form-control" value="<?php echo $proyecto; ?>" placeholder="Proyecto" required>
+                                                <input type="text" name="proyecto" class="form-control" value="<?php echo $proyecto; ?>" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -181,13 +153,13 @@ foreach ($stcs as $stc){
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">Persona Contacto</label>
-                                                <input type="text" name="personacontacto" class="form-control" value="<?php echo $persona_contacto; ?>" placeholder="Persona Contacto" required>
+                                                <input type="text" name="personacontacto" class="form-control" value="<?php echo $persona_contacto; ?>" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">Medio de Contacto</label>
-                                                <input type="text" name="medio_contacto" class="form-control" value="<?php echo $medio_contacto; ?>" placeholder="Medio de Contacto" required>
+                                                <input type="text" name="medio_contacto" class="form-control" value="<?php echo $medio_contacto; ?>" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -196,7 +168,7 @@ foreach ($stcs as $stc){
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Falla</label>
-                                            <textarea name="falla" id="" cols="30" rows="4" class="form-control" required><?php echo $falla; ?></textarea>
+                                            <textarea name="falla" id="" cols="30" rows="4" class="form-control" readonly><?php echo $falla; ?></textarea>
                                             <input type="text" name="id_usuario" value="<?php echo $id_get;?>" hidden>
                                         </div>
                                     </div>

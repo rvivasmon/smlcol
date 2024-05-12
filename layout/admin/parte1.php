@@ -17,10 +17,11 @@ $email_sesion = $_SESSION['sesion_email'];
 
 $url = $_SERVER["PHP_SELF"];
 $conta = strlen($url);
-$rest = substr($url, 22, $conta);
+$rest = substr($url, 15, $conta);
 
 
 $sql_roles_permisos = "SELECT * FROM roles_permisos AS rolper INNER JOIN permisos AS per ON per.id_permisos = rolper.permiso_id INNER JOIN cargo AS rol ON rol.id_cargo = rolper.rol_id WHERE rolper.estado = '1' ";
+
 $query_roles_permisos = $pdo->prepare($sql_roles_permisos);
 $query_roles_permisos-> execute();
 $roles_permisos = $query_roles_permisos->fetchAll(PDO::FETCH_ASSOC);
@@ -28,20 +29,23 @@ $contadorpermiso = 0;
 
 foreach ($roles_permisos as $rol_permiso) {
   if($id_rol_sesion_usuario == $rol_permiso['rol_id']) {
-      $contadorpermiso = $contadorpermiso + 1;
-        echo $rol_permiso['url'];
-        echo "<br>";
-        echo $rest;
+
+      //echo $rol_permiso['url'];
 
       if($rest == $rol_permiso['url']) {
         //echo "Permiso autorizado - ";
-        //$contadorpermiso = $contadorpermiso + 1;
-      //}else{
-        //echo "Permiso no autorizado";
-      }
+        $contadorpermiso = $contadorpermiso + 1;
+      }else{
+        //echo "Permiso no autorizado - ";
+    }
   }
-  echo $contadorpermiso;
 }
+
+  if($contadorpermiso>0){
+    //echo "Ruta autorizada";
+  }else{
+    //echo "Usuario no autorizado";
+  }
 
 ?>
 
@@ -126,235 +130,279 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
               with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                MENÚ ADMINISTRACIÓN
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/administracion/create_oc.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>CREAR OC</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/administracion/index_oc.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>OC PENDIENTES</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/administracion/create_cliente.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>CREAR CLIENTES</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/administracion/index_clientes.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>LISTA CLIENTES</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                MENÚ OPERACIÓN
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Status POP </p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tratamiento POP</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Status OP</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tratamiento OP</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>CAMPO LIBRE</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc/index.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>STC CLIENTE</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>OST CLIENTE</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                MENÚ <br> ATENCIÓN CLIENTE
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/atencion_cliente/stc/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Creación Nueva STC</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/atencion_cliente/stc" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tratamiento Soporte Técnico (TSTC)</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/atencion_cliente/ost" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Orden de Servicio Técnico NUEVAS (OST)</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/atencion_cliente/ost/index_create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tratamiento de Orden de Servicio Técnico(TOST)</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                MENÚ CRM
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Status POP </p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tratamiento POP</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Status OP</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tratamiento OP</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>CAMPO LIBRE</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc/index.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>STC CLIENTE</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>OST CLIENTE</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                MENÚ <br> DISEÑO INDUSTRIAL
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Status POP </p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tratamiento POP</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Status OP</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tratamiento OP</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>CAMPO LIBRE</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc/index.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>STC CLIENTE</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>OST CLIENTE</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+
+              <?php 
+                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="14") ){ ?>
+
+                  <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                      <i class="nav-icon fas fa-users"></i>
+                      <p>
+                        MENÚ ADMINISTRACIÓN
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/administracion/create_oc.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>CREAR OC</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/administracion/index_oc.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>OC PENDIENTES</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/administracion/create_cliente.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>CREAR CLIENTES</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/administracion/index_clientes.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>LISTA CLIENTES</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+
+              <?php
+                }
+              ?>
+
+              <?php
+                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Administración") ){ ?>
+
+                  <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                      <i class="nav-icon fas fa-users"></i>
+                      <p>
+                        MENÚ OPERACIÓN
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Status POP </p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Tratamiento POP</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Status OP</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Tratamiento OP</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>CAMPO LIBRE</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc/index.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>STC CLIENTE</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>OST CLIENTE</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+
+              <?php
+                }
+              ?>
+
+              <?php
+                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Administración") ){ ?>
+
+                  <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                      <i class="nav-icon fas fa-users"></i>
+                      <p>
+                        MENÚ <br> ATENCIÓN CLIENTE
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/atencion_cliente/stc/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Creación Nueva STC</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/atencion_cliente/stc" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Tratamiento Soporte Técnico (TSTC)</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/atencion_cliente/ost" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Orden de Servicio Técnico NUEVAS (OST)</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/atencion_cliente/ost/index_create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Tratamiento de Orden de Servicio Técnico(TOST)</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+
+              <?php
+                }
+              ?>
+
+              <?php
+                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Administración") ){ ?>
+
+                  <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                      <i class="nav-icon fas fa-users"></i>
+                      <p>
+                        MENÚ CRM
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Status POP </p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Tratamiento POP</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Status OP</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Tratamiento OP</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>CAMPO LIBRE</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc/index.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>STC CLIENTE</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>OST CLIENTE</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+
+              <?php
+                }
+              ?>
+
+              <?php
+                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Administración") ){ ?>
+
+                  <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                      <i class="nav-icon fas fa-users"></i>
+                      <p>
+                        MENÚ <br> DISEÑO INDUSTRIAL
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Status POP </p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Tratamiento POP</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Status OP</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Tratamiento OP</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>CAMPO LIBRE</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc/index.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>STC CLIENTE</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>OST CLIENTE</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+
+              <?php
+                }
+              ?>
+
+              <?php
+                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Administración") ){ ?>
+
           <li class="nav-item">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-users"></i>
@@ -408,229 +456,274 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                MENÚ PROYECTO
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Status POP </p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tratamiento POP</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Status OP</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tratamiento OP</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>CAMPO LIBRE</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>STC CLIENTE</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>OST CLIENTE</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                MENÚ TI
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/ti/usuarios" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Listado Usuarios</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/ti/usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Crear Usuario</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/ti/permisos" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Listado de Permisos</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/ti/permisos/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Crear Permisos</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/ti/cargos" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Listado de Cargos</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/ti/cargos/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Crear Cargo</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                MENU TECHLED
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/list_price_techled/index_modules.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>List Price Modules</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/list_price_techled/index_cabinet.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>List Price Cabinet</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/list_price_techled/index_equipment.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>List Price Equipment & Accessories</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/list_price_techled/index_hologram.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>List Price Hologram</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/list_price_techled/index_lcd.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>List Price LCD</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/list_price_techled/index_rental.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>List Price Rental & Display</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/list_price_techled/index_system.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>List Price System & Control</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                MENÚ PLANTA
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/planta" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Listado ID Producto</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/planta/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Crear ID Producto</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/ti_usuarios/index_cargos.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>QQQQQQQQQQQQQQQQQQQQ</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/ti_usuarios/create_cargo.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>QQQQQQQQQQQQQQQQQQQ</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                MENÚ TÉCNICO
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/ti_usuarios" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Listado OST Asignadas</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/ti_usuarios/create.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Crear Usuario</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/ti_usuarios/index_cargos.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Listado de Cargos</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo $URL;?>admin/ti_usuarios/create_cargo.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Crear Cargo</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+
+              <?php
+                }
+              ?>
+
+              <?php
+                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Administración") ){ ?>
+
+                  <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                      <i class="nav-icon fas fa-users"></i>
+                      <p>
+                        MENÚ PROYECTO
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Status POP </p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Tratamiento POP</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Status OP</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Tratamiento OP</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>CAMPO LIBRE</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>STC CLIENTE</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>OST CLIENTE</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+
+              <?php
+                }
+              ?>
+
+              <?php
+                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Administración") ){ ?>
+
+                  <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                      <i class="nav-icon fas fa-users"></i>
+                      <p>
+                        MENÚ TI
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/ti/usuarios" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Listado Usuarios</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/ti/usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Crear Usuario</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/ti/permisos" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Listado de Permisos</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/ti/permisos/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Crear Permisos</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/ti/cargos" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Listado de Cargos</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/ti/cargos/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Crear Cargo</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+
+              <?php
+                }
+              ?>
+
+              <?php
+                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Administración") ){ ?>
+
+                  <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                      <i class="nav-icon fas fa-users"></i>
+                      <p>
+                        MENU TECHLED
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/list_price_techled/index_modules.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>List Price Modules</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/list_price_techled/index_cabinet.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>List Price Cabinet</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/list_price_techled/index_equipment.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>List Price Equipment & Accessories</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/list_price_techled/index_hologram.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>List Price Hologram</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/list_price_techled/index_lcd.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>List Price LCD</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/list_price_techled/index_rental.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>List Price Rental & Display</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/list_price_techled/index_system.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>List Price System & Control</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+
+              <?php
+                }
+              ?>
+
+              <?php
+                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Administración") ){ ?>
+
+                  <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                      <i class="nav-icon fas fa-users"></i>
+                      <p>
+                        MENÚ PLANTA
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/planta" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Listado ID Producto</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/planta/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Crear ID Producto</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/ti_usuarios/index_cargos.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>QQQQQQQQQQQQQQQQQQQQ</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/ti_usuarios/create_cargo.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>QQQQQQQQQQQQQQQQQQQ</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+
+              <?php
+                }
+              ?>
+
+              <?php
+                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="9") ){ ?>
+
+                  <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                      <i class="nav-icon fas fa-users"></i>
+                      <p>
+                        MENÚ TÉCNICO
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/ti_usuarios" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Listado OST Asignadas</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/ti_usuarios/create.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Crear Usuario</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/ti_usuarios/index_cargos.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Listado de Cargos</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/ti_usuarios/create_cargo.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Crear Cargo</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+
+              <?php
+                }
+              ?>
+
           <li class="nav-item">
             <a href="<?php echo $URL;?>/login/controller_cerrar_sesion.php" class="nav-link" style="background-color: #ca0a0b">
               <i class="nav-icon fas fa-door-closed"></i>
