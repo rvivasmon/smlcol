@@ -62,6 +62,8 @@ include('../../../layout/admin/parte1.php');
                                                                             </button>
                                                                     </div>
                                                                     <div class="modal-body">
+
+                                                                        <!-- Contenido del modal -->
                                                                         <div class="row">
                                                                             
                                                                             <div class="col-md-3">
@@ -79,7 +81,8 @@ include('../../../layout/admin/parte1.php');
                                                                                 foreach ($permisos as $permiso){
                                                                                     $id_permiso = $permiso['id_permisos'];
                                                                                     $nombre_url = $permiso['nombre_url'];
-                                                                                    $url = $permiso['url'];?>
+                                                                                    $url = $permiso['url'];
+                                                                                    ?>
 
                                                                                     <option value="<?=$id_permiso?>"><?=$permiso['nombre_url'];?></option>
 
@@ -96,8 +99,7 @@ include('../../../layout/admin/parte1.php');
                                                                         </div>
 
                                                                         <hr>
-                                                                        <div id="respuesta<?=$id_rol;?>">
-                                                                        </div>
+                                                                        <div id="respuesta<?=$id_rol;?>"></div>
                                                                         <div class="row"  id="tabla1<?=$id_rol;?>">
                                                                             <table class="table table-bordered table-sm table-striped table-hover">
                                                                                 <tr>
@@ -106,6 +108,7 @@ include('../../../layout/admin/parte1.php');
                                                                                     <th style="text-align: center; background-color: goldenrod">Permiso</th>
                                                                                     <th style="text-align: center; background-color: goldenrod">Acción</th>
                                                                                 </tr>
+
                                                                                 <?php
 
                                                                                 $contador2 = 0;
@@ -142,18 +145,16 @@ include('../../../layout/admin/parte1.php');
                                                                                                         denyButtonColor: '#270a0a',
                                                                                                     }).then((result) => {
                                                                                                         if (result.isConfirmed) {
-                                                                                                        var form = $('#miFormulario<?=$id_rol_permiso;?>');
-                                                                                                        form.submit ();
+                                                                                                            var form = $('#miFormulario<?=$id_rol_permiso;?>');
+                                                                                                            form.submit ();
                                                                                                         }
                                                                                                     });
                                                                                                 }
                                                                                             </script>
                                                                                         </td>
                                                                                     </tr>
-                                                                                    <?php
-                                                                                        }
-                                                                                    }
-                                                                                    ?>
+                                                                                    <?php } ?>
+                                                                                    <?php } ?>
                                                                             </table>
                                                                         </div>
                                                                     </div>

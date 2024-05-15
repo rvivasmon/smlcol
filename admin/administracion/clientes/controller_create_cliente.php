@@ -1,10 +1,10 @@
 <?php 
 
-include('../../app/config/config.php');
-include('../../app/config/conexion.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
 
-include('../../layout/admin/sesion.php');
-include('../../layout/admin/datos_sesion_user.php');
+include('../../../layout/admin/sesion.php');
+include('../../../layout/admin/datos_sesion_user.php');
 
 
 $fecha_ingreso = $_POST['fechaingreso'];
@@ -51,7 +51,7 @@ $sentencia->bindParam(':usuariocliente', $usuariocliente);
 
 if($sentencia->execute()){
 //echo "¡Usuario creado exitosamente!"; // O maneja el mensaje/logica de éxito
-header('Location:' .$URL. 'admin/administracion/index_clientes.php');
+header('Location:' .$URL. 'admin/administracion/clientes/index_clientes.php');
 session_start();
 $_SESSION['msj'] = "Se ha registrado el usuario de manera correcta";
 }else{

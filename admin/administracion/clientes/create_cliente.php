@@ -1,12 +1,12 @@
 <?php 
 
-include('../../app/config/config.php');
-include('../../app/config/conexion.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
 
-include('../../layout/admin/sesion.php');
-include('../../layout/admin/datos_sesion_user.php');
+include('../../../layout/admin/sesion.php');
+include('../../../layout/admin/datos_sesion_user.php');
 
-include('../../layout/admin/parte1.php');
+include('../../../layout/admin/parte1.php');
 
 ?>
 
@@ -144,7 +144,7 @@ include('../../layout/admin/parte1.php');
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <a href="<?php echo $URL."admin/administracion/index_clientes.php";?>" class="btn btn-default btn-block ml-3">Cancelar</a>
+                                            <a href="<?php echo $URL."admin/administracion/clientes/index_clientes.php";?>" class="btn btn-default btn-block ml-3">Cancelar</a>
                                         </div>
                                         <div class="col-md-2">
                                             <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block ml-3">Crear Cliente</button>
@@ -179,4 +179,4 @@ include('../../layout/admin/parte1.php');
     
 </script>
 
-<?php include('../../layout/admin/parte2.php');?>
+<?php include('../../../layout/admin/parte2.php');?>

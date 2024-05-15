@@ -44,7 +44,7 @@ foreach ($roles_permisos as $rol_permiso) {
     //echo "Ruta autorizada";
   }else{
     //echo "Usuario no autorizado";
-    header('Location:'.$URL."admin/no-autorizado.php");
+    //header('Location:'.$URL."admin/no-autorizado.php");
   }
 
 ?>
@@ -141,6 +141,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       </p>
                     </a>
                     <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/administracion/tracking/index_tracking.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>TRACKING</p>
+                        </a>
+                      </li>
                       <li class="nav-item">
                         <a href="<?php echo $URL;?>admin/administracion/create_oc.php" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
@@ -154,13 +160,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo $URL;?>admin/administracion/create_cliente.php" class="nav-link">
+                        <a href="<?php echo $URL;?>admin/administracion/clientes/create_cliente.php" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>CREAR CLIENTES</p>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo $URL;?>admin/administracion/index_clientes.php" class="nav-link">
+                        <a href="<?php echo $URL;?>admin/administracion/clientes/index_clientes.php" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>LISTA CLIENTES</p>
                         </a>
