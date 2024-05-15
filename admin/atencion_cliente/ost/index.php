@@ -87,7 +87,7 @@ include('../../../layout/admin/datos_sesion_user.php');
                                         <td>
                                             <center>
                                                 <a href="show_index.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                <a href="edit_index.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Crear OST<i class="fas fa-pen"></i></a>
+                                                <a href="edit_index.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar OST<i class="fas fa-pen"></i></a>
                                                 <a href="delete_index.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
                                             </center>
                                         </td>

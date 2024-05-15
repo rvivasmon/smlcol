@@ -21,7 +21,7 @@ include('../../../layout/admin/parte1.php');
                             PERMISOS REGISTRADOS                        
                         </div>
                         <div class="card-tools">
-                            <a href="create.php" class="btn btn-primary"><i class="bi bi-plus-square"></i> Crear nuevo permiso</a>
+                            <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear nuevo permiso</a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

@@ -16,14 +16,14 @@ include('../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Cargos SML</h1>
+                <h1 class="m-0">Roles SML</h1>
                     <div class="card card-blue">
                         <div class="card-header">
-                            CARGOS REGISTRADOS                        
+                            ROLES REGISTRADOS                        
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="table_usuarios" class="table table-striped table-hover table-bordered">
+                                <table id="table_roles" class="table table-striped table-hover table-bordered">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -222,16 +222,16 @@ $(document).ready(function () {
 
 <script>
     $(function () {
-        $("#table_usuarios").DataTable({
+        $("#table_roles").DataTable({
             "pageLength": 10,
             "language": {
                 "emptyTable": "No hay información",
-                "info": "Mostrando _START_ a _END_ de _TOTAL_ Usuarios",
-                "infoEmpty": "Mostrando 0 a 0 de 0 Usuarios",
-                "infoFiltered": "(Filtrado de _MAX_ total Usuarios)",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Roles",
+                "infoEmpty": "Mostrando 0 a 0 de 0 Roles",
+                "infoFiltered": "(Filtrado de _MAX_ total Roles)",
                 "infoPostFix": "",
                 "thousands": ",",
-                "lengthMenu": "Mostrar _MENU_ Usuarios",
+                "lengthMenu": "Mostrar _MENU_ Roles",
                 "loadingRecords": "Cargando...",
                 "processing": "Procesando...",
                 "search": "Buscador:",

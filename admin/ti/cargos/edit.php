@@ -27,7 +27,7 @@ foreach ($cargos as $cargo){
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Edición Usuario</h1>
+                    <h1 class="m-0">Edición del Rol</h1>
 
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -56,7 +56,7 @@ foreach ($cargos as $cargo){
                                 <a href="<?php echo $URL."admin/ti/cargos/";?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
-                                <button type="submit" onclick="return confirm('Asegurese de diligenciar correctamente los datos')" class="btn btn-success btn-block">Actualizar Usuario</button>
+                                <button type="submit" onclick="return confirm('Asegurese de diligenciar correctamente los datos')" class="btn btn-success btn-block">Actualizar Rol</button>
                             </div>
                         </div>
 

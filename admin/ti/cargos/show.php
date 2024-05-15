@@ -28,7 +28,7 @@ include('controller_show.php');
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="">Cargo</label>
+                                <label for="">Rol o Cargo</label>
                                 <input name="id_cargo" id="id_cargo" class="form-control" value="<?php echo $cargo; ?>" disabled>
                             </div>
                         </div>                            

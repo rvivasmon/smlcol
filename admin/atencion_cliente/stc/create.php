@@ -6,9 +6,10 @@ include('../../../app/config/conexion.php');
 include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
 
-?>
+include('../../../layout/admin/parte1.php');
 
-<?php include('../../../layout/admin/parte1.php');?>
+
+?>
 
 <div class="content-wrapper">
     <div class="content-header">
@@ -109,16 +110,6 @@ include('../../../layout/admin/datos_sesion_user.php');
 
                                                     $selected = 'selected'; // Marcamos esta opción como seleccionada, ya que solo hay una opción
 
-                                                    /*
-                                                    $query_servicio = $pdo->prepare('SELECT * FROM tipo_servicio');
-                                                    $query_servicio->execute();
-                                                    $servicios = $query_servicio->fetchAll(PDO::FETCH_ASSOC);
-                                                    foreach($servicios as $servicio) {
-                                                        $id_servicio = $servicio['id'];
-                                                        $servicio = $servicio['servicio_stc'];
-                                                        $selected = ($id_servicio == 5) ? 'selected' : '';
-                                                        if($id_servicio !=4) {
-                                                    */
                                                     ?>
                                                         <option value="<?php echo $id_servicio; ?>" <?php echo $selected; ?>><?php echo $servicio_nombre; ?></option>
                                                 </select>

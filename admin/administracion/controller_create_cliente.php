@@ -1,68 +1,57 @@
 <?php 
 
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../app/config/config.php');
+include('../../app/config/conexion.php');
 
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
+include('../../layout/admin/sesion.php');
+include('../../layout/admin/datos_sesion_user.php');
 
 
-//$id = $_POST['id'];
-$id_stc = $_POST['idstc'];
-$usuario = $_POST['usuario'];
 $fecha_ingreso = $_POST['fechaingreso'];
-$medio_ingreso = $_POST['medio_ingreso'];
-$ticket_externo = $_POST['ticketexterno'];
-$servicio = $_POST['tiposervicio'];
-$id_producto = $_POST['idproducto'];
-$falla = $_POST['falla'];
-$observacion = $_POST['observacion'];
-$cliente = $_POST['idcliente'];
-$ciudad = $_POST['idciudad'];
-$proyecto = $_POST['proyecto'];
-$estado = $_POST['idestado'];
+$nombre_comercial = $_POST['nombrecomercial'];
+$razon_social = $_POST['razonsocial'];
+$clase_cliente = $_POST['clasecliente'];
+$siglas_cliente = $_POST['siglascliente'];
+$celular = $_POST['celular'];
+$email = $_POST['email'];
+$telefono = $_POST['telefono'];
+$celular = $_POST['celular'];
 $persona_contacto = $_POST['personacontacto'];
-$medio_contacto = $_POST['medio_contacto'];
-$anio_mes = $_POST['anio_mes'];
-$contador = $_POST['contador'];
+$nit = $_POST['nit'];
+$web = $_POST['web'];
+$direccion = $_POST['direccion'];
+$ciudad = $_POST['ciudad'];
+$departamento = $_POST['departamento'];
+$pais = $_POST['pais'];
+$usuariocliente = $_POST['usuariocliente'];
 
 
-$evidencias = $_POST['archivo_adjunto'];
-
-$nombreDelArchivo = date( "Y-m-d-h-i-s");
-$filename = $nombreDelArchivo."__".$_FILES['archivo_adjunto']['name'];
-$location = "../../../img_uploads/".$filename;
-
-move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'],$location);
-
-
-$sql = "INSERT INTO clientes (id, nombre_comercial, razon_social, clase_cliente, siglas_cliente, celular, email, telefono, contacto, nit, web, direccion, ciudad, departamento, pais, id_usuario) VALUES (:id_stc, :fechaingreso, :medio_ingreso, :ticket_externo, :servicio, :id_producto, :falla, :observacion, :cliente, :ciudad, :proyecto, :estado, :persona_contacto, :medio_contacto, :anio_mes, :contador, :usuario, :evidencias)";
+$sql = "INSERT INTO clientes (fecha, nombre_comercial, razon_social, clase_cliente, siglas_cliente, celular, email, telefono, contacto, nit, web, direccion, ciudad, departamento, pais, id_usuario) VALUES (:fecha_ingreso, :nombre_comercial, :razon_social, :clase_cliente, :siglas_cliente, :celular, :email, :telefono, :contacto, :nit, :web, :direccion, :ciudad, :departamento, :pais, :usuariocliente)";
 
 
 $sentencia = $pdo->prepare($sql);
 
-$sentencia->bindParam(':id_stc', $id_stc);
-$sentencia->bindParam(':fechaingreso', $fecha_ingreso);
-$sentencia->bindParam(':medio_ingreso', $medio_ingreso);
-$sentencia->bindParam(':ticket_externo', $ticket_externo);
-$sentencia->bindParam(':servicio', $servicio);
-$sentencia->bindParam(':id_producto', $id_producto);
-$sentencia->bindParam(':falla', $falla);
-$sentencia->bindParam(':observacion', $observacion);
-$sentencia->bindParam(':cliente', $cliente);
+$sentencia->bindParam(':fecha_ingreso', $fecha_ingreso);
+$sentencia->bindParam(':nombre_comercial', $nombre_comercial);
+$sentencia->bindParam(':razon_social', $razon_social);
+$sentencia->bindParam(':clase_cliente', $clase_cliente);
+$sentencia->bindParam(':siglas_cliente', $siglas_cliente);
+$sentencia->bindParam(':celular', $celular);
+$sentencia->bindParam(':telefono', $telefono);
+$sentencia->bindParam(':email', $email);
+$sentencia->bindParam(':contacto', $contacto);
+$sentencia->bindParam(':nit', $nit);
+$sentencia->bindParam(':web', $web);
+$sentencia->bindParam(':direccion', $direccion);
 $sentencia->bindParam(':ciudad', $ciudad);
-$sentencia->bindParam(':proyecto', $proyecto);
-$sentencia->bindParam(':estado', $estado);
-$sentencia->bindParam(':persona_contacto', $persona_contacto);
-$sentencia->bindParam(':medio_contacto', $medio_contacto);
-$sentencia->bindParam(':anio_mes', $anio_mes);
-$sentencia->bindParam(':contador', $contador);
-$sentencia->bindParam(':usuario', $usuario);
-$sentencia->bindParam(':evidencias', $filename);
+$sentencia->bindParam(':departamento', $departamento);
+$sentencia->bindParam(':pais', $pais);
+$sentencia->bindParam(':usuariocliente', $usuariocliente);
+
 
 if($sentencia->execute()){
 //echo "¡Usuario creado exitosamente!"; // O maneja el mensaje/logica de éxito
-header('Location:' .$URL. 'admin/atencion_cliente/stc');
+header('Location:' .$URL. 'admin/administracion/index_clientes.php');
 session_start();
 $_SESSION['msj'] = "Se ha registrado el usuario de manera correcta";
 }else{

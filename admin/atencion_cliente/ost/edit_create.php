@@ -191,7 +191,7 @@ foreach ($osts as $ost){
                                 <a href="<?php echo $URL."admin/atencion_cliente/ost/index_create.php";?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
-                                <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-success btn-block">Activar OST</button>
+                                <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-success btn-block">Editar OST</button>
                             </div>
                         </div>
 

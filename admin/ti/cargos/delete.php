@@ -29,14 +29,14 @@ foreach ($cargos as $cargo){
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Eliminación del Usuario</h1>
+                    <h1 class="m-0">Eliminación del Rol</h1>
 
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
             <div class="card">
                 <div class="card-header" style="background-color: #d92005; color: #ffffff">
-                    ¿DESEA ELIMINAR AL USUARIO?
+                    ¿DESEA ELIMINAR EL ROL?
                 </div>
                 <div class="card-body">
                     <form action="controller_delete.php" method="post">
@@ -58,7 +58,7 @@ foreach ($cargos as $cargo){
                                 <a href="<?php echo $URL."admin/ti/cargos/";?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
-                                <button type="submit" onclick="return confirm('¿Seguro de querer eliminar al usuario?')" class="btn btn-danger btn-block">Eliminar Usuario</button>
+                                <button type="submit" onclick="return confirm('¿Seguro de querer eliminar al usuario?')" class="btn btn-danger btn-block">Eliminar Rol</button>
                             </div>
                         </div>
 

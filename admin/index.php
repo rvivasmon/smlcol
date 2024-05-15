@@ -8,9 +8,9 @@ include('../layout/admin/datos_sesion_user.php');
 
 include('controller_index.php');
 
-?>
+include('../layout/admin/parte1.php');
 
-<?php include('../layout/admin/parte1.php');?>
+?>
 
   <div class="content-wrapper">
     <div class="content-header">
@@ -49,12 +49,8 @@ include('controller_index.php');
           <div class="col-md-4"></div>
         </div>
       </div><!-- /.container-fluid -->
-      
-      
-      
+
         <div class="row">
-
-
 
           <div class="col-lg-2 col-6">
             <div class="small-box bg-warning">
@@ -124,9 +120,6 @@ include('controller_index.php');
                 </a>  
             </div>
           </div>
-
-
-
         </div>
 
     </div>

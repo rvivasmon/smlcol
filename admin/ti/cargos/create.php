@@ -15,7 +15,7 @@ include('../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Crear Nuevo Cargo</h1>
+                    <h1 class="m-0">Crear Nuevo Rol</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
@@ -28,7 +28,7 @@ include('../../../layout/admin/parte1.php');
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="">Cargo</label>
+                                    <label for="">Rol o Cargo</label>
                                     <input type="text" name="cargo" class="form-control" placeholder="Nombre Cargo" required>
                                 </div>
                             </div>
@@ -41,7 +41,7 @@ include('../../../layout/admin/parte1.php');
                                 <a href="<?php echo $URL."admin/ti/cargos/index.php";?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
-                                <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Registrar Cargo</button>
+                                <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Registrar Rol-Cargo</button>
                             </div>
                         </div>
 

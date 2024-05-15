@@ -29,8 +29,7 @@ $contadorpermiso = 0;
 
 foreach ($roles_permisos as $rol_permiso) {
   if($id_rol_sesion_usuario == $rol_permiso['rol_id']) {
-
-      //echo $rol_permiso['url'];
+    //echo $rol_permiso['url'];
 
       if($rest == $rol_permiso['url']) {
         //echo "Permiso autorizado - ";
@@ -45,11 +44,10 @@ foreach ($roles_permisos as $rol_permiso) {
     //echo "Ruta autorizada";
   }else{
     //echo "Usuario no autorizado";
+    header('Location:'.$URL."admin/no-autorizado.php");
   }
 
 ?>
-
-
 
 <!DOCTYPE html>
 <!--
@@ -561,13 +559,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <li class="nav-item">
                         <a href="<?php echo $URL;?>admin/ti/cargos" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
-                          <p>Listado de Cargos</p>
+                          <p>Listado de Roles</p>
                         </a>
                       </li>
                       <li class="nav-item">
                         <a href="<?php echo $URL;?>admin/ti/cargos/create.php" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
-                          <p>Crear Cargo</p>
+                          <p>Crear Rol</p>
                         </a>
                       </li>
                     </ul>
