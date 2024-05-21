@@ -226,6 +226,7 @@ include('../../../layout/admin/parte1.php');
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="archivo_adjunto">Archivo Adjunto</label>

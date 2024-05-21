@@ -32,7 +32,7 @@ include('controller_show_create.php');
                                     <input type="text" name="idost" class="form-control" value="<?php echo $id_ost; ?>" hidden>
                                 </div>
                             </div>
-                            <div class="col-md-1.5">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Fecha de Ingreso</label>
                                     <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value= "<?php echo $fecha_ingreso; ?>" disabled>
@@ -77,7 +77,7 @@ include('controller_show_create.php');
                                     <input name="idcliente" id="idcliente" class="form-control" value="<?php echo $cliente; ?>" disabled>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="">Ciudad</label>
                                     <input name="idciudad" id="idciudad" class="form-control" value="<?php echo $ciudad; ?>" disabled>
@@ -89,7 +89,7 @@ include('controller_show_create.php');
                                     <input type="text" name="proyecto" class="form-control" value="<?php echo $proyecto; ?>" disabled>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group">
                                     <label for="">Estado</label>
                                     <input name="idestado" id="idestado" class="form-control" value="<?php echo $estado; ?>" disabled>
@@ -113,13 +113,13 @@ include('controller_show_create.php');
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Falla</label>
-                                    <input type="text" name="falla" class="form-control" value="<?php echo $falla; ?>" disabled>
+                                    <textarea name="falla" class="form-control" rows="4" disabled><?php echo $falla; ?></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Observación</label>
-                                    <input type="text" name="observacion" class="form-control" value="<?php echo $observacion; ?>" disabled>
+                                    <textarea name="observacion" rows="4" class="form-control" disabled><?php echo $observacion; ?></textarea>
                                 </div>
                             </div>
                         </div>

@@ -27,10 +27,10 @@ include('../../../layout/admin/parte1.php');
                     <form id="formulario" action="controller_create_tracking.php" method="POST" enctype="multipart/form-data">
 
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-8">
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="">Fecha de Ingreso</label>
                                                 <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value= "<?php echo date('Y-m-d'); ?>" readonly>
@@ -42,7 +42,7 @@ include('../../../layout/admin/parte1.php');
                                                 <input type="text" name="destinomercancia" class="form-control" placeholder="" required>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="">Tipo Producto</label>
                                                 <select class="form-control"  id="tipoproducto" name="tipoproducto" required>
@@ -64,19 +64,25 @@ include('../../../layout/admin/parte1.php');
                                                 <input type="text" name="usuarioperador" class="form-control" value="<?php echo $sesion_nombre; ?>" hidden>
                                             </div>
                                         </div>
-                                        <div class="col-md-5">
+                                        <div class="col-md-8">
                                             <div class="form-group">
                                                 <label for="">Descripción</label>
                                                 <input type="text" name="descripcion" class="form-control" placeholder="Nombre Comercial">
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="">Cantidad</label>
                                                 <input type="text" name="cantidad" class="form-control" placeholder="ID Producto">
                                             </div>
                                         </div>
                                     </div>                                
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="">Observaciones Colombia</label>
+                                    <textarea type="text" name="obscolombia" class="form-control" rows="8" placeholder="" required></textarea>
                                 </div>
                             </div>
                         </div>

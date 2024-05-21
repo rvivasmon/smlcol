@@ -107,13 +107,13 @@ include('controller_show_index.php');
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Falla</label>
-                                    <input type="text" name="falla" class="form-control" value="<?php echo $falla; ?>" disabled>
+                                    <textarea  name="falla" class="form-control" rows="4" disabled><?php echo $falla; ?></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Observación</label>
-                                    <input type="text" name="observacion" class="form-control" value="<?php echo $observacion; ?>" disabled>
+                                    <textarea name="observacion" class="form-control" rows="4" disabled><?php echo $observacion; ?></textarea>
                                 </div>
                             </div>
                         </div>

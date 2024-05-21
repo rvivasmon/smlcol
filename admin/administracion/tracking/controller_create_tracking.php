@@ -15,7 +15,7 @@ $cantidad = $_POST['cantidad'];
 $usuario_operador = $_POST['usuarioperador'];
 
 
-$sql = "INSERT INTO tracking (fecha, op, tipo, descripcion, cantidad) VALUES (:fecha_ingreso, :destino_mercancia, :tipo_producto, :descripcion, :cantidad)";
+$sql = "INSERT INTO tracking (fecha, op, tipo, descripcion, cantidad, usuario) VALUES (:fecha_ingreso, :destino_mercancia, :tipo_producto, :descripcion, :cantidad, :usuario_operador)";
 
 
 $sentencia = $pdo->prepare($sql);
@@ -30,7 +30,7 @@ $sentencia->bindParam(':usuario_operador', $usuario_operador);
 
 if($sentencia->execute()){
 //echo "¡Usuario creado exitosamente!"; // O maneja el mensaje/logica de éxito
-header('Location:' .$URL. 'admin/administracion/traking/index_tracking.php');
+header('Location:' .$URL. 'admin/administracion/tracking/index_tracking.php');
 session_start();
 $_SESSION['msj'] = "Se ha registrado el usuario de manera correcta";
 }else{

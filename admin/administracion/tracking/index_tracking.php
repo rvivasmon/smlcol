@@ -18,10 +18,10 @@ include('../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Clientes SML</h1>
+                <h1 class="m-0">Solicitudes SML / TCL</h1>
                     <div class="card card-blue">
                         <div class="card-header">
-                            ACTIVOS
+                            ACTIVAS
                         </div>
 
                         <hr>
@@ -42,6 +42,7 @@ include('../../../layout/admin/parte1.php');
                                     <th>Cantidad</th>
                                     <th>Procesada</th>
                                     <th>En Producción</th>
+                                    <th>Numero PL</th>
                                     <th>SHIP</th>
                                     <th>En Transito</th>
                                     <th>Guía</th>
@@ -49,7 +50,8 @@ include('../../../layout/admin/parte1.php');
                                     <th>Tipo Envío</th>
                                     <th>Fecha LLegada</th>
                                     <th>Fecha Recibida</th>
-                                    <th>Observaciones</th>
+                                    <th>Obs. en Colombia</th>
+                                    <th>Obs. en China</th>
                                     <th><center>Acciones</center></th>
                                 </tr>
                             </thead>
@@ -69,6 +71,7 @@ include('../../../layout/admin/parte1.php');
                                     $cantidad = $tracking['cantidad'];
                                     $procesada = $tracking['procesada'];
                                     $enproduccion = $tracking['en_produccion'];
+                                    $numpl = $tracking['num_pl'];
                                     $ship = $tracking['ship'];
                                     $entransito = $tracking['en_transito'];
                                     $guia = $tracking['guia'];
@@ -76,7 +79,8 @@ include('../../../layout/admin/parte1.php');
                                     $tipoenvio = $tracking['tipo_envio'];
                                     $fechallegada = $tracking['fecha_llegada'];
                                     $fecharecibido = $tracking['fecha_recibido'];
-                                    $observaciones = $tracking['observaciones'];
+                                    $obscolombia = $tracking['observaciones_colombia'];
+                                    $obschina = $tracking['observaciones_china'];
                                     $contador = $contador + 1;
                                 ?>
                                     <tr>
@@ -88,14 +92,16 @@ include('../../../layout/admin/parte1.php');
                                         <td><?php echo $cantidad; ?></td>
                                         <td><?php echo $procesada; ?></td>
                                         <td><?php echo $enproduccion; ?></td>
+                                        <td><?php echo $numpl; ?></td>
                                         <td><?php echo $ship; ?></td>
                                         <td><?php echo $entransito; ?></td>
                                         <td><?php echo $guia; ?></td>
                                         <td><?php echo $fechaguia; ?></td>
                                         <td><?php echo $tipoenvio; ?></td>
                                         <td><?php echo $fechallegada; ?></td>
-                                        <td><?php echo $observaciones; ?></td>
-                                        <td><?php echo $pais; ?></td>
+                                        <td><?php echo $fecharecibido; ?></td>
+                                        <td><?php echo $obscolombia; ?></td>
+                                        <td><?php echo $obschina; ?></td>
                                         <td>
                                             <center>
                                                 <a href="show_tracking.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
@@ -126,12 +132,12 @@ include('../../../layout/admin/parte1.php');
             "pageLength": 10,
             "language": {
                 "emptyTable": "No hay información",
-                "info": "Mostrando _START_ a _END_ de _TOTAL_ Usuarios",
-                "infoEmpty": "Mostrando 0 a 0 de 0 Usuarios",
-                "infoFiltered": "(Filtrado de _MAX_ total Usuarios)",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Solicitudes",
+                "infoEmpty": "Mostrando 0 a 0 de 0 Solicitudes",
+                "infoFiltered": "(Filtrado de _MAX_ total Solicitudes)",
                 "infoPostFix": "",
                 "thousands": ",",
-                "lengthMenu": "Mostrar _MENU_ Usuarios",
+                "lengthMenu": "Mostrar _MENU_ Solicitudes",
                 "loadingRecords": "Cargando...",
                 "processing": "Procesando...",
                 "search": "Buscador:",
