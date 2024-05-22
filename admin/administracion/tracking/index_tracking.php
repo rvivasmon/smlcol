@@ -18,7 +18,7 @@ include('../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Solicitudes SML / TCL</h1>
+                <h1 class="m-0">Solicitudes SML / TL</h1>
                     <div class="card card-blue">
                         <div class="card-header">
                             ACTIVAS
@@ -36,22 +36,13 @@ include('../../../layout/admin/parte1.php');
                                 <tr>
                                     <th>ID</th>
                                     <th>Fecha</th>
-                                    <th>OP</th>
+                                    <th>Origen Solicitud</th>
                                     <th>Tipo</th>
                                     <th>Descripción</th>
                                     <th>Cantidad</th>
                                     <th>Procesada</th>
                                     <th>En Producción</th>
-                                    <th>Numero PL</th>
-                                    <th>SHIP</th>
-                                    <th>En Transito</th>
-                                    <th>Guía</th>
-                                    <th>Fecha Guía</th>
-                                    <th>Tipo Envío</th>
-                                    <th>Fecha LLegada</th>
-                                    <th>Fecha Recibida</th>
-                                    <th>Obs. en Colombia</th>
-                                    <th>Obs. en China</th>
+                                    <th>Terminado</th>
                                     <th><center>Acciones</center></th>
                                 </tr>
                             </thead>
@@ -64,44 +55,26 @@ include('../../../layout/admin/parte1.php');
                                 $trackings = $query->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($trackings as $tracking){
                                     $id = $tracking['id'];
-                                    $fecha = $tracking['fecha'];
-                                    $op = $tracking['op'];
-                                    $tipo = $tracking['tipo'];
-                                    $descripcion = $tracking['descripcion'];
-                                    $cantidad = $tracking['cantidad'];
-                                    $procesada = $tracking['procesada'];
-                                    $enproduccion = $tracking['en_produccion'];
-                                    $numpl = $tracking['num_pl'];
-                                    $ship = $tracking['ship'];
-                                    $entransito = $tracking['en_transito'];
-                                    $guia = $tracking['guia'];
-                                    $fechaguia = $tracking['fecha_guia'];
-                                    $tipoenvio = $tracking['tipo_envio'];
-                                    $fechallegada = $tracking['fecha_llegada'];
-                                    $fecharecibido = $tracking['fecha_recibido'];
+                                    $date = $tracking['date'];
+                                    $origin = $tracking['origin'];
+                                    $type = $tracking['type'];
+                                    $category = $tracking['category'];
+                                    $quantitly = $tracking['quantitly'];
+                                    $status = $tracking['status'];
                                     $obscolombia = $tracking['observaciones_colombia'];
-                                    $obschina = $tracking['observaciones_china'];
+                                    $finished = $tracking['finished'];
                                     $contador = $contador + 1;
                                 ?>
                                     <tr>
                                         <td><?php echo $contador; ?></td>
-                                        <td><?php echo $fecha; ?></td>
-                                        <td><?php echo $op; ?></td>
-                                        <td><?php echo $tipo; ?></td>
-                                        <td><?php echo $descripcion; ?></td>
-                                        <td><?php echo $cantidad; ?></td>
-                                        <td><?php echo $procesada; ?></td>
-                                        <td><?php echo $enproduccion; ?></td>
-                                        <td><?php echo $numpl; ?></td>
-                                        <td><?php echo $ship; ?></td>
-                                        <td><?php echo $entransito; ?></td>
-                                        <td><?php echo $guia; ?></td>
-                                        <td><?php echo $fechaguia; ?></td>
-                                        <td><?php echo $tipoenvio; ?></td>
-                                        <td><?php echo $fechallegada; ?></td>
-                                        <td><?php echo $fecharecibido; ?></td>
+                                        <td><?php echo $date; ?></td>
+                                        <td><?php echo $origin; ?></td>
+                                        <td><?php echo $type; ?></td>
+                                        <td><?php echo $category; ?></td>
+                                        <td><?php echo $quantitly; ?></td>
+                                        <td><?php echo $status; ?></td>
                                         <td><?php echo $obscolombia; ?></td>
-                                        <td><?php echo $obschina; ?></td>
+                                        <td><?php echo $finished; ?></td>
                                         <td>
                                             <center>
                                                 <a href="show_tracking.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>

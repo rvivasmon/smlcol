@@ -6,20 +6,6 @@ include('../../../app/config/conexion.php');
 include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
 
-/*
-// Verifica si se enviaron los datos del formulario
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Obtiene el ID STC y el nuevo valor para tipo_servicio
-    $id_stc = $_POST['id_1'];
-    $nuevo_tipo_servicio = 4; // Cambiar según sea necesario
-
-    // Actualiza el tipo de servicio en la tabla STC
-    $query_update_stc = $pdo->prepare('UPDATE stc SET tipo_servicio = :nuevo_tipo_servicio WHERE id = :id_stc');
-    $query_update_stc->bindParam(':nuevo_tipo_servicio', $nuevo_tipo_servicio);
-    $query_update_stc->bindParam(':id_stc', $id_stc);
-    $query_update_stc->execute();
-
-    */
 
     // Obtiene los datos del formulario
     $id_ost = $_POST['id_ost'];
@@ -43,9 +29,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sentencia->bindParam(':tecnico_tratante', $tecnico_tratante, PDO::PARAM_INT);
     $sentencia->bindParam(':id', $id_usuario, PDO::PARAM_INT);
 
+    // Ejecuta la consulta
+if ($sentencia->execute()) {
+    // Si la actualización en OST fue exitosa y el estado es 5, actualiza el estado_ticket
+    if ($estado == 5) {
+        $sql_update_ticket = "UPDATE ost SET estado_ticket = :estado_ticket WHERE id = :id";
+        $stmt_update_ticket = $pdo->prepare($sql_update_ticket);
+        $nuevo_estado_ticket = 2; // Nuevo valor para estado_ticket
+        $stmt_update_ticket->bindParam(':estado_ticket', $nuevo_estado_ticket, PDO::PARAM_INT);
+        //$stmt_update_ticket->bindParam(':id_stc', $id_ost, PDO::PARAM_INT); // Asumiendo que $id_ost es el ID del ticket en la tabla stc
+        $stmt_update_ticket->execute();
+    }
 
+    // Redirige o maneja el mensaje de éxito
+    session_start();
+    $_SESSION['msj'] = "Se ha registrado el usuario de manera correcta";
+    header('Location:' . $URL . 'admin/atencion_cliente/ost/index_create.php');
+} else {
+    // Si hubo un error en la actualización en OST, maneja el mensaje de error
+    session_start();
+    $_SESSION['msj'] = "Error al introducir la información";
+}
 
-
+    /*
     // Ejecuta la consulta
     if($sentencia->execute()) {
         // Si la inserción en OST fue exitosa, redirige o maneja el mensaje de éxito

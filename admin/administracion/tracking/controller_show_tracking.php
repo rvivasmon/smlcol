@@ -9,22 +9,14 @@ $tracking_datos = $query_tracking->fetchAll(PDO::FETCH_ASSOC);
 
 foreach($tracking_datos as $tracking_dato){
     $id = $tracking_dato['id'];
-    $fecha = $tracking_dato['fecha'];
-    $op = $tracking_dato['op'];
-    $tipo = $tracking_dato['tipo'];
-    $descripcion = $tracking_dato['descripcion'];
-    $cantidad = $tracking_dato['cantidad'];
-    $procesada = $tracking_dato['procesada'];
+    $fecha = $tracking_dato['date'];
+    $op = $tracking_dato['origin'];
+    $tipo = $tracking_dato['type'];
+    $descripcion = $tracking_dato['category'];
+    $cantidad = $tracking_dato['quantitly'];
+    $procesada = $tracking_dato['status'];
     $enproduccion = $tracking_dato['en_produccion'];
-    $numpl = $tracking_dato['num_pl'];
-    $ship = $tracking_dato['ship'];
-    $entransito = $tracking_dato['en_transito'];
-    $guia = $tracking_dato['guia'];
-    $fechaguia = $tracking_dato['fecha_guia'];
-    $tipoenvio = $tracking_dato['tipo_envio'];
-    $fechallegada = $tracking_dato['fecha_llegada'];
-    $fecharecibido = $tracking_dato['fecha_recibido'];
     $obscolombia = $tracking_dato['observaciones_colombia'];
-    $obschina = $tracking_dato['observaciones_china'];
+
 }
 

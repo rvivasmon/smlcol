@@ -32,19 +32,19 @@ include('../../../layout/admin/parte1.php');
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="">Fecha de Ingreso</label>
+                                                <label for="">Date</label>
                                                 <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value= "<?php echo date('Y-m-d'); ?>" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="">Destino Mercancía</label>
+                                                <label for="">Origin</label>
                                                 <input type="text" name="destinomercancia" class="form-control" placeholder="" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Tipo Producto</label>
+                                                <label for="">Category</label>
                                                 <select class="form-control"  id="tipoproducto" name="tipoproducto" required>
                                                     <option value="">Seleccionar Tipo Producto</option>
                                                     <option value="Fuentes">Fuentes</option>
@@ -66,7 +66,7 @@ include('../../../layout/admin/parte1.php');
                                         </div>
                                         <div class="col-md-8">
                                             <div class="form-group">
-                                                <label for="">Descripción</label>
+                                                <label for="">Type</label>
                                                 <input type="text" name="descripcion" class="form-control" placeholder="Nombre Comercial">
                                             </div>
                                         </div>
