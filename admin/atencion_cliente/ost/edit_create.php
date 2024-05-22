@@ -55,7 +55,7 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                     Modifique la información correspondiente
                 </div>
                 <div class="card-body">
-                    <form action="controller_edit_index.php" method="post">
+                    <form action="controller_edit_create.php" method="post">
                         
                         <div class="row">
                             <div class="col-md-9">
