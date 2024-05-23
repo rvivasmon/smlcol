@@ -1,12 +1,12 @@
 <?php 
 
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
 
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
+include('../../../../layout/admin/sesion.php');
+include('../../../../layout/admin/datos_sesion_user.php');
 
-include('../../../layout/admin/parte1.php');
+include('../../../../layout/admin/parte1.php');
 include('controller_show_tracking.php');
 
 ?>
@@ -77,7 +77,7 @@ include('controller_show_tracking.php');
 
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/administracion/tracking/index_tracking.php"; ?>" class="btn btn-default btn-block">Volver</a>
+                                <a href="<?php echo $URL."admin/administracion/tracking/tracking_col/index_tracking.php"; ?>" class="btn btn-default btn-block">Volver</a>
                             </div>
                         </div>
                 </div>
@@ -85,4 +85,4 @@ include('controller_show_tracking.php');
         </div><!-- /.container-fluid -->
     </div>
 </div>
-<?php include('../../../layout/admin/parte2.php');?>
+<?php include('../../../../layout/admin/parte2.php');?>

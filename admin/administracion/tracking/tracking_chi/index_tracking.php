@@ -1,13 +1,13 @@
 <?php 
 
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
 
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
+include('../../../../layout/admin/sesion.php');
+include('../../../../layout/admin/datos_sesion_user.php');
 
 
-include('../../../layout/admin/parte1.php');
+include('../../../../layout/admin/parte1.php');
 
 
 ?>
@@ -36,11 +36,9 @@ include('../../../layout/admin/parte1.php');
                                 <tr>
                                     <th>ID</th>
                                     <th>Fecha</th>
-                                    <th>Origen Solicitud</th>
                                     <th>Tipo</th>
                                     <th>Descripción</th>
                                     <th>Cantidad</th>
-                                    <th>Procesado</th>
                                     <th>Observación</th>
                                     <th>Terminado</th>
                                     <th><center>Acciones</center></th>
@@ -49,18 +47,16 @@ include('../../../layout/admin/parte1.php');
                             <tbody>
                                 <?php
                                 $contador = 0;
-                                $query = $pdo->prepare('SELECT * FROM tracking WHERE estado = "1"');
+                                $query = $pdo->prepare('SELECT * FROM tracking WHERE status = "2"');
 
                                 $query->execute();
                                 $trackings = $query->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($trackings as $tracking){
                                     $id = $tracking['id'];
-                                    $date = $tracking['date'];
-                                    $origin = $tracking['origin'];
+                                    $date = $tracking['date_status'];
                                     $type = $tracking['type'];
                                     $category = $tracking['category'];
                                     $quantitly = $tracking['quantitly'];
-                                    $status = $tracking['status'];
                                     $obscolombia = $tracking['observaciones_colombia'];
                                     $finished = $tracking['finished'];
                                     $contador = $contador + 1;
@@ -68,11 +64,9 @@ include('../../../layout/admin/parte1.php');
                                     <tr>
                                         <td><?php echo $contador; ?></td>
                                         <td><?php echo $date; ?></td>
-                                        <td><?php echo $origin; ?></td>
                                         <td><?php echo $type; ?></td>
                                         <td><?php echo $category; ?></td>
                                         <td><?php echo $quantitly; ?></td>
-                                        <td><?php echo $status; ?></td>
                                         <td><?php echo $obscolombia; ?></td>
                                         <td><?php echo $finished; ?></td>
                                         <td>
@@ -97,7 +91,7 @@ include('../../../layout/admin/parte1.php');
 </div>
 </div>
 
-<?php include('../../../layout/admin/parte2.php');?>
+<?php include('../../../../layout/admin/parte2.php');?>
 
 <script>
     $(function () {

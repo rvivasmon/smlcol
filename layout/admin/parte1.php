@@ -142,7 +142,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </a>
                     <ul class="nav nav-treeview">
                       <li class="nav-item">
-                        <a href="<?php echo $URL;?>admin/administracion/tracking/index_tracking.php" class="nav-link">
+                        <a href="<?php echo $URL;?>admin/administracion/tracking/tracking_col/index_tracking.php" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>TRACKING</p>
                         </a>
@@ -599,6 +599,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       </p>
                     </a>
                     <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/administracion/tracking/tracking_chi/index_tracking.php" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Requests Tracking</p>
+                        </a>
+                      </li>
                       <li class="nav-item">
                         <a href="<?php echo $URL;?>admin/list_price_techled/index_modules.php" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>

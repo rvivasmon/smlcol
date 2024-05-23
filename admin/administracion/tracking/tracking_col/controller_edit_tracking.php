@@ -1,10 +1,10 @@
 <?php 
 
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
 
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
+include('../../../../layout/admin/sesion.php');
+include('../../../../llayout/admin/datos_sesion_user.php');
 
 $id = $_POST['id'];
 $date1 = $_POST['date'];
@@ -38,7 +38,7 @@ $sentencia->bindParam(':obscolombia', $obscolombia);
 
 if ($sentencia->execute()) {
   echo "Usuario actualizado exitosamente"; // Mensaje de éxito
-  header('Location:' .$URL.'admin/administracion/tracking/index_tracking.php');
+  header('Location:' .$URL.'admin/administracion/tracking/tracking_col/index_tracking.php');
 } else {
   // Maneja los posibles errores durante la ejecución
     $errorInfo = $sentencia->errorInfo();

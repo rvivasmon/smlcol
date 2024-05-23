@@ -1,7 +1,7 @@
 <?php
 
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
 
 $id_usuario = $_POST['id'];
 $estado_inactivo = '2';
@@ -15,7 +15,7 @@ $sentencia->bindParam(':estado_inactivo', $estado_inactivo);
 
 if ($sentencia->execute()) {
     echo "Usuario eliminado exitosamente"; // Mensaje de éxito
-    header('Location:' .$URL.'admin/administracion/tracking/index_tracking.php');
+    header('Location:' .$URL.'admin/administracion/tracking/tracking_col/index_tracking.php');
 } else {
     // Maneja los posibles errores durante la ejecución
     $errorInfo = $sentencia->errorInfo();
