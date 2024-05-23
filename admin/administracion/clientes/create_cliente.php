@@ -116,8 +116,8 @@ include('../../../layout/admin/parte1.php');
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Ciudad</label>
-                                                <input type="text" name="ciudad" class="form-control" placeholder="Ciudad" required>
+                                                <label for="">País</label>
+                                                <input type="text" name="pais" class="form-control" placeholder="País" required>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -128,10 +128,12 @@ include('../../../layout/admin/parte1.php');
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">País</label>
-                                                <input type="text" name="pais" class="form-control" placeholder="País" required>
+                                                <label for="">Ciudad</label>
+                                                <input type="text" name="ciudad" class="form-control" placeholder="Ciudad" required>
                                             </div>
                                         </div>
+
+
                                     </div>
                                 </div>
                             </div>

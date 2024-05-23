@@ -44,7 +44,7 @@ include('../../../layout/admin/parte1.php');
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Category</label>
+                                                <label for="">Type</label>
                                                 <select class="form-control"  id="tipoproducto" name="tipoproducto" required>
                                                     <option value="">Seleccionar Tipo Producto</option>
                                                     <option value="Fuentes">Fuentes</option>
@@ -66,7 +66,7 @@ include('../../../layout/admin/parte1.php');
                                         </div>
                                         <div class="col-md-8">
                                             <div class="form-group">
-                                                <label for="">Type</label>
+                                                <label for="">Category</label>
                                                 <input type="text" name="descripcion" class="form-control" placeholder="Nombre Comercial">
                                             </div>
                                         </div>

@@ -6,7 +6,6 @@ include('../../../app/config/conexion.php');
 include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
 
-
 include('../../../layout/admin/parte1.php');
 
 
@@ -18,68 +17,53 @@ include('../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Solicitudes SML / TL</h1>
+                <h1 class="m-0">Ciudades SML</h1>
                     <div class="card card-blue">
                         <div class="card-header">
-                            ACTIVAS
+                            ACTIVOS
                         </div>
 
                         <hr>
 
-                        <div class="card-tools ml-4">
-                            <a href="create_tracking.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear nueva solicitud</a>
-                        </div>
+                    <div class="card-tools ml-4">
+                        <a href="create_ciudad.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear nueva ciudad</a>
+                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                        <table id="table_tracking" class="table table-striped table-hover table-bordered">
+                        <table id="table_usuarios" class="table table-striped table-hover table-bordered">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Fecha</th>
-                                    <th>Origen Solicitud</th>
-                                    <th>Tipo</th>
-                                    <th>Descripción</th>
-                                    <th>Cantidad</th>
-                                    <th>Procesado</th>
-                                    <th>Observación</th>
-                                    <th>Terminado</th>
+                                    <th>Ciudad</th>
+                                    <th>Departamento/Provincia/Estado</th>
+                                    <th>País</th>
                                     <th><center>Acciones</center></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 $contador = 0;
-                                $query = $pdo->prepare('SELECT * FROM tracking WHERE estado = "1"');
+                                $query = $pdo->prepare('SELECT * FROM ciudad');
 
                                 $query->execute();
-                                $trackings = $query->fetchAll(PDO::FETCH_ASSOC);
-                                foreach ($trackings as $tracking){
-                                    $id = $tracking['id'];
-                                    $date = $tracking['date'];
-                                    $origin = $tracking['origin'];
-                                    $type = $tracking['type'];
-                                    $category = $tracking['category'];
-                                    $quantitly = $tracking['quantitly'];
-                                    $status = $tracking['status'];
-                                    $obscolombia = $tracking['observaciones_colombia'];
-                                    $finished = $tracking['finished'];
+                                $ciudades = $query->fetchAll(PDO::FETCH_ASSOC);
+                                foreach ($ciudades as $ciudadd){
+                                    $id = $ciudadd['id'];
+                                    $ciudad = $ciudadd['ciudad'];
+                                    $departamento = $ciudadd['dep_prov'];
+                                    $pais = $ciudadd['pais'];
                                     $contador = $contador + 1;
                                 ?>
                                     <tr>
                                         <td><?php echo $contador; ?></td>
-                                        <td><?php echo $date; ?></td>
-                                        <td><?php echo $origin; ?></td>
-                                        <td><?php echo $type; ?></td>
-                                        <td><?php echo $category; ?></td>
-                                        <td><?php echo $quantitly; ?></td>
-                                        <td><?php echo $status; ?></td>
-                                        <td><?php echo $obscolombia; ?></td>
-                                        <td><?php echo $finished; ?></td>
+                                        <td><?php echo $ciudad; ?></td>
+                                        <td><?php echo $departamento; ?></td>
+                                        <td><?php echo $pais; ?></td>
                                         <td>
                                             <center>
-                                                <a href="show_tracking.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                <a href="edit_tracking.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
-                                                <a href="delete_tracking.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
+                                                <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
+                                                <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
+                                                <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
                                             </center>
                                         </td>
                                     </tr>
@@ -101,16 +85,16 @@ include('../../../layout/admin/parte1.php');
 
 <script>
     $(function () {
-        $("#table_tracking").DataTable({
+        $("#table_usuarios").DataTable({
             "pageLength": 10,
             "language": {
                 "emptyTable": "No hay información",
-                "info": "Mostrando _START_ a _END_ de _TOTAL_ Solicitudes",
-                "infoEmpty": "Mostrando 0 a 0 de 0 Solicitudes",
-                "infoFiltered": "(Filtrado de _MAX_ total Solicitudes)",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Usuarios",
+                "infoEmpty": "Mostrando 0 a 0 de 0 Usuarios",
+                "infoFiltered": "(Filtrado de _MAX_ total Usuarios)",
                 "infoPostFix": "",
                 "thousands": ",",
-                "lengthMenu": "Mostrar _MENU_ Solicitudes",
+                "lengthMenu": "Mostrar _MENU_ Usuarios",
                 "loadingRecords": "Cargando...",
                 "processing": "Procesando...",
                 "search": "Buscador:",
@@ -148,6 +132,6 @@ include('../../../layout/admin/parte1.php');
                     collectionLayout: 'fixed three-column'
                 }
             ],
-        }).buttons().container().appendTo('#table_tracking_wrapper .col-md-6:eq(0)');
+        }).buttons().container().appendTo('#table_usuarios_wrapper .col-md-6:eq(0)');
     });
 </script>

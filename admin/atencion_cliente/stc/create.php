@@ -131,7 +131,7 @@ include('../../../layout/admin/parte1.php');
                                                     <option value="">Seleccionar Cliente</option>
 
                                                     <?php 
-                                                    $query_cliente = $pdo->prepare('SELECT * FROM clientes');
+                                                    $query_cliente = $pdo->prepare('SELECT * FROM clientes ORDER BY nombre_comercial ASC');
                                                     $query_cliente->execute();
                                                     $clientes = $query_cliente->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($clientes as $cliente) {
@@ -152,7 +152,7 @@ include('../../../layout/admin/parte1.php');
                                                     <option value="">Seleccionar Ciudad</option>
 
                                                     <?php 
-                                                    $query_ciudad = $pdo->prepare('SELECT * FROM ciudad');
+                                                    $query_ciudad = $pdo->prepare('SELECT * FROM ciudad ORDER BY ciudad ASC');
                                                     $query_ciudad->execute();
                                                     $ciudades = $query_ciudad->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($ciudades as $ciudad) {

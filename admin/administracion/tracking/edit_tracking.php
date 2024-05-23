@@ -21,6 +21,8 @@ foreach ($trackings as $tracking){
     $type = $tracking['type'];
     $category = $tracking['category'];
     $quantitly = $tracking['quantitly'];
+    $obscolombia = $tracking['observaciones_colombia'];
+
 
 }
 
@@ -42,7 +44,7 @@ foreach ($trackings as $tracking){
                     Introduzca la información correspondiente
                 </div>
                 <div class="card-body">
-                    <form action="controller_edit.php" method="post">
+                    <form action="controller_edit_tracking.php" method="post">
 
                         <div class="row">
                             <div class="col-md-8">
@@ -62,15 +64,15 @@ foreach ($trackings as $tracking){
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Category</label>
-                                                <select class="form-control"  id="tipoproducto" name="tipoproducto" required>
+                                                <label for="">Type</label>
+                                                <select class="form-control" id="tipoproducto" name="tipoproducto" required>
                                                     <option value="">Seleccionar Tipo Producto</option>
-                                                    <option value="Fuentes">Fuentes</option>
-                                                    <option value="Modulos">Modulos</option>
-                                                    <option value="Tarjetas">Tarjetas</option>
-                                                    <option value="Sistema de Control">Sistema de Control</option>
-                                                    <option value="Video Procesador">Video Procesador</option>
-                                                    <option value="LCD">LCD</option>
+                                                    <option value="Fuentes" <?php echo ($type == 'Fuentes') ? 'selected' : ''; ?>>Fuentes</option>
+                                                    <option value="Modulos" <?php echo ($type == 'Modulos') ? 'selected' : ''; ?>>Modulos</option>
+                                                    <option value="Tarjetas" <?php echo ($type == 'Tarjetas') ? 'selected' : ''; ?>>Tarjetas</option>
+                                                    <option value="Sistema de Control" <?php echo ($type == 'Sistema de Control') ? 'selected' : ''; ?>>Sistema de Control</option>
+                                                    <option value="Video Procesador" <?php echo ($type == 'Video Procesador') ? 'selected' : ''; ?>>Video Procesador</option>
+                                                    <option value="LCD" <?php echo ($type == 'LCD') ? 'selected' : ''; ?>>LCD</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -78,14 +80,14 @@ foreach ($trackings as $tracking){
                                     <div class="row">
                                         <div class="col-md-8">
                                             <div class="form-group">
-                                                <label for="">Type</label>
-                                                <input type="text" name="descripcion" class="form-control" placeholder="Nombre Comercial">
+                                                <label for="">Category</label>
+                                                <input type="text" name="descripcion" class="form-control" value="<?php echo $category;?>" placeholder="Nombre Comercial">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="">Quantitly</label>
-                                                <input type="text" name="quantitly" value="<?php echo $type;?>" class="form-control" >
+                                                <input type="text" name="quantitly" value="<?php echo $quantitly;?>" class="form-control" >
                                                 <input type="text" name="id" value="<?php echo $id;?>" hidden>
                                             </div>
                                         </div>
@@ -95,11 +97,10 @@ foreach ($trackings as $tracking){
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="">Observaciones Colombia</label>
-                                    <textarea type="text" name="obscolombia" class="form-control" rows="8" placeholder="" required></textarea>
+                                    <textarea type="text" name="obscolombia" class="form-control" rows="8" required><?php echo $obscolombia;?></textarea>
                                 </div>
                             </div>
-                        </div>
-                        
+                        </div>                        
 
                         <hr>
 

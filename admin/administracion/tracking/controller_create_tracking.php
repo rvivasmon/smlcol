@@ -12,10 +12,11 @@ $destino_mercancia = $_POST['destinomercancia'];
 $tipo_producto = $_POST['tipoproducto'];
 $descripcion = $_POST['descripcion'];
 $cantidad = $_POST['cantidad'];
+$obscolombia = $_POST['obscolombia'];
 $usuario_operador = $_POST['usuarioperador'];
 
 
-$sql = "INSERT INTO tracking (fecha, op, tipo, descripcion, cantidad, usuario) VALUES (:fecha_ingreso, :destino_mercancia, :tipo_producto, :descripcion, :cantidad, :usuario_operador)";
+$sql = "INSERT INTO tracking (date, origin, type, category, quantitly, usuario, observaciones_colombia) VALUES (:fecha_ingreso, :destino_mercancia, :tipo_producto, :descripcion, :cantidad, :usuario_operador, :obscolombia)";
 
 
 $sentencia = $pdo->prepare($sql);
@@ -25,6 +26,7 @@ $sentencia->bindParam(':destino_mercancia', $destino_mercancia);
 $sentencia->bindParam(':tipo_producto', $tipo_producto);
 $sentencia->bindParam(':descripcion', $descripcion);
 $sentencia->bindParam(':cantidad', $cantidad);
+$sentencia->bindParam(':obscolombia', $obscolombia);
 $sentencia->bindParam(':usuario_operador', $usuario_operador);
 
 
