@@ -9,9 +9,7 @@ include('../../../../layout/admin/datos_sesion_user.php');
 
 include('../../../../layout/admin/parte1.php');
 
-
 ?>
-
 
 <div class="content-wrapper">
     <div class="content-header">
@@ -69,7 +67,11 @@ include('../../../../layout/admin/parte1.php');
 
                                     // convertir el valor de "status" a "NO" o "SÍ"
                                     $statusText = ($status == 1) ? "NO" : (($status == 2) ? "SÍ" : "Desconocido");
-                                ?>
+
+                                    // Convertir el valor de "finished" a los valores requeridos
+                                    $finishedText = ($finished == 0) ? "" : (($finished == 1) ? "NO" : "SÍ");
+
+                                    ?>
                                     <tr>
                                         <td><?php echo $contador; ?></td>
                                         <td><?php echo $date; ?></td>
@@ -77,10 +79,11 @@ include('../../../../layout/admin/parte1.php');
                                         <td><?php echo $type; ?></td>
                                         <td><?php echo $category; ?></td>
                                         <td><?php echo $quantitly; ?></td>
-                                        <td><?php echo $statusText; ?></td>
+                                        <td><a href="#" class="change-status" data-id="<?php echo $id; ?>"><?php echo $statusText; ?></a></td>
+
                                         <td><?php echo $date_status; ?></td>
                                         <td><?php echo $obscolombia; ?></td>
-                                        <td><?php echo $finished; ?></td>
+                                        <td><?php echo $finishedText; ?></td>
                                         <td>
                                             <center>
                                                 <a href="show_tracking.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
@@ -96,11 +99,38 @@ include('../../../../layout/admin/parte1.php');
                     </table>
                     </div>
                 </div>
-                </div>
+            </div>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
+</div>
+
+<!-- Modal para cambiar el estado -->
+<div class="modal fade" id="changeStatusModal" tabindex="-1" role="dialog" aria-labelledby="changeStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changeStatusModalLabel">Cambiar Estado de Procesado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="changeStatusForm" method="post">
+                    <input type="hidden" name="id" id="trackingId">
+                    <div class="form-group">
+                        <label for="status">PROCESAR?</label>
+                        <select name="status" id="status" class="form-control" required>
+                            <option value="2">Sí</option>
+                            <option value="1">No</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <?php include('../../../../layout/admin/parte2.php');?>
@@ -156,4 +186,39 @@ include('../../../../layout/admin/parte1.php');
             ],
         }).buttons().container().appendTo('#table_tracking_wrapper .col-md-6:eq(0)');
     });
+</script>
+
+<script>
+$(document).ready(function() {
+    // Abrir modal al hacer clic en el campo "Procesado"
+    $('.change-status').click(function() {
+
+        if (!isAdmin) {
+            alert('NO ESTÁ AUTORIZADO');
+            return;
+        }
+
+        var trackingId = $(this).data('id');
+        $('#trackingId').val(trackingId);
+        $('#changeStatusModal').modal('show');
+    });
+
+    // Enviar formulario mediante AJAX
+    $('#changeStatusForm').submit(function(e) {
+        e.preventDefault();
+        var formData = $(this).serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: 'change_status.php',
+            data: formData,
+            success: function(response) {
+                location.reload(); // Recargar la página después de actualizar el estado
+            },
+            error: function() {
+                alert('Error al actualizar el estado.');
+            }
+        });
+    });
+});
 </script>

@@ -26,14 +26,12 @@ include('../../../../layout/admin/parte1.php');
 
                         <hr>
 
-                        <div class="card-tools ml-4">
-                            <a href="create_tracking.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear nueva solicitud</a>
-                        </div>
                     <div class="card-body">
                         <div class="table-responsive">
                         <table id="table_tracking" class="table table-striped table-hover table-bordered">
                             <thead>
                                 <tr>
+                                    <th><input type="checkbox" id="select-all"></th> <!-- Checkbox para seleccionar todos -->
                                     <th>ID</th>
                                     <th>Fecha</th>
                                     <th>Tipo</th>
@@ -60,19 +58,31 @@ include('../../../../layout/admin/parte1.php');
                                     $obscolombia = $tracking['observaciones_colombia'];
                                     $finished = $tracking['finished'];
                                     $contador = $contador + 1;
+
+                                    // Reemplazar el valor numérico por el texto correspondiente
+                                    if ($finished == 0) {
+                                        $finished_text = '';
+                                    } elseif ($finished == 1) {
+                                        $finished_text = 'NO';
+                                    } elseif ($finished == 2) {
+                                        $finished_text = 'SÍ';
+                                    } else {
+                                        $finished_text = $finished; // Por si acaso hay otros valores inesperados
+                                    }
                                 ?>
                                     <tr>
-                                        <td><?php echo $contador; ?></td>
+                                        <td><input type="checkbox" class="record-checkbox" value="<?php echo $id; ?>"></td> <!-- Checkbox por registro -->
+                                        <td><a href="<?php echo $URL; ?>admin/administracion/tracking/tracking_chi/show_tracking.php?id=<?php echo $id; ?>"><?php echo $contador; ?></a></td>
                                         <td><?php echo $date; ?></td>
                                         <td><?php echo $type; ?></td>
                                         <td><?php echo $category; ?></td>
                                         <td><?php echo $quantitly; ?></td>
                                         <td><?php echo $obscolombia; ?></td>
-                                        <td><?php echo $finished; ?></td>
+                                        <td><?php echo $finished_text; ?></td>
                                         <td>
                                             <center>
-                                                <a href="show_tracking.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                <a href="edit_tracking.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
+                                                <a href="show_tracking_terminado.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Procesar <i class="fas fa-eye"></i></a>
+                                                <a href="edit_tracking.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Terminar <i class="fas fa-pen"></i></a>
                                                 <a href="delete_tracking.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
                                             </center>
                                         </td>
@@ -143,5 +153,13 @@ include('../../../../layout/admin/parte1.php');
                 }
             ],
         }).buttons().container().appendTo('#table_tracking_wrapper .col-md-6:eq(0)');
+    });
+
+        // Select/Deselect all checkboxes
+        $('#select-all').click(function() {
+        var checked = this.checked;
+        $('.record-checkbox').each(function() {
+            this.checked = checked;
+        });
     });
 </script>

@@ -16,4 +16,14 @@ foreach ($query_usuarios as $sesion_usuario){
     $sesion_cargo = $sesion_usuario['nombre_cargo'];
     $sesion_estado = $sesion_usuario['nombre_estado'];
 
+    $_SESSION['sesion_cargo'] = $sesion_cargo; // Asegúrate de guardar el cargo en la sesión
+
+
+    $isAdmin = $sesion_cargo  == 'Administrador';
+
 }
+?>
+
+<script>
+    var isAdmin = <?php echo json_encode($isAdmin); ?>;
+</script>
