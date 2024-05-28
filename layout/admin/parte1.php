@@ -148,6 +148,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                       </li>
                       <li class="nav-item">
+                        <a href="<?php echo $URL;?>admin/administracion/tecnicos/index_tecnicos.php" class="nav-link">
+                          <i class="fas fa-cog nav-icon"></i>
+                          <p>TÉCNICOS</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
                         <a href="<?php echo $URL;?>admin/administracion/create_oc.php" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>CREAR OC</p>

@@ -24,6 +24,9 @@ include('../../../../layout/admin/parte1.php');
                             ACTIVAS
                         </div>
 
+                        <button id="edit-selected" class="btn btn-warning btn-sm" disabled>Editar Seleccionados</button>
+
+
                         <hr>
 
                     <div class="card-body">
@@ -38,6 +41,7 @@ include('../../../../layout/admin/parte1.php');
                                     <th>Descripción</th>
                                     <th>Cantidad</th>
                                     <th>Observación</th>
+                                    <th>En fabricación</th>
                                     <th>Terminado</th>
                                     <th><center>Acciones</center></th>
                                 </tr>
@@ -56,6 +60,7 @@ include('../../../../layout/admin/parte1.php');
                                     $category = $tracking['category'];
                                     $quantitly = $tracking['quantitly'];
                                     $obscolombia = $tracking['observaciones_colombia'];
+                                    $en_ejecucion = $tracking['en_produccion'];
                                     $finished = $tracking['finished'];
                                     $contador = $contador + 1;
 
@@ -63,11 +68,22 @@ include('../../../../layout/admin/parte1.php');
                                     if ($finished == 0) {
                                         $finished_text = '';
                                     } elseif ($finished == 1) {
-                                        $finished_text = 'NO';
-                                    } elseif ($finished == 2) {
                                         $finished_text = 'SÍ';
+                                    } elseif ($finished == 2) {
+                                        $finished_text = 'NO';
                                     } else {
                                         $finished_text = $finished; // Por si acaso hay otros valores inesperados
+                                    }
+
+                                    //Reemplazo el valorde en_ejecucion por el texto correspondiente
+                                    if ($en_ejecucion == 1) {
+                                        
+                                        $en_ejecucion_text = 'SÍ';
+                                    
+                                    } else {
+
+                                        $en_ejecucion_text = '';
+
                                     }
                                 ?>
                                     <tr>
@@ -78,12 +94,13 @@ include('../../../../layout/admin/parte1.php');
                                         <td><?php echo $category; ?></td>
                                         <td><?php echo $quantitly; ?></td>
                                         <td><?php echo $obscolombia; ?></td>
+                                        <td><?php echo $en_ejecucion_text; ?></td> <!-- Mostrar el texto en_ejecucion -->
                                         <td><?php echo $finished_text; ?></td>
                                         <td>
                                             <center>
-                                                <a href="show_tracking_terminado.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Procesar <i class="fas fa-eye"></i></a>
-                                                <a href="edit_tracking.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Terminar <i class="fas fa-pen"></i></a>
-                                                <a href="delete_tracking.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
+                                                <button onclick="confirmarProduccion(<?php echo $id; ?>)" class="btn btn-info btn-sm">Procesar <i class="fas fa-eye"></i></button>
+                                                <button onclick="terminarProduccion(<?php echo $id; ?>, <?php echo $en_ejecucion; ?>)" class="btn btn-success btn-sm">Terminar <i class="fas fa-pen"></i></button>
+                                                <a href="edit_tracking.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Enviar <i class="fas fa-ship"></i></a>
                                             </center>
                                         </td>
                                     </tr>
@@ -162,4 +179,89 @@ include('../../../../layout/admin/parte1.php');
             this.checked = checked;
         });
     });
+
+    function confirmarProduccion(id) {
+        if (confirm("Desea iniciar la fabricación del producto?")) {
+            // Si el usuario selecciona "SÍ"
+            window.location.href = "procesar_produccion.php?id=" + id;
+        }
+        // Si el usuario selecciona "NO", no se hace nada y permanece en la página
+    }
+
+    function terminarProduccion(id, enEjecucion) {
+    if (enEjecucion == 1) {
+        if (confirm("¿Está seguro de que desea terminar la fabricación del producto?")) {
+            // Redirigir a la página que se encarga de actualizar los campos finished y date_finished
+            window.location.href = "terminar_produccion.php?id=" + id;
+        }
+    } else {
+        alert("Primero comience la fabricación de las piezas");
+    }
+}
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('.record-checkbox');
+    const editSelectedButton = document.getElementById('edit-selected');
+    const selectedIdsInput = document.getElementById('selectedIds');
+
+    function updateButtonState() {
+      const selectedIds = Array.from(checkboxes)
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => checkbox.value);
+
+      if (selectedIds.length >= 2) {
+        editSelectedButton.disabled = false;
+      } else {
+        editSelectedButton.disabled = true;
+      }
+
+      selectedIdsInput.value = selectedIds.join(',');
+    }
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', updateButtonState);
+    });
+
+    document.getElementById('select-all').addEventListener('change', function () {
+      const checked = this.checked;
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = checked;
+      });
+      updateButtonState();
+    });
+
+    editSelectedButton.addEventListener('click', function () {
+      const selectedIds = selectedIdsInput.value;
+      if (selectedIds) {
+        $('#editModal').modal('show');
+      } else {
+        alert('Seleccione al menos dos registros para editar.');
+      }
+    });
+
+    document.getElementById('editForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const formData = new FormData(this);
+
+      fetch('update_tracking.php', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Registros actualizados exitosamente.');
+          location.reload();
+        } else {
+          alert('Hubo un error al actualizar los registros.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  });
 </script>
+

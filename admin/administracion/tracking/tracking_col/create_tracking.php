@@ -67,13 +67,13 @@ include('../../../../layout/admin/parte1.php');
                                         <div class="col-md-8">
                                             <div class="form-group">
                                                 <label for="">Category</label>
-                                                <input type="text" name="descripcion" class="form-control" placeholder="Nombre Comercial">
+                                                <input type="text" name="descripcion" class="form-control" placeholder="">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="">Cantidad</label>
-                                                <input type="text" name="cantidad" class="form-control" placeholder="ID Producto">
+                                                <input type="text" name="cantidad" class="form-control" placeholder="">
                                             </div>
                                         </div>
                                     </div>                                

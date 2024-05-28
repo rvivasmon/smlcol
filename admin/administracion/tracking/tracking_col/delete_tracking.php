@@ -21,6 +21,7 @@ foreach ($trackings as $tracking){
     $type = $tracking['type'];
     $category = $tracking['category'];
     $quantitly = $tracking['quantitly'];
+    $obscolombia = $tracking['observaciones_colombia'];
 
 }
 
@@ -61,30 +62,22 @@ foreach ($trackings as $tracking){
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">Category</label>
-                                                <select class="form-control"  id="tipoproducto" name="tipoproducto" readonly>
-                                                    <option value="">Seleccionar Tipo Producto</option>
-                                                    <option value="Fuentes">Fuentes</option>
-                                                    <option value="Modulos">Modulos</option>
-                                                    <option value="Tarjetas">Tarjetas</option>
-                                                    <option value="Sistema de Control">Sistema de Control</option>
-                                                    <option value="Video Procesador">Video Procesador</option>
-                                                    <option value="LCD">LCD</option>
-                                                </select>
+                                                <label for="">Type</label>
+                                                <input type="text" name="type" value="<?php echo $type;?>" class="form-control" readonly>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-8">
                                             <div class="form-group">
-                                                <label for="">Type</label>
-                                                <input type="text" name="descripcion" value="<?php echo $type; ?>" class="form-control" readonly>
+                                                <label for="">Category</label>
+                                                <input type="text" name="category" value="<?php echo $category; ?>" class="form-control" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="">Quantitly</label>
-                                                <input type="text" name="quantitly" value="<?php echo $type;?>" class="form-control" readonly>
+                                                <input type="text" name="quantitly" value="<?php echo $quantitly;?>" class="form-control" readonly>
                                                 <input type="text" name="id" value="<?php echo $id;?>" hidden>
                                             </div>
                                         </div>
@@ -94,7 +87,7 @@ foreach ($trackings as $tracking){
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="">Observaciones Colombia</label>
-                                    <textarea type="text" name="obscolombia" class="form-control" rows="8" placeholder="" readonly></textarea>
+                                    <textarea type="text" name="obscolombia" class="form-control" rows="8" placeholder="" readonly><?php echo $obscolombia;?></textarea>
                                 </div>
                             </div>
                         </div>

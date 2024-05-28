@@ -25,7 +25,6 @@ include('../../../layout/admin/datos_sesion_user.php');
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>ID STC</th>
                                     <th>ID OST</th>
                                     <th>Fecha Ingreso</th>
                                     <th>Medio Ingreso</th>
@@ -73,7 +72,6 @@ include('../../../layout/admin/datos_sesion_user.php');
                                 ?>
                                     <tr>
                                         <td><?php echo $contador; ?></td>
-                                        <td><?php echo $id_stc; ?></td>
                                         <td><?php echo $id_ost; ?></td>
                                         <td><?php echo $fechaingreso; ?></td>
                                         <td><?php echo $medioingreso; ?></td>

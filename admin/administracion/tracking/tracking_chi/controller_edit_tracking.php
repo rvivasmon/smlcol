@@ -7,7 +7,7 @@ include('../../../../layout/admin/sesion.php');
 include('../../../../layout/admin/datos_sesion_user.php');
 
 $id = $_POST['id'];
-$date_finished = $_POST['date_finished'];
+$date_finished = $_POST['date_finished1'];
 $num_envoys = $_POST['num_envoys'];
 $ship = $_POST['ship'];
 $guia = $_POST['guia'];
@@ -24,7 +24,7 @@ SET
     guia = :guia,
     fecha_guia = :fecha_guia,
     observaciones_china = :obschina,
-    finished = :finished
+    fecha_envio = :date_finished
     WHERE 
     id = :id");
 

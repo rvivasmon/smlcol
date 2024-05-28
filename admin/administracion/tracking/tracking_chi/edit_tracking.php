@@ -43,7 +43,7 @@ if (empty($date_finished)) {
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Finalización de Producto</h1>
+                    <h1 class="m-0">Envío de Producto</h1>
 
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -64,7 +64,7 @@ if (empty($date_finished)) {
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="">Date Finished</label>
-                                                <input type="text" name="date_finished" value="<?php echo $date_finished;?>" class="form-control" readonly>
+                                                <input type="text" name="date_finished1" value="<?php echo $date_finished;?>" class="form-control" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -112,7 +112,7 @@ if (empty($date_finished)) {
                                 <a href="<?php echo $URL."admin/administracion/tracking/tracking_chi/index_tracking.php";?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
-                                <button type="submit" onclick="return confirm('Asegurese de diligenciar correctamente los datos')" class="btn btn-success btn-block">Finalizar Producto</button>
+                                <button type="submit" onclick="return confirm('Asegurese de diligenciar correctamente los datos')" class="btn btn-success btn-block">Enviar Producto</button>
                             </div>
                         </div>
 

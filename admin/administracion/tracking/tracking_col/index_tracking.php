@@ -24,9 +24,10 @@ include('../../../../layout/admin/parte1.php');
 
                         <hr>
 
-                        <div class="card-tools ml-4">
-                            <a href="create_tracking.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear nueva solicitud</a>
-                        </div>
+                    <div class="card-tools ml-4">
+                        <a href="create_tracking.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear nueva solicitud</a>
+                    </div>
+                    
                     <div class="card-body">
                         <div class="table-responsive">
                         <table id="table_tracking" class="table table-striped table-hover table-bordered">
@@ -41,7 +42,10 @@ include('../../../../layout/admin/parte1.php');
                                     <th>Procesado</th>
                                     <th>Fecha Procesado</th>
                                     <th>Observación</th>
+                                    <th>Inicio de Fabricación</th>
                                     <th>Terminado</th>
+                                    <th>Enviado</th>
+                                    <th>Fecha Envío</th>
                                     <th><center>Acciones</center></th>
                                 </tr>
                             </thead>
@@ -62,14 +66,17 @@ include('../../../../layout/admin/parte1.php');
                                     $status = $tracking['status'];
                                     $date_status = $tracking['date_status'];
                                     $obscolombia = $tracking['observaciones_colombia'];
+                                    $inicio_prod = $tracking['inicio_produccion'];
                                     $finished = $tracking['finished'];
+                                    $enviado = $tracking['enviar'];
+                                    $fecha_envio = $tracking['fecha_envio'];
                                     $contador = $contador + 1;
 
                                     // convertir el valor de "status" a "NO" o "SÍ"
                                     $statusText = ($status == 1) ? "NO" : (($status == 2) ? "SÍ" : "Desconocido");
 
                                     // Convertir el valor de "finished" a los valores requeridos
-                                    $finishedText = ($finished == 0) ? "" : (($finished == 1) ? "NO" : "SÍ");
+                                    $finishedText = ($finished == 0) ? "" : (($finished == 1) ? "SÍ" : "NO");
 
                                     ?>
                                     <tr>
@@ -80,10 +87,12 @@ include('../../../../layout/admin/parte1.php');
                                         <td><?php echo $category; ?></td>
                                         <td><?php echo $quantitly; ?></td>
                                         <td><a href="#" class="change-status" data-id="<?php echo $id; ?>"><?php echo $statusText; ?></a></td>
-
                                         <td><?php echo $date_status; ?></td>
                                         <td><?php echo $obscolombia; ?></td>
+                                        <td><?php echo $inicio_prod; ?></td>
                                         <td><?php echo $finishedText; ?></td>
+                                        <td><?php echo $enviado; ?></td>
+                                        <td><?php echo $fecha_envio; ?></td>
                                         <td>
                                             <center>
                                                 <a href="show_tracking.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>

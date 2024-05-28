@@ -37,7 +37,7 @@ if ($sentencia->execute()) {
         $stmt_update_ticket = $pdo->prepare($sql_update_ticket);
         $nuevo_estado_ticket = 2; // Nuevo valor para estado_ticket
         $stmt_update_ticket->bindParam(':estado_ticket', $nuevo_estado_ticket, PDO::PARAM_INT);
-        //$stmt_update_ticket->bindParam(':id_stc', $id_ost, PDO::PARAM_INT); // Asumiendo que $id_ost es el ID del ticket en la tabla stc
+        $stmt_update_ticket->bindParam(':id', $id_usuario, PDO::PARAM_INT); // Asumiendo que $id_ost es el ID del ticket en la tabla stc
         $stmt_update_ticket->execute();
     }
 
@@ -67,5 +67,3 @@ if ($sentencia->execute()) {
     // Si no se enviaron los datos del formulario, redirige o maneja el error
     header('Location: ' . $URL . 'ruta/donde/se/visualiza/el/formulario');
 }*/
-
-
