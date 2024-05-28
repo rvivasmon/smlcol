@@ -23,4 +23,4 @@ if ($stmt->execute($params)) {
 } else {
   echo json_encode(['success' => false, 'error' => $stmt->errorInfo()]);
 }
-?>
+
