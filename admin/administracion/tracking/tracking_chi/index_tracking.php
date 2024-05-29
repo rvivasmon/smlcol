@@ -49,7 +49,7 @@ include('../../../../layout/admin/parte1.php');
                             <tbody>
                                 <?php
                                 $contador = 0;
-                                $query = $pdo->prepare('SELECT * FROM tracking WHERE status = "2"');
+                                $query = $pdo->prepare('SELECT * FROM tracking WHERE status = "2" AND estado = "1"');
 
                                 $query->execute();
                                 $trackings = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -85,6 +85,10 @@ include('../../../../layout/admin/parte1.php');
                                         $en_ejecucion_text = '';
 
                                     }
+
+                                    // Determinar si los botones deben estar deshabilitados
+                                    $disable_procesar = $en_ejecucion == 1 ? 'disabled' : '';
+                                    $disable_terminar = $en_ejecucion != 1 || $finished == 1 ? 'disabled' : '';
                                 ?>
                                     <tr>
                                         <td><input type="checkbox" class="record-checkbox" value="<?php echo $id; ?>"></td> <!-- Checkbox por registro -->
@@ -98,8 +102,8 @@ include('../../../../layout/admin/parte1.php');
                                         <td><?php echo $finished_text; ?></td>
                                         <td>
                                             <center>
-                                                <button onclick="confirmarProduccion(<?php echo $id; ?>)" class="btn btn-info btn-sm">Procesar <i class="fas fa-eye"></i></button>
-                                                <button onclick="terminarProduccion(<?php echo $id; ?>, <?php echo $en_ejecucion; ?>)" class="btn btn-success btn-sm">Terminar <i class="fas fa-pen"></i></button>
+                                                <button onclick="confirmarProduccion(<?php echo $id; ?>)" class="btn btn-info btn-sm" <?php echo $disable_procesar; ?>>Procesar <i class="fas fa-eye"></i></button>
+                                                <button onclick="terminarProduccion(<?php echo $id; ?>, <?php echo $en_ejecucion; ?>)" class="btn btn-success btn-sm" <?php echo $disable_terminar; ?>>Terminar <i class="fas fa-pen"></i></button>
                                                 <a href="edit_tracking.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Enviar <i class="fas fa-ship"></i></a>
                                             </center>
                                         </td>
@@ -117,6 +121,52 @@ include('../../../../layout/admin/parte1.php');
     </div><!-- /.container-fluid -->
 </div>
 </div>
+
+<!-- Modal HTML -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Shipping information</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editForm">
+          <input type="hidden" id="selectedIds" name="selected_ids">
+          <div class="form-group">
+            <label for="num_envoys">Num Envoys</label>
+            <input type="text" class="form-control" id="num_envoys" name="num_envoys" required>
+          </div>
+          <div class="form-group">
+            <label for="ship">Ship</label>
+              <select class="form-control" id="ship" name="ship" required>
+                <option value="">Select an option</option>
+                <option value="Barco">Boats</option>
+                <option value="Avión">Airplane</option>
+                <option value="FEDEX">FEDEX</option>
+              </select>
+          </div>
+          <div class="form-group">
+            <label for="guia">Guide</label>
+            <input type="text" class="form-control" id="guia" name="guia" required>
+          </div>
+          <div class="form-group">
+            <label for="fecha_guia">Guide date</label>
+            <input type="date" class="form-control" id="fecha_guia" name="fecha_guia" required>
+          </div>
+          <div class="form-group">
+            <label for="obschina">Observations from China</label>
+            <textarea class="form-control" id="obschina" name="obschina" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <?php include('../../../../layout/admin/parte2.php');?>
 

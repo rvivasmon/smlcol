@@ -78,6 +78,9 @@ include('../../../../layout/admin/parte1.php');
                                     // Convertir el valor de "finished" a los valores requeridos
                                     $finishedText = ($finished == 0) ? "" : (($finished == 1) ? "SÍ" : "NO");
 
+                                    // Reemplazo el valor de enviado por el texto correspondiente
+                                    $enviado_text = $enviado ? ($enviado == 1 ? 'SÍ' : 'NO') : ''; // Si $enviado es nulo o vacío, dejarlo vacío en el formulario
+
                                     ?>
                                     <tr>
                                         <td><?php echo $contador; ?></td>
@@ -91,7 +94,7 @@ include('../../../../layout/admin/parte1.php');
                                         <td><?php echo $obscolombia; ?></td>
                                         <td><?php echo $inicio_prod; ?></td>
                                         <td><?php echo $finishedText; ?></td>
-                                        <td><?php echo $enviado; ?></td>
+                                        <td><?php echo $enviado_text; ?></td>
                                         <td><?php echo $fecha_envio; ?></td>
                                         <td>
                                             <center>
