@@ -154,18 +154,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo $URL;?>admin/administracion/create_oc.php" class="nav-link">
-                          <i class="far fa-circle nav-icon"></i>
-                          <p>CREAR OC</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="<?php echo $URL;?>admin/administracion/index_oc.php" class="nav-link">
-                          <i class="far fa-circle nav-icon"></i>
-                          <p>OC PENDIENTES</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
                         <a href="<?php echo $URL;?>admin/administracion/clientes/create_cliente.php" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>CREAR CLIENTES</p>
@@ -246,7 +234,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               ?>
 
               <?php
-                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Administración") ){ ?>
+                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="15") ){ ?>
 
                   <li class="nav-item">
                     <a href="#" class="nav-link active">
@@ -684,18 +672,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <p>Crear ID Producto</p>
                         </a>
                       </li>
-                      <li class="nav-item">
-                        <a href="<?php echo $URL;?>admin/ti_usuarios/index_cargos.php" class="nav-link">
-                          <i class="far fa-circle nav-icon"></i>
-                          <p>QQQQQQQQQQQQQQQQQQQQ</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="<?php echo $URL;?>admin/ti_usuarios/create_cargo.php" class="nav-link">
-                          <i class="far fa-circle nav-icon"></i>
-                          <p>QQQQQQQQQQQQQQQQQQQ</p>
-                        </a>
-                      </li>
                     </ul>
                   </li>
 
@@ -721,22 +697,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <p>Listado OST Asignadas</p>
                         </a>
                       </li>
+                    </ul>
+                  </li>
+
+              <?php
+                }
+              ?>
+
+                  <?php
+                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="8") ){ ?>
+
+                  <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                      <i class="nav-icon fas fa-users"></i>
+                      <p>
+                        MENÚ CLIENTE
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
                       <li class="nav-item">
-                        <a href="<?php echo $URL;?>admin/ti_usuarios/create.php" class="nav-link">
+                        <a href="<?php echo $URL;?>admin/cliente" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
-                          <p>Crear Usuario</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="<?php echo $URL;?>admin/ti_usuarios/index_cargos.php" class="nav-link">
-                          <i class="far fa-circle nav-icon"></i>
-                          <p>Listado de Cargos</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="<?php echo $URL;?>admin/ti_usuarios/create_cargo.php" class="nav-link">
-                          <i class="far fa-circle nav-icon"></i>
-                          <p>Crear Cargo</p>
+                          <p>Listado Pantallas</p>
                         </a>
                       </li>
                     </ul>

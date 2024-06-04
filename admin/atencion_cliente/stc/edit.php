@@ -86,7 +86,7 @@ foreach ($stcs as $stc){
                                                 <select name="tiposervicio" id="tiposervicio" class="form-control" required>
                                                     <?php 
                                                     $valor_actual_en_edicion = $stc['tipo_servicio'];
-                                                    $query_servicio = $pdo->prepare('SELECT * FROM tipo_servicio');
+                                                    $query_servicio = $pdo->prepare('SELECT * FROM tipo_servicio WHERE servicio_stc IS NOT NULL AND servicio_stc != "" ORDER BY servicio_stc ASC');
                                                     $query_servicio->execute();
                                                     $servicios = $query_servicio->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($servicios as $servicio) {

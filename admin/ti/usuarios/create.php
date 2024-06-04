@@ -69,16 +69,22 @@ include('../../../layout/admin/parte1.php');
                                         $cargos = $query_cargo->fetchAll(PDO::FETCH_ASSOC);
                                         foreach($cargos as $cargo) {
                                             $id_cargo = $cargo['id_cargo'];
-                                            $cargo = $cargo['descripcion'];
-                                            ?>
-                                            <option value="<?php echo $id_cargo; ?>"><?php echo $cargo; ?></option>
-                                        <?php
+                                            $cargo_descripcion = $cargo['descripcion'];
+                                            if ($cargo_descripcion === "Cliente") {
+                                                // Si el cargo es "cliente", mostramos la opción y asociamos el evento de apertura del modal
+                                                echo '<option value="' . $id_cargo . '" data-toggle="modal" data-target="#cargoModal">' . $cargo_descripcion . '</option>';
+                                            } else {
+
+                                            echo '<option value="' . $id_cargo . '">' . $cargo_descripcion . '</option>';
+                                            }
                                         }
                                         ?>
                                     </select>
                                 </div>
                             </div>                            
                         </div>
+                        <!-- Este es el campo oculto del ID del cliente seleccionado aquí -->
+                        <input type="hidden" id="id_cliente" name="id_cliente">
                         <hr>
 
                         <div class="row">
@@ -97,4 +103,70 @@ include('../../../layout/admin/parte1.php');
         </div><!-- /.container-fluid -->
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="cargoModal" tabindex="-1" role="dialog" aria-labelledby="cargoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cargoModalLabel">Listado De Clientes Sin Usuario</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Aquí puedes agregar contenido adicional relacionado con el cliente -->
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="">Clientes:</label>
+                        <select name="idcliente" id="idcliente" class="form-control" required>
+                            <option value="">Seleccione Un Cliente</option>
+                            <?php 
+                            $query_cliente = $pdo->prepare('SELECT * FROM clientes WHERE id NOT IN (SELECT id_cliente FROM usuarios)');
+                            $query_cliente->execute();
+                            $clientes = $query_cliente->fetchAll(PDO::FETCH_ASSOC);                            
+                            foreach($clientes as $cliente) {
+                                $id = $cliente['id'];
+                                $cliente_comercial = $cliente['nombre_comercial'];
+                            ?>
+                            <option value="<?php echo $id; ?>"> <?php echo $cliente_comercial; ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>                  
+                    </div> 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnAceptar">Aceptar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>    
+    </div>
+</div>
+
 <?php include('../../../layout/admin/parte2.php');?>
+
+<script>
+    // Función para actualizar el campo id_cliente cuando se selecciona un cliente
+    function registrarCliente() {
+        var clienteSeleccionado = document.getElementById('idcliente').value;
+        document.getElementById('id_cliente').value = clienteSeleccionado;
+    }
+    // apertura del modal si id_cargo pertenece a cliente
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('id_cargo').addEventListener('change', function() {
+            var selectedOption = this.options[this.selectedIndex];
+            var cargo = selectedOption.textContent.trim().toLowerCase();
+            if (cargo === "cliente") {
+                $('#cargoModal').modal('show');
+            }
+        });
+
+        // Llamar a la función registrarCliente cuando se selecciona un cliente en el modal
+        document.getElementById('btnAceptar').addEventListener('click', function() {
+            registrarCliente();
+        });
+    });
+</script>

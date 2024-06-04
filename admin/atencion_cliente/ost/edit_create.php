@@ -30,6 +30,9 @@ foreach ($osts as $ost){
     $nombre_estado = $ost['nombre_estado'];
     $persona_contacto = $ost['persona_contacto'];
     $medio_contacto = $ost['email_contacto'];
+    $tipo_servicio_actual = $ost['tipo_servicio'];
+    $estado_actual = $ost['estado'];
+    $tecnico_tratante_actual = $ost['tecnico_tratante'];
 }
 
 // Nueva consulta para obtener los técnicos
@@ -89,7 +92,7 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="">Tipo Servicio</label>
-                                                <select name="tipo_servicio" id="tipo_servicio" class="form-control" value="<?php echo $tipo_servicio; ?>" required>
+                                                <select name="tipo_servicio" id="tipo_servicio" class="form-control" required>
 
                                                     <?php
                                                         $query_servicio = $pdo->prepare('SELECT * FROM tipo_servicio');
@@ -98,10 +101,8 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                                                         foreach($servicios as $servicio) {
                                                             $id_servicio = $servicio['id'];
                                                             $nombre_servicio = $servicio['servicio_ost'];
-                                                            $selected = ($id_servicio == 4) ? 'selected' : '';
-                                                    ?>                                           
-                                                        <option value="<?php echo $id_servicio; ?>" <?php echo $selected; ?>><?php echo $nombre_servicio; ?></option>
-                                                    <?php
+                                                            $selected = ($id_servicio == $tipo_servicio_actual) ? 'selected' : '';
+                                                        echo "<option value='$id_servicio' $selected>$nombre_servicio</option>";
                                                         }
                                                     ?>
                                                 
@@ -149,9 +150,10 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                                                 <label for="">Técnico Tratante</label>
                                                 
                                                     <select name="tecnico_tratante" id="tecnico_tratante" class="form-control" required>
-                                                        <?php foreach ($tecnicos as $tecnico) { ?>
-                                                            <option value="<?php echo $tecnico['id']; ?>"><?php echo $tecnico['nombre']; ?></option>
-                                                        <?php } ?>
+                                                        <?php foreach ($tecnicos as $tecnico) {
+                                                            $selected = ($tecnico['id'] == $tecnico_tratante_actual) ? 'selected' : '';
+                                                            echo "<option value='{$tecnico['id']}' $selected>{$tecnico['nombre']}</option>";
+                                                        } ?>
                                                     </select>
                                             </div>
                                         </div>                            
@@ -166,9 +168,8 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($estados as $estado) {
                                                         $id_estado = $estado['id'];
                                                         $estado = $estado['estadostc'];
-                                                        ?>
-                                                        <option value="<?php echo $id_estado; ?>"><?php echo $estado; ?></option>
-                                                    <?php
+                                                        $selected = ($id_estado == $estado_actual) ? 'selected' : '';
+                                                            echo "<option value='$id_estado' $selected>$nombre_estado</option>";
                                                     }
                                                     ?>
                                                 </select>

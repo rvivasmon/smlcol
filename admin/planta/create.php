@@ -6,9 +6,9 @@ include('../../app/config/conexion.php');
 include('../../layout/admin/sesion.php');
 include('../../layout/admin/datos_sesion_user.php');
 
-?>
+include('../../layout/admin/parte1.php');
 
-<?php include('../../layout/admin/parte1.php');?>
+?>
 
 <div class="content-wrapper">
     <div class="content-header">
@@ -40,7 +40,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                                 $anio_mes = date('Ym');
 
                                                 // Obtener el último registro de la base de datos ordenado por año_mes de forma descendente
-                                                $query_ultimo_registro = $pdo->prepare('SELECT * FROM stc ORDER BY contador DESC LIMIT 1');
+                                                $query_ultimo_registro = $pdo->prepare('SELECT * FROM id_producto ORDER BY contador DESC LIMIT 1');
                                                 $query_ultimo_registro->execute();
                                                 $ultimo_registro = $query_ultimo_registro->fetch(PDO::FETCH_ASSOC);
 
@@ -50,29 +50,29 @@ include('../../layout/admin/datos_sesion_user.php');
                                                 // Verificar si hay un último registro
                                                 if($ultimo_registro) {
                                                     // Si hay un último registro, verificar si el año_mes es igual al del último registro
-                                                    if($ultimo_registro['anio_mes'] == $anio_mes) {
+                                                    if($ultimo_registro['anio_mes_prod'] == $anio_mes) {
                                                         // Si el año_mes es igual, continuar con el contador
-                                                        $contador = $ultimo_registro['contador'] + 1;
+                                                        $contador = $ultimo_registro['contador_prod'] + 1;
                                                     } else {
                                                         // Si el año_mes es diferente, reiniciar el contador
                                                         $contador = 1;
                                                     }
                                                 }
 
-                                                // Crea el ID STC utilizando el año_mes y el contador
-                                                $id_stc = 'STC - ' . $anio_mes . '-' . sprintf('%03d', $contador);
+                                                // Crea el ID Producto utilizando el año_mes y el contador
+                                                $id_prod = $anio_mes . '-' . sprintf('%03d', $contador);
 
                                                 ?>
 
                                                 <input type="hidden" name="anio_mes" value="<?php echo $anio_mes; ?>">
                                                 <input type="hidden" name="contador" value="<?php echo $contador; ?>">
-                                                <input type="text" name="idstc" class="form-control" value="<?php echo $id_stc; ?>" hidden>
+                                                <input type="text" name="idprod" class="form-control" value="<?php echo $id_prod; ?>" hidden>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">Fecha de Creación</label>
-                                                <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value= "<?php echo date('Y-m-d'); ?>" readonly>
+                                                <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value= "<?php echo date('Y-m-d'); ?>">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -178,77 +178,6 @@ include('../../layout/admin/datos_sesion_user.php');
                                     <br>
                                     <output id="list" style="position: relative; width: 200px; height: 200px; overflow: hidden;"></output>
                                     <input type="file" name="archivo_adjunto" id="file" class="form-control-file" multiple>
-                                    
-                                    <?php
-// Generar el código de barras
-$barcode_value = 'www.example.com'; // Cambia esto por el valor deseado del código de barras
-$barcode_style = array(
-    'border' => 2,
-    'vpadding' => 'auto',
-    'hpadding' => 'auto',
-    'fgcolor' => array(0,0,0),
-    'bgcolor' => false,
-    'module_width' => 1,
-    'module_height' => 1
-);
-$pdf->write1DBarcode($barcode_value, 'C39', 20, 100, '', 40, 0.2, $barcode_style, 'N');
-
-// Generar el código QR
-$qr_code_value = 'www.example.com'; // Cambia esto por el valor deseado del código QR
-$pdf->write2DBarcode($qr_code_value, 'QRCODE,L', 20, 150, 40, 40, $style, 'N');
-?>
-
-
-
-                                    <script>
-                                            var currentImageIndex = 0; // Índice de la imagen actual
-
-                                            function archivo(evt) {
-                                            var files = evt.target.files; // FileList object
-
-                                                for (var i = 0, f; f = files[i]; i++) {
-                                                    var reader = new FileReader();
-                                                    // Si el archivo es una imagen
-                                                    if (f.type.match('image.*')) {
-                                                        reader.onload = (function(theFile) {
-                                                            return function(e) {
-                                                                // Insertamos la imagen
-                                                                var img = document.createElement('img');
-                                                                img.src = e.target.result;
-                                                                img.width = 200; // Tamaño de la imagen
-                                                                img.style.display = "none"; // Ocultamos la imagen
-                                                                document.getElementById("list").appendChild(img);
-                                                        };
-                                                            })(f);
-                                                        }
-                                                        // Lectura del archivo
-                                                        reader.readAsDataURL(f);
-                                                    }
-                                                    showImage(currentImageIndex); // Mostramos la primera imagen
-                                                }
-
-                                                document.getElementById('file').addEventListener('change', archivo, false);
-
-                                                function showImage(index) {
-                                                var images = document.getElementById("list").getElementsByTagName("img");
-                                                for (var i = 0; i < images.length; i++) {
-                                                    images[i].style.display = "none"; // Ocultamos todas las imágenes
-                                                }
-                                                images[index].style.display = "block"; // Mostramos la imagen actual
-                                            }
-
-                                            function nextImage() {
-                                            var images = document.getElementById("list").getElementsByTagName("img");
-                                            currentImageIndex = (currentImageIndex + 1) % images.length; // Avanzamos al siguiente índice circularmente
-                                                    showImage(currentImageIndex);
-                                            }
-
-                                            function prevImage() {
-                                                var images = document.getElementById("list").getElementsByTagName("img");
-                                                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Retrocedemos al índice anterior circularmente
-                                                showImage(currentImageIndex);
-                                            }
-                                    </script>
                                 </div>
                             </div> 
                         </div>
