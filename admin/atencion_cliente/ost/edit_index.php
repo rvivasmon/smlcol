@@ -20,8 +20,13 @@ $contador_ost = 1;
 
 // Verificar si hay un último registro
 if($ultimo_registro_ost) {
-    // Si hay un último registro, continuar con el contador
-    $contador_ost = $ultimo_registro_ost['contador_ost'] + 1;
+    // Obtener el año y mes del último registro en formato YYYYMM
+    $ultimo_anio_mes = date('Ym', strtotime($ultimo_registro_ost['fecha_ost']));
+
+    // Si el mes y año del último registro son iguales al mes y año actuales, continuar con el contador
+    if($ultimo_anio_mes == $anio_mes_ost) {
+        $contador_ost = $ultimo_registro_ost['contador_ost'] + 1;
+    }
 }
 
 // Crea el ID OST utilizando el año_mes y el contador

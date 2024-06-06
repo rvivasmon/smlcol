@@ -33,6 +33,7 @@ foreach ($osts as $ost){
     $tipo_servicio_actual = $ost['tipo_servicio'];
     $estado_actual = $ost['estado'];
     $tecnico_tratante_actual = $ost['tecnico_tratante'];
+    $evidencia = $ost['evidencia'];
 }
 
 // Nueva consulta para obtener los técnicos
@@ -58,7 +59,7 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                     Modifique la información correspondiente
                 </div>
                 <div class="card-body">
-                    <form action="controller_edit_create.php" method="post">
+                    <form action="controller_edit_create.php" method="post" enctype="multipart/form-data">
                         
                         <div class="row">
                             <div class="col-md-9">
@@ -160,16 +161,16 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">Estado</label>
-                                                <select name="estado" value="<?php echo $nombre_estado; ?>" id="estado" class="form-control" required>
+                                                <select name="estado" id="estado" class="form-control" required>
                                                 <?php
                                                     $query_estado = $pdo->prepare('SELECT * FROM estado');
                                                     $query_estado->execute();
                                                     $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($estados as $estado) {
                                                         $id_estado = $estado['id'];
-                                                        $estado = $estado['estadostc'];
+                                                        $nombre_estado_bd = $estado['estadoost'];
                                                         $selected = ($id_estado == $estado_actual) ? 'selected' : '';
-                                                            echo "<option value='$id_estado' $selected>$nombre_estado</option>";
+                                                            echo "<option value='$id_estado' $selected>$nombre_estado_bd</option>";
                                                     }
                                                     ?>
                                                 </select>
@@ -193,62 +194,82 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         
                             <div class="col-md-3">
-                                <div class="form-group">
+                            <div class="form-group">
                                     <label for="archivo_adjunto">Archivo Adjunto</label>
                                     <br>
-                                    <output id="list" style="position: relative; width: 300px; height: 300px; overflow: hidden;"></output>
+                                    <center>
+                                        <div id="image-container">
+                                            <?php if (!empty($evidencia)) {
+                                                $evidencias = explode(',', $evidencia);
+                                                foreach ($evidencias as $index => $img) {
+                                                    $display = ($index == 0) ? 'block' : 'none';
+                                                    echo "<img src='{$URL}/img_uploads/{$img}' width='50%' alt='' style='display: $display;' class='preview-image'>";
+                                                }
+                                            } ?>
+                                        </div>
+                                    </center>
+                                    <output id="list" style="position: relative; width: 50px; height: 50px; overflow: hidden;"></output>
                                     <input type="file" name="archivo_adjunto[]" id="file" class="form-control-file" multiple>
 
                                     <script>
-                                            var currentImageIndex = 0; // Índice de la imagen actual
-
-                                            function archivo(evt) {
+                                        function archivo(evt) {
                                             var files = evt.target.files; // FileList object
-
-                                                for (var i = 0, f; f = files[i]; i++) {
-                                                    var reader = new FileReader();
-                                                    // Si el archivo es una imagen
-                                                    if (f.type.match('image.*')) {
-                                                        reader.onload = (function(theFile) {
-                                                            return function(e) {
-                                                                // Insertamos la imagen
-                                                                var img = document.createElement('img');
-                                                                img.src = e.target.result;
-                                                                img.width = 200; // Tamaño de la imagen
-                                                                img.style.display = "none"; // Ocultamos la imagen
-                                                                document.getElementById("list").appendChild(img);
+                                            var container = document.getElementById("list");
+                                            container.innerHTML = "";
+                                            for (var i = 0, f; f = files[i]; i++) {
+                                                var reader = new FileReader();
+                                                // Si el archivo es una imagen
+                                                if (f.type.match('image.*')) {
+                                                    reader.onload = (function(theFile) {
+                                                        return function(e) {
+                                                            // Insertamos la imagen
+                                                            var img = document.createElement('img');
+                                                            img.src = e.target.result;
+                                                            img.width = 200; // Tamaño de la imagen
+                                                            img.classList.add('preview-image');
+                                                            img.style.display = (container.children.length === 0) ? 'block' : 'none';
+                                                            container.appendChild(img);
                                                         };
-                                                            })(f);
-                                                        }
-                                                        // Lectura del archivo
-                                                        reader.readAsDataURL(f);
-                                                    }
-                                                    showImage(currentImageIndex); // Mostramos la primera imagen
+                                                    })(f);
+                                                    // Lectura del archivo
+                                                    reader.readAsDataURL(f);
                                                 }
+                                            }
+                                        }
+                                        document.getElementById('file').addEventListener('change', archivo, false);
 
-                                                document.getElementById('file').addEventListener('change', archivo, false);
+                                        function prevImage() {
+                                            var images = document.getElementsByClassName('preview-image');
+                                            var currentIndex = getCurrentImageIndex(images);
+                                            if (currentIndex > 0) {
+                                                showImage(images, currentIndex - 1);
+                                            }
+                                        }
 
-                                                function showImage(index) {
-                                                var images = document.getElementById("list").getElementsByTagName("img");
-                                                for (var i = 0; i < images.length; i++) {
-                                                    images[i].style.display = "none"; // Ocultamos todas las imágenes
+                                        function nextImage() {
+                                            var images = document.getElementsByClassName('preview-image');
+                                            var currentIndex = getCurrentImageIndex(images);
+                                            if (currentIndex < images.length - 1) {
+                                                showImage(images, currentIndex + 1);
+                                            }
+                                        }
+
+                                        function getCurrentImageIndex(images) {
+                                            for (var i = 0; i < images.length; i++) {
+                                                if (images[i].style.display === 'block') {
+                                                    return i;
                                                 }
-                                                images[index].style.display = "block"; // Mostramos la imagen actual
                                             }
+                                            return -1;
+                                        }
 
-                                            function nextImage() {
-                                            var images = document.getElementById("list").getElementsByTagName("img");
-                                            currentImageIndex = (currentImageIndex + 1) % images.length; // Avanzamos al siguiente índice circularmente
-                                                    showImage(currentImageIndex);
+                                        function showImage(images, index) {
+                                            for (var i = 0; i < images.length; i++) {
+                                                images[i].style.display = 'none';
                                             }
-
-                                            function prevImage() {
-                                                var images = document.getElementById("list").getElementsByTagName("img");
-                                                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Retrocedemos al índice anterior circularmente
-                                                showImage(currentImageIndex);
-                                            }
-                                        </script>
-
+                                            images[index].style.display = 'block';
+                                        }
+                                    </script>
                                 </div>
                             </div>
                         </div>
@@ -263,7 +284,7 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                                             <a href="<?php echo $URL."admin/atencion_cliente/ost/index_create.php";?>" class="btn btn-default btn-block">Cancelar</a>
                                         </div>
                                         <div class="col-md-2">
-                                            <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-success btn-block">Editar OST</button>
+                                            <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-success btn-block">Guardar OST</button>
                                         </div>
                                     </div>
                                 </div>

@@ -215,7 +215,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc/index.php" class="nav-link">
+                        <a href="<?php echo $URL;?>bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>STC CLIENTE</p>
                         </a>
@@ -319,7 +319,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc/index.php" class="nav-link">
+                        <a href="<?php echo $URL;?>bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>STC CLIENTE</p>
                         </a>
@@ -380,7 +380,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc/index.php" class="nav-link">
+                        <a href="<?php echo $URL;?>bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>STC CLIENTE</p>
                         </a>
@@ -441,7 +441,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc/index.php" class="nav-link">
+                <a href="<?php echo $URL;?>bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>STC CLIENTE</p>
                 </a>
@@ -502,7 +502,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo $URL;?>bd_smlcol/soportetecnico/stc" class="nav-link">
+                        <a href="<?php echo $URL;?>bd_sigcp_2024/soportetecnico/stc" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>STC CLIENTE</p>
                         </a>
@@ -582,7 +582,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               ?>
 
               <?php
-                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Administración") ){ ?>
+                if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="16") ){ ?>
 
                   <li class="nav-item">
                     <a href="#" class="nav-link active">

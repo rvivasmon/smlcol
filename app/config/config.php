@@ -5,7 +5,7 @@
 define('BD_SERVIDOR','localhost');
 define('BD_USUARIO','TIadmin');
 define('BD_PASSWORD','TI_2024*');
-define('BD_SISTEMA','bd_smlcol');
+define('BD_SISTEMA','bd_sigcp_2024');
 
 
 // Servidor
