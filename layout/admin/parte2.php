@@ -23,25 +23,25 @@
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
-<script src="<?php echo $URL?>public/plugins/jquery/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 
 <!-- DataTables  & Plugins -->
-<script src="<?php echo $URL?>public/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="<?php echo $URL?>public/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="<?php echo $URL?>public/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="<?php echo $URL?>public/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="<?php echo $URL?>public/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="<?php echo $URL?>public/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="<?php echo $URL?>public/plugins/jszip/jszip.min.js"></script>
-<script src="<?php echo $URL?>public/plugins/pdfmake/pdfmake.min.js"></script>
-<script src="<?php echo $URL?>public/plugins/pdfmake/vfs_fonts.js"></script>
-<script src="<?php echo $URL?>public/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="<?php echo $URL?>public/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="<?php echo $URL?>public/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables@1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-bs4@1.10.24/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-responsive@2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-responsive-bs4@2.2.9/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-buttons@1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-buttons-bs4@1.7.1/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.7.1/dist/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-buttons-html5@1.7.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-buttons-print@1.7.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-buttons-colvis@1.7.1/js/buttons.colVis.min.js"></script>
 
 
 </body>
