@@ -9,3 +9,4 @@ if (isset($_SESSION['sesion_email'])) {
     header('Location: '.$URL.'login/'); 
 }
 
+?>

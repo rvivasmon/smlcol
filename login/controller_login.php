@@ -1,7 +1,9 @@
 <?php 
 include('../app/config/config.php');
 include('../app/config/conexion.php');
+
 session_start();
+
 include_once('funcs/funcs.php');
 
 $codigoVerificacion = $_SESSION['codigo_verificacion'] ?? '';

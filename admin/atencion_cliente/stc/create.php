@@ -41,32 +41,33 @@ include('../../../layout/admin/parte1.php');
                                                 $anio_mes = date('Ym');
 
                                                 // Obtener el último registro de la base de datos ordenado por año_mes de forma descendente
-                                                $query_ultimo_registro = $pdo->prepare('SELECT * FROM stc ORDER BY contador DESC LIMIT 1');
+                                                $query_ultimo_registro = $pdo->prepare('SELECT * FROM stc ORDER BY anio_mes DESC, contador DESC LIMIT 1');
                                                 $query_ultimo_registro->execute();
-                                                $ultimo_registro = $query_ultimo_registro->fetch(PDO::FETCH_ASSOC);
-
-                                                // Inicializar el contador en 1 por defecto
-                                                $contador = 1;
+                                                $ultimo_registro_stc = $query_ultimo_registro->fetch(PDO::FETCH_ASSOC);
 
                                                 // Verificar si hay un último registro
-                                                if($ultimo_registro) {
-                                                    // Si hay un último registro, verificar si el año_mes es igual al del último registro
-                                                    if($ultimo_registro['anio_mes'] == $anio_mes) {
-                                                        // Si el año_mes es igual, continuar con el contador
-                                                        $contador = $ultimo_registro['contador'] + 1;
-                                                    } else {
-                                                        // Si el año_mes es diferente, reiniciar el contador
-                                                        $contador = 1;
+                                                if($ultimo_registro_stc) {
+                                                    // Obtener el año y mes del último registro en formato YYYYMM
+                                                    $ultimo_anio_mes = date('Ym', strtotime($ultimo_registro_stc['fecha_ingreso']));
+
+                                                    // Si el mes y año del último registro son iguales al mes y año actuales, continuar con el contador
+                                                    if ($ultimo_anio_mes == $anio_mes) {
+                                                        $contador_stc = $ultimo_registro_stc['contador'] + 1;
+                                                    } else{
+
+                                                        // Inicializar el contador
+                                                        $contador_stc = 1;
                                                     }
+
                                                 }
 
                                                 // Crea el ID STC utilizando el año_mes y el contador
-                                                $id_stc = 'STC - ' . $anio_mes . '-' . sprintf('%03d', $contador);
+                                                $id_stc = 'STC - ' . $anio_mes . '-' . sprintf('%03d', $contador_stc);
 
                                                 ?>
 
                                                 <input type="hidden" name="anio_mes" value="<?php echo $anio_mes; ?>">
-                                                <input type="hidden" name="contador" value="<?php echo $contador; ?>">
+                                                <input type="hidden" name="contador" value="<?php echo $contador_stc; ?>">
                                                 <input type="text" name="idstc" class="form-control" value="<?php echo $id_stc; ?>" hidden>
                                             </div>
                                         </div>

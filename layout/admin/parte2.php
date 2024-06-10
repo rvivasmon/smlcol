@@ -25,9 +25,9 @@
 <!-- jQuery -->
 <script src="<?php echo $URL?>public/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="<?php echo $URL?>public/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="<?php echo $URL?>public/dist/js/adminlte.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 
 <!-- DataTables  & Plugins -->
 <script src="<?php echo $URL?>public/plugins/datatables/jquery.dataTables.min.js"></script>

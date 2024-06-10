@@ -6,34 +6,38 @@ include('../../../app/config/conexion.php');
 include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
 
-// Colocas el código para generar el ID OST
+
 // Obtener el año y el mes actuales en formato YYYYMM
 $anio_mes_ost = date('Ym');
 
 // Obtener el último registro de la base de datos ordenado por contador de forma descendente
-$query_ultimo_registro_ost = $pdo->prepare('SELECT * FROM ost ORDER BY contador_ost DESC LIMIT 1');
+$query_ultimo_registro_ost = $pdo->prepare('SELECT * FROM ost ORDER BY anio_mes_ost DESC, contador_ost DESC LIMIT 1');
 $query_ultimo_registro_ost->execute();
 $ultimo_registro_ost = $query_ultimo_registro_ost->fetch(PDO::FETCH_ASSOC);
 
-// Inicializar el contador en 1 por defecto
-$contador_ost = 1;
-
 // Verificar si hay un último registro
-if($ultimo_registro_ost) {
+if ($ultimo_registro_ost) {
     // Obtener el año y mes del último registro en formato YYYYMM
     $ultimo_anio_mes = date('Ym', strtotime($ultimo_registro_ost['fecha_ost']));
 
     // Si el mes y año del último registro son iguales al mes y año actuales, continuar con el contador
-    if($ultimo_anio_mes == $anio_mes_ost) {
+    if ($ultimo_anio_mes == $anio_mes_ost) {
         $contador_ost = $ultimo_registro_ost['contador_ost'] + 1;
+    } else{
+
+        // Inicializar el contador
+        $contador_ost = 1;
     }
+
 }
 
-// Crea el ID OST utilizando el año_mes y el contador
+// Crear el ID OST utilizando el año_mes y el contador
 $id_ost = 'OST-' . $anio_mes_ost . '-' . sprintf('%03d', $contador_ost);
 
-// Fin del código para generar el ID OST
+// Imprimir el ID OST (para verificación)
+echo $id_ost;
 
+// Fin del código para generar el ID OST
 $id_get = $_GET['id'];
 
 $query = $pdo->prepare("SELECT stc.*, tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_clientes, ciudad.ciudad AS nombre_ciudad, estado.estadostc AS nombre_estado FROM stc JOIN tipo_servicio ON stc.tipo_servicio = tipo_servicio.id JOIN estado ON stc.estado = estado.id JOIN clientes ON stc.cliente = clientes.id JOIN ciudad ON stc.ciudad = ciudad.id WHERE stc.id = :id_get");

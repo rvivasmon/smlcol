@@ -14,6 +14,8 @@ include('../layout/admin/parte1.php');
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.13/index.global.min.js'></script>
 
 <script>
+
+    var a;
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -28,7 +30,7 @@ include('../layout/admin/parte1.php');
             events: 'reservas/cargar_reservas.php',
               
             dateClick: function(info) {
-              var a = info.dateStr;
+              a = info.dateStr;
               const fechaComoCadena = a;
               var numeroDia = new Date(fechaComoCadena).getDay();
               var dias = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES'];
@@ -159,13 +161,13 @@ include('../layout/admin/parte1.php');
             <center><b>Turno Mañana</b></center>
             <br>
               <button type="button" id="btn_h1" data-dismiss="modal" class="btn btn-success btn-lg btn-block">08:00 - 10:00 am</button>
-              <button type="button" id="btn_h2" class="btn btn-success btn-lg btn-block">10:00 - 12:00 pm</button>
+              <button type="button" id="btn_h2" data-dismiss="modal" class="btn btn-success btn-lg btn-block">10:00 - 12:00 pm</button>
           </div>
           <div class="col-md-6">
             <center><b>Turno Tarde</b></center>
             <br>
-              <button type="button" id="btn_h3" class="btn btn-success btn-lg btn-block">02:00 - 04:00 pm</button>
-              <button type="button" id="btn_h4" class="btn btn-success btn-lg btn-block">04:00 - 06:00 pm</button>
+              <button type="button" id="btn_h3" data-dismiss="modal" class="btn btn-success btn-lg btn-block">02:00 - 04:00 pm</button>
+              <button type="button" id="btn_h4" data-dismiss="modal" class="btn btn-success btn-lg btn-block">04:00 - 06:00 pm</button>
           </div>
         </div>
       </div>
@@ -179,9 +181,68 @@ include('../layout/admin/parte1.php');
 
 <?php include('../layout/admin/parte2.php');?>
 
+
+<!-- Modal -->
+<div class="modal fade" id="modal_formulario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Visita Técnica para el día <span id="dia_de_la_semana"></span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <form action="">
+
+            <div class="row">
+              <div class="col-md-12">
+                <label for="">Evento</label>
+                <input type="text" class="form-control">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <label for="">Responsable</label>
+                <input type="text" class="form-control">
+              </div>                
+              <div class="col-md-6">
+                <label for="">Hora Evento</label>
+                <input type="text" class="form-control" id="hora_reserva" disabled>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <label for="">Fecha inicio</label>
+                <input type="text" class="form-control" id="fecha_inicio" disabled>
+              </div>
+              <div class="col-md-6">
+                <label for="">Fecha fin</label>
+                <input type="date" class="form-control" id="fecha_fin">
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   $('#btn_h1').click(function () {
     $('#modal_formulario').modal("show");
+    $('#fecha_inicio').val(a);
+    var h1 = "08:00 - 10:00"
+    $('#hora_reserva').val(h1);
   });
 
   $('#btn_h2').click(function () {
@@ -196,26 +257,3 @@ include('../layout/admin/parte1.php');
     alert("DDDDDDDDDDDDDDDDDDDDD");
   });
 </script>
-
-<!-- Modal -->
-<div class="modal fade" id="modal_formulario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Visita Técnica para el día <span id="dia_de_la_semana"></span></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>

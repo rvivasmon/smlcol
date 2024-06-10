@@ -65,7 +65,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="<?php echo $URL?>/public/plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="<?php echo $URL?>/public/dist/css/adminlte.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css" rel="stylesheet">
   <!-- Icon Logo -->
   <link rel="icon" type="image/ico" href="../public/images/Logo.png">
   <!-- Ventana de alerta  sweetalert2-->
@@ -215,7 +215,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo $URL;?>bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
+                        <a href="<?php echo $URL;?>smartled_bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>STC CLIENTE</p>
                         </a>
@@ -319,7 +319,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo $URL;?>bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
+                        <a href="<?php echo $URL;?>smartled_bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>STC CLIENTE</p>
                         </a>
@@ -380,7 +380,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo $URL;?>bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
+                        <a href="<?php echo $URL;?>smartled_bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>STC CLIENTE</p>
                         </a>
@@ -441,7 +441,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo $URL;?>bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
+                <a href="<?php echo $URL;?>smartled_bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>STC CLIENTE</p>
                 </a>
@@ -502,7 +502,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<?php echo $URL;?>bd_sigcp_2024/soportetecnico/stc" class="nav-link">
+                        <a href="<?php echo $URL;?>smartled_bd_sigcp_2024/soportetecnico/stc" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>STC CLIENTE</p>
                         </a>

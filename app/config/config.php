@@ -3,8 +3,8 @@
 // Localmente
 
 define('BD_SERVIDOR','localhost');
-define('BD_USUARIO','TIadmin');
-define('BD_PASSWORD','TI_2024*');
+define('BD_USUARIO','RandyVivas');
+define('BD_PASSWORD','');
 define('BD_SISTEMA','bd_sigcp_2024');
 
 
@@ -13,7 +13,7 @@ define('BD_SISTEMA','bd_sigcp_2024');
 define('BD_SERVIDOR','201.148.107.151');
 define('BD_USUARIO','smartled_SIGCP_admin');
 define('BD_PASSWORD','TI_2024*');
-define('BD_SISTEMA','smartled_BD_SIGCP_2024');
+define('BD_SISTEMA','smartled_smartled_bd_sigcp_2024');
 
 */
 // Localmente
@@ -23,10 +23,10 @@ define('BD_SISTEMA','smartled_BD_SIGCP_2024');
 //$URL = 'http://192.168.1.105/www.smlcol.com/';
 
 // SmartLed3 LAN
-$URL = 'http://192.168.88.23/www.smlcol.com/';
+//$URL = 'http://192.168.88.23/www.smlcol.com/';
 
 // House
-//$URL = 'http://192.168.1.6/www.smlcol.com/';
+$URL = 'http://192.168.1.8/www.smlcol.com/';
 
 // LAN 3
 //$URL = 'http://192.168.10.167/www.smlcol.com/';
@@ -47,7 +47,7 @@ unset($_SESSION['mensaje']);
 }
 
 
-$fecha_actual = date(format: 'Y-m-d');
-$dia_actual = date(format: 'd');
-$mes_actual = date(format: 'm');
-$anio_actual = date(format: 'Y');
+$fecha_actual = date('Y-m-d');
+$dia_actual = date('d');
+$mes_actual = date('m');
+$anio_actual = date('Y');
