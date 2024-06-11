@@ -36,12 +36,17 @@ include('funcs/funcs.php');
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
           <div class="card-header text-center">
-            <a href="../../index2.html" class="h1"><b>Sis </b>SMLCOL</a>
+            <a href="../../index2.html" class="h1"><b>SIGCP</b> - 2024 <small style="font-size: 35px;"><b>TECHLED</b> Group</small> <small style="font-size: 13px;">Versión 1.2</small> </a>
           </div>
           <div class="card-body">
               <center>
-                <img src="<?php echo $URL?>/public/images/smlnegro.png" style= "width: 200px" alt="">
+                <div style="display: flex; align-items: center;">
+                  <img src="<?php echo $URL?>/public/images/smlnegro.png" style= "width: 150px; margin-right: 20px;" alt="">
+                  <img src="<?php echo $URL?>/public/images/techled.png" style="width: 150px" alt="">
+                </div>
               </center>
+              <!-- <div style="text-align: right; font-size: 12px;">Version 1.2</div> -->
+
 
               <br>
 
