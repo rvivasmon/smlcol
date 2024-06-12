@@ -160,14 +160,18 @@ include('../layout/admin/parte1.php');
           <div class="col-md-6">
             <center><b>Turno Mañana</b></center>
             <br>
-              <button type="button" id="btn_h1" data-dismiss="modal" class="btn btn-success btn-lg btn-block">08:00 - 10:00 am</button>
-              <button type="button" id="btn_h2" data-dismiss="modal" class="btn btn-success btn-lg btn-block">10:00 - 12:00 pm</button>
+              <button type="button" id="btn_h1" data-dismiss="modal" class="btn btn-success btn-lg btn-block">08:00 - 09:00 am</button>
+              <button type="button" id="btn_h2" data-dismiss="modal" class="btn btn-success btn-lg btn-block">09:00 - 10:00 pm</button>
+              <button type="button" id="btn_h3" data-dismiss="modal" class="btn btn-success btn-lg btn-block">10:00 - 11:00 am</button>
+              <button type="button" id="btn_h4" data-dismiss="modal" class="btn btn-success btn-lg btn-block">11:00 - 12:00 pm</button>
           </div>
           <div class="col-md-6">
             <center><b>Turno Tarde</b></center>
             <br>
-              <button type="button" id="btn_h3" data-dismiss="modal" class="btn btn-success btn-lg btn-block">02:00 - 04:00 pm</button>
-              <button type="button" id="btn_h4" data-dismiss="modal" class="btn btn-success btn-lg btn-block">04:00 - 06:00 pm</button>
+              <button type="button" id="btn_h5" data-dismiss="modal" class="btn btn-success btn-lg btn-block">01:00 - 02:00 pm</button>
+              <button type="button" id="btn_h6" data-dismiss="modal" class="btn btn-success btn-lg btn-block">02:00 - 03:00 pm</button>
+              <button type="button" id="btn_h7" data-dismiss="modal" class="btn btn-success btn-lg btn-block">03:00 - 04:00 pm</button>
+              <button type="button" id="btn_h8" data-dismiss="modal" class="btn btn-success btn-lg btn-block">04:00 - 05:00 pm</button>
           </div>
         </div>
       </div>
@@ -180,6 +184,32 @@ include('../layout/admin/parte1.php');
 </div>
 
 <?php include('../layout/admin/parte2.php');?>
+
+                <style>
+                    /* Aplicando estilos a los options para mostrar el color */
+                    select option[value="amarillo_mostaza"] {
+                        background-color: #e7d40a; /* Color amarillo mostaza */
+                        color: #fff;
+                    }
+                    select option[value="rojo"] {
+                        background-color: #ef280f; /* Color rojo */
+                        color: #fff;
+                    }
+                    select option[value="azul"] {
+                        background-color: #109dfa; /* Color azul */
+                        color: #fff;
+                    }
+                    select option[value="verde_agua"] {
+                        background-color: #02ac66; /* Color verde agua */
+                        color: #000;
+                    }
+                    select {
+                        -webkit-appearance: none; /* Elimina el estilo por defecto de select en algunos navegadores */
+                        -moz-appearance: none;
+                        appearance: none;
+                        padding: 5px;
+                    }
+                </style>
 
 
 <!-- Modal -->
@@ -225,7 +255,37 @@ include('../layout/admin/parte1.php');
               </div>
             </div>
 
+            <div class="row">
+              <div class="col-md-6">
+                <label for="">Color</label>
+                <select name="color" id="color" class="form-control">
+                    <option value="amarillo_mostaza" data-color="#e7d40a"></option>
+                    <option value="rojo" data-color="#ef280f"></option>
+                    <option value="azul" data-color="#109dfa"></option>
+                    <option value="verde_agua" data-color="#02ac66"></option>
+                </select>
+              </div>
+            </div>
+
           </form>
+
+          <script>
+              document.addEventListener('DOMContentLoaded', function () {
+                  var selectElement = document.getElementById('color');
+
+                  // Función para actualizar el color de fondo del select
+                  function updateSelectColor() {
+                      var selectedOption = selectElement.options[selectElement.selectedIndex];
+                      selectElement.style.backgroundColor = selectedOption.getAttribute('data-color');
+                  }
+
+                  // Actualizar el color al cargar la página
+                  updateSelectColor();
+
+                  // Actualizar el color al cambiar la selección
+                  selectElement.addEventListener('change', updateSelectColor);
+              });
+          </script>
 
         </div>
       </div>
@@ -241,19 +301,56 @@ include('../layout/admin/parte1.php');
   $('#btn_h1').click(function () {
     $('#modal_formulario').modal("show");
     $('#fecha_inicio').val(a);
-    var h1 = "08:00 - 10:00"
+    var h1 = "08:00 - 09:00"
     $('#hora_reserva').val(h1);
   });
 
   $('#btn_h2').click(function () {
-    alert("BBBBBBBBBBBBBBBBBBBBBBB");
+    $('#modal_formulario').modal("show");
+    $('#fecha_inicio').val(a);
+    var h2 = "09:00 - 10:00"
+    $('#hora_reserva').val(h2);
   });
 
   $('#btn_h3').click(function () {
-    alert("CCCCCCCCCCCCCCCCCCCCCCCCCCC");
+    $('#modal_formulario').modal("show");
+    $('#fecha_inicio').val(a);
+    var h3 = "10:00 - 11:00"
+    $('#hora_reserva').val(h3);
   });
 
   $('#btn_h4').click(function () {
-    alert("DDDDDDDDDDDDDDDDDDDDD");
+    $('#modal_formulario').modal("show");
+    $('#fecha_inicio').val(a);
+    var h4 = "11:00 - 12:00"
+    $('#hora_reserva').val(h4);
   });
+
+  $('#btn_h5').click(function () {
+    $('#modal_formulario').modal("show");
+    $('#fecha_inicio').val(a);
+    var h5 = "01:00 - 02:00"
+    $('#hora_reserva').val(h5);
+  });
+
+  $('#btn_h6').click(function () {
+    $('#modal_formulario').modal("show");
+    $('#fecha_inicio').val(a);
+    var h6 = "02:00 - 03:00"
+    $('#hora_reserva').val(h6);
+  });
+
+  $('#btn_h7').click(function () {
+    $('#modal_formulario').modal("show");
+    $('#fecha_inicio').val(a);
+    var h7 = "03:00 - 04:00"
+    $('#hora_reserva').val(h7);
+  });
+
+  $('#btn_h8').click(function () {
+    $('#modal_formulario').modal("show");
+    $('#fecha_inicio').val(a);
+    var h8 = "04:00 - 05:00"
+    $('#hora_reserva').val(h8);
+  })
 </script>
