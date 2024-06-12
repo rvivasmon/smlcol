@@ -27,7 +27,7 @@ $sentencia->bindParam(':id_usuario', $id_usuario);
 
 if ($sentencia->execute()) {
   echo "Usuario actualizado exitosamente"; // Mensaje de éxito
-  header('Location:' .$URL.'admin/ti_usuarios/');
+  header('Location:' .$URL.'admin/ti/usuarios/');
 } else {
   // Maneja los posibles errores durante la ejecución
     $errorInfo = $sentencia->errorInfo();

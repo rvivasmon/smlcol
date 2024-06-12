@@ -10,7 +10,7 @@ include('../../../layout/admin/parte1.php');
 
 $id_get = $_GET['id'];
 
-$query = $pdo->prepare("SELECT usuarios.*, cargo.descripcion AS nombre_cargo, estado.estado_general AS nombre_estado FROM usuarios JOIN cargo ON usuarios.id_cargo = cargo.id_cargo JOIN estado ON usuarios.estado = estado.id WHERE usuarios.id = '$id_get'");
+$query = $pdo->prepare("SELECT usuarios.*, cargo.descripcion AS nombre_cargo, estado.estado_general AS nombre_estado, usuarios.id_cargo AS id_cargo_usuario FROM usuarios JOIN cargo ON usuarios.id_cargo = cargo.id_cargo JOIN estado ON usuarios.estado = estado.id WHERE usuarios.id = '$id_get'");
 
 $query->execute();
 $usuarios = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -22,6 +22,7 @@ foreach ($usuarios as $usuario){
     $cargo = $usuario['nombre_cargo'];
     $estado = $usuario['nombre_estado'];
     $valor_actual_en_edicion = $usuario['estado'];
+    $valor_actual_en_edicion_cargo = $usuario['id_cargo_usuario'];
 
 }
 
@@ -79,7 +80,7 @@ foreach ($usuarios as $usuario){
 
                                             $id_cargo = $cargo['id_cargo'];
                                             $cargo_descripcion = $cargo['descripcion'];
-                                            $selected = ($id_cargo == $valor_actual_en_edicion) ? 'selected' : '';
+                                            $selected = ($id_cargo == $valor_actual_en_edicion_cargo) ? 'selected' : '';
                                             ?>
                                             <option value="<?php echo $id_cargo; ?>" <?php echo $selected; ?>><?php echo $cargo_descripcion; ?></option>
                                         <?php

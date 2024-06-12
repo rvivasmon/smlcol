@@ -34,9 +34,6 @@ if ($ultimo_registro_ost) {
 // Crear el ID OST utilizando el año_mes y el contador
 $id_ost = 'OST-' . $anio_mes_ost . '-' . sprintf('%03d', $contador_ost);
 
-// Imprimir el ID OST (para verificación)
-echo $id_ost;
-
 // Fin del código para generar el ID OST
 $id_get = $_GET['id'];
 
