@@ -73,8 +73,8 @@ $id_prod = $anio_mes . '-' . sprintf('%03d', $contador_prod);
                                             <div class="form-group">
                                                 <label for=""></label>
 
-                                                <input type="hidden" name="anio_mes" value="<?php echo $anio_mes; ?>">
-                                                <input type="hidden" name="contador" value="<?php echo $contador_prod; ?>">
+                                                <input type="hidden" name="anio_mes1" value="<?php echo $anio_mes; ?>">
+                                                <input type="hidden" name="contador1" value="<?php echo $contador_prod; ?>">
                                                 <input type="text" name="idprod" class="form-control" value="<?php echo $id_prod; ?>" hidden>
                                             </div>
                                         </div>
@@ -87,7 +87,8 @@ $id_prod = $anio_mes . '-' . sprintf('%03d', $contador_prod);
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="">Agente</label>
-                                                <input type="text" name="Agente" class="form-control" value="<?php echo htmlspecialchars($sesion_nombre = $sesion_usuario['nombre']); ?>" disabled>
+                                                <input type="text" name="agente1" class="form-control" value="<?php echo htmlspecialchars($sesion_nombre = $sesion_usuario['nombre']); ?>" disabled>
+                                                <input type="text" name="agente" class="form-control" value="<?php echo htmlspecialchars($sesion_nombre = $sesion_usuario['nombre']); ?>" hidden>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -121,7 +122,7 @@ $id_prod = $anio_mes . '-' . sprintf('%03d', $contador_prod);
                                         <div class="col-md-5">
                                             <div class="form-group">
                                                 <label for="">Check List</label>
-                                                <input type="text" name="proyecto" class="form-control" placeholder="Check List" required>
+                                                <input type="text" name="proyecto" class="form-control" placeholder="Check List">
                                             </div>
                                         </div>
                                     </div>                                
