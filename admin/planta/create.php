@@ -54,7 +54,7 @@ $id_prod = $anio_mes . '-' . sprintf('%03d', $contador_prod);
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">CREAR ID PRODUCTO</h1>
+                    <h1 class="m-0">CREAR ID PANTALLA</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
@@ -153,10 +153,10 @@ $id_prod = $anio_mes . '-' . sprintf('%03d', $contador_prod);
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <a href="<?php echo $URL."admin/atencion_cliente/stc";?>" class="btn btn-default btn-block">Cancelar</a>
+                                            <a href="<?php echo $URL."admin/planta";?>" class="btn btn-default btn-block">Cancelar</a>
                                         </div>
                                         <div class="col-md-2">
-                                            <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Crear STC</button>
+                                            <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Crear ID</button>
                                         </div>
                                     </div>
                                 </div>
