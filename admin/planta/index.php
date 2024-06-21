@@ -25,37 +25,40 @@ include('../../layout/admin/datos_sesion_user.php');
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Nombre</th>
-                                    <th>Email</th>
-                                    <th>Usuario</th>
-                                    <th>Cargo</th>
-                                    <th>Estado</th>
+                                    <th>ID Producto</th>
+                                    <th>OP</th>
+                                    <th>POP</th>
+                                    <th>Cliente</th>
+                                    <th>Ciudad</th>
+                                    <th>Proyecto</th>
                                     <th><center>Acciones</center></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 $contador = 0;
-                                $query = $pdo->prepare('SELECT usuarios.*, cargo.descripcion AS nombre_cargo, estado.estado_general as estado_general FROM usuarios JOIN cargo ON usuarios.id_cargo = cargo.id_cargo JOIN estado ON usuarios.estado = estado.id /*WHERE estado = "1"*/');
+                                $query = $pdo->prepare('SELECT * FROM id_producto');
 
                                 $query->execute();
-                                $usuarios = $query->fetchAll(PDO::FETCH_ASSOC);
-                                foreach ($usuarios as $usuario){
-                                    $id = $usuario['id'];
-                                    $nombres = $usuario['nombre'];
-                                    $correos = $usuario['email'];
-                                    $usuario_uso = $usuario['usuario'];
-                                    $cargo = $usuario['nombre_cargo'];
-                                    $estado = $usuario['estado_general'];
+                                $productos = $query->fetchAll(PDO::FETCH_ASSOC);
+                                foreach ($productos as $producto){
+                                    $id = $producto['id'];
+                                    $fecha = $producto['fecha'];
+                                    $op = $producto['op'];
+                                    $agente = $producto['agente'];
+                                    $id_prod = $producto['id_producto'];
+                                    $anio_mes_prod = $producto['anio_mes_prod'];
+                                    $contador_prod = $producto['contador_prod'];
                                     $contador = $contador + 1;
                                 ?>
                                     <tr>
                                         <td><?php echo $contador; ?></td>
-                                        <td><?php echo $nombres; ?></td>
-                                        <td><?php echo $correos; ?></td>
-                                        <td><?php echo $usuario_uso; ?></td>
-                                        <td><?php echo $cargo; ?></td>
-                                        <td><?php echo $estado; ?></td>
+                                        <td><?php echo $fecha; ?></td>
+                                        <td><?php echo $op; ?></td>
+                                        <td><?php echo $agente; ?></td>
+                                        <td><?php echo $id_prod; ?></td>
+                                        <td><?php echo $anio_mes_prod; ?></td>
+                                        <td><?php echo $contador_prod; ?></td>
                                         <td>
                                             <center>
                                                 <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>

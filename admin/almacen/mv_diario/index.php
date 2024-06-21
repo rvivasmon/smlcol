@@ -30,18 +30,21 @@ include('../../../layout/admin/parte1.php');
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Nombre</th>
-                                            <th>Documento</th>
-                                            <th>Usuario</th>
-                                            <th>Ciudad</th>
-                                            <th>Estado General</th>
+                                            <th>Fecha</th>
+                                            <th>Producto</th>
+                                            <th>Referencia 1</th>
+                                            <th>Referencia 2</th>
+                                            <th>Almacén Origen</th>
+                                            <th>Almacén Destino</th>
+                                            <th>Cantidas</th>
+                                            <th>Descripción</th>
                                             <th><center>Acciones</center></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                         $contador = 0;
-                                        $query = $pdo->prepare('SELECT tecnicos.*, estado.estado_general AS estado_tecnicos, ciudad.ciudad AS ciudad_tecnico FROM tecnicos  JOIN ciudad ON tecnicos.ciudad = ciudad.id JOIN estado ON tecnicos.estado_general = estado. id WHERE tecnicos.estado_general = "1"');
+                                        $query = $pdo->prepare('SELECT * FROM movimiento_diario');
                                         $query->execute();
                                         $tecnicos = $query->fetchAll(PDO::FETCH_ASSOC);
                                         foreach ($tecnicos as $tecnico){

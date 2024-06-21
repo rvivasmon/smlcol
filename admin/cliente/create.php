@@ -101,7 +101,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                             <input type="text" name="ticketexterno" class="form-control" placeholder="Ticket Externo" hidden>
                                         </div>
                                     </div>  
-                                     
+                                    
                                     <div class="col-md-0">
                                         <div class="form-group">
                                             <label for=""></label>
@@ -187,8 +187,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                     <div class="col-md-0">
                                         <div class="form-group"> <!-- Se coloca aquí el usuario que está trabajando el archivo -->
                                             <label for=""></label>
-                                            <input  class="form-control"  id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']?>" hidden>
-                                            
+                                            <input  class="form-control"  id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']?>" hidden>                                            
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -212,7 +211,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                             </select>
                                         </div>
                                     </div>
-                                   
+
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Persona Contacto</label>
@@ -243,7 +242,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                 </div>                            
                             </div>
                         </div>
-                         <div class="col-md-3">
+                        <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="archivo_adjunto">Archivo Adjunto</label>
                                     <br>
