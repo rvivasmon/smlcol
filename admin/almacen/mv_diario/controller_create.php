@@ -8,7 +8,7 @@ include('../../../layout/admin/datos_sesion_user.php');
 $fecha = $_POST['fecha'];
 $producto = $_POST['producto2'];
 $pitch = !empty($_POST['pitch2']) ? $_POST['pitch2'] : NULL;
-$serie_modulo = !empty($_POST['serie_modulo2']) ? $_POST['serie_modulo2'] : NULL;
+$serie_modulo2 = !empty($_POST['serie_modulo2']) ? $_POST['serie_modulo2'] : NULL;
 $referencia_modulo = !empty($_POST['referencia_modulo2']) ? $_POST['referencia_modulo2'] : NULL;
 $modelo_modulo1 = !empty($_POST['modelo_modulo2']) ? $_POST['modelo_modulo2'] : NULL;
 $marca_control1 = !empty($_POST['marca_control2']) ? $_POST['marca_control2'] : NULL;
@@ -24,21 +24,37 @@ $entrada_md = $_POST['entrada_md'];
 $observacion = $_POST['observacion'];
 $usuario = $_POST['idusuario2'];
 $op_destino = $_POST['op_destino'];
-$referencia_1 = isset($_POST['pitch2']) ? $_POST['pitch2'] : (isset($_POST['marca_control2']) ? $_POST['marca_control2'] : $_POST['marca_fuente2']);
-$referencia_2 = isset($_POST['serie_modulo2']) ? $_POST['serie_modulo2'] : (isset($_POST['serie_control2']) ? $_POST['serie_control2'] : $_POST['modelo_fuente2']);
+$referencia_1 = !empty($_POST['pitch2']) ? $_POST['pitch2'] : (!empty($_POST['marca_control2']) ? $_POST['marca_control2'] : $_POST['marca_fuente2']);
+$referencia_2 = !empty($_POST['serie_modulo2']) ? $_POST['serie_modulo2'] : (!empty($_POST['serie_control2']) ? $_POST['serie_control2'] : $_POST['modelo_fuente2']);
 
+// Comprobaciones
+echo "pitch2: " . $_POST['pitch2'];
+echo "marca_control2: " . $_POST['marca_control2'];
+echo "marca_fuente2: " . $_POST['marca_fuente2'];
+echo "serie_modulo2: " . $_POST['serie_modulo2'];
+echo "serie_control2: " . $_POST['serie_control2'];
+echo "modelo_fuente2: " . $_POST['modelo_fuente2'];
+echo "referencia_1: " . $referencia_1;
+echo "referencia_2: " . $referencia_2;
 
+if (empty($referencia_1)) {
+    $referencia_1 = 'default_value_1'; // o algún valor por defecto que tenga sentido para ti
+}
+
+if (empty($referencia_2)) {
+    $referencia_2 = 'default_value_2'; // o algún valor por defecto que tenga sentido para ti
+}
 
 $sql = "INSERT INTO movimiento_diario 
         (fecha, producto, pitch_modulo, serie_modulo, referencia_modulo, modelo_modulo, marca_control, serie_control, funcion_control, marca_fuente, modelo_fuente, tipo_fuente, almacen_origen, cantidad_salida, almacen_destino, cantidad_entrada, observaciones, id_usuario, op, referencia_1, referencia_2) 
-        VALUES (:fecha, :producto, :pitch, :serie_modulo, :referencia_modulo, :modelo_modulo1, :marca_control1, :serie_control, :funcion_control, :marca_fuente, :modelo_fuente, :tipo_fuente, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino)";
+        VALUES (:fecha, :producto, :pitch, :serie_modulo2, :referencia_modulo, :modelo_modulo1, :marca_control1, :serie_control, :funcion_control, :marca_fuente, :modelo_fuente, :tipo_fuente, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :referencia_1, :referencia_2)";
 
 $sentencia = $pdo->prepare($sql);
 
 $sentencia->bindParam(':fecha', $fecha);
 $sentencia->bindParam(':producto', $producto);
 $sentencia->bindParam(':pitch', $pitch);
-$sentencia->bindParam(':serie_modulo', $serie_modulo);
+$sentencia->bindParam(':serie_modulo2', $serie_modulo2);
 $sentencia->bindParam(':referencia_modulo', $referencia_modulo);
 $sentencia->bindParam(':modelo_modulo1', $modelo_modulo1);
 $sentencia->bindParam(':marca_control1', $marca_control1);
@@ -54,6 +70,8 @@ $sentencia->bindParam(':entrada_md', $entrada_md);
 $sentencia->bindParam(':observacion', $observacion);
 $sentencia->bindParam(':usuario', $usuario);
 $sentencia->bindParam(':op_destino', $op_destino);
+$sentencia->bindParam(':referencia_1', $referencia_1);
+$sentencia->bindParam(':referencia_2', $referencia_2);
 
 if($sentencia->execute()){
     header('Location:' .$URL. 'admin/almacen/mv_diario');

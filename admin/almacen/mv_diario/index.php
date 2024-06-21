@@ -36,6 +36,7 @@ include('../../../layout/admin/parte1.php');
                                             <th>Referencia 2</th>
                                             <th>Almacén Origen</th>
                                             <th>Almacén Destino</th>
+                                            <th>Destino</th>
                                             <th>Cantidas</th>
                                             <th>Descripción</th>
                                             <th><center>Acciones</center></th>
@@ -46,23 +47,31 @@ include('../../../layout/admin/parte1.php');
                                         $contador = 0;
                                         $query = $pdo->prepare('SELECT * FROM movimiento_diario');
                                         $query->execute();
-                                        $tecnicos = $query->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach ($tecnicos as $tecnico){
-                                            $id = $tecnico['id'];
-                                            $nombre = $tecnico['nombre'];
-                                            $documento = $tecnico['docident'];
-                                            $usuario_uso = $tecnico['usuario'];
-                                            $ciudad = $tecnico['ciudad_tecnico'];
-                                            $estado_general = $tecnico['estado_tecnicos'];
+                                        $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($movidiarios as $movidiario){
+                                            $id = $movidiario['id_movimiento_diario'];
+                                            $fecha = $movidiario['fecha'];
+                                            $producto = $movidiario['producto'];
+                                            $referencia1 = $movidiario['referencia_1'];
+                                            $referencia2 = $movidiario['referencia_2'];
+                                            $almacen_origen = $movidiario['almacen_origen'];
+                                            $almacen_destino = $movidiario['almacen_destino'];
+                                            $destino = $movidiario['op'];
+                                            $cantidades = $movidiario['cantidad_salida'];
+                                            $observaciones = $movidiario['observaciones'];
                                             $contador = $contador + 1;
                                         ?>
                                             <tr>
                                                 <td><?php echo $contador; ?></td>
-                                                <td><?php echo $nombre; ?></td>
-                                                <td><?php echo $documento; ?></td>
-                                                <td><?php echo $usuario_uso; ?></td>
-                                                <td><?php echo $ciudad; ?></td>
-                                                <td><?php echo $estado_general; ?></td>
+                                                <td><?php echo $fecha; ?></td>
+                                                <td><?php echo $producto; ?></td>
+                                                <td><?php echo $referencia1; ?></td>
+                                                <td><?php echo $referencia2; ?></td>
+                                                <td><?php echo $almacen_origen; ?></td>
+                                                <td><?php echo $almacen_destino; ?></td>
+                                                <td><?php echo $destino; ?></td>
+                                                <td><?php echo $cantidades; ?></td>
+                                                <td><?php echo $observaciones; ?></td>
                                                 <td>
                                                     <center>
                                                         <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
