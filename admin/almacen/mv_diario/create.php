@@ -84,7 +84,7 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="pitch2" id="pitch2" class="form-control" onchange="actualizarSerieModulo()">
                                                     <option value="">Seleccione un Pitch</option>
                                                     <?php 
-                                                    $query_pitch = $pdo->prepare('SELECT almacen_principal.id_almacen_principal, caracteristicas_modulos.pitch FROM almacen_principal INNER JOIN caracteristicas_modulos ON almacen_principal.pitch = caracteristicas_modulos.id_caracteristicas ORDER BY caracteristicas_modulos.pitch ASC');
+                                                    $query_pitch = $pdo->prepare('SELECT almacen_principal.id_almacen_principal, caracteristicas_modulos.pitch FROM almacen_principal INNER JOIN caracteristicas_modulos ON almacen_principal.pitch = caracteristicas_modulos.id_car_mod ORDER BY caracteristicas_modulos.pitch ASC');
                                                     $query_pitch->execute();
                                                     $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
                                                     
@@ -113,7 +113,7 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="modelo_modulo2" id="modelo_modulo2" class="form-control">
                                                     <option value="">Seleccione un Modelo</option>
                                                     <?php 
-                                                    $query_modelo = $pdo->prepare('SELECT almacen_principal.id_almacen_principal, caracteristicas_modulos.modelo_modulo FROM almacen_principal INNER JOIN caracteristicas_modulos ON almacen_principal.modelo_modulo = caracteristicas_modulos.id_caracteristicas ORDER BY caracteristicas_modulos.modelo_modulo ASC');
+                                                    $query_modelo = $pdo->prepare('SELECT almacen_principal.id_almacen_principal, caracteristicas_modulos.modelo_modulo FROM almacen_principal INNER JOIN caracteristicas_modulos ON almacen_principal.modelo_modulo = caracteristicas_modulos.id_car_mod ORDER BY caracteristicas_modulos.modelo_modulo ASC');
                                                     $query_modelo->execute();
                                                     $modelos = $query_modelo->fetchAll(PDO::FETCH_ASSOC);
 
@@ -160,7 +160,7 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="marca_control2" id="marca_control2" class="form-control">
                                                     <option value="">Seleccione una Marca</option>
                                                     <?php 
-                                                    $query_marca_control = $pdo->prepare('SELECT almacen_principal.id_almacen_principal, caracteristicas_control.marca_control FROM almacen_principal INNER JOIN caracteristicas_control ON almacen_principal.marca_control = caracteristicas_control.id_caracteristicas ORDER BY caracteristicas_control.marca_control ASC');
+                                                    $query_marca_control = $pdo->prepare('SELECT almacen_principal.id_almacen_principal, caracteristicas_control.marca_control FROM almacen_principal INNER JOIN caracteristicas_control ON almacen_principal.marca_control = caracteristicas_control.id_car_ctrl ORDER BY caracteristicas_control.marca_control ASC');
                                                     $query_marca_control->execute();
                                                     $marca_controles = $query_marca_control->fetchAll(PDO::FETCH_ASSOC);
                                                     
@@ -195,7 +195,7 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="funcion_control2" id="funcion_control2" class="form-control">
                                                     <option value="">Seleccione una Función</option>
                                                     <?php 
-                                                    $query_funcion_control = $pdo->prepare('SELECT almacen_principal.id_almacen_principal, caracteristicas_control.funcion_control FROM almacen_principal INNER JOIN caracteristicas_control ON almacen_principal.funcion_control = caracteristicas_control.id_caracteristicas ORDER BY caracteristicas_control.funcion_control ASC');
+                                                    $query_funcion_control = $pdo->prepare('SELECT almacen_principal.id_almacen_principal, caracteristicas_control.funcion_control FROM almacen_principal INNER JOIN caracteristicas_control ON almacen_principal.funcion_control = caracteristicas_control.id_car_ctrl ORDER BY caracteristicas_control.funcion_control ASC');
                                                     $query_funcion_control->execute();
                                                     $funcion_controles = $query_funcion_control->fetchAll(PDO::FETCH_ASSOC);
 
@@ -227,7 +227,7 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="marca_fuente2" id="marca_fuente2" class="form-control">
                                                     <option value="">Seleccione una Marca</option>
                                                     <?php 
-                                                    $query_marca_fuente = $pdo->prepare('SELECT almacen_principal.id_almacen_principal, caracteristicas_fuentes.marca_fuente FROM almacen_principal INNER JOIN caracteristicas_fuentes ON almacen_principal.marca_fuente = caracteristicas_fuentes.id_caracteristicas ORDER BY caracteristicas_fuentes.marca_fuente ASC');
+                                                    $query_marca_fuente = $pdo->prepare('SELECT almacen_principal.id_almacen_principal, caracteristicas_fuentes.marca_fuente FROM almacen_principal INNER JOIN caracteristicas_fuentes ON almacen_principal.marca_fuente = caracteristicas_fuentes.id_car_fuen ORDER BY caracteristicas_fuentes.marca_fuente ASC');
                                                     $query_marca_fuente->execute();
                                                     $marca_fuentes = $query_marca_fuente->fetchAll(PDO::FETCH_ASSOC);
                                                     
@@ -263,7 +263,7 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="tipo_fuente2" id="tipo_fuente2" class="form-control">
                                                     <option value="">Seleccione un Tipo</option>
                                                     <?php 
-                                                    $query_tipo_fuente  = $pdo->prepare('SELECT almacen_principal.id_almacen_principal, caracteristicas_fuentes.tipo_fuente FROM almacen_principal INNER JOIN caracteristicas_fuentes ON almacen_principal.tipo_fuente = caracteristicas_fuentes.id_caracteristicas ORDER BY caracteristicas_fuentes.tipo_fuente ASC');
+                                                    $query_tipo_fuente  = $pdo->prepare('SELECT almacen_principal.id_almacen_principal, caracteristicas_fuentes.tipo_fuente FROM almacen_principal INNER JOIN caracteristicas_fuentes ON almacen_principal.tipo_fuente = caracteristicas_fuentes.id_car_fuen ORDER BY caracteristicas_fuentes.tipo_fuente ASC');
                                                     $query_tipo_fuente->execute();
                                                     $tipo_fuentes = $query_tipo_fuente->fetchAll(PDO::FETCH_ASSOC);
                                                     
@@ -302,7 +302,7 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="almacen_salida_md" id="almacen_salida_md" class="form-control">
                                                     <option value="">Almacén Origen</option>
                                                     <?php 
-                                                    $query_almacen  = $pdo->prepare('SELECT * FROM asignar_almacen');
+                                                    $query_almacen  = $pdo->prepare('SELECT * FROM asignar_almacenes');
                                                     $query_almacen->execute();
                                                     $almacenes = $query_almacen->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($almacenes as $almacen) {
@@ -328,7 +328,7 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="almacen_entrada_md" id="almacen_entrada_md" class="form-control">
                                                     <option value="">Almacén Destino</option>
                                                     <?php 
-                                                    $query_almacen_entra = $pdo->prepare('SELECT * FROM asignar_almacen');
+                                                    $query_almacen_entra = $pdo->prepare('SELECT * FROM asignar_almacenes');
                                                     $query_almacen_entra->execute();
                                                     $almacenes_entras = $query_almacen_entra->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($almacenes_entras as $almacen_entra) {
@@ -347,6 +347,9 @@ include('../../../layout/admin/parte1.php');
                                             <div class="form-group">
                                                 <label for="entrada_md">Entrada</label>
                                                 <input type="text" name="entrada_md" class="form-control" placeholder="Cantidad Entrada" required>
+                                                <input type="hidden" name="pitch" value="<?php echo $pitch_unico['pitch']; ?>">
+                                                <input type="hidden" name="marca_control" value="<?php echo $marca_unica['marca_control']; ?>">
+                                                <input type="hidden" name="marca_fuente" value="<?php echo $marca_fuente_unica['marca_fuente']; ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -377,7 +380,7 @@ include('../../../layout/admin/parte1.php');
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Crear Producto</button>
+                                    <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Crear Movimiento</button>
                                 </div>
                             </div>
                         </div>

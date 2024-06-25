@@ -24,29 +24,12 @@ $entrada_md = $_POST['entrada_md'];
 $observacion = $_POST['observacion'];
 $usuario = $_POST['idusuario2'];
 $op_destino = $_POST['op_destino'];
-$referencia_1 = !empty($_POST['pitch2']) ? $_POST['pitch2'] : (!empty($_POST['marca_control2']) ? $_POST['marca_control2'] : $_POST['marca_fuente2']);
+$referencia_1 = !empty($_POST['pitch']) ? $_POST['pitch'] : (!empty($_POST['marca_control']) ? $_POST['marca_control'] : $_POST['marca_fuente']);
 $referencia_2 = !empty($_POST['serie_modulo2']) ? $_POST['serie_modulo2'] : (!empty($_POST['serie_control2']) ? $_POST['serie_control2'] : $_POST['modelo_fuente2']);
 
-// Comprobaciones
-echo "pitch2: " . $_POST['pitch2'];
-echo "marca_control2: " . $_POST['marca_control2'];
-echo "marca_fuente2: " . $_POST['marca_fuente2'];
-echo "serie_modulo2: " . $_POST['serie_modulo2'];
-echo "serie_control2: " . $_POST['serie_control2'];
-echo "modelo_fuente2: " . $_POST['modelo_fuente2'];
-echo "referencia_1: " . $referencia_1;
-echo "referencia_2: " . $referencia_2;
-
-if (empty($referencia_1)) {
-    $referencia_1 = 'default_value_1'; // o algún valor por defecto que tenga sentido para ti
-}
-
-if (empty($referencia_2)) {
-    $referencia_2 = 'default_value_2'; // o algún valor por defecto que tenga sentido para ti
-}
 
 $sql = "INSERT INTO movimiento_diario 
-        (fecha, producto, pitch_modulo, serie_modulo, referencia_modulo, modelo_modulo, marca_control, serie_control, funcion_control, marca_fuente, modelo_fuente, tipo_fuente, almacen_origen, cantidad_salida, almacen_destino, cantidad_entrada, observaciones, id_usuario, op, referencia_1, referencia_2) 
+        (fecha, producto, pitch_modulo, serie_modulo, referencia_modulo, modelo_modulo, marca_control, serie_control, funcion_control, marca_fuente, modelo_fuente, tipo_fuente, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, referencia_1, referencia_2) 
         VALUES (:fecha, :producto, :pitch, :serie_modulo2, :referencia_modulo, :modelo_modulo1, :marca_control1, :serie_control, :funcion_control, :marca_fuente, :modelo_fuente, :tipo_fuente, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :referencia_1, :referencia_2)";
 
 $sentencia = $pdo->prepare($sql);
@@ -72,6 +55,7 @@ $sentencia->bindParam(':usuario', $usuario);
 $sentencia->bindParam(':op_destino', $op_destino);
 $sentencia->bindParam(':referencia_1', $referencia_1);
 $sentencia->bindParam(':referencia_2', $referencia_2);
+
 
 if($sentencia->execute()){
     header('Location:' .$URL. 'admin/almacen/mv_diario');

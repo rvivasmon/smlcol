@@ -86,11 +86,11 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="pitch" id="pitch" class="form-control">
                                                     <option value="">Seleccione un Pitch</option>
                                                     <?php 
-                                                    $query_pitch  = $pdo->prepare('SELECT id_caracteristicas, pitch FROM caracteristicas_modulos WHERE pitch IS NOT NULL AND pitch <> "" AND pitch <> "0" ORDER BY pitch ASC');
+                                                    $query_pitch  = $pdo->prepare('SELECT id_car_mod, pitch FROM caracteristicas_modulos WHERE pitch IS NOT NULL AND pitch <> "" AND pitch <> "0" ORDER BY pitch ASC');
                                                     $query_pitch->execute();
                                                     $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($pitches as $pitch) {
-                                                        echo '<option value="' . $pitch['id_caracteristicas'] . '">' . $pitch['pitch'] . '</option>';
+                                                        echo '<option value="' . $pitch['id_car_mod'] . '">' . $pitch['pitch'] . '</option>';
                                                     }
                                                     ?>
                                                 </select>
@@ -117,14 +117,14 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="modelo_modulo1" id="modelo_modulo1" class="form-control">
                                                     <option value="">Seleccione un Modelo</option>
                                                     <?php 
-                                                    $query_modelo = $pdo->prepare('SELECT id_caracteristicas, modelo_modulo FROM caracteristicas_modulos WHERE modelo_modulo IS NOT NULL AND modelo_modulo <> "" AND modelo_modulo <> "0" ORDER BY modelo_modulo ASC');
+                                                    $query_modelo = $pdo->prepare('SELECT id_car_mod, modelo_modulo FROM caracteristicas_modulos WHERE modelo_modulo IS NOT NULL AND modelo_modulo <> "" AND modelo_modulo <> "0" ORDER BY modelo_modulo ASC');
                                                     $query_modelo->execute();
                                                     $modelos = $query_modelo->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($modelos as $modelo) {
-                                                        $id_caracteristicas = $modelo['id_caracteristicas'];
+                                                        $id_car_mod = $modelo['id_car_mod'];
                                                         $modelo_modulo = $modelo['modelo_modulo'];
                                                         ?>
-                                                        <option value="<?php echo $id_caracteristicas;?>"><?php echo $modelo_modulo; ?></option>
+                                                        <option value="<?php echo $id_car_mod;?>"><?php echo $modelo_modulo; ?></option>
                                                     <?php
                                                     }
                                                     ?>
@@ -153,11 +153,11 @@ include('../../../layout/admin/parte1.php');
                                                     <option value="">Seleccione una Marca</option>
                                                     <?php 
                                                     echo "Valor de marca_control1: " . $marca_control1;
-                                                    $query_marca_control  = $pdo->prepare('SELECT id_caracteristicas, marca_control FROM caracteristicas_control WHERE marca_control IS NOT NULL AND marca_control <> "" AND marca_control <> "0" ORDER BY marca_control ASC');
+                                                    $query_marca_control  = $pdo->prepare('SELECT id_car_ctrl, marca_control FROM caracteristicas_control WHERE marca_control IS NOT NULL AND marca_control <> "" AND marca_control <> "0" ORDER BY marca_control ASC');
                                                     $query_marca_control->execute();
                                                     $marca_controles = $query_marca_control->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($marca_controles as $marca_control) {
-                                                        echo '<option value="' . $marca_control['id_caracteristicas'] . '">' . $marca_control['marca_control'] . '</option>';
+                                                        echo '<option value="' . $marca_control['id_car_ctrl'] . '">' . $marca_control['marca_control'] . '</option>';
                                                     }
                                                     ?>
                                                 </select>
@@ -175,11 +175,11 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="funcion_control" id="funcion_control" class="form-control">
                                                     <option value="">Seleccione una Función</option>
                                                     <?php 
-                                                    $query_funcion_control  = $pdo->prepare('SELECT id_caracteristicas, funcion_control FROM caracteristicas_control WHERE funcion_control IS NOT NULL AND funcion_control <> "" AND funcion_control <> "0" ORDER BY funcion_control ASC');
+                                                    $query_funcion_control  = $pdo->prepare('SELECT id_car_ctrl, funcion_control FROM caracteristicas_control WHERE funcion_control IS NOT NULL AND funcion_control <> "" AND funcion_control <> "0" ORDER BY funcion_control ASC');
                                                     $query_funcion_control->execute();
                                                     $funcion_controles = $query_funcion_control->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($funcion_controles as $funcion_control) {
-                                                        echo '<option value="' . $funcion_control['id_caracteristicas'] . '">' . $funcion_control['funcion_control'] . '</option>';
+                                                        echo '<option value="' . $funcion_control['id_car_ctrl'] . '">' . $funcion_control['funcion_control'] . '</option>';
                                                     }
                                                     ?>
                                                 </select>
@@ -194,11 +194,11 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="marca_fuente" id="marca_fuente" class="form-control">
                                                     <option value="">Seleccione una Marca</option>
                                                     <?php 
-                                                    $query_marca_fuente  = $pdo->prepare('SELECT id_caracteristicas, marca_fuente FROM caracteristicas_fuentes WHERE marca_fuente IS NOT NULL AND marca_fuente <> "" AND marca_fuente <> "0" ORDER BY marca_fuente ASC');
+                                                    $query_marca_fuente  = $pdo->prepare('SELECT id_car_fuen, marca_fuente FROM caracteristicas_fuentes WHERE marca_fuente IS NOT NULL AND marca_fuente <> "" AND marca_fuente <> "0" ORDER BY marca_fuente ASC');
                                                     $query_marca_fuente->execute();
                                                     $marca_fuentes = $query_marca_fuente->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($marca_fuentes as $marca_fuente) {
-                                                        echo '<option value="' . $marca_fuente['id_caracteristicas'] . '">' . $marca_fuente['marca_fuente'] . '</option>';
+                                                        echo '<option value="' . $marca_fuente['id_car_fuen'] . '">' . $marca_fuente['marca_fuente'] . '</option>';
                                                     }
                                                     ?>
                                                 </select>
@@ -217,11 +217,11 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="tipo_fuente" id="tipo_fuente" class="form-control">
                                                     <option value="">Seleccione un Tipo</option>
                                                     <?php 
-                                                    $query_tipo_fuente  = $pdo->prepare('SELECT id_caracteristicas, tipo_fuente FROM caracteristicas_fuentes WHERE tipo_fuente IS NOT NULL AND tipo_fuente <> "" AND tipo_fuente <> "0" ORDER BY tipo_fuente ASC');
+                                                    $query_tipo_fuente  = $pdo->prepare('SELECT id_car_fuen, tipo_fuente FROM caracteristicas_fuentes WHERE tipo_fuente IS NOT NULL AND tipo_fuente <> "" AND tipo_fuente <> "0" ORDER BY tipo_fuente ASC');
                                                     $query_tipo_fuente->execute();
                                                     $tipo_fuentes = $query_tipo_fuente->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($tipo_fuentes as $tipo_fuente) {
-                                                        echo '<option value="' . $tipo_fuente['id_caracteristicas'] . '">' . $tipo_fuente['tipo_fuente'] . '</option>';
+                                                        echo '<option value="' . $tipo_fuente['id_car_fuen'] . '">' . $tipo_fuente['tipo_fuente'] . '</option>';
                                                     }
                                                     ?>
                                                 </select>

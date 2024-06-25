@@ -45,7 +45,18 @@ include('../../../layout/admin/parte1.php');
                                     <tbody>
                                         <?php
                                         $contador = 0;
-                                        $query = $pdo->prepare('SELECT * FROM movimiento_diario');
+                                        $query = $pdo->prepare('SELECT 
+                                            movimiento_diario.*, 
+                                            productos.tipo_producto AS producto,
+                                            almacen_origen.nombre_almacen AS almacenes_origen,
+                                            almacen_destino.nombre_almacen AS almacenes_destino
+                                        FROM 
+                                            movimiento_diario
+                                        INNER JOIN productos ON movimiento_diario.producto = productos.id_producto
+                                        INNER JOIN asignar_almacenes AS almacen_origen ON movimiento_diario.almacen_origen1 = almacen_origen.id_asignacion
+                                        INNER JOIN asignar_almacenes AS almacen_destino ON movimiento_diario.almacen_destino1 = almacen_destino.id_asignacion
+
+                                        ');
                                         $query->execute();
                                         $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);
                                         foreach ($movidiarios as $movidiario){
@@ -54,8 +65,8 @@ include('../../../layout/admin/parte1.php');
                                             $producto = $movidiario['producto'];
                                             $referencia1 = $movidiario['referencia_1'];
                                             $referencia2 = $movidiario['referencia_2'];
-                                            $almacen_origen = $movidiario['almacen_origen'];
-                                            $almacen_destino = $movidiario['almacen_destino'];
+                                            $almacen_origen1 = $movidiario['almacenes_origen'];
+                                            $almacen_destino1 = $movidiario['almacenes_destino'];
                                             $destino = $movidiario['op'];
                                             $cantidades = $movidiario['cantidad_salida'];
                                             $observaciones = $movidiario['observaciones'];
@@ -67,8 +78,8 @@ include('../../../layout/admin/parte1.php');
                                                 <td><?php echo $producto; ?></td>
                                                 <td><?php echo $referencia1; ?></td>
                                                 <td><?php echo $referencia2; ?></td>
-                                                <td><?php echo $almacen_origen; ?></td>
-                                                <td><?php echo $almacen_destino; ?></td>
+                                                <td><?php echo $almacen_origen1; ?></td>
+                                                <td><?php echo $almacen_destino1; ?></td>
                                                 <td><?php echo $destino; ?></td>
                                                 <td><?php echo $cantidades; ?></td>
                                                 <td><?php echo $observaciones; ?></td>
