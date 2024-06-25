@@ -347,9 +347,9 @@ include('../../../layout/admin/parte1.php');
                                             <div class="form-group">
                                                 <label for="entrada_md">Entrada</label>
                                                 <input type="text" name="entrada_md" class="form-control" placeholder="Cantidad Entrada" required>
-                                                <input type="hidden" name="pitch" value="<?php echo $pitch_unico['pitch']; ?>">
-                                                <input type="hidden" name="marca_control" value="<?php echo $marca_unica['marca_control']; ?>">
-                                                <input type="hidden" name="marca_fuente" value="<?php echo $marca_fuente_unica['marca_fuente']; ?>">
+                                                <input type="hidden" name="pitch3" value="<?php echo $pitch_unico['pitch']; ?>">
+                                                <input type="hidden" name="marca_control3" value="<?php echo $marca_unica['marca_control']; ?>">
+                                                <input type="hidden" name="marca_fuente3" value="<?php echo $marca_fuente_unica['marca_fuente']; ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -471,6 +471,68 @@ document.addEventListener('DOMContentLoaded', function() {
         // Llama a la función inicialmente para establecer el valor correcto
         actualizarIdProductoSeleccionado();
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const selectProducto = document.getElementById('producto2');
+    const pitchInput = document.getElementsByName('pitch3')[0];
+    const marcaControlInput = document.getElementsByName('marca_control3')[0];
+    const marcaFuenteInput = document.getElementsByName('marca_fuente3')[0];
+
+    // Función para actualizar los campos de acuerdo al producto seleccionado
+    function actualizarCamposProducto() {
+        // Obtener el valor seleccionado del producto
+        const productoSeleccionado = selectProducto.options[selectProducto.selectedIndex].text;
+
+        // Actualizar los valores de los campos según el producto seleccionado
+        if (productoSeleccionado.includes('Módulo')) {
+            pitchInput.value = document.getElementById('pitch2').options[document.getElementById('pitch2').selectedIndex].text;
+            marcaControlInput.value = '';
+            marcaFuenteInput.value = '';
+        } else if (productoSeleccionado.includes('Control')) {
+            pitchInput.value = '';
+            marcaControlInput.value = document.getElementById('marca_control2').options[document.getElementById('marca_control2').selectedIndex].text;
+            marcaFuenteInput.value = '';
+        } else if (productoSeleccionado.includes('Fuente')) {
+            pitchInput.value = '';
+            marcaControlInput.value = '';
+            marcaFuenteInput.value = document.getElementById('marca_fuente2').options[document.getElementById('marca_fuente2').selectedIndex].text;
+        } else {
+            // Si no se selecciona ningún producto, establecer todos los campos en blanco
+            pitchInput.value = '';
+            marcaControlInput.value = '';
+            marcaFuenteInput.value = '';
+        }
+    }
+
+    // Escuchar cambios en el select de producto y actualizar los campos
+    selectProducto.addEventListener('change', actualizarCamposProducto);
+
+    // Escuchar cambios en el select de pitch y actualizar el campo correspondiente
+    const selectPitch = document.getElementById('pitch2');
+    selectPitch.addEventListener('change', function() {
+        pitchInput.value = selectPitch.options[selectPitch.selectedIndex].text;
+    });
+
+    // Escuchar cambios en el select de marca de control y actualizar el campo correspondiente
+    const selectMarcaControl = document.getElementById('marca_control2');
+    selectMarcaControl.addEventListener('change', function() {
+        marcaControlInput.value = selectMarcaControl.options[selectMarcaControl.selectedIndex].text;
+    });
+
+    // Escuchar cambios en el select de marca de fuente y actualizar el campo correspondiente
+    const selectMarcaFuente = document.getElementById('marca_fuente2');
+    selectMarcaFuente.addEventListener('change', function() {
+        marcaFuenteInput.value = selectMarcaFuente.options[selectMarcaFuente.selectedIndex].text;
+    });
+
+    // Llamar a la función inicialmente para establecer los valores correctos
+    actualizarCamposProducto();
+});
+
+
+
+
+
 
 </script>
 

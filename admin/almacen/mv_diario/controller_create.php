@@ -24,7 +24,21 @@ $entrada_md = $_POST['entrada_md'];
 $observacion = $_POST['observacion'];
 $usuario = $_POST['idusuario2'];
 $op_destino = $_POST['op_destino'];
-$referencia_1 = !empty($_POST['pitch']) ? $_POST['pitch'] : (!empty($_POST['marca_control']) ? $_POST['marca_control'] : $_POST['marca_fuente']);
+//$referencia_1 = !empty($_POST['pitch3']) ? $_POST['pitch3'] : (!empty($_POST['marca_control3']) ? $_POST['marca_control3'] : $_POST['marca_fuente3']);
+
+if (!empty($_POST['pitch3'])) {
+    $referencia_1 = $_POST['pitch3'];
+} elseif (!empty($_POST['marca_control3'])) {
+    $referencia_1 = $_POST['marca_control3'];
+} elseif (!empty($_POST['marca_fuente3'])) {
+    $referencia_1 = $_POST['marca_fuente3'];
+} else {
+    $referencia_1 = NULL; // O asigna un valor por defecto si ninguno está presente
+}
+
+
+
+
 $referencia_2 = !empty($_POST['serie_modulo2']) ? $_POST['serie_modulo2'] : (!empty($_POST['serie_control2']) ? $_POST['serie_control2'] : $_POST['modelo_fuente2']);
 
 

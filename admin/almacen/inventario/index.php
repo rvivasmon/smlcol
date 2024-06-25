@@ -53,7 +53,25 @@ include('../../../layout/admin/parte1.php');
                                 <tbody>
                                     <?php
                                     $contador = 0;
-                                    $query = $pdo->prepare('SELECT almacen_principal.*, productos.tipo_producto as nombre_producto FROM almacen_principal JOIN productos ON almacen_principal.tipo_producto = productos.id_producto');
+                                    $query = $pdo->prepare('SELECT 
+                                        ap.*,
+                                        productos.tipo_producto as nombre_producto,
+                                        cm.pitch as nombre_pitch,
+                                        cms.modelo_modulo as modul_model,
+                                        cctr.marca_control as cont_marc,
+                                        cctrs.funcion_control as cont_fun,
+                                        cf.marca_fuente as fuen_marc,
+                                        cft.tipo_fuente as fuen_tipo
+                                    FROM
+                                        almacen_principal AS ap
+                                    LEFT JOIN productos ON ap.tipo_producto = productos.id_producto
+                                    LEFT JOIN caracteristicas_modulos AS cm ON ap.pitch = cm.id_car_mod
+                                    LEFT JOIN caracteristicas_modulos AS cms ON ap.modelo_modulo = cms.id_car_mod
+                                    LEFT JOIN caracteristicas_control AS cctr ON ap.marca_control = cctr.id_car_ctrl
+                                    LEFT JOIN caracteristicas_control AS cctrs ON ap.funcion_control = cctrs.id_car_ctrl
+                                    LEFT JOIN caracteristicas_fuentes AS cf ON ap.marca_fuente = cf.id_car_fuen
+                                    LEFT JOIN caracteristicas_fuentes AS cft ON ap.tipo_fuente = cft.id_car_fuen
+                                    ');
 
                                     $query->execute();
                                     $almacenes_pricipales = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -61,18 +79,18 @@ include('../../../layout/admin/parte1.php');
                                         $id = $almacen_pricipal['id_almacen_principal'];
                                         $fecha_ingreso = $almacen_pricipal['fecha_ingreso'];
                                         $producto = $almacen_pricipal['nombre_producto'];
-                                        $pitch = $almacen_pricipal['pitch'];
+                                        $pitch = $almacen_pricipal['nombre_pitch'];
                                         $serie_modulo = $almacen_pricipal['serie_modulo'];
                                         $referencia = $almacen_pricipal['referencia'];
-                                        $modelo_modulo = $almacen_pricipal['modelo_modulo'];
+                                        $modelo_modulo = $almacen_pricipal['modul_model'];
                                         $medida_x = $almacen_pricipal['medida_x'];
                                         $medida_y = $almacen_pricipal['medida_y'];
-                                        $marca_control = $almacen_pricipal['marca_control'];
+                                        $marca_control = $almacen_pricipal['cont_marc'];
                                         $serie_control = $almacen_pricipal['serie_control'];
-                                        $funcion_control = $almacen_pricipal['funcion_control'];
-                                        $marca_fuente = $almacen_pricipal['marca_fuente'];
+                                        $funcion_control = $almacen_pricipal['cont_fun'];
+                                        $marca_fuente = $almacen_pricipal['fuen_marc'];
                                         $modelo_fuente = $almacen_pricipal['modelo_fuente'];
-                                        $tipo_fuente = $almacen_pricipal['tipo_fuente'];
+                                        $tipo_fuente = $almacen_pricipal['fuen_tipo'];
                                         $voltaje = $almacen_pricipal['voltaje_salida'];
                                         $existencia = $almacen_pricipal['existencias'];
                                         $contador = $contador + 1;
