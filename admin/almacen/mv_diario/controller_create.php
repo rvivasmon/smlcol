@@ -24,8 +24,9 @@ $entrada_md = $_POST['entrada_md'];
 $observacion = $_POST['observacion'];
 $usuario = $_POST['idusuario2'];
 $op_destino = $_POST['op_destino'];
-//$referencia_1 = !empty($_POST['pitch3']) ? $_POST['pitch3'] : (!empty($_POST['marca_control3']) ? $_POST['marca_control3'] : $_POST['marca_fuente3']);
 
+
+// Lógica para asignar referencia_1
 if (!empty($_POST['pitch3'])) {
     $referencia_1 = $_POST['pitch3'];
 } elseif (!empty($_POST['marca_control3'])) {
@@ -36,10 +37,19 @@ if (!empty($_POST['pitch3'])) {
     $referencia_1 = NULL; // O asigna un valor por defecto si ninguno está presente
 }
 
+// Lógica para asignar referencia_2
+if (!empty($_POST['serie_modulo3'])) {
+    $referencia_2 = $_POST['serie_modulo3'];
+} elseif (!empty($_POST['serie_control3'])) {
+    $referencia_2 = $_POST['serie_control3'];
+} elseif (!empty($_POST['modelo_fuente3'])) {
+    $referencia_2 = $_POST['modelo_fuente3'];
+} else {
+    $referencia_2 = NULL; // O asigna un valor por defecto si ninguno está presente
+}
 
 
-
-$referencia_2 = !empty($_POST['serie_modulo2']) ? $_POST['serie_modulo2'] : (!empty($_POST['serie_control2']) ? $_POST['serie_control2'] : $_POST['modelo_fuente2']);
+//$referencia_2 = !empty($_POST['serie_modulo2']) ? $_POST['serie_modulo2'] : (!empty($_POST['serie_control2']) ? $_POST['serie_control2'] : $_POST['modelo_fuente2']);
 
 
 $sql = "INSERT INTO movimiento_diario 

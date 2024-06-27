@@ -63,7 +63,7 @@ include('../../../layout/admin/parte1.php');
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="op_destino">Asignar a:</label>
-                                    <input type="text" name="op_destino" class="form-control" placeholder="Asignar">
+                                    <input type="text" name="op_destino" class="form-control" placeholder="Asignar" required>
                                 </div>
                             </div>
                             <div class="col-md-0">
@@ -81,7 +81,7 @@ include('../../../layout/admin/parte1.php');
                                         <div class="col-md-2 campos Modulo2">
                                             <div class="form-group">
                                                 <label for="pitch">Pitch</label>
-                                                <select name="pitch2" id="pitch2" class="form-control" onchange="actualizarSerieModulo()">
+                                                <select name="pitch2" id="pitch2" class="form-control">
                                                     <option value="">Seleccione un Pitch</option>
                                                     <?php 
                                                     $query_pitch = $pdo->prepare('SELECT almacen_principal.id_almacen_principal, caracteristicas_modulos.pitch FROM almacen_principal INNER JOIN caracteristicas_modulos ON almacen_principal.pitch = caracteristicas_modulos.id_car_mod ORDER BY caracteristicas_modulos.pitch ASC');
@@ -142,7 +142,21 @@ include('../../../layout/admin/parte1.php');
                                         <div class="col-md-4 campos Modulo2">
                                             <div class="form-group">
                                                 <label for="serie_modulo">Serie</label>
-                                                <input type="text" name="serie_modulo2" class="form-control" placeholder="Serie">
+                                                <select name="serie_modulo2" id="serie_modulo2" class="form-control">
+                                                    <option value="">Seleccione la Serie</option>
+                                                    <?php
+                                                        $query_serie = $pdo->prepare('SELECT * FROM almacen_principal WHERE serie_modulo IS NOT NULL AND serie_modulo != ""');
+                                                        $query_serie->execute();
+                                                        $series = $query_serie->fetchAll(PDO::FETCH_ASSOC);
+                                                        foreach($series as $serie) {
+                                                            $id_almacen_principal = $serie['id_almacen_principal'];
+                                                            $serie_modulo = $serie['serie_modulo'];
+                                                    ?>
+                                                            <option value="<?php echo $id_almacen_principal; ?>"><?php echo $serie_modulo; ?></option>
+                                                    <?php
+                                                        }
+                                                    ?>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-4 campos Modulo2">
@@ -186,7 +200,21 @@ include('../../../layout/admin/parte1.php');
                                         <div class="col-md-4 campos Control2">
                                             <div class="form-group">
                                                 <label for="serie_control">Referencia</label>
-                                                <input type="text" name="serie_control2" class="form-control" placeholder="Serie">
+                                                <select name="serie_control2" id="serie_control2" class="form-control">
+                                                    <option value="">Seleccione la Referencia</option>
+                                                    <?php
+                                                        $query_control1 = $pdo->prepare('SELECT * FROM almacen_principal WHERE serie_control IS NOT NULL AND serie_control != ""');
+                                                        $query_control1->execute();
+                                                        $controles = $query_control1->fetchAll(PDO::FETCH_ASSOC);
+                                                        foreach($controles as $control1) {
+                                                            $id_almacen_principal_control = $control1['id_almacen_principal'];
+                                                            $serie_control1 = $control1['serie_control'];
+                                                    ?>
+                                                            <option value="<?php echo $id_almacen_principal_control; ?>"><?php echo $serie_control1; ?></option>
+                                                    <?php
+                                                        }
+                                                    ?>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-4 campos Control2">
@@ -254,7 +282,21 @@ include('../../../layout/admin/parte1.php');
                                         <div class="col-md-3 campos Fuente2">
                                             <div class="form-group">
                                                 <label for="modelo_fuente">Modelo</label>
-                                                <input type="text" name="modelo_fuente2" class="form-control" placeholder="Modelo">
+                                                <select name="modelo_fuente2" id="modelo_fuente2" class="form-control">
+                                                    <option value="">Seleccione el Modelo</option>
+                                                    <?php
+                                                        $query_modelfuente = $pdo->prepare('SELECT * FROM almacen_principal WHERE modelo_fuente IS NOT NULL AND modelo_fuente != ""');
+                                                        $query_modelfuente->execute();
+                                                        $modelosfuentes = $query_modelfuente->fetchAll(PDO::FETCH_ASSOC);
+                                                        foreach($modelosfuentes as $modelfuente) {
+                                                            $id_principal_modelfuente = $modelfuente['id_almacen_principal'];
+                                                            $serie_modelfuente = $modelfuente['modelo_fuente'];
+                                                    ?>
+                                                            <option value="<?php echo $id_principal_modelfuente; ?>"><?php echo $serie_modelfuente; ?></option>
+                                                    <?php
+                                                        }
+                                                    ?>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-3 campos Fuente2">
@@ -350,6 +392,9 @@ include('../../../layout/admin/parte1.php');
                                                 <input type="hidden" name="pitch3" value="<?php echo $pitch_unico['pitch']; ?>">
                                                 <input type="hidden" name="marca_control3" value="<?php echo $marca_unica['marca_control']; ?>">
                                                 <input type="hidden" name="marca_fuente3" value="<?php echo $marca_fuente_unica['marca_fuente']; ?>">
+                                                <input type="hidden" name="serie_modulo3" value="<?php echo $serie['serie_modulo']; ?>">
+                                                <input type="hidden" name="serie_control3" value="<?php echo $control1['serie_control']; ?>">
+                                                <input type="hidden" name="modelo_fuente3" value="<?php echo $modelfuente['modelo_fuente']; ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -477,6 +522,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const pitchInput = document.getElementsByName('pitch3')[0];
     const marcaControlInput = document.getElementsByName('marca_control3')[0];
     const marcaFuenteInput = document.getElementsByName('marca_fuente3')[0];
+    const serieModuloInput = document.getElementsByName('serie_modulo3')[0];
+    const serieControlInput = document.getElementsByName('serie_control3')[0];
+    const modeloFuenteInput = document.getElementsByName('modelo_fuente3')[0];
 
     // Función para actualizar los campos de acuerdo al producto seleccionado
     function actualizarCamposProducto() {
@@ -486,21 +534,33 @@ document.addEventListener('DOMContentLoaded', function() {
         // Actualizar los valores de los campos según el producto seleccionado
         if (productoSeleccionado.includes('Módulo')) {
             pitchInput.value = document.getElementById('pitch2').options[document.getElementById('pitch2').selectedIndex].text;
+            serieModuloInput.value = document.getElementById('serie_modulo2').options[document.getElementById('serie_modulo2').selectedIndex].text;
             marcaControlInput.value = '';
             marcaFuenteInput.value = '';
+            serieControlInput.value = '';
+            modeloFuenteInput.value = '';
         } else if (productoSeleccionado.includes('Control')) {
             pitchInput.value = '';
+            serieModuloInput.value = '';
             marcaControlInput.value = document.getElementById('marca_control2').options[document.getElementById('marca_control2').selectedIndex].text;
+            serieControlInput.value = document.getElementById('serie_control2').options[document.getElementById('serie_control2').selectedIndex].text;
             marcaFuenteInput.value = '';
+            modeloFuenteInput.value = '';
         } else if (productoSeleccionado.includes('Fuente')) {
             pitchInput.value = '';
+            serieModuloInput.value = '';
             marcaControlInput.value = '';
+            serieControlInput.value = '';
             marcaFuenteInput.value = document.getElementById('marca_fuente2').options[document.getElementById('marca_fuente2').selectedIndex].text;
+            modeloFuenteInput.value = document.getElementById('modelo_fuente2').options[document.getElementById('modelo_fuente2').selectedIndex].text;
         } else {
             // Si no se selecciona ningún producto, establecer todos los campos en blanco
             pitchInput.value = '';
+            serieModuloInput.value = '';
             marcaControlInput.value = '';
+            serieControlInput.value = '';
             marcaFuenteInput.value = '';
+            modeloFuenteInput.value = '';
         }
     }
 
@@ -523,6 +583,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectMarcaFuente = document.getElementById('marca_fuente2');
     selectMarcaFuente.addEventListener('change', function() {
         marcaFuenteInput.value = selectMarcaFuente.options[selectMarcaFuente.selectedIndex].text;
+    });
+
+    // Escuchar cambios en el select de marca de fuente y actualizar el campo correspondiente
+    const selectSerieModulo = document.getElementById('serie_modulo2');
+    selectSerieModulo.addEventListener('change', function() {
+        serieModuloInput.value = selectSerieModulo.options[selectSerieModulo.selectedIndex].text;
+    });
+
+    // Escuchar cambios en el select de marca de fuente y actualizar el campo correspondiente
+    const selectSerieControl = document.getElementById('serie_control2');
+    selectSerieControl.addEventListener('change', function() {
+        serieControlInput.value = selectSerieControl.options[selectSerieControl.selectedIndex].text;
+    });
+
+    // Escuchar cambios en el select de marca de fuente y actualizar el campo correspondiente
+    const selectModeloFuente = document.getElementById('modelo_fuente2');
+    selectModeloFuente.addEventListener('change', function() {
+        modeloFuenteInput.value = selectModeloFuente.options[selectModeloFuente.selectedIndex].text;
     });
 
     // Llamar a la función inicialmente para establecer los valores correctos

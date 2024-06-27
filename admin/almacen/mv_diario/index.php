@@ -37,7 +37,7 @@ include('../../../layout/admin/parte1.php');
                                             <th>Almacén Origen</th>
                                             <th>Almacén Destino</th>
                                             <th>Destino</th>
-                                            <th>Cantidas</th>
+                                            <th>Cantidad</th>
                                             <th>Descripción</th>
                                             <th><center>Acciones</center></th>
                                         </tr>
