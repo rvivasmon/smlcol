@@ -39,13 +39,6 @@ include('../../../layout/admin/parte1.php');
                                         <th>Modelo Modulo</th>
                                         <th>Medida X</th>
                                         <th>Medida Y</th>
-                                        <th>Marca Control</th>
-                                        <th>Serie Control</th>
-                                        <th>Funcion Control</th>
-                                        <th>Marca Fuente</th>
-                                        <th>Modelo Fuente</th>
-                                        <th>Tipo Fuente</th>
-                                        <th>Voltaje Salida</th>
                                         <th>Fecha Creacion</th>
                                         <th><center>Acciones</center></th>
                                     </tr>
@@ -57,20 +50,14 @@ include('../../../layout/admin/parte1.php');
                                         ap.*,
                                         productos.tipo_producto as nombre_producto,
                                         cm.pitch as nombre_pitch,
-                                        cms.modelo_modulo as modul_model,
-                                        cctr.marca_control as cont_marc,
-                                        cctrs.funcion_control as cont_fun,
-                                        cf.marca_fuente as fuen_marc,
-                                        cft.tipo_fuente as fuen_tipo
+                                        cms.modelo_modulo as modul_model
                                     FROM
                                         alma_principal AS ap
                                     LEFT JOIN productos ON ap.tipo_producto = productos.id_producto
                                     LEFT JOIN caracteristicas_modulos AS cm ON ap.pitch = cm.id_car_mod
                                     LEFT JOIN caracteristicas_modulos AS cms ON ap.modelo_modulo = cms.id_car_mod
-                                    LEFT JOIN caracteristicas_control AS cctr ON ap.marca_control = cctr.id_car_ctrl
-                                    LEFT JOIN caracteristicas_control AS cctrs ON ap.funcion_control = cctrs.id_car_ctrl
-                                    LEFT JOIN caracteristicas_fuentes AS cf ON ap.marca_fuente = cf.id_car_fuen
-                                    LEFT JOIN caracteristicas_fuentes AS cft ON ap.tipo_fuente = cft.id_car_fuen
+                                    WHERE
+                                        ap.tipo_producto = 1
                                     ');
 
                                     $query->execute();
@@ -85,13 +72,6 @@ include('../../../layout/admin/parte1.php');
                                         $modelo_modulo = $almacen_pricipal['modul_model'];
                                         $medida_x = $almacen_pricipal['medida_x'];
                                         $medida_y = $almacen_pricipal['medida_y'];
-                                        $marca_control = $almacen_pricipal['cont_marc'];
-                                        $serie_control = $almacen_pricipal['serie_control'];
-                                        $funcion_control = $almacen_pricipal['cont_fun'];
-                                        $marca_fuente = $almacen_pricipal['fuen_marc'];
-                                        $modelo_fuente = $almacen_pricipal['modelo_fuente'];
-                                        $tipo_fuente = $almacen_pricipal['fuen_tipo'];
-                                        $voltaje = $almacen_pricipal['voltaje_salida'];
                                         $existencia = $almacen_pricipal['cantidad_plena'];
                                         $contador = $contador + 1;
                                     ?>
@@ -105,13 +85,6 @@ include('../../../layout/admin/parte1.php');
                                             <td><?php echo $modelo_modulo; ?></td>
                                             <td><?php echo $medida_x; ?></td>
                                             <td><?php echo $medida_y; ?></td>
-                                            <td><?php echo $marca_control; ?></td>
-                                            <td><?php echo $serie_control; ?></td>
-                                            <td><?php echo $funcion_control; ?></td>
-                                            <td><?php echo $marca_fuente; ?></td>
-                                            <td><?php echo $modelo_fuente; ?></td>
-                                            <td><?php echo $tipo_fuente; ?></td>
-                                            <td><?php echo $voltaje; ?></td>
                                             <td><?php echo $fecha_ingreso; ?></td>
                                             <td>
                                                 <center>

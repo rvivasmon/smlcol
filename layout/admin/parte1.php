@@ -73,6 +73,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datatables.net-bs4@1.11.5/css/dataTables.bootstrap4.min.css">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datatables.net-responsive-bs4@2.2.9/css/responsive.bootstrap4.min.css">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datatables.net-buttons-bs4@2.2.0/css/buttons.bootstrap4.min.css">
+
+      <title>Document</title>
+    <link rel="stylesheet" href="path/to/your/main.css"> <!-- Tu archivo CSS principal -->
+
+    <style>
+        /* Estilos para los submenús */
+.nav-treeview .submenu > .nav-treeview {
+    display: none; /* Ocultar los submenús por defecto */
+    position: absolute; /* Posicionar los submenús de manera absoluta */
+    left: 100%; /* Mover los submenús hacia la derecha */
+    top: 0; /* Alinear los submenús en la parte superior */
+    z-index: 1000; /* Asegurarse de que los submenús se muestren por encima de otros elementos */
+    background: #343a40; /* Fondo del submenú */
+    border: 1px solid #495057; /* Borde del submenú */
+    width: 200px; /* Ancho opcional del submenú */
+}
+
+/* Mostrar los submenús cuando el elemento padre está en hover */
+.nav-treeview .submenu:hover > .nav-treeview {
+    display: block; /* Mostrar los submenús cuando se hace hover */
+}
+
+    </style>
+
     </head>
     <body class="hold-transition sidebar-mini">
       <div class="wrapper">
@@ -170,9 +194,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <?php
                       if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Almacén") ){ ?>
 
+                      <?php
+                        // Ejemplo de generación dinámica de submenús para Consulta Stock
+
+                        // Ejemplo de datos simulados (reemplaza con tu lógica de datos real)
+                        $almacenes = array(
+                          array('id' => 3, 'nombre' => 'Almacén Principal'),
+                          array('id' => 4, 'nombre' => 'Almacén Secundario'),
+                          array('id' => 5, 'nombre' => 'Almacén Importación'),
+                          array('id' => 6, 'nombre' => 'Almacén Técnica'),
+                          array('id' => 7, 'nombre' => 'Almacén Planta'),
+                          array('id' => 8, 'nombre' => 'Almacén Pruebas'),
+                          array('id' => 9, 'nombre' => 'Almacén Desechados'),
+                          array('id' => 10, 'nombre' => 'Almacén Soporte Técnico'),
+                          array('id' => 11, 'nombre' => 'Almacén Aliados'),
+                          // Agregar más almacenes según necesites
+                        );
+
+                        $productos = array(
+                          array('id' => 1, 'nombre' => 'Módulo'),
+                          array('id' => 2, 'nombre' => 'Controladora'),
+                          array('id' => 3, 'nombre' => 'Fuente'),
+                          array('id' => 4, 'nombre' => 'LCD'),
+                          array('id' => 5, 'nombre' => 'Accesorios'),
+                          // Agregar más productos según necesites
+                        );
+                      ?>
+
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
-                            <i class="nav-icon fas fa-users"></i>
+                          <i class="fa-solid fa-warehouse"></i>
                             <p>
                               ALMACÉN
                               <i class="right fas fa-angle-left"></i>
@@ -180,13 +231,49 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           </a>
                           <ul class="nav nav-treeview">
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/almacen/inventario" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Consulta Stock</p>
+                              <a href="#" class="nav-link">
+                                <i class="fas fa-box-open nav-icon"></i>
+                                  <p>Consulta Stock</p>
                               </a>
+                              <ul class="nav nav-treeview">
+                                  <?php foreach ($almacenes as $almacen): ?>
+                                      <li class="nav-item">
+                                          <a href="#" class="nav-link">
+                                              <i class="far fa-circle nav-icon"></i>
+                                              <p><?php echo $almacen['nombre']; ?></p>
+                                          </a>
+                                          <ul class="nav nav-treeview">
+                                              <?php foreach ($productos as $producto): ?>
+                                                  <?php
+                                                  // Definir variables para las URL por defecto
+                                                  $url_producto = "#"; // URL por defecto si no se cumple ninguna condición
+
+                                                  // Condiciones para las direcciones específicas
+                                                  if ($almacen['id'] == 3) {
+                                                      if ($producto['id'] == 1) {
+                                                          $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
+                                                      } elseif ($producto['id'] == 2) {
+                                                          $url_producto = $URL . "admin/almacen/inventario/index_control.php";
+                                                      } elseif ($producto['id'] == 3) {
+                                                          $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
+                                                      }
+                                                      // Agregar más condiciones según sea necesario
+                                                  }
+                                                  ?>
+                                                  <li class="nav-item">
+                                                      <a href="<?php echo $url_producto; ?>" class="nav-link">
+                                                          <i class="far fa-circle nav-icon"></i>
+                                                          <p><?php echo $producto['nombre']; ?></p>
+                                                      </a>
+                                                  </li>
+                                              <?php endforeach; ?>
+                                          </ul>
+                                      </li>
+                                  <?php endforeach; ?>
+                              </ul>
                             </li>
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/mv_diario" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/almacen/inventario/index_almacenes.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Stock / Almacénes</p>
                               </a>
@@ -209,7 +296,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-cogs"></i>
                             <p>
                               OPERACIÓN
                               <i class="right fas fa-angle-left"></i>
@@ -270,7 +357,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-universal-access"></i>
                             <p>
                               ATENCIÓN CLIENTE
                               <i class="right fas fa-angle-left"></i>
@@ -313,7 +400,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-sort-amount-asc"></i>
                             <p>
                               CRM
                               <i class="right fas fa-angle-left"></i>
@@ -321,45 +408,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           </a>
                           <ul class="nav nav-treeview">
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/crm/create.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Status POP </p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tratamiento POP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Status OP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tratamiento OP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>CAMPO LIBRE</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>smartled_bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>STC CLIENTE</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>OST CLIENTE</p>
+                                <p>Creación Pre Proyecto </p>
                               </a>
                             </li>
                           </ul>
@@ -374,7 +425,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-object-ungroup"></i>
                             <p>
                               DISEÑO INDUSTRIAL
                               <i class="right fas fa-angle-left"></i>
@@ -435,7 +486,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-television"></i>
                             <p>
                               PRODUCTO
                               <i class="right fas fa-angle-left"></i>
@@ -496,7 +547,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-puzzle-piece "></i>
                             <p>
                               PROYECTO
                               <i class="right fas fa-angle-left"></i>
@@ -557,7 +608,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-database"></i>
                             <p>
                               TI
                               <i class="right fas fa-angle-left"></i>
@@ -685,7 +736,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-university"></i>
                             <p>
                               PLANTA
                               <i class="right fas fa-angle-left"></i>
@@ -716,7 +767,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-wrench"></i>
                             <p>
                               TÉCNICO
                               <i class="right fas fa-angle-left"></i>
@@ -741,7 +792,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-user-plus"></i>
                             <p>
                               CLIENTE
                               <i class="right fas fa-angle-left"></i>

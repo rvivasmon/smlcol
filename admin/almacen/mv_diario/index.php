@@ -53,9 +53,8 @@ include('../../../layout/admin/parte1.php');
                                         FROM 
                                             movimiento_diario
                                         INNER JOIN productos ON movimiento_diario.producto = productos.id_producto
-                                        INNER JOIN asignar_almacenes AS almacen_origen ON movimiento_diario.almacen_origen1 = almacen_origen.id_asignacion
-                                        INNER JOIN asignar_almacenes AS almacen_destino ON movimiento_diario.almacen_destino1 = almacen_destino.id_asignacion
-
+                                        INNER JOIN asignar_todos_almacenes AS almacen_origen ON movimiento_diario.almacen_origen1 = almacen_origen.id_asignacion
+                                        INNER JOIN asignar_todos_almacenes AS almacen_destino ON movimiento_diario.almacen_destino1 = almacen_destino.id_asignacion
                                         ');
                                         $query->execute();
                                         $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -68,7 +67,7 @@ include('../../../layout/admin/parte1.php');
                                             $almacen_origen1 = $movidiario['almacenes_origen'];
                                             $almacen_destino1 = $movidiario['almacenes_destino'];
                                             $destino = $movidiario['op'];
-                                            $cantidades = $movidiario['cantidad_salida'];
+                                            $cantidades = $movidiario['cantidad_entrada'];
                                             $observaciones = $movidiario['observaciones'];
                                             $contador = $contador + 1;
                                         ?>

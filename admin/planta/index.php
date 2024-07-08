@@ -37,14 +37,20 @@ include('../../layout/admin/datos_sesion_user.php');
                             <tbody>
                                 <?php
                                 $contador = 0;
-                                $query = $pdo->prepare('SELECT * FROM id_producto');
+                                $query = $pdo->prepare('SELECT
+                                    id_producto.*,
+                                    op.op as nombre_op
+                                FROM 
+                                    id_producto
+                                inner join op on id_producto.op = op.id
+                                ');
 
                                 $query->execute();
                                 $productos = $query->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($productos as $producto){
                                     $id = $producto['id'];
                                     $fecha = $producto['fecha'];
-                                    $op = $producto['op'];
+                                    $op = $producto['nombre_op'];
                                     $agente = $producto['agente'];
                                     $id_prod = $producto['id_producto'];
                                     $anio_mes_prod = $producto['anio_mes_prod'];
