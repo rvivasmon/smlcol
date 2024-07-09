@@ -1,29 +1,12 @@
 <?php 
-
 include('../../app/config/config.php');
 include('../../app/config/conexion.php');
-
 include('../../layout/admin/sesion.php');
 include('../../layout/admin/datos_sesion_user.php');
-
 include('../../layout/admin/parte1.php');
-
 
 // Obtener la fecha de creación del formulario
 $fecha_creacion = isset($_POST['fechaingreso']) ? $_POST['fechaingreso'] : date('Y-m-d');
-
-// Validar el formato de fecha con JavaScript
-    echo"<script>
-            function validarFecha() {
-                var fecha = document.getElementById('fechaingreso').value;
-                var regex = /^\d{4}-\d{2}-\d{2}$/;
-                if (!regex.test(fecha)) {
-                    alert('Formato de fecha incorrecto. Utilice el formato YYYY-MM-DD.');
-                    return false;
-                }
-                return true;
-            }
-        </script>";
 
 // Obtener el año y mes de la fecha actual en formato YYYYMM
 $anio_mes = date('Ym', strtotime($fecha_creacion));
@@ -45,9 +28,7 @@ if ($ultimo_registro_prod) {
 
 // Crear el ID del producto
 $id_prod = $anio_mes . '-' . sprintf('%03d', $contador_prod);
-
 ?>
-
 
 <div class="content-wrapper">
     <div class="content-header">
@@ -55,8 +36,8 @@ $id_prod = $anio_mes . '-' . sprintf('%03d', $contador_prod);
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">CREAR ID PANTALLA</h1>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
+                </div>
+            </div>
 
             <div class="card card-blue">
                 <div class="card-header">
@@ -64,7 +45,6 @@ $id_prod = $anio_mes . '-' . sprintf('%03d', $contador_prod);
                 </div>
                 <div class="card-body">
                     <form id="formulario" action="controller_create.php" method="POST" enctype="multipart/form-data">
-
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="form-group">
@@ -72,8 +52,7 @@ $id_prod = $anio_mes . '-' . sprintf('%03d', $contador_prod);
                                         <div class="col-md-0">
                                             <div class="form-group">
                                                 <label for=""></label>
-
-                                                <input type="hidden" name="anio_mes1" value="<?php echo $anio_mes; ?>">
+                                                <input type="hidden" name="anio_mes1" id="anio_mes1" value="<?php echo $anio_mes; ?>">
                                                 <input type="hidden" name="contador1" value="<?php echo $contador_prod; ?>">
                                                 <input type="text" name="idprod" class="form-control" value="<?php echo $id_prod; ?>" hidden>
                                             </div>
@@ -81,7 +60,7 @@ $id_prod = $anio_mes . '-' . sprintf('%03d', $contador_prod);
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="">Fecha Creación</label>
-                                                <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value="<?php echo date('Y-m-d'); ?>" onchange="actualizarContador()">
+                                                <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value="<?php echo $fecha_creacion; ?>" onchange="actualizarContador()">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -138,7 +117,7 @@ $id_prod = $anio_mes . '-' . sprintf('%03d', $contador_prod);
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="archivo_adjunto">Archivo Adjunto</label>
+                                    <label for="archivo_adjunto">Archivo Adjunto</
                                     <br>
                                     <output id="list" style="position: relative; width: 200px; height: 200px; overflow: hidden;"></output>
                                     <input type="file" name="archivo_adjunto" id="file" class="form-control-file" multiple>
@@ -174,18 +153,20 @@ $id_prod = $anio_mes . '-' . sprintf('%03d', $contador_prod);
 
 <script>
     function actualizarContador() {
-        var fecha = document.getElementById('fechaingreso').value;
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "actualizar_contador.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var nuevoContador = xhr.responseText;
-                var anio_mes = fecha.substring(0, 7).replace('-', '');
-                var id_prod = anio_mes + '-' + ('000' + nuevoContador).slice(-3);
-                document.getElementById('idproducto').value = id_prod;
-            }
-        };
-        xhr.send("fecha=" + encodeURIComponent(fecha));
-    }
+    var fecha = document.getElementById('fechaingreso').value;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "actualizar_contador.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var nuevoContador = xhr.responseText;
+            var anio_mes = fecha.substring(0, 7).replace('-', '');
+            var id_prod = anio_mes + '-' + ('000' + nuevoContador).slice(-3);
+            document.getElementById('idproducto').value = id_prod;
+            document.querySelector('input[name="anio_mes1"]').value = anio_mes;
+            document.querySelector('input[name="contador1"]').value = nuevoContador;
+        }
+    };
+    xhr.send("fecha=" + encodeURIComponent(fecha));
+}
 </script>

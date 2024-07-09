@@ -163,7 +163,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/administracion/tracking/tracking_col/index_tracking.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>TRACKING</p>
+                                <p>COMPRA TECHLED</p>
                               </a>
                             </li>
                             <li class="nav-item">
@@ -282,6 +282,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               <a href="<?php echo $URL;?>admin/almacen/mv_diario" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Movimiento Diario</p>
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/producto/create_producto.php" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Crear Producto </p>
                               </a>
                             </li>
                           </ul>
@@ -493,12 +499,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </p>
                           </a>
                           <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Status POP </p>
-                              </a>
-                            </li>
                             <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>

@@ -64,10 +64,62 @@ include('../../../../layout/admin/parte1.php');
                                                 <input type="text" name="usuarioperador" class="form-control" value="<?php echo $sesion_nombre; ?>" hidden>
                                             </div>
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Category</label>
-                                                <input type="text" name="descripcion" class="form-control" placeholder="">
+                                                <label for="">Category 1</label>
+                                                <select class= "form-control" name="categoria" id="categoria">
+                                                <option value="">Seleccione la categoría</option>
+                                                    <?php 
+                                                    $query_pitch = $pdo->prepare('SELECT * FROM movimiento_diario');
+                                                    $query_pitch->execute();
+                                                    $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
+                                                    
+                                                    // Filtrar pitches únicos
+                                                    $pitches_unicos = [];
+                                                    $pitches_unicos_keys = [];
+
+                                                    foreach($pitches as $pitch) {
+                                                        if (!in_array($pitch['referencia_1'], $pitches_unicos)) {
+                                                            $pitches_unicos[] = $pitch['referencia_1'];
+                                                            $pitches_unicos_keys[] = $pitch;
+                                                        }
+                                                    }
+
+                                                    // Generar opciones únicas
+                                                    foreach($pitches_unicos_keys as $pitch_unico) {
+                                                        echo '<option value="' . $pitch_unico['id_movimiento_diario'] . '">' . $pitch_unico['referencia_1'] . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="">Category 2</label>
+                                                <select class="form-control" name="categoria" id="categoria">
+                                                <option value="">Seleccione la categoría</option>
+                                                    <?php 
+                                                    $query_pitch = $pdo->prepare('SELECT * FROM movimiento_diario');
+                                                    $query_pitch->execute();
+                                                    $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
+                                                    
+                                                    // Filtrar pitches únicos
+                                                    $pitches_unicos = [];
+                                                    $pitches_unicos_keys = [];
+
+                                                    foreach($pitches as $pitch) {
+                                                        if (!in_array($pitch['referencia_2'], $pitches_unicos)) {
+                                                            $pitches_unicos[] = $pitch['referencia_2'];
+                                                            $pitches_unicos_keys[] = $pitch;
+                                                        }
+                                                    }
+
+                                                    // Generar opciones únicas
+                                                    foreach($pitches_unicos_keys as $pitch_unico) {
+                                                        echo '<option value="' . $pitch_unico['id_movimiento_diario'] . '">' . $pitch_unico['referencia_2'] . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
