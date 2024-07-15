@@ -22,7 +22,9 @@ include('../../../layout/admin/parte1.php');
                         </div>
                         <hr>
                         <div class="card-tools ml-4">
-                            <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear Nuevo Movimiento</a>
+                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#movimientoModal">
+                                <i class="bi bi-plus-square"></i> Crear Nuevo Movimiento
+                            </button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -93,6 +95,33 @@ include('../../../layout/admin/parte1.php');
                                         <?php
                                             }
                                         ?>
+
+
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="movimientoModal" tabindex="-1" aria-labelledby="movimientoModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="movimientoModalLabel">Seleccionar Tipo de Movimiento</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/create_movimiento_entrada.php'">Movimiento de Entrada</button>
+                                                <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/create_movimiento_salida.php'">Movimiento de Salida</button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>
+
+
+
+
                                     </tbody>
                                 </table>
                             </div>

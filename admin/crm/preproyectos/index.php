@@ -8,64 +8,65 @@ include('../../../layout/admin/datos_sesion_user.php');
 
 include('../../../layout/admin/parte1.php');
 
-
 ?>
-
 
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Usuarios SML</h1>
+                <h1 class="m-0">PRE PROYECTOS</h1>
                     <div class="card card-blue">
                         <div class="card-header">
-                            ACTIVOS
+                            Identificador
                         </div>
 
                         <hr>
-
+                        
                         <div class="card-tools ml-4">
-                            <a href="create_tecnicos.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear nuevo técnico</a>
+                            <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square">Crear Nuevo Pre</i></a>
                         </div>
-
+                        
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="table_usuarios" class="table table-striped table-hover table-bordered">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Nombre</th>
-                                            <th>Documento</th>
-                                            <th>Usuario</th>
+                                            <th>ID Producto</th>
+                                            <th>Nombre Pre-Proyecto</th>
+                                            <th>Nombre Cliente</th>
+                                            <th>Cliente</th>
                                             <th>Ciudad</th>
-                                            <th>Estado General</th>
+                                            <th>Proyecto</th>
                                             <th><center>Acciones</center></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                         $contador = 0;
-                                        $query = $pdo->prepare('SELECT tecnicos.*, estado.estado_general AS estado_tecnicos, ciudad.ciudad AS ciudad_tecnico FROM tecnicos  JOIN ciudad ON tecnicos.ciudad = ciudad.id JOIN estado ON tecnicos.estado_general = estado. id WHERE tecnicos.estado_general = "1"');
+                                        $query = $pdo->prepare('SELECT * FROM pre_proyecto');
 
                                         $query->execute();
-                                        $tecnicos = $query->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach ($tecnicos as $tecnico){
-                                            $id = $tecnico['id'];
-                                            $nombre = $tecnico['nombre'];
-                                            $documento = $tecnico['docident'];
-                                            $usuario_uso = $tecnico['usuario'];
-                                            $ciudad = $tecnico['ciudad_tecnico'];
-                                            $estado_general = $tecnico['estado_tecnicos'];
+                                        $productos = $query->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($productos as $producto){
+                                            $id = $producto['id_preproyec'];
+                                            $fecha = $producto['fecha'];
+                                            $op = $producto['nombre_preproyecto'];
+                                            $agente = $producto['asesor'];
+                                            $id_prod = $producto['idprepro'];
+                                            $anio_mes_prod = $producto['anio_mes'];
+                                            $contador_prod = $producto['contador'];
                                             $contador = $contador + 1;
                                         ?>
                                             <tr>
                                                 <td><?php echo $contador; ?></td>
-                                                <td><?php echo $nombre; ?></td>
-                                                <td><?php echo $documento; ?></td>
-                                                <td><?php echo $usuario_uso; ?></td>
-                                                <td><?php echo $ciudad; ?></td>
-                                                <td><?php echo $estado_general; ?></td>
+                                                <td><?php echo $id_prod; ?></td>
+                                                <td><?php echo $op; ?></td>
+                                                <td><?php echo $agente; ?></td>
+                                                <td><?php echo $anio_mes_prod; ?></td>
+                                                <td><?php echo $contador_prod; ?></td>
+                                                <td><?php echo $fecha; ?></td>
                                                 <td>
                                                     <center>
                                                         <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
@@ -96,12 +97,12 @@ include('../../../layout/admin/parte1.php');
             "pageLength": 10,
             "language": {
                 "emptyTable": "No hay información",
-                "info": "Mostrando _START_ a _END_ de _TOTAL_ Técnicos",
-                "infoEmpty": "Mostrando 0 a 0 de 0 Técnicos",
-                "infoFiltered": "(Filtrado de _MAX_ total Técnicos)",
+                "info": "Mostrando_START_ a _END_ de _TOTAL_ Usuarios",
+                "infoEmpty": "Mostrando 0 a 0 de 0 Usuarios",
+                "infoFiltered": "(Filtrado de _MAX_ total Usuarios)",
                 "infoPostFix": "",
                 "thousands": ",",
-                "lengthMenu": "Mostrar _MENU_ Técnicos",
+                "lengthMenu": "Mostrar _MENU_ Usuarios",
                 "loadingRecords": "Cargando...",
                 "processing": "Procesando...",
                 "search": "Buscador:",

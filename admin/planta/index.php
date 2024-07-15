@@ -19,72 +19,79 @@ include('../../layout/admin/datos_sesion_user.php');
                         <div class="card-header">
                             Identificador
                         </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                        <table id="table_usuarios" class="table table-striped table-hover table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>ID Producto</th>
-                                    <th>OP</th>
-                                    <th>POP</th>
-                                    <th>Cliente</th>
-                                    <th>Ciudad</th>
-                                    <th>Proyecto</th>
-                                    <th><center>Acciones</center></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $contador = 0;
-                                $query = $pdo->prepare('SELECT
-                                    id_producto.*,
-                                    op.op as nombre_op
-                                FROM 
-                                    id_producto
-                                inner join op on id_producto.op = op.id
-                                ');
 
-                                $query->execute();
-                                $productos = $query->fetchAll(PDO::FETCH_ASSOC);
-                                foreach ($productos as $producto){
-                                    $id = $producto['id'];
-                                    $fecha = $producto['fecha'];
-                                    $op = $producto['nombre_op'];
-                                    $agente = $producto['agente'];
-                                    $id_prod = $producto['id_producto'];
-                                    $anio_mes_prod = $producto['anio_mes_prod'];
-                                    $contador_prod = $producto['contador_prod'];
-                                    $contador = $contador + 1;
-                                ?>
-                                    <tr>
-                                        <td><?php echo $contador; ?></td>
-                                        <td><?php echo $fecha; ?></td>
-                                        <td><?php echo $op; ?></td>
-                                        <td><?php echo $agente; ?></td>
-                                        <td><?php echo $id_prod; ?></td>
-                                        <td><?php echo $anio_mes_prod; ?></td>
-                                        <td><?php echo $contador_prod; ?></td>
-                                        <td>
-                                            <center>
-                                                <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
-                                                <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
-                                            </center>
-                                        </td>
-                                    </tr>
-                                <?php
-                            }                            
-                        ?>
-                    </tbody>
-                    </table>
+                        <hr>
+                        
+                        <div class="card-tools ml-4">
+                            <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square">Crear Nuevo ID</i></a>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="table_usuarios" class="table table-striped table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>ID Producto</th>
+                                            <th>OP</th>
+                                            <th>POP</th>
+                                            <th>Cliente</th>
+                                            <th>Ciudad</th>
+                                            <th>Proyecto</th>
+                                            <th><center>Acciones</center></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $contador = 0;
+                                        $query = $pdo->prepare('SELECT
+                                            id_producto.*,
+                                            op.op as nombre_op
+                                        FROM 
+                                            id_producto
+                                        inner join op on id_producto.op = op.id
+                                        ');
+
+                                        $query->execute();
+                                        $productos = $query->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($productos as $producto){
+                                            $id = $producto['id'];
+                                            $fecha = $producto['fecha'];
+                                            $op = $producto['nombre_op'];
+                                            $agente = $producto['agente'];
+                                            $id_prod = $producto['id_producto'];
+                                            $anio_mes_prod = $producto['anio_mes_prod'];
+                                            $contador_prod = $producto['contador_prod'];
+                                            $contador = $contador + 1;
+                                        ?>
+                                            <tr>
+                                                <td><?php echo $contador; ?></td>
+                                                <td><?php echo $id_prod; ?></td>
+                                                <td><?php echo $op; ?></td>
+                                                <td><?php echo $agente; ?></td>
+                                                <td><?php echo $anio_mes_prod; ?></td>
+                                                <td><?php echo $contador_prod; ?></td>
+                                                <td><?php echo $fecha; ?></td>
+                                                <td>
+                                                    <center>
+                                                        <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
+                                                        <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
+                                                        <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
+                                                    </center>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        }                            
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                </div>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-</div>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
 </div>
 
 <?php include('../../layout/admin/parte2.php');?>

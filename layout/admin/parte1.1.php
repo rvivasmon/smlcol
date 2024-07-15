@@ -417,13 +417,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/crm/create.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Proyectos</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/crm/preproyectos/" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Pre Proyectos</p>
+                                <p>Creación Pre Proyecto </p>
                               </a>
                             </li>
                           </ul>
