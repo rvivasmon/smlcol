@@ -10,7 +10,7 @@ include('../../../layout/admin/parte1.php');
 
 $id_get = $_GET['id'];
 
-$query = $pdo->prepare("SELECT usuarios.*, cargo.descripcion AS nombre_cargo, estado.estado_general AS nombre_estado, usuarios.id_cargo AS id_cargo_usuario FROM usuarios JOIN cargo ON usuarios.id_cargo = cargo.id_cargo JOIN estado ON usuarios.estado = estado.id WHERE usuarios.id = '$id_get'");
+$query = $pdo->prepare("SELECT usuarios.*, cargo.descripcion AS nombre_cargo, t_estado.estado_general AS nombre_estado, usuarios.id_cargo AS id_cargo_usuario FROM usuarios JOIN cargo ON usuarios.id_cargo = cargo.id_cargo JOIN t_estado ON usuarios.estado = t_estado.id WHERE usuarios.id = '$id_get'");
 
 $query->execute();
 $usuarios = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -23,6 +23,7 @@ foreach ($usuarios as $usuario){
     $estado = $usuario['nombre_estado'];
     $valor_actual_en_edicion = $usuario['estado'];
     $valor_actual_en_edicion_cargo = $usuario['id_cargo_usuario'];
+    $pass = $usuario['contraseña'];
 
 }
 
@@ -45,13 +46,20 @@ foreach ($usuarios as $usuario){
                 <div class="card-body">
                     <form action="controller_edit.php" method="post">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="">Nombre</label>
                                     <input type="text" name="nombre" value="<?php echo $nombres;?>" class="form-control" placeholder="Nombre Completo" required>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="">Usuario</label>
+                                    <input type="text" name="usuario" value="<?php echo $usuario_uso;?>" class="form-control" placeholder="Usuario">
+                                    <input type="text" name="id_usuario" value="<?php echo $id_get;?>" hidden>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="">Correo Electrónico</label>
                                     <input type="text" name="email" value="<?php echo $correos;?>" class="form-control" placeholder="Email" required>
@@ -60,13 +68,6 @@ foreach ($usuarios as $usuario){
                         </div>
                         
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="">Usuario</label>
-                                    <input type="text" name="usuario" value="<?php echo $usuario_uso;?>" class="form-control" placeholder="Usuario">
-                                    <input type="text" name="id_usuario" value="<?php echo $id_get;?>" hidden>
-                                </div>
-                            </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="">Cargo</label>
@@ -95,7 +96,7 @@ foreach ($usuarios as $usuario){
                                     <select name="id_estado" id="id_estado" class="form-control" required>
                                         
                                     <?php
-                                        $query_estado = $pdo->prepare('SELECT * FROM estado');
+                                        $query_estado = $pdo->prepare('SELECT * FROM t_estado');
                                         $query_estado->execute();
                                         $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
                                         
@@ -111,6 +112,18 @@ foreach ($usuarios as $usuario){
                                     }
                                     ?>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="">Contraseña</label>
+                                    <input type="text" name="pass" class="form-control" placeholder="Contraseña">
+
+                                        <!-- Checkbox para indicar si es la primera vez -->
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="reset_password" id="reset_password" value="1">
+                                        <label class="form-check-label" for="reset_password">Reestablecer Contraseña</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -132,4 +145,5 @@ foreach ($usuarios as $usuario){
         </div><!-- /.container-fluid -->
     </div>
 </div>
+
 <?php include('../../../layout/admin/parte2.php');?>

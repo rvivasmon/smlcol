@@ -12,7 +12,7 @@ include('../../../layout/admin/datos_sesion_user.php');
 
 $id_get = $_GET['id'];
 
-$query = $pdo->prepare("SELECT stc.*, tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_cliente, ciudad.ciudad AS nombre_ciudad, estado.estadostc AS nombre_estado FROM stc JOIN tipo_servicio ON stc.tipo_servicio = tipo_servicio.id JOIN clientes ON stc.cliente = clientes.id JOIN ciudad ON stc.ciudad = ciudad.id JOIN estado ON stc.estado = estado.id  WHERE stc.id = '$id_get'");
+$query = $pdo->prepare("SELECT stc.*, t_tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_cliente, t_ciudad.ciudad AS nombre_ciudad, t_estado.estadostc AS nombre_estado FROM stc JOIN t_tipo_servicio ON stc.tipo_servicio = t_tipo_servicio.id JOIN clientes ON stc.cliente = clientes.id JOIN t_ciudad ON stc.ciudad = t_ciudad.id JOIN t_estado ON stc.estado = t_estado.id  WHERE stc.id = '$id_get'");
 
 $query->execute();
 $stcs = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -83,7 +83,7 @@ foreach ($stcs as $stc){
                                     <label for="">Tipo de Servicio</label>
                                     <select name="tiposervicio" id="tiposervicio" class="form-control" readonly>
                                         <?php 
-                                        $query_servicio = $pdo->prepare('SELECT * FROM tipo_servicio');
+                                        $query_servicio = $pdo->prepare('SELECT * FROM t_tipo_servicio');
                                         $query_servicio->execute();
                                         $servicios = $query_servicio->fetchAll(PDO::FETCH_ASSOC);
                                         foreach($servicios as $servicio) {
@@ -130,7 +130,7 @@ foreach ($stcs as $stc){
                                     <label for="">Ciudad</label>
                                     <select name="idciudad" id="idciudad" class="form-control" readonly>
                                         <?php 
-                                        $query_ciudad = $pdo->prepare('SELECT * FROM ciudad');
+                                        $query_ciudad = $pdo->prepare('SELECT * FROM t_ciudad');
                                         $query_ciudad->execute();
                                         $ciudades = $query_ciudad->fetchAll(PDO::FETCH_ASSOC);
                                         foreach($ciudades as $ciudad) {
@@ -155,7 +155,7 @@ foreach ($stcs as $stc){
                                     <label for="">Estado</label>
                                     <select name="idestado" id="idestado" class="form-control" readonly>
                                         <?php 
-                                        $query_estado = $pdo->prepare('SELECT * FROM estado');
+                                        $query_estado = $pdo->prepare('SELECT * FROM t_estado');
                                         $query_estado->execute();
                                         $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
                                         foreach($estados as $estado) {

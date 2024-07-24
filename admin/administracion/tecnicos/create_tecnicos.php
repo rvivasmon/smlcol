@@ -52,7 +52,7 @@ include('../../../layout/admin/parte1.php');
                                     <label for="">Ciudad</label>
                                     <select name="ciudad" id="ciudad" class="form-control" required>
                                         <?php 
-                                        $query_ciudad = $pdo->prepare('SELECT * FROM ciudad ORDER BY ciudad ASC');
+                                        $query_ciudad = $pdo->prepare('SELECT * FROM t_ciudad ORDER BY ciudad ASC');
                                         $query_ciudad->execute();
                                         $ciudades = $query_ciudad->fetchAll(PDO::FETCH_ASSOC);
                                         foreach($ciudades as $ciudad) {
@@ -71,7 +71,7 @@ include('../../../layout/admin/parte1.php');
                                     <label for="">Estado General</label>
                                     <select name="estado_general" id="estado_general" class="form-control" required>
                                         <?php 
-                                        $query_estado = $pdo->prepare('SELECT * FROM estado WHERE estado_general IS NOT NULL AND estado_general != "" ORDER BY estado_general ASC');
+                                        $query_estado = $pdo->prepare('SELECT * FROM t_estado WHERE estado_general IS NOT NULL AND estado_general != "" ORDER BY estado_general ASC');
                                         $query_estado->execute();
                                         $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
                                         foreach($estados as $estado) {

@@ -49,7 +49,7 @@ include('../../../layout/admin/parte1.php');
                                     <select name="producto2" id="producto2" class="form-control" required>
                                         <option value="">Seleccione un Producto</option>
                                         <?php 
-                                        $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM productos ORDER BY tipo_producto ASC');
+                                        $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos ORDER BY tipo_producto ASC');
                                         $query_producto->execute();
                                         $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
                                         foreach($productos as $producto) {
@@ -338,7 +338,7 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="almacen_entrada_md" id="almacen_entrada_md" class="form-control" required>
                                                     <option value="">Almacén Destino</option>
                                                     <?php
-                                                    $query_almacen_entra = $pdo->prepare('SELECT * FROM asignar_todos_almacenes');
+                                                    $query_almacen_entra = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes');
                                                     $query_almacen_entra->execute();
                                                     $almacenes_entras = $query_almacen_entra->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($almacenes_entras as $almacen_entra) {
@@ -374,7 +374,7 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="almacen_salida_md" id="almacen_salida_md" class="form-control" >
                                                     <option value="">Almacén Origen</option>
                                                     <?php 
-                                                    $query_almacen  = $pdo->prepare('SELECT * FROM asignar_todos_almacenes');
+                                                    $query_almacen  = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes');
                                                     $query_almacen->execute();
                                                     $almacenes = $query_almacen->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($almacenes as $almacen) {

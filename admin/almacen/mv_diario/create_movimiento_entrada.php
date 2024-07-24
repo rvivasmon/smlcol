@@ -49,7 +49,7 @@ include('../../../layout/admin/parte1.php');
                                     <select name="producto2" id="producto2" class="form-control" required>
                                         <option value="">Seleccione un Producto</option>
                                         <?php 
-                                        $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM productos ORDER BY tipo_producto ASC');
+                                        $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos ORDER BY tipo_producto ASC');
                                         $query_producto->execute();
                                         $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
                                         foreach($productos as $producto) {
@@ -72,6 +72,35 @@ include('../../../layout/admin/parte1.php');
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <div class="row">
+                                        <div class="col-md-6 campos Modulo2">
+                                            <div class="form-group">
+                                                <label for="modelo_modulo1">Modelo</label>
+                                                <select name="modelo_modulo2" id="modelo_modulo2" class="form-control">
+                                                    <option value="">Seleccione un Modelo</option>
+                                                    <?php 
+                                                    $query_modelo = $pdo->prepare('SELECT id, modelo_modulo FROM t_tipo_producto WHERE modelo_modulo IS NOT NULL AND modelo_modulo != "" ORDER BY modelo_modulo ASC');
+                                                    $query_modelo->execute();
+                                                    $modelos = $query_modelo->fetchAll(PDO::FETCH_ASSOC);
+
+                                                    // Filtrar modelos únicos
+                                                    $modelos_unicos = [];
+                                                    $modelos_unicos_keys = [];
+
+                                                    foreach($modelos as $modelo) {
+                                                        if (!in_array($modelo['modelo_modulo'], $modelos_unicos)) {
+                                                            $modelos_unicos[] = $modelo['modelo_modulo'];
+                                                            $modelos_unicos_keys[] = $modelo;
+                                                        }
+                                                    }
+
+                                                    // Generar opciones únicas
+                                                    foreach($modelos_unicos_keys as $modelo_unico) {
+                                                        echo '<option value="' . $modelo_unico['id_almacen_principal'] . '">' . $modelo_unico['modelo_modulo'] . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
                                         <div class="col-md-2 campos Modulo2">
                                             <div class="form-group">
                                                 <label for="pitch">Pitch</label>
@@ -96,35 +125,6 @@ include('../../../layout/admin/parte1.php');
                                                     // Generar opciones únicas
                                                     foreach($pitches_unicos_keys as $pitch_unico) {
                                                         echo '<option value="' . $pitch_unico['id_almacen_principal'] . '">' . $pitch_unico['pitch'] . '</option>';
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 campos Modulo2">
-                                            <div class="form-group">
-                                                <label for="modelo_modulo1">Modelo</label>
-                                                <select name="modelo_modulo2" id="modelo_modulo2" class="form-control">
-                                                    <option value="">Seleccione un Modelo</option>
-                                                    <?php 
-                                                    $query_modelo = $pdo->prepare('SELECT alma_principal.id_almacen_principal, caracteristicas_modulos.modelo_modulo FROM alma_principal INNER JOIN caracteristicas_modulos ON alma_principal.modelo_modulo = caracteristicas_modulos.id_car_mod ORDER BY caracteristicas_modulos.modelo_modulo ASC');
-                                                    $query_modelo->execute();
-                                                    $modelos = $query_modelo->fetchAll(PDO::FETCH_ASSOC);
-
-                                                    // Filtrar modelos únicos
-                                                    $modelos_unicos = [];
-                                                    $modelos_unicos_keys = [];
-
-                                                    foreach($modelos as $modelo) {
-                                                        if (!in_array($modelo['modelo_modulo'], $modelos_unicos)) {
-                                                            $modelos_unicos[] = $modelo['modelo_modulo'];
-                                                            $modelos_unicos_keys[] = $modelo;
-                                                        }
-                                                    }
-
-                                                    // Generar opciones únicas
-                                                    foreach($modelos_unicos_keys as $modelo_unico) {
-                                                        echo '<option value="' . $modelo_unico['id_almacen_principal'] . '">' . $modelo_unico['modelo_modulo'] . '</option>';
                                                     }
                                                     ?>
                                                 </select>
@@ -338,7 +338,7 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="almacen_salida_md" id="almacen_salida_md" class="form-control" required>
                                                     <option value="">Almacén Origen</option>
                                                     <?php 
-                                                    $query_almacen  = $pdo->prepare('SELECT * FROM asignar_todos_almacenes');
+                                                    $query_almacen  = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes');
                                                     $query_almacen->execute();
                                                     $almacenes = $query_almacen->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($almacenes as $almacen) {
@@ -364,7 +364,7 @@ include('../../../layout/admin/parte1.php');
                                                 <select name="almacen_entrada_md" id="almacen_entrada_md" class="form-control" >
                                                     <option value="">Almacén Destino</option>
                                                     <?php 
-                                                    $query_almacen_entra = $pdo->prepare('SELECT * FROM asignar_todos_almacenes');
+                                                    $query_almacen_entra = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes');
                                                     $query_almacen_entra->execute();
                                                     $almacenes_entras = $query_almacen_entra->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($almacenes_entras as $almacen_entra) {

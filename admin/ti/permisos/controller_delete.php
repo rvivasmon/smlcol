@@ -8,7 +8,7 @@ $nombre_url = $_POST['nombre_url'];
 $url = $_POST['url'];
 $estado_inactivo = '2';
 
-$sql = "UPDATE permisos SET estado = '$estado_inactivo' WHERE id_permisos = :id_permisos";
+$sql = "UPDATE t_permisos SET estado = '$estado_inactivo' WHERE id_permisos = :id_permisos";
 
 $sentencia = $pdo->prepare($sql);
 

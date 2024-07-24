@@ -11,7 +11,7 @@ $departamento = $_POST['departamento'];
 $pais = $_POST['pais'];
 
 
-$sql = "INSERT INTO ciudad (ciudad, dep_prov, pais) VALUES (:ciudad, :departamento, :pais)";
+$sql = "INSERT INTO t_ciudad (ciudad, dep_prov, pais) VALUES (:ciudad, :departamento, :pais)";
 
 $sentencia = $pdo->prepare($sql);
 

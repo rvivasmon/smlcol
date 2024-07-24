@@ -49,14 +49,14 @@ include('../../../layout/admin/parte1.php');
                                         $contador = 0;
                                         $query = $pdo->prepare('SELECT 
                                             movimiento_diario.*, 
-                                            productos.tipo_producto AS producto,
+                                            t_productos.tipo_producto AS producto,
                                             almacen_origen.nombre_almacen AS almacenes_origen,
                                             almacen_destino.nombre_almacen AS almacenes_destino
                                         FROM 
                                             movimiento_diario
-                                        INNER JOIN productos ON movimiento_diario.producto = productos.id_producto
-                                        INNER JOIN asignar_todos_almacenes AS almacen_origen ON movimiento_diario.almacen_origen1 = almacen_origen.id_asignacion
-                                        INNER JOIN asignar_todos_almacenes AS almacen_destino ON movimiento_diario.almacen_destino1 = almacen_destino.id_asignacion
+                                        INNER JOIN t_productos ON movimiento_diario.producto = t_productos.id_producto
+                                        INNER JOIN t_asignar_todos_almacenes AS almacen_origen ON movimiento_diario.almacen_origen1 = almacen_origen.id_asignacion
+                                        INNER JOIN t_asignar_todos_almacenes AS almacen_destino ON movimiento_diario.almacen_destino1 = almacen_destino.id_asignacion
                                         ');
                                         $query->execute();
                                         $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);

@@ -10,7 +10,7 @@ include('../../../layout/admin/parte1.php');
 
 $id_get = $_GET['id'];
 
-$query = $pdo->prepare("SELECT ost.*, tipo_servicio.servicio_ost AS nombre_servicio, estado.estadoost AS nombre_estado FROM ost JOIN tipo_servicio ON ost.tipo_servicio = tipo_servicio.id JOIN estado ON ost.estado = estado.id WHERE ost.id = :id_get");
+$query = $pdo->prepare("SELECT ost.*, t_tipo_servicio.servicio_ost AS nombre_servicio, t_estado.estadoost AS nombre_estado FROM ost JOIN t_tipo_servicio ON ost_tipo_servicio = t_tipo_servicio.id JOIN t_estado ON ost_estado = t_estado.id WHERE ost.id = :id_get");
 
 $query->execute( [":id_get" => $id_get]);
 $osts = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -96,7 +96,7 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                                                 <select name="tipo_servicio" id="tipo_servicio" class="form-control" required>
 
                                                     <?php
-                                                        $query_servicio = $pdo->prepare('SELECT * FROM tipo_servicio');
+                                                        $query_servicio = $pdo->prepare('SELECT * FROM t_tipo_servicio');
                                                         $query_servicio->execute();
                                                         $servicios = $query_servicio->fetchAll(PDO::FETCH_ASSOC);
                                                         foreach($servicios as $servicio) {
@@ -163,7 +163,7 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                                                 <label for="">Estado</label>
                                                 <select name="estado" id="estado" class="form-control" required>
                                                 <?php
-                                                    $query_estado = $pdo->prepare('SELECT * FROM estado');
+                                                    $query_estado = $pdo->prepare('SELECT * FROM t_estado');
                                                     $query_estado->execute();
                                                     $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($estados as $estado) {

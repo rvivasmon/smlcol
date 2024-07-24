@@ -46,13 +46,13 @@ include('../../../layout/admin/parte1.php');
                                     $contador = 0;
                                     $query = $pdo->prepare('SELECT 
                                         ap.*,
-                                        productos.tipo_producto as nombre_producto,
+                                        t_productos.tipo_producto as nombre_producto,
 
                                         cf.marca_fuente as fuen_marc,
                                         cft.tipo_fuente as fuen_tipo
                                     FROM
                                         alma_principal AS ap
-                                    LEFT JOIN productos ON ap.tipo_producto = productos.id_producto
+                                    LEFT JOIN t_productos ON ap.tipo_producto = t_productos.id_producto
 
                                     LEFT JOIN caracteristicas_fuentes AS cf ON ap.marca_fuente = cf.id_car_fuen
                                     LEFT JOIN caracteristicas_fuentes AS cft ON ap.tipo_fuente = cft.id_car_fuen

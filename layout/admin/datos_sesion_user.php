@@ -1,7 +1,7 @@
 <?php 
 
 $email_sesion = $_SESSION['sesion_email'];
-$query_usuario = $pdo->prepare('SELECT usuarios.*, cargo.descripcion AS nombre_cargo, estado.estado_general AS nombre_estado FROM usuarios JOIN cargo ON usuarios.id_cargo = cargo.id_cargo JOIN estado ON usuarios.estado = estado.id WHERE usuarios.email = :email_sesion AND usuarios.estado = "1"');
+$query_usuario = $pdo->prepare('SELECT usuarios.*, cargo.descripcion AS nombre_cargo, t_estado.estado_general AS nombre_estado FROM usuarios JOIN cargo ON usuarios.id_cargo = cargo.id_cargo JOIN t_estado ON usuarios.estado = t_estado.id WHERE usuarios.email = :email_sesion AND usuarios.estado = "1"');
 
 $query_usuario->bindParam(':email_sesion', $email_sesion);
 $query_usuario->execute();

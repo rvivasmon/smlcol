@@ -46,7 +46,7 @@ include('../../../layout/admin/parte1.php');
                                     <tbody>
                                         <?php
                                         $contador = 0;
-                                        $query = $pdo->prepare('SELECT tecnicos.*, estado.estado_general AS estado_tecnicos, ciudad.ciudad AS ciudad_tecnico FROM tecnicos  JOIN ciudad ON tecnicos.ciudad = ciudad.id JOIN estado ON tecnicos.estado_general = estado. id WHERE tecnicos.estado_general = "1"');
+                                        $query = $pdo->prepare('SELECT tecnicos.*, t_estado.estado_general AS estado_tecnicos, t_ciudad.ciudad AS ciudad_tecnico FROM tecnicos  JOIN t_ciudad ON tecnicos.ciudad = t_ciudad.id JOIN t_estado ON tecnicos.estado_general = t_estado.id WHERE tecnicos.estado_general = "1"');
 
                                         $query->execute();
                                         $tecnicos = $query->fetchAll(PDO::FETCH_ASSOC);

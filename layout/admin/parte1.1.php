@@ -20,7 +20,7 @@ $conta = strlen($url);
 $rest = substr($url, 15, $conta);
 
 
-$sql_roles_permisos = "SELECT * FROM roles_permisos AS rolper INNER JOIN permisos AS per ON per.id_permisos = rolper.permiso_id INNER JOIN cargo AS rol ON rol.id_cargo = rolper.rol_id WHERE rolper.estado = '1' ";
+$sql_roles_permisos = "SELECT * FROM roles_permisos AS rolper INNER JOIN t_permisos AS per ON per.id_permisos = rolper.permiso_id INNER JOIN cargo AS rol ON rol.id_cargo = rolper.rol_id WHERE rolper.estado = '1' ";
 
 $query_roles_permisos = $pdo->prepare($sql_roles_permisos);
 $query_roles_permisos-> execute();

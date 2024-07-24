@@ -22,63 +22,70 @@ include('../../../layout/admin/parte1.php');
                         <div class="card-header">
                             ACTIVOS
                         </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                        <table id="table_usuarios" class="table table-striped table-hover table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nombre</th>
-                                    <th>Email</th>
-                                    <th>Usuario</th>
-                                    <th>Cargo</th>
-                                    <th>Estado</th>
-                                    <th><center>Acciones</center></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $contador = 0;
-                                $query = $pdo->prepare('SELECT usuarios.*, cargo.descripcion AS nombre_cargo, estado.estado_general as estado_general FROM usuarios JOIN cargo ON usuarios.id_cargo = cargo.id_cargo JOIN estado ON usuarios.estado = estado.id WHERE usuarios.estado = "1"');
 
-                                $query->execute();
-                                $usuarios = $query->fetchAll(PDO::FETCH_ASSOC);
-                                foreach ($usuarios as $usuario){
-                                    $id = $usuario['id'];
-                                    $nombres = $usuario['nombre'];
-                                    $correos = $usuario['email'];
-                                    $usuario_uso = $usuario['usuario'];
-                                    $cargo = $usuario['nombre_cargo'];
-                                    $estado = $usuario['estado_general'];
-                                    $contador = $contador + 1;
+                        <hr>
+
+                        <div class="card-tools ml-4">
+                            <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square">Crear Nuevo Usuario</i></a>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="table_usuarios" class="table table-striped table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nombre</th>
+                                            <th>Email</th>
+                                            <th>Usuario</th>
+                                            <th>Cargo</th>
+                                            <th>Estado</th>
+                                            <th><center>Acciones</center></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $contador = 0;
+                                        $query = $pdo->prepare('SELECT usuarios.*, cargo.descripcion AS nombre_cargo, t_estado.estado_general as estado_general FROM usuarios JOIN cargo ON usuarios.id_cargo = cargo.id_cargo JOIN t_estado ON usuarios.estado = t_estado.id WHERE usuarios.estado = "1"');
+
+                                        $query->execute();
+                                        $usuarios = $query->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($usuarios as $usuario){
+                                            $id = $usuario['id'];
+                                            $nombres = $usuario['nombre'];
+                                            $correos = $usuario['email'];
+                                            $usuario_uso = $usuario['usuario'];
+                                            $cargo = $usuario['nombre_cargo'];
+                                            $estado = $usuario['estado_general'];
+                                            $contador = $contador + 1;
+                                        ?>
+                                            <tr>
+                                                <td><?php echo $contador; ?></td>
+                                                <td><?php echo $nombres; ?></td>
+                                                <td><?php echo $correos; ?></td>
+                                                <td><?php echo $usuario_uso; ?></td>
+                                                <td><?php echo $cargo; ?></td>
+                                                <td><?php echo $estado; ?></td>
+                                                <td>
+                                                    <center>
+                                                        <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
+                                                        <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
+                                                        <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
+                                                    </center>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                    }                            
                                 ?>
-                                    <tr>
-                                        <td><?php echo $contador; ?></td>
-                                        <td><?php echo $nombres; ?></td>
-                                        <td><?php echo $correos; ?></td>
-                                        <td><?php echo $usuario_uso; ?></td>
-                                        <td><?php echo $cargo; ?></td>
-                                        <td><?php echo $estado; ?></td>
-                                        <td>
-                                            <center>
-                                                <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
-                                                <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
-                                            </center>
-                                        </td>
-                                    </tr>
-                                <?php
-                            }                            
-                        ?>
-                    </tbody>
-                    </table>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                </div>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-</div>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
 </div>
 
 <?php include('../../../layout/admin/parte2.php');?>

@@ -43,7 +43,7 @@ include('../../../layout/admin/parte1.php');
                             <tbody>
                                 <?php
                                 $contador = 0;
-                                $query = $pdo->prepare('SELECT * FROM ciudad');
+                                $query = $pdo->prepare('SELECT * FROM t_ciudad');
 
                                 $query->execute();
                                 $ciudades = $query->fetchAll(PDO::FETCH_ASSOC);

@@ -37,7 +37,7 @@ include('../../../layout/admin/parte1.php');
                                     <tbody>
                                         <?php
                                         $contador_permisos = 0;
-                                        $sql_permisos = "SELECT * FROM permisos WHERE estado = '1' ORDER BY nombre_url ASC";
+                                        $sql_permisos = "SELECT * FROM t_permisos WHERE estado = '1' ORDER BY nombre_url ASC";
                                             $query_permisos = $pdo->prepare($sql_permisos);
                                             $query_permisos-> execute();
                                             $permisos = $query_permisos->fetchAll(PDO::FETCH_ASSOC);

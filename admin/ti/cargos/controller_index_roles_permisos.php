@@ -35,7 +35,7 @@ $sentencia->execute();
 </tr>
 <?php
 $contador2 = 0;
-$sql_roles_permisos = "SELECT * FROM roles_permisos AS rolper INNER JOIN permisos AS per ON per.id_permisos = rolper.permiso_id INNER JOIN cargo AS rol ON rol.id_cargo = rolper.rol_id WHERE rolper.estado = '1' ORDER BY per.nombre_url ASC";
+$sql_roles_permisos = "SELECT * FROM roles_permisos AS rolper INNER JOIN t_permisos AS per ON per.id_permisos = rolper.permiso_id INNER JOIN cargo AS rol ON rol.id_cargo = rolper.rol_id WHERE rolper.estado = '1' ORDER BY per.nombre_url ASC";
 
 $query_roles_permisos = $pdo->prepare($sql_roles_permisos);
 $query_roles_permisos-> execute();

@@ -12,7 +12,7 @@ include('../../../layout/admin/datos_sesion_user.php');
 
 $id_get = $_GET['id'];
 
-$query = $pdo->prepare("SELECT * FROM permisos WHERE id_permisos = '$id_get'");
+$query = $pdo->prepare("SELECT * FROM t_permisos WHERE id_permisos = '$id_get'");
 
 $query->execute();
 $permisos = $query->fetchAll(PDO::FETCH_ASSOC);

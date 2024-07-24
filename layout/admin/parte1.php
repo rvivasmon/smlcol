@@ -20,7 +20,7 @@ $conta = strlen($url);
 $rest = substr($url, 15, $conta);
 
 
-$sql_roles_permisos = "SELECT * FROM roles_permisos AS rolper INNER JOIN permisos AS per ON per.id_permisos = rolper.permiso_id INNER JOIN cargo AS rol ON rol.id_cargo = rolper.rol_id WHERE rolper.estado = '1' ";
+$sql_roles_permisos = "SELECT * FROM roles_permisos AS rolper INNER JOIN t_permisos AS per ON per.id_permisos = rolper.permiso_id INNER JOIN cargo AS rol ON rol.id_cargo = rolper.rol_id WHERE rolper.estado = '1' ";
 
 $query_roles_permisos = $pdo->prepare($sql_roles_permisos);
 $query_roles_permisos-> execute();
@@ -182,6 +182,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               <a href="<?php echo $URL;?>admin/administracion/clientes/index_clientes.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>LISTA CLIENTES</p>
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/administracion/vehiculos" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>VEHÍCULOS</p>
                               </a>
                             </li>
                           </ul>
@@ -635,12 +641,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               </a>
                             </li>
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/ti/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Crear Usuario</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/ti/permisos" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Listado de Permisos</p>
@@ -754,12 +754,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               <a href="<?php echo $URL;?>admin/planta" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Listado ID Pantallas</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/planta/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Crear ID Pantallas</p>
                               </a>
                             </li>
                           </ul>

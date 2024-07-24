@@ -39,14 +39,6 @@ include('../../../layout/admin/parte1.php');
                                     <input type="time" id="hora" name="hora" class="form-control" placeholder="Hora" readonly>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="fecha">Almacén</label>
-                                    <select name="" id="">
-                                        
-                                    </select>
-                                </div>
-                            </div>
 
                         </div>
 
@@ -57,7 +49,7 @@ include('../../../layout/admin/parte1.php');
                                     <select name="producto" id="producto" class="form-control">
                                         <option value="">Seleccione un Producto</option>
                                         <?php 
-                                        $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM productos ORDER BY tipo_producto ASC');
+                                        $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos ORDER BY tipo_producto ASC');
                                         $query_producto->execute();
                                         $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
                                         foreach($productos as $producto) {
@@ -80,7 +72,27 @@ include('../../../layout/admin/parte1.php');
                                 <div class="form-group">
 
                                     <div class="row">
-                                        <div class="col-md-2 campo Modulo">
+                                        <div class="col-md-3 campo Modulo">
+                                            <div class="form-group">
+                                                <label for="">Modelo</label>
+                                                <select name="modelo_modulo1" id="modelo_modulo1" class="form-control">
+                                                    <option value="">Seleccione un Modelo</option>
+                                                    <?php 
+                                                    $query_modelo = $pdo->prepare('SELECT id, modelo_modulo FROM t_tipo_producto WHERE modelo_modulo IS NOT NULL AND modelo_modulo <> "" AND modelo_modulo <> "0" ORDER BY modelo_modulo ASC');
+                                                    $query_modelo->execute();
+                                                    $modelos = $query_modelo->fetchAll(PDO::FETCH_ASSOC);
+                                                    foreach($modelos as $modelo) {
+                                                        $id_car_mod = $modelo['id_car_mod'];
+                                                        $modelo_modulo = $modelo['modelo_modulo'];
+                                                        ?>
+                                                        <option value="<?php echo $id_car_mod;?>"><?php echo $modelo_modulo; ?></option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 campo Modulo">
                                             <div class="form-group">
                                                 <label for="">Pitch</label>
                                                 <select name="pitch" id="pitch" class="form-control">
@@ -96,39 +108,19 @@ include('../../../layout/admin/parte1.php');
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4 campo Modulo">
+                                        <div class="col-md-3 campo Modulo">
                                             <div class="form-group">
                                                 <label for="">Serie</label>
                                                 <input type="text" name="serie_modulo" class="form-control" placeholder="Serie">
                                             </div>
                                         </div>
-                                        <div class="col-md-4 campo Modulo">
-                                            <div class="form-group">
-                                                <label for="">Referencia</label>
-                                                <input type="text" name="referencia_modulo" class="form-control" placeholder="Referencia">
-                                            </div>
-                                        </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-6 campo Modulo">
+                                        <div class="col-md-3 campo Modulo">
                                             <div class="form-group">
-                                                <label for="">Modelo</label>
-                                                <select name="modelo_modulo1" id="modelo_modulo1" class="form-control">
-                                                    <option value="">Seleccione un Modelo</option>
-                                                    <?php 
-                                                    $query_modelo = $pdo->prepare('SELECT id_car_mod, modelo_modulo FROM caracteristicas_modulos WHERE modelo_modulo IS NOT NULL AND modelo_modulo <> "" AND modelo_modulo <> "0" ORDER BY modelo_modulo ASC');
-                                                    $query_modelo->execute();
-                                                    $modelos = $query_modelo->fetchAll(PDO::FETCH_ASSOC);
-                                                    foreach($modelos as $modelo) {
-                                                        $id_car_mod = $modelo['id_car_mod'];
-                                                        $modelo_modulo = $modelo['modelo_modulo'];
-                                                        ?>
-                                                        <option value="<?php echo $id_car_mod;?>"><?php echo $modelo_modulo; ?></option>
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                </select>
+                                                <label for="">Referencia</label>
+                                                <input type="text" name="referencia_modulo" class="form-control" placeholder="Referencia">
                                             </div>
                                         </div>
                                         <div class="col-md-2 campo Modulo">

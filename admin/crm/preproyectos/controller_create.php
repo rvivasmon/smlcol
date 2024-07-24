@@ -16,9 +16,10 @@ $telefono = $_POST['telefono_contacto'];
 $asesor = $_POST['idusuario2'];
 $anio_mes1 = $_POST['anio_mes'];
 $contador1 = $_POST['contador'];
+$ciudad = $_POST['ciudad'];
 
 // Insertar datos principales en la tabla pre_proyecto
-$sql = "INSERT INTO pre_proyecto (fecha, tipo_proyecto, idprepro, nombre_preproyecto, cliente, contacto, telefono, asesor, anio_mes, contador) VALUES (:fcreacion, :tipo_proyecto, :idproy, :nombre_proyecto, :cliente, :contacto, :telefono, :asesor, :anio_mes1, :contador1)";
+$sql = "INSERT INTO pre_proyecto (fecha, tipo_proyecto, idprepro, nombre_preproyecto, cliente, contacto, telefono, asesor, anio_mes, contador, ciudad) VALUES (:fcreacion, :tipo_proyecto, :idproy, :nombre_proyecto, :cliente, :contacto, :telefono, :asesor, :anio_mes1, :contador1, :ciudad)";
 $sentencia = $pdo->prepare($sql);
 
 $sentencia->bindParam(':fcreacion', $fcreacion);
@@ -31,8 +32,12 @@ $sentencia->bindParam(':telefono', $telefono);
 $sentencia->bindParam(':asesor', $asesor);
 $sentencia->bindParam(':anio_mes1', $anio_mes1);
 $sentencia->bindParam(':contador1', $contador1);
+$sentencia->bindParam(':ciudad', $ciudad);
 
 if ($sentencia->execute()) {
+    // Obtener el ID generado automáticamente para pre_proyecto
+    $id_preproyec = $pdo->lastInsertId();
+
     $items = $_POST['items'];
     $pantallas = $_POST['pantallas'];
     $estado = $_POST['estado'];
@@ -46,7 +51,6 @@ if ($sentencia->execute()) {
     $contador = $_POST['contador'];
 
     for ($i = 0; $i < count($items); $i++) {
-        $idproy1 = $idproy;
         $items1 = $items[$i];
         $pantallas1 = $pantallas[$i];
         $estado1 = $estado[$i];
@@ -60,10 +64,10 @@ if ($sentencia->execute()) {
         $contador1 = $contador;
 
         // Insertar datos en la tabla item_preproyecto
-        $sql1 = "INSERT INTO item_preproyecto (id_preproyec, items, cantidad_pantallas, estado, categoria, uso, tipo_producto, pitch, x_disponible, y_disponible, justificacion, contador) VALUES (:idproy1, :items1, :pantallas1, :estado1, :categoria_producto1, :uso1, :tipo_producto1, :pitch1, :x_disponible1, :y_disponible1, :justificacion1, :contador1)";
+        $sql1 = "INSERT INTO item_preproyecto (id_preproyec, items, cantidad_pantallas, estado, categoria, uso, tipo_producto, pitch, x_disponible, y_disponible, justificacion, contador) VALUES (:id_preproyec, :items1, :pantallas1, :estado1, :categoria_producto1, :uso1, :tipo_producto1, :pitch1, :x_disponible1, :y_disponible1, :justificacion1, :contador1)";
         $sentencia1 = $pdo->prepare($sql1);
 
-        $sentencia1->bindParam(':idproy1', $idproy1);
+        $sentencia1->bindParam(':id_preproyec', $id_preproyec);
         $sentencia1->bindParam(':items1', $items1);
         $sentencia1->bindParam(':pantallas1', $pantallas1);
         $sentencia1->bindParam(':estado1', $estado1);
@@ -94,7 +98,7 @@ if ($sentencia->execute()) {
         'text' => '¡Usuario creado exitosamente!',
         'icon' => 'success'
     );
-    header('Location: ' . $URL . 'admin/crm');
+    header('Location: ' . $URL . 'admin/crm/preproyectos');
     exit;
 } else {
     session_start();

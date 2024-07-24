@@ -55,7 +55,7 @@ include('../../../layout/admin/parte1.php');
                                     $contador = 0;
                                     $query = $pdo->prepare('SELECT 
                                         ap.*,
-                                        productos.tipo_producto as nombre_producto,
+                                        t_productos.tipo_producto as nombre_producto,
                                         cm.pitch as nombre_pitch,
                                         cms.modelo_modulo as modul_model,
                                         cctr.marca_control as cont_marc,
@@ -64,7 +64,7 @@ include('../../../layout/admin/parte1.php');
                                         cft.tipo_fuente as fuen_tipo
                                     FROM
                                         alma_principal AS ap
-                                    LEFT JOIN productos ON ap.tipo_producto = productos.id_producto
+                                    LEFT JOIN t_productos ON ap.tipo_producto = t_productos.id_producto
                                     LEFT JOIN caracteristicas_modulos AS cm ON ap.pitch = cm.id_car_mod
                                     LEFT JOIN caracteristicas_modulos AS cms ON ap.modelo_modulo = cms.id_car_mod
                                     LEFT JOIN caracteristicas_control AS cctr ON ap.marca_control = cctr.id_car_ctrl

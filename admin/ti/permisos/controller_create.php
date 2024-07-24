@@ -10,7 +10,7 @@ $nombre_url = $_POST['nombre_url'];
 $url = $_POST['url'];
 $estado_permisos = '1';
 
-$sql = "INSERT INTO permisos (nombre_url, url, estado) VALUES (:nombre_url, :url, :estado)";
+$sql = "INSERT INTO t_permisos (nombre_url, url, estado) VALUES (:nombre_url, :url, :estado)";
 
 $sentencia = $pdo->prepare($sql);
 

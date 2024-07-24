@@ -10,7 +10,7 @@ include('../../../layout/admin/parte1.php');
 
 $id_get = $_GET['id'];
 
-$query = $pdo->prepare("SELECT stc.*, tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_cliente, ciudad.ciudad AS nombre_ciudad, estado.estadostc AS nombre_estado FROM stc JOIN tipo_servicio ON stc.tipo_servicio = tipo_servicio.id JOIN clientes ON stc.cliente = clientes.id JOIN ciudad ON stc.ciudad = ciudad.id JOIN estado ON stc.estado = estado.id  WHERE stc.id = '$id_get'");
+$query = $pdo->prepare("SELECT stc.*, t_tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_cliente, t_ciudad.ciudad AS nombre_ciudad, t_estado.estadostc AS nombre_estado FROM stc JOIN t_tipo_servicio ON stc.tipo_servicio = t_tipo_servicio.id JOIN clientes ON stc.cliente = clientes.id JOIN t_ciudad ON stc.ciudad = t_ciudad.id JOIN t_estado ON stc.estado = t_estado.id  WHERE stc.id = '$id_get'");
 
 $query->execute();
 $stcs = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -86,7 +86,7 @@ foreach ($stcs as $stc){
                                                 <select name="tiposervicio" id="tiposervicio" class="form-control" required>
                                                     <?php 
                                                     $valor_actual_en_edicion = $stc['tipo_servicio'];
-                                                    $query_servicio = $pdo->prepare('SELECT * FROM tipo_servicio WHERE servicio_stc IS NOT NULL AND servicio_stc != "" ORDER BY servicio_stc ASC');
+                                                    $query_servicio = $pdo->prepare('SELECT * FROM t_tipo_servicio WHERE servicio_stc IS NOT NULL AND servicio_stc != "" ORDER BY servicio_stc ASC');
                                                     $query_servicio->execute();
                                                     $servicios = $query_servicio->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($servicios as $servicio) {
@@ -135,7 +135,7 @@ foreach ($stcs as $stc){
                                                 <select name="idestado" id="idestado" class="form-control" required>
                                                     <?php
                                                     $valor_actual_en_edicion = $stc['estado'];
-                                                    $query_estado = $pdo->prepare('SELECT * FROM estado');
+                                                    $query_estado = $pdo->prepare('SELECT * FROM t_estado');
                                                     $query_estado->execute();
                                                     $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($estados as $estado) {

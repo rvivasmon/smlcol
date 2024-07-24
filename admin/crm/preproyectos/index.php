@@ -22,23 +22,23 @@ include('../../../layout/admin/parte1.php');
                         </div>
 
                         <hr>
-                        
+
                         <div class="card-tools ml-4">
                             <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square">Crear Nuevo Pre</i></a>
                         </div>
-                        
+
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="table_usuarios" class="table table-striped table-hover table-bordered">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>ID Producto</th>
+                                            <th>Fecha</th>
+                                            <th>ID</th>
                                             <th>Nombre Pre-Proyecto</th>
                                             <th>Nombre Cliente</th>
-                                            <th>Cliente</th>
+                                            <th>Contacto</th>
                                             <th>Ciudad</th>
-                                            <th>Proyecto</th>
                                             <th><center>Acciones</center></th>
                                         </tr>
                                     </thead>
@@ -52,26 +52,25 @@ include('../../../layout/admin/parte1.php');
                                         foreach ($productos as $producto){
                                             $id = $producto['id_preproyec'];
                                             $fecha = $producto['fecha'];
-                                            $op = $producto['nombre_preproyecto'];
-                                            $agente = $producto['asesor'];
                                             $id_prod = $producto['idprepro'];
-                                            $anio_mes_prod = $producto['anio_mes'];
-                                            $contador_prod = $producto['contador'];
+                                            $nombre_proyecto = $producto['nombre_preproyecto'];
+                                            $cliente = $producto['cliente'];
+                                            $contacto = $producto['contacto'];
+                                            $ciudad = $producto['ciudad'];
                                             $contador = $contador + 1;
                                         ?>
                                             <tr>
                                                 <td><?php echo $contador; ?></td>
-                                                <td><?php echo $id_prod; ?></td>
-                                                <td><?php echo $op; ?></td>
-                                                <td><?php echo $agente; ?></td>
-                                                <td><?php echo $anio_mes_prod; ?></td>
-                                                <td><?php echo $contador_prod; ?></td>
                                                 <td><?php echo $fecha; ?></td>
+                                                <td><?php echo $id_prod; ?></td>
+                                                <td><?php echo $nombre_proyecto; ?></td>
+                                                <td><?php echo $cliente; ?></td>
+                                                <td><?php echo $contacto; ?></td>
+                                                <td><?php echo $ciudad; ?></td>
                                                 <td>
                                                     <center>
-                                                        <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                        <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
-                                                        <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
+                                                        <a href="<?php echo $URL."admin/crm/proyectos/create.php";?>?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Tratamiento<i class="fas fa-pen"></i></a>
+                                                        <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar<i class="fas fa-trash"></i></a>
                                                     </center>
                                                 </td>
                                             </tr>

@@ -1,16 +1,12 @@
 <?php 
-
 include('../../../app/config/config.php');
 include('../../../app/config/conexion.php');
-
 include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
-
 include('../../../layout/admin/parte1.php');
 
 // Función para obtener el tipo de proyecto
-function obtenerTipoProyecto($pdo, $id)
-{
+function obtenerTipoProyecto($pdo, $id) {
     $query = $pdo->prepare('SELECT crm FROM prefijos WHERE id_prefijos = :id');
     $query->execute(['id' => $id]);
     $prefijo = $query->fetch(PDO::FETCH_ASSOC);
@@ -46,22 +42,27 @@ $id_ppc = $anio_mes . '-' . sprintf('%03d', $contador_ppc);
 $tipo_proyecto = obtenerTipoProyecto($pdo, 2); // Ajustar según necesidad
 
 // Consultar estados para el select de Estado
-$query_estado = $pdo->prepare('SELECT * FROM estado WHERE estado_ppc IS NOT NULL AND estado_ppc != "" ORDER BY estado_ppc ASC');
+$query_estado = $pdo->prepare('SELECT * FROM t_estado WHERE estado_ppc IS NOT NULL AND estado_ppc != "" ORDER BY estado_ppc ASC');
 $query_estado->execute();
 $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
 
 // Consultar categorías de productos para el select de Categoría Producto
-$query_producto = $pdo->prepare('SELECT * FROM productos_terminados WHERE categoria IS NOT NULL AND categoria != "" ORDER BY categoria ASC');
+$query_producto = $pdo->prepare('SELECT * FROM t_categoria_productos WHERE categoria IS NOT NULL AND categoria != "" ORDER BY categoria ASC');
 $query_producto->execute();
 $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
 
 // Consultar usos de productos para el select de Uso
-$query_uso = $pdo->prepare('SELECT * FROM productos_terminados WHERE uso_leds IS NOT NULL AND uso_leds != "" ORDER BY uso_leds ASC');
+$query_uso = $pdo->prepare('SELECT * FROM t_uso_productos WHERE uso_productos IS NOT NULL AND uso_productos != "" ORDER BY uso_productos ASC');
 $query_uso->execute();
 $usos = $query_uso->fetchAll(PDO::FETCH_ASSOC);
 
+// Consultar Modelo de modulo para el select de Tipo Módulo
+$query_modelmod = $pdo->prepare('SELECT * FROM t_tipo_producto WHERE modelo_modulo IS NOT NULL AND modelo_modulo != "" ORDER BY modelo_modulo ASC');
+$query_modelmod->execute();
+$modelo_modulo = $query_modelmod->fetchAll(PDO::FETCH_ASSOC);
+
 // Consultar tipos de productos para el select de Tipo Producto
-$query_tipo_producto = $pdo->prepare('SELECT * FROM productos_terminados WHERE tipo_producto IS NOT NULL AND tipo_producto != "" ORDER BY tipo_producto ASC');
+$query_tipo_producto = $pdo->prepare('SELECT * FROM t_tipo_producto WHERE tipo_producto21 IS NOT NULL AND tipo_producto21 != "" ORDER BY tipo_producto21 ASC');
 $query_tipo_producto->execute();
 $tipos_productos = $query_tipo_producto->fetchAll(PDO::FETCH_ASSOC);
 
@@ -113,14 +114,16 @@ $hora_actual = date('H:i');
                                         <option value="<?php echo htmlspecialchars($tipo_proyecto); ?>"><?php echo htmlspecialchars($tipo_proyecto); ?></option>
                                     </select>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="id_proyecto" class="d-block mb-0">Id Proyecto</label>
                                     <input type="text" name="id_proyecto" id="id_proyecto" class="form-control" value="<?php echo htmlspecialchars($id_ppc); ?>" readonly>
                                 </div>
-                                <div class="col-md-0">
-                                    <input type="hidden" name="idusuario2" value="<?php echo $sesion_usuario['id']; ?>">
+                                <div class="col-md-5">
+                                    <label for="ciudad" class="d-block mb-0">Ciudad</label>
+                                    <input type="text" name="ciudad" id="ciudad" class="form-control">
                                 </div>
                                 <div class="col-md-0">
+                                    <input type="hidden" name="idusuario2" value="<?php echo $sesion_usuario['id']; ?>">
                                     <input type="hidden" name="anio_mes" value="<?php echo $anio_mes; ?>">
                                     <input type="hidden" name="contador" value="<?php echo $contador_ppc; ?>">
                                 </div>
@@ -153,217 +156,203 @@ $hora_actual = date('H:i');
                                     <label for="asesor_encargado" class="d-block mb-0">Asesor Encargado</label>
                                     <input type="text" name="asesor_encargado" class="form-control" value="<?php echo htmlspecialchars($sesion_usuario['nombre']); ?>" readonly>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="buscador" class="d-block mb-0">Búsqueda por PPC</label>
-                                    <select name="buscador_ppc" id="buscador_ppc" class="form-control">
-                                        <!-- Opciones cargadas dinámicamente con JavaScript -->
-                                    </select>
-                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-7" style="border: 0.10px solid #808080; padding: 15px;">
-                        <div class="form-group  cloned-section">
+                        <div class="form-group cloned-section">
                             <div class="row">
-                                <div class="col-md-3 items_pre">
-                                    <label for="items" class="d-block mb-0">Items</label>
-                                    <input type="text" name="items[]" class="form-control" value="1" readonly>
+                                <div class="col-md-4 items_pre">
+                                    <div class="form-group">
+                                        <label for="items" class="d-block mb-0">Items</label>
+                                        <input type="text" name="items[]" class="form-control" value="1" readonly>
+                                    </div>
                                 </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="pantallas" class="d-block mb-0">Cantidad de Pantallas</label>
-                                    <input type="number" name="pantallas[]" class="form-control" required>
+                                <div class="col-md-4 categoria_producto">
+                                    <div class="form-group">
+                                        <label for="categoria_producto" class="d-block mb-0">Categoría Producto</label>
+                                        <select id="categoria_producto" name="categoria_producto[]" class="form-control" required>
+                                            <option value="">Seleccione una categoría</option>
+                                            <?php foreach ($productos as $producto) { ?>
+                                                <option value="<?php echo htmlspecialchars($producto['id_prod_terminado']); ?>"><?php echo htmlspecialchars($producto['categoria']); ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="estado" class="d-block mb-0">Estado</label>
-                                    <select name="estado[]" class="form-control">
-                                        <option value="">Seleccione Estado</option>
-                                        <?php foreach ($estados as $estado) : ?>
-                                            <option value="<?php echo htmlspecialchars($estado['estado_ppc']); ?>"><?php echo htmlspecialchars($estado['estado_ppc']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                <div class="col-md-4 tipo_producto">
+                                    <div class="form-group">
+                                        <label for="tipo_producto" class="d-block mb-0">Tipo Producto</label>
+                                        <select id="tipo_producto" name="tipo_producto[]" class="form-control" required>
+                                            <option value="">Seleccione el tipo de producto</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="categoria_producto" class="d-block mb-0">Categoría Producto</label>
-                                    <select name="categoria_producto[]" class="form-control">
-                                        <option value="">Seleccione Categoría</option>
-                                        <?php foreach ($productos as $producto) : ?>
-                                            <option value="<?php echo htmlspecialchars($producto['categoria']); ?>"><?php echo htmlspecialchars($producto['categoria']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 uso">
+                                    <div class="form-group">
+                                        <label for="uso" class="d-block mb-0">Uso</label>
+                                        <select id="uso" name="uso[]" class="form-control" required>
+                                            <option value="">Seleccione el uso</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="uso" class="d-block mb-0">Uso</label>
-                                    <select name="uso[]" class="form-control">
-                                        <option value="">Seleccione Uso</option>
-                                        <?php foreach ($usos as $uso) : ?>
-                                            <option value="<?php echo htmlspecialchars($uso['uso_leds']); ?>"><?php echo htmlspecialchars($uso['uso_leds']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                <div class="col-md-4 tipo_modulo">
+                                    <div class="form-group">
+                                        <label for="tipo_modulo" class="d-block mb-0">Tipo Módulo</label>
+                                        <select id="tipo_modulo" name="tipo_modulo[]" class="form-control" required>
+                                            <option value="">Seleccione el tipo de módulo</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="tipo_producto" class="d-block mb-0">Tipo Producto</label>
-                                    <select name="tipo_producto[]" class="form-control">
-                                        <option value="">Seleccione Tipo</option>
-                                        <?php foreach ($tipos_productos as $tipo_producto) : ?>
-                                            <option value="<?php echo htmlspecialchars($tipo_producto['tipo_producto']); ?>"><?php echo htmlspecialchars($tipo_producto['tipo_producto']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="pitch" class="d-block mb-0">Pitch</label>
-                                    <select name="pitch[]" class="form-control">
-                                        <option value="">Seleccione Pitch</option>
-                                        <?php foreach ($pitches as $pitch) : ?>
-                                            <option value="<?php echo htmlspecialchars($pitch['pitch']); ?>"><?php echo htmlspecialchars($pitch['pitch']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="x_disponible" class="d-block mb-0">X Disponible</label>
-                                    <input type="number" name="x_disponible[]" class="form-control" required>
-                                </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="y_disponible" class="d-block mb-0">Y Disponible</label>
-                                    <input type="number" name="y_disponible[]" class="form-control" required>
-                                </div>
-                                <div class="col-md-9 items_pre">
-                                    <label for="justificacion" class="d-block mb-0">Justificación</label>
-                                    <textarea name="justificacion[]" class="form-control" rows="2"></textarea>
+                                <div class="col-md-4 pitch">
+                                    <div class="form-group">
+                                        <label for="pitch" class="d-block mb-0">Pitch</label>
+                                        <select id="pitch" name="pitch[]" class="form-control" required>
+                                            <option value="">Seleccione el pitch</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
+                        <div id="items-container"></div> <!-- Contenedor para los ítems agregados dinámicamente -->
+
                         <div class="form-group">
-                            <button type="button" id="add_item" class="btn btn-primary">Añadir Item</button>
+                            <button type="button" class="btn btn-success" id="add-item">Añadir Item</button>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-9">
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <a href="<?php echo $URL."admin/crm/preproyectos";?>" class="btn btn-default btn-block">Cancelar</a>
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Crear Pre-Proyecto</button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-12">
+                        <label for="comentarios" class="d-block mb-0">Comentarios</label>
+                        <textarea class="form-control" name="comentarios" rows="2"></textarea>
                     </div>
                 </div>
-
+                <div class="modal-footer">
+                    <a href="../preproyectos/" class="btn btn-default">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Crear Pre Proyecto</button>
+                </div>
             </form>
         </div>
     </div>
 </div>
 
-                        <div style="display: none;" id="item-template">
-                            <hr>
-                            <div class="row">
-                                <div class="col-md-3 items_pre">
-                                    <label for="items" class="d-block mb-0">Items</label>
-                                    <input type="text" name="items[]" class="form-control" value="1" readonly>
-                                </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="pantallas" class="d-block mb-0">Cantidad de Pantallas</label>
-                                    <input type="number" name="pantallas[]" class="form-control" required>
-                                </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="estado" class="d-block mb-0">Estado</label>
-                                    <select name="estado[]" class="form-control">
-                                        <option value="">Seleccione Estado</option>
-                                        <?php foreach ($estados as $estado) : ?>
-                                            <option value="<?php echo htmlspecialchars($estado['estado_ppc']); ?>"><?php echo htmlspecialchars($estado['estado_ppc']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="categoria_producto" class="d-block mb-0">Categoría Producto</label>
-                                    <select name="categoria_producto[]" class="form-control">
-                                        <option value="">Seleccione Categoría</option>
-                                        <?php foreach ($productos as $producto) : ?>
-                                            <option value="<?php echo htmlspecialchars($producto['categoria']); ?>"><?php echo htmlspecialchars($producto['categoria']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="uso" class="d-block mb-0">Uso</label>
-                                    <select name="uso[]" class="form-control">
-                                        <option value="">Seleccione Uso</option>
-                                        <?php foreach ($usos as $uso) : ?>
-                                            <option value="<?php echo htmlspecialchars($uso['uso_leds']); ?>"><?php echo htmlspecialchars($uso['uso_leds']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="tipo_producto" class="d-block mb-0">Tipo Producto</label>
-                                    <select name="tipo_producto[]" class="form-control">
-                                        <option value="">Seleccione Tipo</option>
-                                        <?php foreach ($tipos_productos as $tipo_producto) : ?>
-                                            <option value="<?php echo htmlspecialchars($tipo_producto['tipo_producto']); ?>"><?php echo htmlspecialchars($tipo_producto['tipo_producto']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="pitch" class="d-block mb-0">Pitch</label>
-                                    <select name="pitch[]" class="form-control">
-                                        <option value="">Seleccione Pitch</option>
-                                        <?php foreach ($pitches as $pitch) : ?>
-                                            <option value="<?php echo htmlspecialchars($pitch['pitch']); ?>"><?php echo htmlspecialchars($pitch['pitch']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="x_disponible" class="d-block mb-0">X Disponible</label>
-                                    <input type="number" name="x_disponible[]" class="form-control" required>
-                                </div>
-                                <div class="col-md-3 items_pre">
-                                    <label for="y_disponible" class="d-block mb-0">Y Disponible</label>
-                                    <input type="number" name="y_disponible[]" class="form-control" required>
-                                </div>
-                                <div class="col-md-9 items_pre">
-                                    <label for="justificacion" class="d-block mb-0">Justificación</label>
-                                    <textarea name="justificacion[]" class="form-control" rows="2"></textarea>
-                                </div>
-                            </div>
-                        </div>
+<script>
+    document.getElementById('add-item').addEventListener('click', function() {
+        var originalSection = document.querySelector('.cloned-section');
+        var clonedSection = originalSection.cloneNode(true);
 
+        // Limpiar los valores de los campos en la sección clonada
+        var inputs = clonedSection.querySelectorAll('input, select');
+        inputs.forEach(function(input) {
+            if (input.type !== 'hidden') {
+                input.value = '';
+            }
+        });
 
+        // Incrementar el valor del campo 'items'
+        var itemsField = clonedSection.querySelector('input[name="items[]"]');
+        var currentItemValue = document.querySelectorAll('input[name="items[]"]').length;
+        itemsField.value = currentItemValue + 1;
+
+        // Agregar la sección clonada al contenedor de ítems
+        document.getElementById('items-container').appendChild(clonedSection);
+    });
+</script>
+
+<script>
+    function validarFormulario() {
+        var tipoProyecto = document.getElementById('tipo_proyecto').value;
+        var fecha = document.getElementById('fecha').value;
+        var hora = document.getElementById('hora').value;
+        var ciudad = document.getElementById('ciudad').value;
+        var nombreProyecto = document.querySelector('input[name="nombre_proyecto"]').value;
+        var cliente = document.querySelector('input[name="cliente"]').value;
+        var contactoCliente = document.querySelector('input[name="contacto_cliente"]').value;
+        var telefonoContacto = document.querySelector('input[name="telefono_contacto"]').value;
+
+        if (!tipoProyecto || !fecha || !hora || !ciudad || !nombreProyecto || !cliente || !contactoCliente || !telefonoContacto) {
+            alert('Por favor, complete todos los campos obligatorios.');
+            return false;
+        }
+
+        return true;
+    }
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let itemCount = 1;
-        const itemTemplate = document.getElementById('item-template');
-
-        // Función para agregar un nuevo item
-        document.getElementById('add_item').addEventListener('click', function() {
-            const newSection = itemTemplate.cloneNode(true);
-            newSection.style.display = 'block'; // Mostrar la sección clonada
-
-            // Actualizar el valor del nuevo item
-            itemCount++;
-            const itemInputs = newSection.querySelectorAll('input[name="items[]"]');
-            itemInputs.forEach(input => {
-                input.value = itemCount;
-            });
-
-            // Insertar la nueva sección antes del botón "Añadir Item"
-            const addBtn = document.getElementById('add_item');
-            addBtn.parentNode.insertBefore(newSection, addBtn);
+        document.getElementById('categoria_producto').addEventListener('change', function() {
+            var categoriaId = this.value;
+            if (categoriaId) {
+                fetch('get_tipo_producto.php?id_categoria=' + categoriaId)
+                    .then(response => response.json())
+                    .then(data => {
+                        var tipoProductoSelect = document.getElementById('tipo_producto');
+                        tipoProductoSelect.innerHTML = '<option value="">Seleccione el tipo de producto</option>';
+                        data.forEach(item => {
+                            tipoProductoSelect.innerHTML += '<option value="' + item.id + '">' + item.tipo_producto21 + '</option>';
+                        });
+                    });
+                
+                fetch('get_uso.php?id_categoria=' + categoriaId)
+                    .then(response => response.json())
+                    .then(data => {
+                        var usoSelect = document.getElementById('uso');
+                        usoSelect.innerHTML = '<option value="">Seleccione el uso</option>';
+                        data.forEach(item => {
+                            usoSelect.innerHTML += '<option value="' + item.id + '">' + item.uso_productos + '</option>';
+                        });
+                    });
+            } else {
+                // Limpia los selects si no hay categoría seleccionada
+                document.getElementById('tipo_producto').innerHTML = '<option value="">Seleccione el tipo de producto</option>';
+                document.getElementById('uso').innerHTML = '<option value="">Seleccione el uso</option>';
+            }
         });
 
-        // Reiniciar el contador de items cuando cambie el ID del proyecto
-        document.getElementById('id_proyecto').addEventListener('change', function() {
-            itemCount = 1;
-            const itemInputs = document.querySelectorAll('input[name="items[]"]');
-            itemInputs.forEach((input, index) => {
-                input.value = index + 1;
-            });
+        document.getElementById('uso').addEventListener('change', function() {
+            var usoId = this.value;
+            if (usoId) {
+                fetch('get_tipo_modulo.php?id_uso=' + usoId)
+                    .then(response => response.json())
+                    .then(data => {
+                        var tipoModuloSelect = document.getElementById('tipo_modulo');
+                        tipoModuloSelect.innerHTML = '<option value="">Seleccione el tipo de módulo</option>';
+                        data.forEach(item => {
+                            tipoModuloSelect.innerHTML += '<option value="' + item.id + '">' + item.modelo_modulo + '</option>';
+                        });
+                    });
+            } else {
+                // Limpia el select si no hay uso seleccionado
+                document.getElementById('tipo_modulo').innerHTML = '<option value="">Seleccione el tipo de módulo</option>';
+            }
+        });
+
+        document.getElementById('tipo_modulo').addEventListener('change', function() {
+            var tipoModuloId = this.value;
+            if (tipoModuloId) {
+                fetch('get_pitch.php?id_tipo_modulo=' + tipoModuloId)
+                    .then(response => response.json())
+                    .then(data => {
+                        var pitchSelect = document.getElementById('pitch');
+                        pitchSelect.innerHTML = '<option value="">Seleccione el pitch</option>';
+                        data.forEach(item => {
+                            pitchSelect.innerHTML += '<option value="' + item.id_car_mod + '">' + item.pitch + '</option>';
+                        });
+                    });
+            } else {
+                // Limpia el select si no hay tipo de módulo seleccionado
+                document.getElementById('pitch').innerHTML = '<option value="">Seleccione el pitch</option>';
+            }
         });
     });
+
+    
 </script>
+
+
 
 <?php include('../../../layout/admin/parte2.php'); ?>

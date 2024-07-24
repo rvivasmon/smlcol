@@ -11,7 +11,7 @@ $nombre_url = $_POST['nombre_url'];
 $url = $_POST['url'];
 
 
-$sql = "UPDATE permisos SET nombre_url = :nombre_url, url = :url, id_permisos = :id_permisos WHERE id_permisos = :id_permisos";
+$sql = "UPDATE t_permisos SET nombre_url = :nombre_url, url = :url, id_permisos = :id_permisos WHERE id_permisos = :id_permisos";
 
 $sentencia = $pdo->prepare($sql);
 

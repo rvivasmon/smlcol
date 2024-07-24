@@ -61,7 +61,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                     $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
 
                                     // Obtiene los estados de las pantallas
-                                    $query_estado = $pdo->prepare('SELECT estado_pantalla_cliente FROM estado ORDER BY estado_pantalla_cliente');
+                                    $query_estado = $pdo->prepare('SELECT estado_pantalla_cliente FROM t_estado ORDER BY estado_pantalla_cliente');
                                     $query_estado->execute();
                                     $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
 

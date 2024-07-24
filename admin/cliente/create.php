@@ -108,7 +108,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                             <select name="tiposervicio" id="tiposervicio" class="form-control" hidden>
                                                 <?php 
                                                 $valor_actual_en_edicion = $stc['tipo_servicio'];
-                                                $query_servicio = $pdo->prepare('SELECT * FROM tipo_servicio');
+                                                $query_servicio = $pdo->prepare('SELECT * FROM t_tipo_servicio');
                                                 $query_servicio->execute();
                                                 $servicios = $query_servicio->fetchAll(PDO::FETCH_ASSOC);
                                                 foreach($servicios as $servicio) {
@@ -144,7 +144,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                                 
                                                 <?php
                                                 $valor_actual_en_edicion = $stc['estado'];
-                                                $query_estado = $pdo->prepare('SELECT * FROM estado');
+                                                $query_estado = $pdo->prepare('SELECT * FROM t_estado');
                                                 $query_estado->execute();
                                                 $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
                                                 foreach($estados as $estado) {
@@ -166,7 +166,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                             <select name="idciudad" id="idciudad" class="form-control" readonly>
                                                 <?php
                                                 $valor_actual_en_edicion = $stc['ciudad'];
-                                                $query_ciudad = $pdo->prepare('SELECT * FROM ciudad');
+                                                $query_ciudad = $pdo->prepare('SELECT * FROM t_ciudad');
                                                 $query_ciudad->execute();
                                                 $ciudades = $query_ciudad->fetchAll(PDO::FETCH_ASSOC);
                                                 foreach($ciudades as $ciudad) {

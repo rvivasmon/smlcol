@@ -74,7 +74,7 @@ include('../../../layout/admin/parte1.php');
                                                                             <div class="col-md-6">
                                                                                 <select name="permiso_id" id="permiso_id<?=$id_rol;?>" class="form-control">
                                                                                     <?php
-                                                                                    $sql_permisos = "SELECT * FROM permisos WHERE estado = '1' ORDER BY nombre_url ASC";
+                                                                                    $sql_permisos = "SELECT * FROM t_permisos WHERE estado = '1' ORDER BY nombre_url ASC";
                                                                                     $query_permisos = $pdo->prepare($sql_permisos);
                                                                                     $query_permisos-> execute();
                                                                                     $permisos = $query_permisos->fetchAll(PDO::FETCH_ASSOC);
@@ -112,7 +112,7 @@ include('../../../layout/admin/parte1.php');
                                                                                 <?php
 
                                                                                 $contador2 = 0;
-                                                                                $sql_roles_permisos = "SELECT * FROM roles_permisos AS rolper INNER JOIN permisos AS per ON per.id_permisos = rolper.permiso_id INNER JOIN cargo AS rol ON rol.id_cargo = rolper.rol_id WHERE rolper.estado = '1' ORDER BY per.nombre_url ASC";
+                                                                                $sql_roles_permisos = "SELECT * FROM roles_permisos AS rolper INNER JOIN t_permisos AS per ON per.id_permisos = rolper.permiso_id INNER JOIN cargo AS rol ON rol.id_cargo = rolper.rol_id WHERE rolper.estado = '1' ORDER BY per.nombre_url ASC";
                                                                                 $query_roles_permisos = $pdo->prepare($sql_roles_permisos);
                                                                                 $query_roles_permisos-> execute();
                                                                                 $roles_permisos = $query_roles_permisos->fetchAll(PDO::FETCH_ASSOC);
