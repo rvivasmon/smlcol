@@ -47,7 +47,7 @@ include('../../../layout/admin/datos_sesion_user.php');
                             <tbody>
                                 <?php
                                 $contador = 0;
-                                $query = $pdo->prepare('SELECT ost.*, t_tipo_servicio.servicio_ost AS nombre_servicio, tecnicos.nombre AS nombre_tecnicos, t_estado.estadoost AS nombre_estado FROM ost JOIN t_tipo_servicio ON ost_tipo_servicio = t_tipo_servicio.id JOIN t_estado ON ost_estado = t_estado.id JOIN tecnicos ON ost.tecnico_tratante = tecnicos.id WHERE ost_estado_ticket IN (1,2)');
+                                $query = $pdo->prepare('SELECT ost.*, t_tipo_servicio.servicio_ost AS nombre_servicio, tecnicos.nombre AS nombre_tecnicos, t_estado.estadoost AS nombre_estado FROM ost JOIN t_tipo_servicio ON ost.tipo_servicio = t_tipo_servicio.id JOIN t_estado ON ost.estado = t_estado.id JOIN tecnicos ON ost.tecnico_tratante = tecnicos.id WHERE ost.estado_ticket IN (1,2)');
 
                                 $query->execute();
                                 $osts = $query->fetchAll(PDO::FETCH_ASSOC);

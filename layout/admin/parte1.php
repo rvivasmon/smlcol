@@ -173,12 +173,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               </a>
                             </li>
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/administracion/clientes/create_cliente.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>CREAR CLIENTES</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/administracion/clientes/index_clientes.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>LISTA CLIENTES</p>

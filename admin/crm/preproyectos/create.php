@@ -1,12 +1,16 @@
 <?php 
+
 include('../../../app/config/config.php');
 include('../../../app/config/conexion.php');
+
 include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
+
 include('../../../layout/admin/parte1.php');
 
 // Función para obtener el tipo de proyecto
-function obtenerTipoProyecto($pdo, $id) {
+function obtenerTipoProyecto($pdo, $id)
+{
     $query = $pdo->prepare('SELECT crm FROM prefijos WHERE id_prefijos = :id');
     $query->execute(['id' => $id]);
     $prefijo = $query->fetch(PDO::FETCH_ASSOC);
@@ -52,7 +56,7 @@ $query_producto->execute();
 $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
 
 // Consultar usos de productos para el select de Uso
-$query_uso = $pdo->prepare('SELECT * FROM t_uso_productos WHERE uso_productos IS NOT NULL AND uso_productos != "" ORDER BY uso_productos ASC');
+$query_uso = $pdo->prepare('SELECT * FROM t_uso_productos WHERE producto_uso IS NOT NULL AND producto_uso != "" ORDER BY producto_uso    ASC');
 $query_uso->execute();
 $usos = $query_uso->fetchAll(PDO::FETCH_ASSOC);
 
@@ -93,10 +97,10 @@ $hora_actual = date('H:i');
             Introduzca la información correspondiente
         </div>
         <div class="card-body">
-            <form action="controller_create.php" method="POST" onsubmit="return validarFormulario()" id="formulario_creacion_ppc">
+            <form action="controller_create.php" method="POST" id="formulario_creacion_ppc">
                 <div class="row">
                     <div class="col-md-5">
-                        <div class="form-group">
+                        <div class="form-group head-section">
                             <div class="row">
                                 <div class="col-md-4">
                                     <label for="fecha" class="d-block mb-0">Fecha</label>
@@ -160,199 +164,351 @@ $hora_actual = date('H:i');
                         </div>
                     </div>
 
-                    <div class="col-md-7" style="border: 0.10px solid #808080; padding: 15px;">
-                        <div class="form-group cloned-section">
-                            <div class="row">
-                                <div class="col-md-4 items_pre">
-                                    <div class="form-group">
-                                        <label for="items" class="d-block mb-0">Items</label>
-                                        <input type="text" name="items[]" class="form-control" value="1" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 categoria_producto">
-                                    <div class="form-group">
-                                        <label for="categoria_producto" class="d-block mb-0">Categoría Producto</label>
-                                        <select id="categoria_producto" name="categoria_producto[]" class="form-control" required>
-                                            <option value="">Seleccione una categoría</option>
-                                            <?php foreach ($productos as $producto) { ?>
-                                                <option value="<?php echo htmlspecialchars($producto['id_prod_terminado']); ?>"><?php echo htmlspecialchars($producto['categoria']); ?></option>
-                                            <?php } ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 tipo_producto">
-                                    <div class="form-group">
-                                        <label for="tipo_producto" class="d-block mb-0">Tipo Producto</label>
-                                        <select id="tipo_producto" name="tipo_producto[]" class="form-control" required>
-                                            <option value="">Seleccione el tipo de producto</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-md-4 uso">
-                                    <div class="form-group">
-                                        <label for="uso" class="d-block mb-0">Uso</label>
-                                        <select id="uso" name="uso[]" class="form-control" required>
-                                            <option value="">Seleccione el uso</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 tipo_modulo">
-                                    <div class="form-group">
-                                        <label for="tipo_modulo" class="d-block mb-0">Tipo Módulo</label>
-                                        <select id="tipo_modulo" name="tipo_modulo[]" class="form-control" required>
-                                            <option value="">Seleccione el tipo de módulo</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 pitch">
-                                    <div class="form-group">
-                                        <label for="pitch" class="d-block mb-0">Pitch</label>
-                                        <select id="pitch" name="pitch[]" class="form-control" required>
-                                            <option value="">Seleccione el pitch</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="items-container"></div> <!-- Contenedor para los ítems agregados dinámicamente -->
-
+                    <div class="col-md-7">
                         <div class="form-group">
-                            <button type="button" class="btn btn-success" id="add-item">Añadir Item</button>
-                        </div>
-                    </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group cloned-section">
+                                        <div class="row">
+                                            <div class="col-md-4 items_pre">
+                                                <div class="form-group">
+                                                    <label for="items" class="d-block mb-0">Items</label>
+                                                    <input type="text" name="items[]" class="form-control" value="1" readonly>
+                                                    <input type="hidden" id="item_data" name="item_data">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 items_pre">
+                                                <div class="form-group">
+                                                    <label for="pantallas" class="d-block mb-0">Cantidad de Pantallas</label>
+                                                    <input type="number" name="pantallas[]" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 items_pre">
+                                                <label for="estado" class="d-block mb-0">Estado</label>
+                                                <select name="estado[]" class="form-control">
+                                                    <option value="1">Nuevo</option>
+                                                    <?php foreach ($estados as $estado) : ?>
+                                                        <option value="<?php echo htmlspecialchars($estado['id']); ?>" <?php echo ($estado['id'] == 1) ? 'selected' : ''; ?>>
+                                                            <?php echo htmlspecialchars($estado['estado_ppc']); ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                        </div>
 
-                    <div class="col-md-12">
-                        <label for="comentarios" class="d-block mb-0">Comentarios</label>
-                        <textarea class="form-control" name="comentarios" rows="2"></textarea>
+                                        <div class="row">
+                                            <div class="col-md-4 items_pre">
+                                                <div class="form-group">
+                                                    <label for="categoria_producto" class="d-block mb-0">Categoría Producto</label>
+                                                    <select name="categoria_producto[]" id="categoria_producto_<?php echo $contador_ppc; ?>" class="form-control" onchange="cargarDatosRelacionados(this.value, <?php echo $contador_ppc; ?>)">
+                                                        <option value="">Seleccione Categoría</option>
+                                                        <?php foreach ($productos as $producto) : ?>
+                                                            <option value="<?php echo htmlspecialchars($producto['id_prod_terminado']); ?>"><?php echo htmlspecialchars($producto['categoria']); ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 items_pre">
+                                                <div class="form-group">
+                                                    <label for="uso" class="d-block mb-0">Uso</label>
+                                                    <select name="uso[]" id="uso_<?php echo $contador_ppc; ?>" class="form-control">
+                                                        <option value="">Seleccione Uso</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 items_pre">
+                                                <div class="form-group">
+                                                    <label for="tipo_producto" class="d-block mb-0">Tipo Producto</label>
+                                                    <select name="tipo_producto[]" id="tipo_producto_<?php echo $contador_ppc; ?>" class="form-control">
+                                                        <option value="">Seleccione Tipo</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4 items_pre">
+                                                <div class="form-group">
+                                                    <label for="tipo_modulo" class="d-block mb-0">Tipo Módulo</label>
+                                                    <select name="tipo_modulo[]" id="tipo_modulo_<?php echo $contador_ppc; ?>" class="form-control">
+                                                        <option value="">Seleccione Tipo de Módulo</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 items_pre">
+                                                <div class="form-group">
+                                                    <label for="pitch" class="d-block mb-0">Pitch</label>
+                                                    <select name="pitch[]" id="pitch_<?php echo $contador_ppc; ?>" class="form-control">
+                                                        <option value="">Seleccione Pitch</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 items_pre">
+                                                <div class="form-group">
+                                                    <label for="x_disponible" class="d-block mb-0">X Dispo en mm</label>
+                                                    <input type="number" name="x_disponible[]" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 items_pre">
+                                                <div class="form-group">
+                                                    <label for="y_disponible" class="d-block mb-0">Y Dispo en mm</label>
+                                                    <input type="number" name="y_disponible[]" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12 items_pre">
+                                                <div class="form-group">
+                                                    <label for="justificacion" class="d-block mb-0">Justificación</label>
+                                                    <textarea name="justificacion[]" class="form-control" rows="2"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <!-- Botón para añadir item -->
+                                    <div class="form-group">
+                                        <button type="button" id="btn_add_item" class="btn btn-primary">Añadir Item</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <a href="../preproyectos/" class="btn btn-default">Cancelar</a>
-                    <button type="submit" class="btn btn-primary">Crear Pre Proyecto</button>
+
+                <br>
+
+                <!-- Tabla donde se mostrarán los items añadidos -->
+                <div class="table-responsive">
+                    <table id="table_items" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th># Pantallas</th>
+                                <th>Estado</th>
+                                <th>Categoría</th>
+                                <th>Uso</th>
+                                <th>T. Producto</th>
+                                <th>T. Modelo Módulo</th>
+                                <th>Pitch</th>
+                                <th>X Disponible</th>
+                                <th>Y Disponible</th>
+                                <th>Justificación</th>
+                                <th><center>Acciones</center></th>
+                            </tr>
+                        </thead>
+                        <tbody id="table_body">
+                            <!-- Los items añadidos se mostrarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <a href="<?php echo $URL."admin/crm/preproyectos";?>" class="btn btn-default btn-block">Cancelar</a>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Crear Pre-Proyecto</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
+
 <script>
-    document.getElementById('add-item').addEventListener('click', function() {
-        var originalSection = document.querySelector('.cloned-section');
-        var clonedSection = originalSection.cloneNode(true);
-
-        // Limpiar los valores de los campos en la sección clonada
-        var inputs = clonedSection.querySelectorAll('input, select');
-        inputs.forEach(function(input) {
-            if (input.type !== 'hidden') {
-                input.value = '';
-            }
-        });
-
-        // Incrementar el valor del campo 'items'
-        var itemsField = clonedSection.querySelector('input[name="items[]"]');
-        var currentItemValue = document.querySelectorAll('input[name="items[]"]').length;
-        itemsField.value = currentItemValue + 1;
-
-        // Agregar la sección clonada al contenedor de ítems
-        document.getElementById('items-container').appendChild(clonedSection);
-    });
+    document.getElementById('anadirItem').addEventListener('click', function() {
+    // Selecciona el campo "estado" y establece su valor en "1" (o "Nuevo")
+    document.getElementById('estado').value = '1';
+    
+    // Aquí puedes agregar el código para manejar el añadir ítem
+});
 </script>
 
 <script>
-    function validarFormulario() {
-        var tipoProyecto = document.getElementById('tipo_proyecto').value;
-        var fecha = document.getElementById('fecha').value;
-        var hora = document.getElementById('hora').value;
-        var ciudad = document.getElementById('ciudad').value;
-        var nombreProyecto = document.querySelector('input[name="nombre_proyecto"]').value;
-        var cliente = document.querySelector('input[name="cliente"]').value;
-        var contactoCliente = document.querySelector('input[name="contacto_cliente"]').value;
-        var telefonoContacto = document.querySelector('input[name="telefono_contacto"]').value;
+document.getElementById('btn_add_item').addEventListener('click', function() {
+    // Obtener los valores de los campos
+    const cantidadPantallas = document.querySelector('input[name="pantallas[]"]').value;
+    const estado = document.querySelector('select[name="estado[]"]').value;
+    const categoria = document.querySelector('select[name="categoria_producto[]"]').value;
+    const uso = document.querySelector('select[name="uso[]"]').value;
+    const tipoProducto = document.querySelector('select[name="tipo_producto[]"]').value;
+    const tipoModulo = document.querySelector('select[name="tipo_modulo[]"]').value;
+    const pitch = document.querySelector('select[name="pitch[]"]').value;
+    const xDisponible = document.querySelector('input[name="x_disponible[]"]').value;
+    const yDisponible = document.querySelector('input[name="y_disponible[]"]').value;
+    const justificacion = document.querySelector('textarea[name="justificacion[]"]').value;
 
-        if (!tipoProyecto || !fecha || !hora || !ciudad || !nombreProyecto || !cliente || !contactoCliente || !telefonoContacto) {
-            alert('Por favor, complete todos los campos obligatorios.');
-            return false;
-        }
+    // Crear una nueva fila en la tabla
+    const tableBody = document.getElementById('table_body');
+    const rowCount = tableBody.rows.length;
+    const newRow = tableBody.insertRow(rowCount);
 
-        return true;
-    }
+    newRow.innerHTML = `
+        <td>${rowCount + 1}</td>
+        <td>${cantidadPantallas}</td>
+        <td>${estado}</td>
+        <td>${categoria}</td>
+        <td>${uso}</td>
+        <td>${tipoProducto}</td>
+        <td>${tipoModulo}</td>
+        <td>${pitch}</td>
+        <td>${xDisponible}</td>
+        <td>${yDisponible}</td>
+        <td>${justificacion}</td>
+        <td>
+            <center>
+                <button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>
+            </center>
+        </td>
+    `;
+
+    // Limpiar los campos del formulario
+    document.querySelector('input[name="pantallas[]"]').value = '';
+    document.querySelector('select[name="estado[]"]').selectedIndex = 0;
+    document.querySelector('select[name="categoria_producto[]"]').selectedIndex = 0;
+    document.querySelector('select[name="uso[]"]').selectedIndex = 0;
+    document.querySelector('select[name="tipo_producto[]"]').selectedIndex = 0;
+    document.querySelector('select[name="tipo_modulo[]"]').selectedIndex = 0;
+    document.querySelector('select[name="pitch[]"]').selectedIndex = 0;
+    document.querySelector('input[name="x_disponible[]"]').value = '';
+    document.querySelector('input[name="y_disponible[]"]').value = '';
+    document.querySelector('textarea[name="justificacion[]"]').value = '';
+});
+
+// Añadir el siguiente código para guardar los datos de la tabla en el campo oculto
+document.getElementById('formulario_creacion_ppc').addEventListener('submit', function() {
+    const rows = document.querySelectorAll('#table_body tr');
+    const itemData = [];
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const rowData = {
+            item: cells[0].innerText,
+            pantallas: cells[1].innerText,
+            estado: cells[2].innerText,
+            categoria_producto: cells[3].innerText,
+            uso: cells[4].innerText,
+            tipo_producto: cells[5].innerText,
+            tipo_modulo: cells[6].innerText,
+            pitch: cells[7].innerText,
+            x_disponible: cells[8].innerText,
+            y_disponible: cells[9].innerText,
+            justificacion: cells[10].innerText
+        };
+        itemData.push(rowData);
+    });
+
+    document.getElementById('item_data').value = JSON.stringify(itemData);
+});
+
 </script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('categoria_producto').addEventListener('change', function() {
-            var categoriaId = this.value;
-            if (categoriaId) {
-                fetch('get_tipo_producto.php?id_categoria=' + categoriaId)
-                    .then(response => response.json())
-                    .then(data => {
-                        var tipoProductoSelect = document.getElementById('tipo_producto');
-                        tipoProductoSelect.innerHTML = '<option value="">Seleccione el tipo de producto</option>';
-                        data.forEach(item => {
-                            tipoProductoSelect.innerHTML += '<option value="' + item.id + '">' + item.tipo_producto21 + '</option>';
-                        });
+    // Función para cargar los datos relacionados
+    function cargarDatosRelacionados(categoria, tipo) {
+        // Cargar usos basados en la categoría
+        if (categoria) {
+            fetch(`filter_data.php?categoria=${categoria}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // Verifica la estructura de los datos recibidos
+                    let usoSelect = document.querySelector(`#uso_${tipo}`);
+                    usoSelect.innerHTML = '<option value="">Seleccione Uso</option>';
+                    data.forEach(uso => {
+                        usoSelect.innerHTML += `<option value="${uso.id}">${uso.producto_uso}</option>`;
                     });
-                
-                fetch('get_uso.php?id_categoria=' + categoriaId)
-                    .then(response => response.json())
-                    .then(data => {
-                        var usoSelect = document.getElementById('uso');
-                        usoSelect.innerHTML = '<option value="">Seleccione el uso</option>';
-                        data.forEach(item => {
-                            usoSelect.innerHTML += '<option value="' + item.id + '">' + item.uso_productos + '</option>';
-                        });
-                    });
-            } else {
-                // Limpia los selects si no hay categoría seleccionada
-                document.getElementById('tipo_producto').innerHTML = '<option value="">Seleccione el tipo de producto</option>';
-                document.getElementById('uso').innerHTML = '<option value="">Seleccione el uso</option>';
-            }
-        });
+                });
+        } else {
+            document.querySelector(`#uso_${tipo}`).innerHTML = '<option value="">Seleccione Uso</option>';
+        }
 
-        document.getElementById('uso').addEventListener('change', function() {
-            var usoId = this.value;
-            if (usoId) {
-                fetch('get_tipo_modulo.php?id_uso=' + usoId)
-                    .then(response => response.json())
-                    .then(data => {
-                        var tipoModuloSelect = document.getElementById('tipo_modulo');
-                        tipoModuloSelect.innerHTML = '<option value="">Seleccione el tipo de módulo</option>';
-                        data.forEach(item => {
-                            tipoModuloSelect.innerHTML += '<option value="' + item.id + '">' + item.modelo_modulo + '</option>';
-                        });
+        // Cargar tipo producto basado en la categoría
+        if (categoria) {
+            fetch(`filter_data.php?categoria=${categoria}`)
+                .then(response => response.json())
+                .then(data => {
+                    let tipoProductoSelect = document.querySelector(`#tipo_producto_${tipo}`);
+                    tipoProductoSelect.innerHTML = '<option value="">Seleccione Tipo</option>';
+                    data.forEach(tipoProducto => {
+                        tipoProductoSelect.innerHTML += `<option value="${tipoProducto.id}">${tipoProducto.tipo_producto21}</option>`;
                     });
-            } else {
-                // Limpia el select si no hay uso seleccionado
-                document.getElementById('tipo_modulo').innerHTML = '<option value="">Seleccione el tipo de módulo</option>';
-            }
-        });
+                });
+        } else {
+            document.querySelector(`#tipo_producto_${tipo}`).innerHTML = '<option value="">Seleccione Tipo</option>';
+        }
+    }
 
-        document.getElementById('tipo_modulo').addEventListener('change', function() {
-            var tipoModuloId = this.value;
-            if (tipoModuloId) {
-                fetch('get_pitch.php?id_tipo_modulo=' + tipoModuloId)
-                    .then(response => response.json())
-                    .then(data => {
-                        var pitchSelect = document.getElementById('pitch');
-                        pitchSelect.innerHTML = '<option value="">Seleccione el pitch</option>';
-                        data.forEach(item => {
-                            pitchSelect.innerHTML += '<option value="' + item.id_car_mod + '">' + item.pitch + '</option>';
-                        });
+    // Función para cargar el tipo de módulo basado en el uso
+    function cargarTipoModulo(uso, tipo) {
+        if (uso) {
+            fetch(`filter_data.php?uso=${uso}`)
+                .then(response => response.json())
+                .then(data => {
+                    let tipoModuloSelect = document.querySelector(`#tipo_modulo_${tipo}`);
+                    tipoModuloSelect.innerHTML = '<option value="">Seleccione Tipo de Módulo</option>';
+                    data.forEach(tipoModulo => {
+                        tipoModuloSelect.innerHTML += `<option value="${tipoModulo.id}">${tipoModulo.modelo_modulo}</option>`;
                     });
-            } else {
-                // Limpia el select si no hay tipo de módulo seleccionado
-                document.getElementById('pitch').innerHTML = '<option value="">Seleccione el pitch</option>';
-            }
-        });
+                });
+        } else {
+            document.querySelector(`#tipo_modulo_${tipo}`).innerHTML = '<option value="">Seleccione Tipo de Módulo</option>';
+        }
+    }
+
+    // Función para cargar el pitch basado en el tipo de módulo
+    function cargarPitch(tipoModulo, tipo) {
+        if (tipoModulo) {
+            fetch(`filter_data.php?tipo_modulo=${tipoModulo}`)
+                .then(response => response.json())
+                .then(data => {
+                    let pitchSelect = document.querySelector(`#pitch_${tipo}`);
+                    pitchSelect.innerHTML = '<option value="">Seleccione Pitch</option>';
+                    data.forEach(pitch => {
+                        pitchSelect.innerHTML += `<option value="${pitch.id_car_mod}">${pitch.pitch}</option>`;
+                    });
+                });
+        } else {
+            document.querySelector(`#pitch_${tipo}`).innerHTML = '<option value="">Seleccione Pitch</option>';
+        }
+    }
+
+    // Agregar event listeners a los campos
+    document.addEventListener('change', function(event) {
+        if (event.target.name === 'categoria_producto[]') {
+            let tipo = event.target.id.split('_').pop();
+            let categoria = event.target.value;
+            cargarDatosRelacionados(categoria, tipo);
+        }
+
+        if (event.target.name === 'uso[]') {
+            let tipo = event.target.id.split('_').pop();
+            let uso = event.target.value;
+            cargarTipoModulo(uso, tipo);
+        }
+
+        if (event.target.name === 'tipo_modulo[]') {
+            let tipo = event.target.id.split('_').pop();
+            let tipoModulo = event.target.value;
+            cargarPitch(tipoModulo, tipo);
+        }
     });
+});
 
-    
 </script>
-
-
 
 <?php include('../../../layout/admin/parte2.php'); ?>

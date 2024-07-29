@@ -127,6 +127,7 @@ if ($proyecto) {
                                             <th>Categoría</th>
                                             <th>Uso</th>
                                             <th>T. Producto</th>
+                                            <th>T. Modelo Módulo</th>
                                             <th>Pitch</th>
                                             <th>X Disponible</th>
                                             <th>Y Disponible</th>
@@ -137,7 +138,7 @@ if ($proyecto) {
                                     <tbody>
                                         <?php
                                         $contador = 0;
-                                        $query_items = $pdo->prepare('SELECT item_preproyecto.*, caracteristicas_modulos.pitch FROM item_preproyecto INNER JOIN caracteristicas_modulos ON item_preproyecto.pitch = caracteristicas_modulos.id_car_mod WHERE item_preproyecto.id_preproyec = :id_proyecto ORDER BY caracteristicas_modulos.pitch ASC');
+                                        $query_items = $pdo->prepare('SELECT * FROM item_preproyecto WHERE item_preproyecto.id_preproyec = :id_proyecto ORDER BY pitch ASC');
 
                                         $query_items->bindParam(':id_proyecto', $id, PDO::PARAM_INT); // Utiliza el valor de $id_proyecto del formulario
                                         $query_items->execute();
@@ -152,6 +153,7 @@ if ($proyecto) {
                                                         <td><?php echo $producto['categoria']; ?></td>
                                                         <td><?php echo $producto['uso']; ?></td>
                                                         <td><?php echo $producto['tipo_producto']; ?></td>
+                                                        <td><?php echo $producto['modelo_uso']; ?></td>
                                                         <td><?php echo $producto['pitch']; ?></td>
                                                         <td><?php echo $producto['x_disponible']; ?></td>
                                                         <td><?php echo $producto['y_disponible']; ?></td>
