@@ -28,6 +28,20 @@ if ($proyecto) {
     exit;
 }
 
+// Consulta para obtener los datos del item - preproyecto
+$query_pre = $pdo->prepare("SELECT * FROM item_preproyecto WHERE id_preproyec = :id_get");
+$query_pre->bindParam(':id_get', $id_get, PDO::PARAM_INT);
+$query_pre->execute();
+$pre_proyecto = $query_pre->fetch(PDO::FETCH_ASSOC);
+
+if ($pre_proyecto) {
+    $id_pre = $pre_proyecto['id_item_preproy'];
+
+} else {
+    echo "No se encontró el pre-proyecto.";
+    exit;
+}
+
 ?>
 
 <div class="content-wrapper">
@@ -138,7 +152,26 @@ if ($proyecto) {
                                     <tbody>
                                         <?php
                                         $contador = 0;
-                                        $query_items = $pdo->prepare('SELECT * FROM item_preproyecto WHERE item_preproyecto.id_preproyec = :id_proyecto ORDER BY pitch ASC');
+                                        $query_items = $pdo->prepare('SELECT
+                                                    item_preproyecto.*,
+                                                    t_estado.estado_ppc AS nom_estado,
+                                                    t_categoria_productos.categoria AS nom_categoria,
+                                                    tipo_prod.tipo_producto21 AS nom_producto,
+                                                    modelo_prod.modelo_modulo AS nom_modelo,
+                                                    t_tipo_producto.producto_uso AS nom_uso,
+                                                    caracteristicas_modulos.pitch AS nom_pitch
+                                                FROM
+                                                    item_preproyecto
+                                                LEFT JOIN t_estado ON item_preproyecto.estado = t_estado.id
+                                                LEFT JOIN t_categoria_productos ON item_preproyecto.categoria = t_categoria_productos.id_prod_terminado
+                                                LEFT JOIN t_tipo_producto as tipo_prod ON item_preproyecto.tipo_producto = tipo_prod.id
+                                                LEFT JOIN t_tipo_producto as modelo_prod ON item_preproyecto.modelo_uso = modelo_prod.id
+                                                LEFT JOIN t_tipo_producto ON item_preproyecto.uso = t_tipo_producto.id
+                                                LEFT JOIN caracteristicas_modulos ON item_preproyecto.pitch = caracteristicas_modulos.id_car_mod
+                                                WHERE
+                                                    item_preproyecto.id_preproyec = :id_proyecto
+                                                ORDER BY nom_pitch ASC
+                                        ');
 
                                         $query_items->bindParam(':id_proyecto', $id, PDO::PARAM_INT); // Utiliza el valor de $id_proyecto del formulario
                                         $query_items->execute();
@@ -148,25 +181,25 @@ if ($proyecto) {
                                                 ?>
                                                 <tr>
                                                     <td><?php echo $contador; ?></td>
-                                                        <td><?php echo $producto['cantidad_pantallas']; ?></td>
-                                                        <td><?php echo $producto['estado']; ?></td>
-                                                        <td><?php echo $producto['categoria']; ?></td>
-                                                        <td><?php echo $producto['uso']; ?></td>
-                                                        <td><?php echo $producto['tipo_producto']; ?></td>
-                                                        <td><?php echo $producto['modelo_uso']; ?></td>
-                                                        <td><?php echo $producto['pitch']; ?></td>
-                                                        <td><?php echo $producto['x_disponible']; ?></td>
-                                                        <td><?php echo $producto['y_disponible']; ?></td>
-                                                        <td><?php echo $producto['justificacion']; ?></td>
-                                                        <td>
-                                                            <center>
-                                                                <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Tratar <i class="fas fa-pen"></i></a>
-                                                                <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
-                                                            </center>
+                                                    <td><?php echo htmlspecialchars($producto['cantidad_pantallas'] ?? ''); ?></td>
+                                                    <td><?php echo htmlspecialchars($producto['nom_estado'] ?? ''); ?></td>
+                                                    <td><?php echo htmlspecialchars($producto['nom_categoria'] ?? ''); ?></td>
+                                                    <td><?php echo htmlspecialchars($producto['nom_uso'] ?? ''); ?></td>
+                                                    <td><?php echo htmlspecialchars($producto['nom_producto'] ?? ''); ?></td>
+                                                    <td><?php echo htmlspecialchars($producto['nom_modelo'] ?? ''); ?></td>
+                                                    <td><?php echo htmlspecialchars($producto['nom_pitch'] ?? ''); ?></td>
+                                                    <td><?php echo htmlspecialchars($producto['x_disponible'] ?? ''); ?></td>
+                                                    <td><?php echo htmlspecialchars($producto['y_disponible'] ?? ''); ?></td>
+                                                    <td><?php echo htmlspecialchars($producto['justificacion'] ?? ''); ?></td>
+                                                    <td>
+                                                    <center>
+                                                    <a href="edit_create.php?item_id=<?php echo $producto['id_item_preproy']; ?>&preproyec_id=<?php echo $id; ?>" class="btn btn-success btn-sm">Tratar <i class="fas fa-pen"></i></a>
+                                                    <a href="delete.php?id=<?php echo $id_pre; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
+                                                    </center>
                                                 </tr>
-                                        <?php
+                                            <?php
                                             }                            
-                                        ?>
+                                            ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -186,6 +219,17 @@ if ($proyecto) {
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <button type="submit" onclick="return confirm('¿Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Crear Proyecto</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <a href="" class="btn btn-warning btn-block">Añadir Item</a>
                                                 </div>
                                             </div>
                                         </div>

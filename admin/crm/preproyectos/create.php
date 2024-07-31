@@ -56,7 +56,7 @@ $query_producto->execute();
 $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
 
 // Consultar usos de productos para el select de Uso
-$query_uso = $pdo->prepare('SELECT * FROM t_uso_productos WHERE producto_uso IS NOT NULL AND producto_uso != "" ORDER BY producto_uso    ASC');
+$query_uso = $pdo->prepare('SELECT * FROM t_uso_productos WHERE producto_uso IS NOT NULL AND producto_uso != "" ORDER BY producto_uso ASC');
 $query_uso->execute();
 $usos = $query_uso->fetchAll(PDO::FETCH_ASSOC);
 
@@ -328,7 +328,6 @@ $hora_actual = date('H:i');
     </div>
 </div>
 
-
 <script>
     document.getElementById('anadirItem').addEventListener('click', function() {
     // Selecciona el campo "estado" y establece su valor en "1" (o "Nuevo")
@@ -388,6 +387,12 @@ document.getElementById('btn_add_item').addEventListener('click', function() {
     document.querySelector('input[name="y_disponible[]"]').value = '';
     document.querySelector('textarea[name="justificacion[]"]').value = '';
 });
+
+function eliminarFila(btn) {
+    const row = btn.closest('tr');
+    row.remove();
+}
+
 
 // Añadir el siguiente código para guardar los datos de la tabla en el campo oculto
 document.getElementById('formulario_creacion_ppc').addEventListener('submit', function() {
@@ -507,6 +512,58 @@ document.getElementById('formulario_creacion_ppc').addEventListener('submit', fu
             cargarPitch(tipoModulo, tipo);
         }
     });
+});
+
+</script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+  const categoriaProducto = document.getElementById('categoria_producto');
+  const uso = document.getElementById('uso');
+  const tipoProducto = document.getElementById('tipo_producto');
+  const tipoModulo = document.getElementById('tipo_modulo');
+  const pitch = document.getElementById('pitch');
+  const xDispo = document.getElementById('x_dispo');
+  const yDispo = document.getElementById('y_dispo');
+
+  categoriaProducto.addEventListener('change', function() {
+    // Resetea todos los campos para habilitarlos al cambiar la selección
+    uso.disabled = false;
+    tipoProducto.disabled = false;
+    tipoModulo.disabled = false;
+    pitch.disabled = false;
+    xDispo.disabled = false;
+    yDispo.disabled = false;
+
+    // Deshabilita los campos según la selección de categoría
+    switch (categoriaProducto.value) {
+      case '1':
+        tipoModulo.disabled = true;
+        pitch.disabled = true;
+        xDispo.disabled = true;
+        yDispo.disabled = true;
+        break;
+      case '2':
+        tipoModulo.disabled = true;
+        pitch.disabled = true;
+        break;
+      case '4':
+        uso.disabled = true;
+        tipoProducto.disabled = true;
+        tipoModulo.disabled = true;
+        pitch.disabled = true;
+        xDispo.disabled = true;
+        yDispo.disabled = true;
+        break;
+      default:
+        // En caso de otra categoría no hacer nada
+        break;
+    }
+  });
+
+  // Para deshabilitar por defecto al cargar la página
+  categoriaProducto.dispatchEvent(new Event('change'));
 });
 
 </script>
