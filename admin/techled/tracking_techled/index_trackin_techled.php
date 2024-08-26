@@ -55,17 +55,17 @@ include('../../../layout/admin/parte1.php');
                                 $trackings = $query->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($trackings as $tracking){
                                     $id = $tracking['id'];
-                                    $fecha = $tracking['fecha'];
-                                    $tipo = $tracking['tipo'];
-                                    $descripcion = $tracking['descripcion'];
-                                    $cantidad = $tracking['cantidad'];
+                                    $fecha = $tracking['date'];
+                                    $tipo = $tracking['type'];
+                                    $descripcion = $tracking['observaciones_china'];
+                                    $cantidad = $tracking['quantitly'];
                                     $enproduccion = $tracking['en_produccion'];
                                     $ship = $tracking['ship'];
-                                    $entransito = $tracking['en_transito'];
+                                    $entransito = $tracking['num_envoys'];
                                     $guia = $tracking['guia'];
                                     $fechaguia = $tracking['fecha_guia'];
                                     $tipoenvio = $tracking['tipo_envio'];
-                                    $observaciones = $tracking['observaciones'];
+                                    $observaciones = $tracking['observaciones_colombia'];
                                     $contador = $contador + 1;
                                 ?>
                                     <tr>

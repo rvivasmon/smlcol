@@ -220,7 +220,7 @@ $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="col-md-6">
                                         <div class="row">
                                             <div class="form-group canvas-container">
-                                                <div class="col-md-12">
+                                                <div class="col-md-6">
                                                     <div class="text-center">
                                                         <label for="rectangulo"></label>
                                                         <canvas id="canvas" width="180" height="180" style="border: 1px solid #000000;"></canvas>
@@ -233,9 +233,68 @@ $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- Nuevo Checkbox para mostrar/ocultar formulario -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="agregar_Producto" id="agregar_Producto" value="1"> Agregar Sistema de Control
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const agregarProductoCheckbox = document.getElementById('agregar_Producto');
+            const formularioExtra = document.getElementById('formularioExtra');
+
+            // Mostrar/ocultar el formulario adicional cuando el checkbox cambia
+            agregarProductoCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    formularioExtra.style.display = 'block';
+                } else {
+                    formularioExtra.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+                        <!-- Nuevo Formulario para agregar otro producto -->
+<div id="formularioExtra" style="display: none;">
+    <h3>SISTEMA DE CONTROL</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="nombreProducto">Controladora</label>
+                <input type="text" name="nombreProducto" id="nombreProducto" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="cantidadProducto">Cantidad</label>
+                <input type="number" name="cantidadProducto" id="cantidadProducto" class="form-control">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="precioProducto">Sending</label>
+                <input type="text" name="precioProducto" id="precioProducto" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="descripcionProducto">Cantidad</label>
+                <textarea name="descripcionProducto" id="descripcionProducto" cols="30" rows="4" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
 
                         <hr>
 
@@ -281,103 +340,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script>
-    /*
-document.addEventListener('DOMContentLoaded', function() {
-    const pitchSelect = document.getElementById('pitch_dispo');
-    const xDispInput = document.getElementById('x_disp');
-    const yDispInput = document.getElementById('y_disp');
-    const xRealInput = document.querySelector('input[name="x_real"]');
-    const yRealInput = document.querySelector('input[name="y_real"]');
-    const xTotalInput = document.getElementById('x_total');
-    const yTotalInput = document.getElementById('y_total');
-    const moduloXInput = document.getElementById('modulo_x');
-    const moduloYInput = document.getElementById('modulo_y');
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-
-    function updateTotals() {
-        const xDisp = parseFloat(xDispInput.value) || 0;
-        const yDisp = parseFloat(yDispInput.value) || 0;
-        const xReal = parseFloat(xRealInput.value) || 0;
-        const yReal = parseFloat(yRealInput.value) || 0;
-
-        const selectedOption = pitchSelect.options[pitchSelect.selectedIndex];
-        const medidaX = parseFloat(selectedOption.getAttribute('data-medida-x')) || 1;
-        const medidaY = parseFloat(selectedOption.getAttribute('data-medida-y')) || 1;
-
-        const xTotal = Math.round((xDisp / medidaX)) * xReal;
-        const yTotal = Math.round((yDisp / medidaY)) * yReal;
-
-        const moduloX = Math.round(xDisp / medidaX);
-        const moduloY = Math.round(yDisp / medidaY);
-
-        xTotalInput.value = xTotal;
-        yTotalInput.value = yTotal;
-        moduloXInput.value = moduloX;
-        moduloYInput.value = moduloY;
-
-        // Llamar a la función para actualizar el color de los campos
-        updateFieldColors();
-        updateRectangulo();
-    }
-
-    function updateFieldColors() {
-        const xDisp = parseFloat(xDispInput.value) || 0;
-        const yDisp = parseFloat(yDispInput.value) || 0;
-        const xTotal = parseFloat(xTotalInput.value) || 0;
-        const yTotal = parseFloat(yTotalInput.value) || 0;
-
-        // Actualizar el color del texto para x_total
-        xTotalInput.style.color = (xTotal > xDisp) ? 'red' : 'green';
-
-        // Actualizar el color del texto para y_total
-        yTotalInput.style.color = (yTotal > yDisp) ? 'red' : 'green';
-
-        // Asegurarse de que el fondo sea blanco
-        xTotalInput.style.backgroundColor = 'white';
-        yTotalInput.style.backgroundColor = 'white';
-    }
-
-    function updateRectangulo() {
-        const xReal = parseFloat(xRealInput.value) || 0;
-        const yReal = parseFloat(yRealInput.value) || 0;
-
-        // Limpiar el canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Calcular escala para ajustar el dibujo al canvas
-        const maxCanvasSize = 160; // Tamaño máximo para las dimensiones del canvas
-        const scaleFactor = Math.min(maxCanvasSize / xReal, maxCanvasSize / yReal);
-        const scaledX = xReal * scaleFactor;
-        const scaledY = yReal * scaleFactor;
-
-        if (xReal > yReal) {
-            // Dibuja un rectángulo horizontal
-            ctx.fillStyle = 'blue';
-            ctx.fillRect(10, 10, scaledX, scaledY);
-        } else if (xReal < yReal) {
-            // Dibuja un rectángulo vertical
-            ctx.fillStyle = 'green';
-            ctx.fillRect(10, 10, scaledX, scaledY);
-        } else {
-            // Dibuja un cuadrado
-            ctx.fillStyle = 'red';
-            ctx.fillRect(10, 10, scaledX, scaledX);
-        }
-    }
-
-    pitchSelect.addEventListener('change', updateTotals);
-    xDispInput.addEventListener('input', updateTotals);
-    yDispInput.addEventListener('input', updateTotals);
-    xRealInput.addEventListener('input', updateTotals);
-    yRealInput.addEventListener('input', updateTotals);
-
-    // Actualizar los totales y colores al cargar la página inicialmente
-    updateTotals();
-});
-
-*/
-
 
 document.addEventListener('DOMContentLoaded', function() {
     const pitchSelect = document.getElementById('pitch_dispo');
@@ -534,11 +496,13 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.fillRect(10, 10, scaledX, scaledY);
         }
     }
-    
+
     // Inicializar los valores totales al cargar la página
     updateTotals();
 });
 
 </script>
+
+
 
 <?php include('../../../layout/admin/parte2.php'); ?>

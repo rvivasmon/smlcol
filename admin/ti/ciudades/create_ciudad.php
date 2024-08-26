@@ -56,10 +56,10 @@ include('../../../layout/admin/parte1.php');
                                 <hr>
 
                                 <div class="row">
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <a href="<?php echo $URL."admin/ti/ciudades";?>" class="btn btn-default btn-block">Cancelar</a>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Registrar Ciudad</button>
                                     </div>
                                 </div>

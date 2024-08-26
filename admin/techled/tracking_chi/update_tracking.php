@@ -1,6 +1,6 @@
 <?php
-include('../../../../app/config/config.php');
-include('../../../../app/config/conexion.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
 
 $selected_ids = explode(',', $_POST['selected_ids']);
 $num_envoys = $_POST['num_envoys'];

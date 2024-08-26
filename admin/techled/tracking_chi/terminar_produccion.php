@@ -1,6 +1,6 @@
 <?php
-include('../../../../app/config/config.php');
-include('../../../../app/config/conexion.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];

@@ -49,11 +49,8 @@ foreach ($roles_permisos as $rol_permiso) {
 
 ?>
 
+
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
   <html lang="es">
     <head>
       <meta charset="utf-8">
@@ -75,11 +72,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datatables.net-buttons-bs4@2.2.0/css/buttons.bootstrap4.min.css">
 
       <title>Document</title>
-    <link rel="stylesheet" href="path/to/your/main.css"> <!-- Tu archivo CSS principal -->
+    <!-- <link rel="stylesheet" href="path/to/your/main.css"> --> <!-- Tu archivo CSS principal -->
 
     <style>
         /* Estilos para los submenús */
-.nav-treeview .submenu > .nav-treeview {
+    .nav-treeview .submenu > .nav-treeview {
     display: none; /* Ocultar los submenús por defecto */
     position: absolute; /* Posicionar los submenús de manera absoluta */
     left: 100%; /* Mover los submenús hacia la derecha */
@@ -212,6 +209,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         );
 
                         $productos = array(
+                          array('id' => 6, 'nombre' => 'General'),
                           array('id' => 1, 'nombre' => 'Módulo'),
                           array('id' => 2, 'nombre' => 'Controladora'),
                           array('id' => 3, 'nombre' => 'Fuente'),
@@ -247,7 +245,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                   <?php
                                                   // Definir variables para las URL por defecto
                                                   $url_producto = "#"; // URL por defecto si no se cumple ninguna condición
-
                                                   // Condiciones para las direcciones específicas
                                                   if ($almacen['id'] == 3) {
                                                       if ($producto['id'] == 1) {
@@ -256,7 +253,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                           $url_producto = $URL . "admin/almacen/inventario/index_control.php";
                                                       } elseif ($producto['id'] == 3) {
                                                           $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
-                                                      }
+                                                      } elseif ($producto['id'] == 6) {
+                                                        $url_producto = $URL . "admin/almacen/inventario/index.php";
+                                                    }
                                                       // Agregar más condiciones según sea necesario
                                                   }
                                                   ?>
@@ -284,7 +283,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <p>Movimiento Diario</p>
                               </a>
                             </li>
-
                             <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/producto/create_producto.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -678,13 +676,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           </a>
                           <ul class="nav nav-treeview">
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/administracion/tracking/tracking_chi/index_tracking.php" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/techled/tracking_chi/index_tracking.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Requests Tracking</p>
                               </a>
                             </li>
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/list_price_techled/index_modules.php" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/techled/tracking_techled/index_trackin_techled.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List Price Modules</p>
                               </a>

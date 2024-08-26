@@ -1,12 +1,12 @@
 <?php 
 
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
 
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
+include('../../../../layout/admin/sesion.php');
+include('../../../../layout/admin/datos_sesion_user.php');
 
-include('../../../layout/admin/parte1.php');
+include('../../../../layout/admin/parte1.php');
 
 ?>
 
@@ -15,7 +15,7 @@ include('../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Ingreso de Movimientos</h1>
+                    <h1 class="m-0">Movimientos de Salida Almacén Principal</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
@@ -46,9 +46,9 @@ include('../../../layout/admin/parte1.php');
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="producto">Categoría</label>
-                                    <select name="producto2" id="producto2" class="form-control" required>
+                                    <select name="producto" id="producto" class="form-control">
                                         <option value="">Seleccione un Producto</option>
-                                        <?php 
+                                        <?php
                                         $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos ORDER BY tipo_producto ASC');
                                         $query_producto->execute();
                                         $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
@@ -57,20 +57,15 @@ include('../../../layout/admin/parte1.php');
                                         }
                                         ?>
                                     </select>
-                                    <input class="form-control" name="id_producto_seleccionado" id="id_producto_seleccionado" hidden>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="op_destino">Asignar a:</label>
-                                    <input type="text" name="op_destino" class="form-control" placeholder="Asignar" required>
                                 </div>
                             </div>
                             <div class="col-md-0">
                                 <div class="form-group"> <!-- Se coloca aquí el usuario que está trabajando el archivo -->
-                                    <label for=""></label>
-                                    <input class="form-control" id="idusuario2" name="idusuario2" value="<?php echo $sesion_usuario['nombre']?>" hidden>                                            
+                                    <input  class="form-control"  id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']?>" hidden>
                                 </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h1 class="m-0">Validar Producto</h1>
                             </div>
                         </div>
 
@@ -340,36 +335,10 @@ include('../../../layout/admin/parte1.php');
                                     <div class="row">
                                         <div class="col-md-7">
                                             <div class="form-group">
-                                                <label for="salida_md">Almacén Origen</label>
-                                                <select name="almacen_salida_md" id="almacen_salida_md" class="form-control" required>
-                                                    <option value="">Almacén Origen</option>
-                                                    <?php 
-                                                    $query_almacen  = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes');
-                                                    $query_almacen->execute();
-                                                    $almacenes = $query_almacen->fetchAll(PDO::FETCH_ASSOC);
-                                                    foreach($almacenes as $almacen) {
-                                                        echo '<option value="' . $almacen['id_asignacion'] . '">' . $almacen['nombre_almacen'] . '</option>';
-                                                    }
-                                                    ?>
-                                                </select>
-                                                <input class="form-control" name="almacen_salida_md_id" id="almacen_salida_md_id" hidden>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="salida_md">Salida</label>
-                                                <input type="text" name="salida_md" class="form-control" placeholder="Cantidad Salida" required>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-7">
-                                            <div class="form-group">
                                                 <label for="entrada_md">Almacén Destino</label>
                                                 <select name="almacen_entrada_md" id="almacen_entrada_md" class="form-control" required>
                                                     <option value="">Almacén Destino</option>
-                                                    <?php 
+                                                    <?php
                                                     $query_almacen_entra = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes');
                                                     $query_almacen_entra->execute();
                                                     $almacenes_entras = $query_almacen_entra->fetchAll(PDO::FETCH_ASSOC);
@@ -387,14 +356,50 @@ include('../../../layout/admin/parte1.php');
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="entrada_md">Entrada</label>
+                                                <label for="entrada_md">Cantidad Salida</label>
                                                 <input type="text" name="entrada_md" class="form-control" placeholder="Cantidad Entrada" required>
-                                                <input type="hidden" name="pitch3" value="<?php echo $pitch_unico['pitch']; ?>">
+                                                <!--<input type="hidden" name="pitch3" value="<?php echo $pitch_unico['pitch']; ?>">
                                                 <input type="hidden" name="marca_control3" value="<?php echo $marca_unica['marca_control']; ?>">
                                                 <input type="hidden" name="marca_fuente3" value="<?php echo $marca_fuente_unica['marca_fuente']; ?>">
                                                 <input type="hidden" name="serie_modulo3" value="<?php echo $serie['serie_modulo']; ?>">
                                                 <input type="hidden" name="serie_control3" value="<?php echo $control1['serie_control']; ?>">
-                                                <input type="hidden" name="modelo_fuente3" value="<?php echo $modelfuente['modelo_fuente']; ?>">
+                                                <input type="hidden" name="modelo_fuente3" value="<?php echo $modelfuente['modelo_fuente']; ?>">-->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-7" hidden>
+                                            <div class="form-group">
+                                                <label for="salida_md">Almacén Salida</label>
+                                                <select name="almacen_salida_md" id="almacen_salida_md" class="form-control" >
+                                                    <option value="">Almacén Origen</option>
+                                                    <?php 
+                                                    $query_almacen  = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes');
+                                                    $query_almacen->execute();
+                                                    $almacenes = $query_almacen->fetchAll(PDO::FETCH_ASSOC);
+                                                    foreach($almacenes as $almacen) {
+                                                        $selected = ($almacen['id_asignacion'] == 3) ? 'selected' : '';
+                                                        echo '<option value="' . $almacen['id_asignacion'] . '" ' . $selected . '>' . $almacen['nombre_almacen'] . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                                <input class="form-control" name="almacen_salida_md_id" id="almacen_salida_md_id" hidden>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" hidden>
+                                            <div class="form-group">
+                                                <label for="salida_md">Salida</label>
+                                                <input type="text" name="salida_md" class="form-control" placeholder="Cantidad Salida">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <div class="form-group">
+                                                <label for="op_destino">Asignar a:</label>
+                                                <input type="text" name="op_destino" class="form-control" placeholder="Asignar" required>
                                             </div>
                                         </div>
                                     </div>
@@ -626,10 +631,22 @@ document.addEventListener('DOMContentLoaded', function() {
     selectEntrada.addEventListener('change', verificarAlmacenes);
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+        // Obtener referencias a los campos de entrada y salida
+        const entradaMdInput = document.getElementsByName('entrada_md')[0];
+        const salidaMdInput = document.getElementsByName('salida_md')[0];
 
+        // Función para actualizar el campo de salida_md
+        function actualizarSalidaMd() {
+            salidaMdInput.value = entradaMdInput.value; // Establecer el mismo valor que entrada_md
+        }
+
+        // Escuchar cambios en el campo entrada_md y llamar a la función actualizarSalidaMd
+        entradaMdInput.addEventListener('input', actualizarSalidaMd);
+    });
 
 
 </script>
 
-<?php include('../../../layout/admin/parte2.php');?>
+<?php include('../../../../layout/admin/parte2.php');?>
 
