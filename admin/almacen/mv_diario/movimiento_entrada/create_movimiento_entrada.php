@@ -24,9 +24,9 @@ include('../../../../layout/admin/parte1.php');
                     Introduzca la información correspondiente
                 </div>
                 <div class="card-body">
-                    <form action="controller_create1.php" method="POST">
-                        <div class="row">
+                    <form action="controller_create.php" method="POST">
 
+                        <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="fecha">Fecha</label>
@@ -39,7 +39,6 @@ include('../../../../layout/admin/parte1.php');
                                     <input type="time" id="hora" name="hora" class="form-control" placeholder="Hora" readonly>
                                 </div>
                             </div>
-
                         </div>
 
                         <div class="row">
@@ -200,7 +199,13 @@ include('../../../../layout/admin/parte1.php');
                             </div>
                         </div>
 
-                        <div class="row">
+                        <style>
+                            .oculto {
+                                display: none;
+                            }
+                        </style>
+
+                        <div class="row oculto">
                             <div class="col-md-4 campo Control">
                                 <div class="form-group">
                                     <label for="pixel_maximo">Pixel Máximo</label>
@@ -221,7 +226,7 @@ include('../../../../layout/admin/parte1.php');
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row oculto">
                             <div class="col-md-4 campo Control">
                                 <div class="form-group">
                                     <label for="sim">SIM</label>
@@ -242,7 +247,7 @@ include('../../../../layout/admin/parte1.php');
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row oculto">
                             <div class="col-md-10 campo Control">
                                 <div class="form-group">
                                     <label for="descripcion">Descripción</label>
@@ -394,16 +399,16 @@ include('../../../../layout/admin/parte1.php');
                             </div>
 
                             <div class="col-md-6">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-10">
-                                                <div class="form-group">
-                                                    <label for="observacion">Observaciones</label>
-                                                    <textarea name="observacion" id="observacion" cols="30" rows="4" class="form-control" placeholder="Observaciones"></textarea>
-                                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <div class="form-group">
+                                                <label for="observacion">Observaciones</label>
+                                                <textarea name="observacion" id="observacion" cols="30" rows="4" class="form-control" placeholder="Observaciones"></textarea>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                             </div>
                         </div>
 
@@ -421,10 +426,10 @@ include('../../../../layout/admin/parte1.php');
                                 </div>
                             </div>
                         </div>
+
                     </form>
                 </div>
             </div>
-
         </div><!-- /.container-fluid -->
     </div>
 </div>

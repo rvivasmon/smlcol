@@ -32,7 +32,7 @@ include('../../../layout/admin/parte1.php');
 
                             <div class="card-tools ml-4">
                                 <div class="form-group">
-                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#movimientoModal">
+                                    <button type="button" class="btn" style="background-color: #20B2AA; color: white; border-color: #20B2AA;" data-toggle="modal" data-target="#movimientoModal">
                                         <i class="bi bi-plus-square"></i> Crear Nuevo Movimiento
                                     </button>
                                 </div>
@@ -66,37 +66,37 @@ include('../../../layout/admin/parte1.php');
                                                                 almacen_origen.nombre_almacen AS almacenes_origen,
                                                                 almacen_destino.nombre_almacen AS almacenes_destino,
                                                                 CASE
-                                                                    WHEN caracmod.id_car_mod IS NOT NULL THEN caracmod.pitch
-                                                                    WHEN caraccon.id_car_ctrl IS NOT NULL THEN caraccon.marca_control
-                                                                    WHEN caracfuen.id_car_fuen IS NOT NULL THEN caracfuen.marca_fuente
+                                                                    WHEN mvd.tipo_producto = 1 THEN caracmod.pitch
+                                                                    WHEN mvd.tipo_producto = 2 THEN caraccon.marca_control
+                                                                    WHEN mvd.tipo_producto = 3 THEN caracfuen.marca_fuente
                                                                     ELSE NULL
                                                                 END AS nombre_referencia_1,
                                                                 CASE
-                                                                    WHEN caracmodulos.id_car_mod IS NOT NULL THEN caracmodulos.serie_modulo
-                                                                    WHEN caraccontrol.id_referencia IS NOT NULL THEN caraccontrol.referencia
-                                                                    WHEN caracfuentes.id_referencias_fuentes IS NOT NULL THEN caracfuentes.modelo_fuente
+                                                                    WHEN mvd.tipo_producto = 1 THEN caracmodulos.serie_modulo
+                                                                    WHEN mvd.tipo_producto = 2 THEN caraccontrol.referencia
+                                                                    WHEN mvd.tipo_producto = 3 THEN caracfuentes.modelo_fuente
                                                                     ELSE NULL
                                                                 END AS nombre_referencia_2
-                                                                FROM
+                                                            FROM
                                                                 movimiento_diario AS mvd
-                                                                INNER JOIN
-                                                                t_productos AS productomovido ON mvd.producto = productomovido.id_producto
-                                                                INNER JOIN
+                                                            INNER JOIN
+                                                                t_productos AS productomovido ON mvd.tipo_producto = productomovido.id_producto
+                                                            INNER JOIN
                                                                 t_asignar_todos_almacenes AS almacen_origen ON mvd.almacen_origen1 = almacen_origen.id_asignacion
-                                                                INNER JOIN
+                                                            INNER JOIN
                                                                 t_asignar_todos_almacenes AS almacen_destino ON mvd.almacen_destino1 = almacen_destino.id_asignacion
-                                                                LEFT JOIN
-                                                                caracteristicas_modulos AS caracmod ON mvd.referencia_1 = caracmod.id_car_mod
-                                                                LEFT JOIN
-                                                                caracteristicas_control AS caraccon ON mvd.referencia_1 = caraccon.id_car_ctrl
-                                                                LEFT JOIN
-                                                                caracteristicas_fuentes AS caracfuen ON mvd.referencia_1 = caracfuen.id_car_fuen
-                                                                LEFT JOIN
-                                                                caracteristicas_modulos AS caracmodulos ON mvd.referencia_2 = caracmodulos.id_car_mod
-                                                                LEFT JOIN
-                                                                referencias_control AS caraccontrol ON mvd.referencia_2 = caraccontrol.id_referencia
-                                                                LEFT JOIN
-                                                                referencias_fuente AS caracfuentes ON mvd.referencia_2 = caracfuentes.id_referencias_fuentes
+                                                            LEFT JOIN
+                                                                caracteristicas_modulos AS caracmod ON mvd.referencia_1 = caracmod.id_car_mod AND mvd.tipo_producto = 1
+                                                            LEFT JOIN
+                                                                caracteristicas_control AS caraccon ON mvd.referencia_1 = caraccon.id_car_ctrl AND mvd.tipo_producto = 2
+                                                            LEFT JOIN
+                                                                caracteristicas_fuentes AS caracfuen ON mvd.referencia_1 = caracfuen.id_car_fuen AND mvd.tipo_producto = 3
+                                                            LEFT JOIN
+                                                                caracteristicas_modulos AS caracmodulos ON mvd.referencia_2 = caracmodulos.id_car_mod AND mvd.tipo_producto = 1
+                                                            LEFT JOIN
+                                                                referencias_control AS caraccontrol ON mvd.referencia_2 = caraccontrol.id_referencia AND mvd.tipo_producto = 2
+                                                            LEFT JOIN
+                                                                referencias_fuente AS caracfuentes ON mvd.referencia_2 = caracfuentes.id_referencias_fuentes AND mvd.tipo_producto = 3;
                                                                 ');
                                         $query->execute();
                                         $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -149,7 +149,7 @@ include('../../../layout/admin/parte1.php');
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entrada1/create_movimiento_entrada.php'">Movimiento de Entrada</button>
+                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entrada/create_movimiento_entrada.php'">Movimiento de Entrada</button>
                                                         <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_salida/create_movimiento_salida.php'">Movimiento de Salida</button>
                                                     </div>
                                                     <div class="modal-footer">

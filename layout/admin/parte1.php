@@ -221,7 +221,7 @@ foreach ($roles_permisos as $rol_permiso) {
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
-                          <i class="fa-solid fa-warehouse"></i>
+                            <i class="fa-solid fa-warehouse"></i>
                             <p>
                               ALMACÉN
                               <i class="right fas fa-angle-left"></i>
@@ -237,7 +237,7 @@ foreach ($roles_permisos as $rol_permiso) {
                                   <?php foreach ($almacenes as $almacen): ?>
                                       <li class="nav-item">
                                           <a href="#" class="nav-link">
-                                              <i class="far fa-circle nav-icon"></i>
+                                              <i class="nav-icon fas fa-circle"></i>
                                               <p><?php echo $almacen['nombre']; ?></p>
                                           </a>
                                           <ul class="nav nav-treeview">
@@ -261,7 +261,7 @@ foreach ($roles_permisos as $rol_permiso) {
                                                   ?>
                                                   <li class="nav-item">
                                                       <a href="<?php echo $url_producto; ?>" class="nav-link">
-                                                          <i class="far fa-circle nav-icon"></i>
+                                                          <i class="far fa-dot-circle nav-icon"></i>
                                                           <p><?php echo $producto['nombre']; ?></p>
                                                       </a>
                                                   </li>
@@ -284,9 +284,9 @@ foreach ($roles_permisos as $rol_permiso) {
                               </a>
                             </li>
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/producto/create_producto.php" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/almacen/inventario/" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Crear Producto </p>
+                                <p>Productos Creados</p>
                               </a>
                             </li>
                           </ul>

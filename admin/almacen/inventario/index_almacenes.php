@@ -61,7 +61,7 @@ include('../../../layout/admin/parte1.php');
                                         END AS nombre_producto
                                     FROM 
                                         alma_total AS at
-                                    INNER JOIN alma_principal AS ap ON at.producto_alma = ap.id_almacen_principal
+                                    INNER JOIN alma_principal AS ap ON at.producto = ap.id_almacen_principal
                                     ');
 
                                     $query->execute();

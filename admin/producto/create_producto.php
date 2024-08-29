@@ -372,7 +372,7 @@ include('../../layout/admin/parte1.php');
                                         <div class="col-md-3 campo Modulo">
                                             <div class="form-group">
                                                 <label for="pitch3">Pitch</label>
-                                                <input type="text" id="pitch3" name="pitch3" class="form-control" placeholder="Pitch" >
+                                                <input type="text" id="pitch3" name="pitch3" class="form-control" pattern="^[0-9].*" placeholder="Pitch" title="Debe comenzar con un número" />
                                             </div>
                                         </div>
                                     </div>

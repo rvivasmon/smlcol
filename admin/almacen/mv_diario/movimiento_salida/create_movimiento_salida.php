@@ -25,8 +25,8 @@ include('../../../../layout/admin/parte1.php');
                 </div>
                 <div class="card-body">
                     <form action="controller_create.php" method="POST">
-                        <div class="row">
 
+                        <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="fecha">Fecha</label>
@@ -39,7 +39,6 @@ include('../../../../layout/admin/parte1.php');
                                     <input type="time" id="hora" name="hora" class="form-control" placeholder="Hora" readonly>
                                 </div>
                             </div>
-
                         </div>
 
                         <div class="row">
@@ -69,265 +68,262 @@ include('../../../../layout/admin/parte1.php');
                             </div>
                         </div>
 
+                                    <!-- MODULO -->
+
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-3 campo Modulo">
                                 <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-2 campos Modulo2">
-                                            <div class="form-group">
-                                                <label for="pitch">Pitch</label>
-                                                <select name="pitch2" id="pitch2" class="form-control">
-                                                    <option value="">Seleccione un Pitch</option>
-                                                    <?php 
-                                                    $query_pitch = $pdo->prepare('SELECT alma_principal.id_almacen_principal, caracteristicas_modulos.pitch FROM alma_principal INNER JOIN caracteristicas_modulos ON alma_principal.pitch = caracteristicas_modulos.id_car_mod ORDER BY caracteristicas_modulos.pitch ASC');
-                                                    $query_pitch->execute();
-                                                    $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
-                                                    
-                                                    // Filtrar pitches únicos
-                                                    $pitches_unicos = [];
-                                                    $pitches_unicos_keys = [];
+                                    <label for="uso">Uso</label>
+                                    <select id="uso" name="uso" class="form-control">
+                                        <option value="">Seleccione un Uso</option>
+                                        <?php
+                                        // Obtener el valor del producto seleccionado
+                                        $categoria_id = 1; // Por defecto, seleccionamos el primero
+                                        $query_uso = $pdo->prepare('SELECT id_uso, producto_uso FROM t_uso_productos WHERE t_productos = :categoria_id AND producto_uso IS NOT NULL AND producto_uso != "" ORDER BY producto_uso ASC');
+                                        $query_uso->execute(['categoria_id' => $categoria_id]);
+                                        $usos = $query_uso->fetchAll(PDO::FETCH_ASSOC);
 
-                                                    foreach($pitches as $pitch) {
-                                                        if (!in_array($pitch['pitch'], $pitches_unicos)) {
-                                                            $pitches_unicos[] = $pitch['pitch'];
-                                                            $pitches_unicos_keys[] = $pitch;
-                                                        }
-                                                    }
-
-                                                    // Generar opciones únicas
-                                                    foreach($pitches_unicos_keys as $pitch_unico) {
-                                                        echo '<option value="' . $pitch_unico['id_almacen_principal'] . '">' . $pitch_unico['pitch'] . '</option>';
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 campos Modulo2">
-                                            <div class="form-group">
-                                                <label for="modelo_modulo1">Modelo</label>
-                                                <select name="modelo_modulo2" id="modelo_modulo2" class="form-control">
-                                                    <option value="">Seleccione un Modelo</option>
-                                                    <?php 
-                                                    $query_modelo = $pdo->prepare('SELECT alma_principal.id_almacen_principal, caracteristicas_modulos.modelo_modulo FROM alma_principal INNER JOIN caracteristicas_modulos ON alma_principal.modelo_modulo = caracteristicas_modulos.id_car_mod ORDER BY caracteristicas_modulos.modelo_modulo ASC');
-                                                    $query_modelo->execute();
-                                                    $modelos = $query_modelo->fetchAll(PDO::FETCH_ASSOC);
-
-                                                    // Filtrar modelos únicos
-                                                    $modelos_unicos = [];
-                                                    $modelos_unicos_keys = [];
-
-                                                    foreach($modelos as $modelo) {
-                                                        if (!in_array($modelo['modelo_modulo'], $modelos_unicos)) {
-                                                            $modelos_unicos[] = $modelo['modelo_modulo'];
-                                                            $modelos_unicos_keys[] = $modelo;
-                                                        }
-                                                    }
-
-                                                    // Generar opciones únicas
-                                                    foreach($modelos_unicos_keys as $modelo_unico) {
-                                                        echo '<option value="' . $modelo_unico['id_almacen_principal'] . '">' . $modelo_unico['modelo_modulo'] . '</option>';
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-4 campos Modulo2">
-                                            <div class="form-group">
-                                                <label for="serie_modulo">Serie</label>
-                                                <select name="serie_modulo2" id="serie_modulo2" class="form-control">
-                                                    <option value="">Seleccione la Serie</option>
-                                                    <?php
-                                                        $query_serie = $pdo->prepare('SELECT * FROM alma_principal WHERE serie_modulo IS NOT NULL AND serie_modulo != ""');
-                                                        $query_serie->execute();
-                                                        $series = $query_serie->fetchAll(PDO::FETCH_ASSOC);
-                                                        foreach($series as $serie) {
-                                                            $id_almacen_principal = $serie['id_almacen_principal'];
-                                                            $serie_modulo = $serie['serie_modulo'];
-                                                    ?>
-                                                            <option value="<?php echo $id_almacen_principal; ?>"><?php echo $serie_modulo; ?></option>
-                                                    <?php
-                                                        }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 campos Modulo2">
-                                            <div class="form-group">
-                                                <label for="referencia_modulo">Referencia</label>
-                                                <input type="text" name="referencia_modulo2" class="form-control" placeholder="Referencia">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-4 campos Control2">
-                                            <div class="form-group">
-                                                <label for="marca_control1">Marca</label>
-                                                <select name="marca_control2" id="marca_control2" class="form-control">
-                                                    <option value="">Seleccione una Marca</option>
-                                                    <?php 
-                                                    $query_marca_control = $pdo->prepare('SELECT alma_principal.id_almacen_principal, caracteristicas_control.marca_control FROM alma_principal INNER JOIN caracteristicas_control ON alma_principal.marca_control = caracteristicas_control.id_car_ctrl ORDER BY caracteristicas_control.marca_control ASC');
-                                                    $query_marca_control->execute();
-                                                    $marca_controles = $query_marca_control->fetchAll(PDO::FETCH_ASSOC);
-                                                    
-                                                    // Filtrar marcas únicas
-                                                    $marcas_unicas = [];
-                                                    $marcas_unicas_keys = [];
-
-                                                    foreach($marca_controles as $marca_control) {
-                                                        if (!in_array($marca_control['marca_control'], $marcas_unicas)) {
-                                                            $marcas_unicas[] = $marca_control['marca_control'];
-                                                            $marcas_unicas_keys[] = $marca_control;
-                                                        }
-                                                    }
-
-                                                    // Generar opciones únicas
-                                                    foreach($marcas_unicas_keys as $marca_unica) {
-                                                        echo '<option value="' . $marca_unica['id_almacen_principal'] . '">' . $marca_unica['marca_control'] . '</option>';
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 campos Control2">
-                                            <div class="form-group">
-                                                <label for="serie_control">Referencia</label>
-                                                <select name="serie_control2" id="serie_control2" class="form-control">
-                                                    <option value="">Seleccione la Referencia</option>
-                                                    <?php
-                                                        $query_control1 = $pdo->prepare('SELECT * FROM alma_principal WHERE serie_control IS NOT NULL AND serie_control != ""');
-                                                        $query_control1->execute();
-                                                        $controles = $query_control1->fetchAll(PDO::FETCH_ASSOC);
-                                                        foreach($controles as $control1) {
-                                                            $id_almacen_principal_control = $control1['id_almacen_principal'];
-                                                            $serie_control1 = $control1['serie_control'];
-                                                    ?>
-                                                            <option value="<?php echo $id_almacen_principal_control; ?>"><?php echo $serie_control1; ?></option>
-                                                    <?php
-                                                        }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 campos Control2">
-                                            <div class="form-group">
-                                                <label for="funcion_control">Función</label>
-                                                <select name="funcion_control2" id="funcion_control2" class="form-control">
-                                                    <option value="">Seleccione una Función</option>
-                                                    <?php 
-                                                    $query_funcion_control = $pdo->prepare('SELECT alma_principal.id_almacen_principal, caracteristicas_control.funcion_control FROM alma_principal INNER JOIN caracteristicas_control ON alma_principal.funcion_control = caracteristicas_control.id_car_ctrl ORDER BY caracteristicas_control.funcion_control ASC');
-                                                    $query_funcion_control->execute();
-                                                    $funcion_controles = $query_funcion_control->fetchAll(PDO::FETCH_ASSOC);
-
-                                                    // Filtrar funciones únicas
-                                                    $funciones_unicas = [];
-                                                    $funciones_unicas_keys = [];
-
-                                                    foreach($funcion_controles as $funcion_control) {
-                                                        if (!in_array($funcion_control['funcion_control'], $funciones_unicas)) {
-                                                            $funciones_unicas[] = $funcion_control['funcion_control'];
-                                                            $funciones_unicas_keys[] = $funcion_control;
-                                                        }
-                                                    }
-
-                                                    // Generar opciones únicas
-                                                    foreach($funciones_unicas_keys as $funcion_unica) {
-                                                        echo '<option value="' . $funcion_unica['id_almacen_principal'] . '">' . $funcion_unica['funcion_control'] . '</option>';
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-3 campos Fuente2">
-                                            <div class="form-group">
-                                                <label for="marca_fuente">Marca</label>
-                                                <select name="marca_fuente2" id="marca_fuente2" class="form-control">
-                                                    <option value="">Seleccione una Marca</option>
-                                                    <?php 
-                                                    $query_marca_fuente = $pdo->prepare('SELECT alma_principal.id_almacen_principal, caracteristicas_fuentes.marca_fuente FROM alma_principal INNER JOIN caracteristicas_fuentes ON alma_principal.marca_fuente = caracteristicas_fuentes.id_car_fuen ORDER BY caracteristicas_fuentes.marca_fuente ASC');
-                                                    $query_marca_fuente->execute();
-                                                    $marca_fuentes = $query_marca_fuente->fetchAll(PDO::FETCH_ASSOC);
-                                                    
-                                                    // Filtrar marcas únicas
-                                                    $marcas_fuente_unicas = [];
-                                                    $marcas_fuente_unicas_keys = [];
-
-                                                    foreach($marca_fuentes as $marca_fuente) {
-                                                        if (!in_array($marca_fuente['marca_fuente'], $marcas_fuente_unicas)) {
-                                                            $marcas_fuente_unicas[] = $marca_fuente['marca_fuente'];
-                                                            $marcas_fuente_unicas_keys[] = $marca_fuente;
-                                                        }
-                                                    }
-
-                                                    // Generar opciones únicas
-                                                    foreach($marcas_fuente_unicas_keys as $marca_fuente_unica) {
-                                                        echo '<option value="' . $marca_fuente_unica['id_almacen_principal'] . '">' . $marca_fuente_unica['marca_fuente'] . '</option>';
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3 campos Fuente2">
-                                            <div class="form-group">
-                                                <label for="modelo_fuente">Modelo</label>
-                                                <select name="modelo_fuente2" id="modelo_fuente2" class="form-control">
-                                                    <option value="">Seleccione el Modelo</option>
-                                                    <?php
-                                                        $query_modelfuente = $pdo->prepare('SELECT * FROM alma_principal WHERE modelo_fuente IS NOT NULL AND modelo_fuente != ""');
-                                                        $query_modelfuente->execute();
-                                                        $modelosfuentes = $query_modelfuente->fetchAll(PDO::FETCH_ASSOC);
-                                                        foreach($modelosfuentes as $modelfuente) {
-                                                            $id_principal_modelfuente = $modelfuente['id_almacen_principal'];
-                                                            $serie_modelfuente = $modelfuente['modelo_fuente'];
-                                                    ?>
-                                                            <option value="<?php echo $id_principal_modelfuente; ?>"><?php echo $serie_modelfuente; ?></option>
-                                                    <?php
-                                                        }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 campos Fuente2">
-                                            <div class="form-group">
-                                                <label for="tipo_fuente">Tipo</label>
-                                                <select name="tipo_fuente2" id="tipo_fuente2" class="form-control">
-                                                    <option value="">Seleccione un Tipo</option>
-                                                    <?php 
-                                                    $query_tipo_fuente  = $pdo->prepare('SELECT alma_principal.id_almacen_principal, caracteristicas_fuentes.tipo_fuente FROM alma_principal INNER JOIN caracteristicas_fuentes ON alma_principal.tipo_fuente = caracteristicas_fuentes.id_car_fuen ORDER BY caracteristicas_fuentes.tipo_fuente ASC');
-                                                    $query_tipo_fuente->execute();
-                                                    $tipo_fuentes = $query_tipo_fuente->fetchAll(PDO::FETCH_ASSOC);
-                                                    
-                                                    // Filtrar tipos únicos
-                                                    $tipos_fuente_unicos = [];
-                                                    $tipos_fuente_unicos_keys = [];
-
-                                                    foreach($tipo_fuentes as $tipo_fuente) {
-                                                        if (!in_array($tipo_fuente['tipo_fuente'], $tipos_fuente_unicos)) {
-                                                            $tipos_fuente_unicos[] = $tipo_fuente['tipo_fuente'];
-                                                            $tipos_fuente_unicos_keys[] = $tipo_fuente;
-                                                        }
-                                                    }
-
-                                                    // Generar opciones únicas
-                                                    foreach($tipos_fuente_unicos_keys as $tipo_fuente_unico) {
-                                                        echo '<option value="' . $tipo_fuente_unico['id_almacen_principal'] . '">' . $tipo_fuente_unico['tipo_fuente'] . '</option>';
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                        foreach ($usos as $uso): ?>
+                                            <option value="<?php echo htmlspecialchars($uso['id_uso']); ?>">
+                                                <?php echo htmlspecialchars($uso['producto_uso']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 campo Modulo">
+                                <div class="form-group">
+                                    <label for="modelo_modulo1">Modelo</label>
+                                    <select id="modelo_modulo1" name="modelo_modulo1" class="form-control">
+                                        <option value="">Seleccione un modelo</option>
+                                        <?php
+                                        $query_modelo = $pdo->prepare('SELECT id, modelo_modulo FROM t_tipo_producto WHERE modelo_modulo IS NOT NULL AND modelo_modulo != "" ORDER BY modelo_modulo ASC');
+                                        $query_modelo->execute();
+                                        $modelos = $query_modelo->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($modelos as $modelo): ?>
+                                            <option value="<?php echo $modelo['id']; ?>">
+                                                <?php echo $modelo['modelo_modulo']; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 campo Modulo">
+                                <div class="form-group">
+                                    <label for="pitch">Pitch</label>
+                                    <select id="pitch" name="pitch" class="form-control">
+                                        <option value="">Seleccione un pitch</option>
+                                        <!-- Opciones dinámicas se añadirán aquí -->
+                                    </select>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-2 campo Modulo">
+                                <div class="form-group">
+                                    <label for="medida_x">Tamaño X</label>
+                                    <input type="text" id="medida_x" name="medida_x" class="form-control" placeholder="Tamaño X" >
+                                </div>
+                            </div>
+                            <div class="col-md-2 campo Modulo">
+                                <div class="form-group">
+                                    <label for="medida_y">Tamaño Y</label>
+                                    <input type="text" id="medida_y" name="medida_y" class="form-control" placeholder="Tamaño Y" >
+                                </div>
+                            </div>
+                            <div class="col-md-2 campo Modulo">
+                                <div class="form-group">
+                                    <label for="pixel_x">Pixel X</label>
+                                    <input type="text" id="pixel_x" name="pixel_x" class="form-control" placeholder="Pixel X" >
+                                </div>
+                            </div>
+                            <div class="col-md-2 campo Modulo">
+                                <div class="form-group">
+                                    <label for="pixel_y">Pixel Y</label>
+                                    <input type="text" id="pixel_y" name="pixel_y" class="form-control" placeholder="Pixel Y" >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 campo Modulo">
+                                <div class="form-group">
+                                    <label for="serie_modulo">Serie Modulo</label>
+                                    <input type="text" id="serie_modulo" name="serie_modulo" class="form-control" placeholder="Serie Módulo" >
+                                </div>
+                            </div>
+                            <div class="col-md-4 campo Modulo">
+                                <div class="form-group">
+                                    <label for="referencia_modulo">Referencia Módulo</label>
+                                    <input type="text" id="referencia_modulo" name="referencia_modulo" class="form-control" placeholder="Referencia Módulo" >
+                                </div>
+                            </div>
+                        </div>
+
+                                    <!-- CONTROLADORA -->
+
+                        <div class="row">
+                            <div class="col-md-8 campo Control">
+                                <div class="form-group">
+                                    <label for="marca_control">Marca</label>
+                                    <select id="marca_control" name="marca_control" class="form-control" >
+                                        <option value="">Seleccione una marca</option>
+                                        <!-- Opciones dinámicas -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8 campo Control">
+                                <div class="form-group">
+                                    <label for="funcion_control">Función</label>
+                                    <select id="funcion_control" name="funcion_control" class="form-control" >
+                                        <option value="">Seleccione una función</option>
+                                        <!-- Opciones dinámicas -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8 campo Control">
+                                <div class="form-group">
+                                    <label for="referencia_control">Referencia</label>
+                                    <select id="referencia_control" name="referencia_control" class="form-control" >
+                                        <option value="">Seleccione una referencia</option>
+                                        <!-- Opciones dinámicas -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <style>
+                            .oculto {
+                                display: none;
+                            }
+                        </style>
+
+                        <div class="row oculto">
+                            <div class="col-md-4 campo Control">
+                                <div class="form-group">
+                                    <label for="pixel_maximo">Pixel Máximo</label>
+                                    <input type="text" id="pixel_maximo" name="pixel_maximo" class="form-control" placeholder="Pixel Máximo" >
+                                </div>
+                            </div>
+                            <div class="col-md-4 campo Control">
+                                <div class="form-group">
+                                    <label for="pixel_x_maximo">Pixel X Máximo</label>
+                                    <input type="text" id="pixel_x_maximo" name="pixel_x_maximo" class="form-control" placeholder="Pixel X Máximo" >
+                                </div>
+                            </div>
+                            <div class="col-md-4 campo Control">
+                                <div class="form-group">
+                                    <label for="pixel_y_maximo">Pixel Y Máximo</label>
+                                    <input type="text" id="pixel_y_maximo" name="pixel_y_maximo" class="form-control" placeholder="Pixel Y Máximo" >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row oculto">
+                            <div class="col-md-4 campo Control">
+                                <div class="form-group">
+                                    <label for="sim">SIM</label>
+                                    <input type="text" id="sim" name="sim" class="form-control" placeholder="SIM" >
+                                </div>
+                            </div>
+                            <div class="col-md-4 campo Control">
+                                <div class="form-group">
+                                    <label for="puertos">Puertos</label>
+                                    <input type="text" id="puertos" name="puertos" class="form-control" placeholder="Puertos" >
+                                </div>
+                            </div>
+                            <div class="col-md-4 campo Control">
+                                <div class="form-group">
+                                    <label for="pixel_x_puerto">Pixel x Puerto</label>
+                                    <input type="text" id="pixel_x_puerto" name="pixel_x_puerto" class="form-control" placeholder="Pixel x Puerto" >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row oculto">
+                            <div class="col-md-10 campo Control">
+                                <div class="form-group">
+                                    <label for="descripcion">Descripción</label>
+                                    <input type="text" id="descripcion" name="descripcion" class="form-control" placeholder="Descripcion" >
+                                </div>
+                            </div>
+                        </div>
+
+                                    <!-- FUENTE -->
+
+                        <div class="row">
+                            <div class="col-md-6 campo Fuente">
+                                <div class="form-group">
+                                    <label for="marca_fuente">Marca</label>
+                                    <select name="marca_fuente" id="marca_fuente" class="form-control">
+                                        <option value="">Seleccione una Marca</option>
+                                        <!-- Opciones dinámicas -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 campo Fuente">
+                                <div class="form-group">
+                                    <label for="tipo_fuente">Tipo</label>
+                                    <select name="tipo_fuente" id="tipo_fuente" class="form-control">
+                                        <option value="">Seleccione un Tipo</option>
+                                        <!-- Opciones dinámicas -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 campo Fuente">
+                                <div class="form-group">
+                                    <label for="modelo_fuente">Modelo</label>
+                                    <select name="modelo_fuente" id="modelo_fuente" class="form-control">
+                                        <option value="">Seleccione un Modelo</option>
+                                        <!-- Opciones dinámicas -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 campo Fuente">
+                                <div class="form-group">
+                                    <label for="voltaje_fuente">Voltaje</label>
+                                    <select name="voltaje_fuente" id="voltaje_fuente" class="form-control">
+                                        <option value="">Seleccione el voltaje</option>
+                                        <!-- Opciones dinámicas -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                                    <!-- LCD -->
+
+                        <div class="row">
+                            <div class="col-md-3 campo LCD">
+                                <div class="form-group">
+                                    <label for="marca_lcd">Marca</label>
+                                    <input type="text" id="marca_lcd" name="marca_lcd" class="form-control" placeholder="Marca">
+                                </div>
+                            </div>
+                            <div class="col-md-3 campo LCD">
+                                <div class="form-group">
+                                    <label for="modelo_lcd">Modelo</label>
+                                    <input type="text" id="modelo_lcd" name="modelo_lcd" class="form-control" placeholder="Modelo">
+                                </div>
+                            </div>
+                        </div>
+
+                                    <!-- ALMACEN -->
 
                         <div class="row">
                             <div class="col-md-6">
@@ -358,12 +354,6 @@ include('../../../../layout/admin/parte1.php');
                                             <div class="form-group">
                                                 <label for="entrada_md">Cantidad Salida</label>
                                                 <input type="text" name="entrada_md" class="form-control" placeholder="Cantidad Entrada" required>
-                                                <!--<input type="hidden" name="pitch3" value="<?php echo $pitch_unico['pitch']; ?>">
-                                                <input type="hidden" name="marca_control3" value="<?php echo $marca_unica['marca_control']; ?>">
-                                                <input type="hidden" name="marca_fuente3" value="<?php echo $marca_fuente_unica['marca_fuente']; ?>">
-                                                <input type="hidden" name="serie_modulo3" value="<?php echo $serie['serie_modulo']; ?>">
-                                                <input type="hidden" name="serie_control3" value="<?php echo $control1['serie_control']; ?>">
-                                                <input type="hidden" name="modelo_fuente3" value="<?php echo $modelfuente['modelo_fuente']; ?>">-->
                                             </div>
                                         </div>
                                     </div>
@@ -438,44 +428,13 @@ include('../../../../layout/admin/parte1.php');
                     </form>
                 </div>
             </div>
-
         </div><!-- /.container-fluid -->
     </div>
 </div>
 
+<?php include('../../../../layout/admin/parte2.php');?>
+
 <script>
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Ocultar campos inicialmente
-    const camposModulo = document.querySelectorAll('.campos.Modulo2');
-    const camposControl = document.querySelectorAll('.campos.Control2');
-    const camposFuente = document.querySelectorAll('.campos.Fuente2');
-
-    // Inicialmente ocultar todos los campos
-    camposModulo.forEach(campo => campo.style.display = 'none');
-    camposControl.forEach(campo => campo.style.display = 'none');
-    camposFuente.forEach(campo => campo.style.display = 'none');
-
-    // Mostrar/ocultar campos según la categoría seleccionada
-    const selectProducto = document.getElementById('producto2');
-    selectProducto.addEventListener('change', function() {
-        const categoriaSeleccionada = this.options[this.selectedIndex].text;
-
-        // Ocultar todos los campos
-        camposModulo.forEach(campo => campo.style.display = 'none');
-        camposControl.forEach(campo => campo.style.display = 'none');
-        camposFuente.forEach(campo => campo.style.display = 'none');
-
-        // Mostrar los campos correspondientes según la categoría seleccionada
-        if (categoriaSeleccionada.includes('Control')) {
-            camposControl.forEach(campo => campo.style.display = 'block');
-        } else if (categoriaSeleccionada.includes('Módulo')) {
-            camposModulo.forEach(campo => campo.style.display = 'block');
-        } else if (categoriaSeleccionada.includes('Fuente')) {
-            camposFuente.forEach(campo => campo.style.display = 'block');
-        }
-    });
-
     // Obtener la fecha actual en el formato yyyy-mm-dd
     var today = new Date().toISOString().split('T')[0];
     // Establecer el valor del campo de fecha
@@ -487,7 +446,53 @@ document.addEventListener('DOMContentLoaded', function() {
     var minutes = String(now.getMinutes()).padStart(2, '0');
     var currentTime = hours + ':' + minutes;
     document.getElementById('hora').value = currentTime;
-});
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ocultar todos los campos al cargar la página
+        var campos = document.querySelectorAll('.campo');
+        campos.forEach(function(campo) {
+            campo.style.display = 'none';
+        });
+
+        // Llamar a la función cuando el campo de producto cambia
+        document.getElementById('producto').addEventListener('change', function() {
+            actualizarCampos();
+        });
+
+        // Función para mostrar/ocultar campos según el producto seleccionado
+        function actualizarCampos() {
+            var producto = document.getElementById('producto').value.toLowerCase().trim();
+            var campos = document.querySelectorAll('.campo');
+            
+            // Ocultar todos los campos
+            campos.forEach(function(campo) {
+                campo.style.display = 'none';
+            });
+
+            // Mostrar campos según el producto seleccionado
+            if (producto === "1") {
+                mostrarCampos('Modulo');
+            } else if (producto === "2") {
+                mostrarCampos('Control');
+            } else if (producto === "3") {
+                mostrarCampos('Fuente');
+            } else if (producto === "4") {
+                mostrarCampos('LCD');
+            } else if (producto === "5") {
+                mostrarCampos('Accesorios');
+            }
+        }
+
+        function mostrarCampos(clase) {
+            var campos = document.querySelectorAll('.' + clase);
+            campos.forEach(function(campo) {
+                campo.style.display = 'block';
+            });
+        }
+    });
+</script>
+
+<script>
 
 //visualizar los id de almacen
 document.addEventListener('DOMContentLoaded', function() {
@@ -505,116 +510,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// visualizar el campo categoria
 document.addEventListener('DOMContentLoaded', function() {
-        // Función para actualizar el valor del campo del ID del producto seleccionado
-        function actualizarIdProductoSeleccionado() {
-            const selectProducto = document.getElementById('producto2');
-            const idProductoSeleccionado = selectProducto.value; // Obtener el valor del option seleccionado
-            document.getElementById('id_producto_seleccionado').value = idProductoSeleccionado;
-        }
-
-        // Evento para actualizar el ID del producto seleccionado cuando cambia el producto
-        const selectProducto = document.getElementById('producto2');
-        selectProducto.addEventListener('change', actualizarIdProductoSeleccionado);
-
-        // Llama a la función inicialmente para establecer el valor correcto
-        actualizarIdProductoSeleccionado();
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-    const selectProducto = document.getElementById('producto2');
-    const pitchInput = document.getElementsByName('pitch3')[0];
-    const marcaControlInput = document.getElementsByName('marca_control3')[0];
-    const marcaFuenteInput = document.getElementsByName('marca_fuente3')[0];
-    const serieModuloInput = document.getElementsByName('serie_modulo3')[0];
-    const serieControlInput = document.getElementsByName('serie_control3')[0];
-    const modeloFuenteInput = document.getElementsByName('modelo_fuente3')[0];
-
-    // Función para actualizar los campos de acuerdo al producto seleccionado
-    function actualizarCamposProducto() {
-        // Obtener el valor seleccionado del producto
-        const productoSeleccionado = selectProducto.options[selectProducto.selectedIndex].text;
-
-        // Actualizar los valores de los campos según el producto seleccionado
-        if (productoSeleccionado.includes('Módulo')) {
-            pitchInput.value = document.getElementById('pitch2').options[document.getElementById('pitch2').selectedIndex].text;
-            serieModuloInput.value = document.getElementById('serie_modulo2').options[document.getElementById('serie_modulo2').selectedIndex].text;
-            marcaControlInput.value = '';
-            marcaFuenteInput.value = '';
-            serieControlInput.value = '';
-            modeloFuenteInput.value = '';
-        } else if (productoSeleccionado.includes('Control')) {
-            pitchInput.value = '';
-            serieModuloInput.value = '';
-            marcaControlInput.value = document.getElementById('marca_control2').options[document.getElementById('marca_control2').selectedIndex].text;
-            serieControlInput.value = document.getElementById('serie_control2').options[document.getElementById('serie_control2').selectedIndex].text;
-            marcaFuenteInput.value = '';
-            modeloFuenteInput.value = '';
-        } else if (productoSeleccionado.includes('Fuente')) {
-            pitchInput.value = '';
-            serieModuloInput.value = '';
-            marcaControlInput.value = '';
-            serieControlInput.value = '';
-            marcaFuenteInput.value = document.getElementById('marca_fuente2').options[document.getElementById('marca_fuente2').selectedIndex].text;
-            modeloFuenteInput.value = document.getElementById('modelo_fuente2').options[document.getElementById('modelo_fuente2').selectedIndex].text;
-        } else {
-            // Si no se selecciona ningún producto, establecer todos los campos en blanco
-            pitchInput.value = '';
-            serieModuloInput.value = '';
-            marcaControlInput.value = '';
-            serieControlInput.value = '';
-            marcaFuenteInput.value = '';
-            modeloFuenteInput.value = '';
-        }
-    }
-
-    // Escuchar cambios en el select de producto y actualizar los campos
-    selectProducto.addEventListener('change', actualizarCamposProducto);
-
-    // Escuchar cambios en el select de pitch y actualizar el campo correspondiente
-    const selectPitch = document.getElementById('pitch2');
-    selectPitch.addEventListener('change', function() {
-        pitchInput.value = selectPitch.options[selectPitch.selectedIndex].text;
-    });
-
-    // Escuchar cambios en el select de marca de control y actualizar el campo correspondiente
-    const selectMarcaControl = document.getElementById('marca_control2');
-    selectMarcaControl.addEventListener('change', function() {
-        marcaControlInput.value = selectMarcaControl.options[selectMarcaControl.selectedIndex].text;
-    });
-
-    // Escuchar cambios en el select de marca de fuente y actualizar el campo correspondiente
-    const selectMarcaFuente = document.getElementById('marca_fuente2');
-    selectMarcaFuente.addEventListener('change', function() {
-        marcaFuenteInput.value = selectMarcaFuente.options[selectMarcaFuente.selectedIndex].text;
-    });
-
-    // Escuchar cambios en el select de marca de fuente y actualizar el campo correspondiente
-    const selectSerieModulo = document.getElementById('serie_modulo2');
-    selectSerieModulo.addEventListener('change', function() {
-        serieModuloInput.value = selectSerieModulo.options[selectSerieModulo.selectedIndex].text;
-    });
-
-    // Escuchar cambios en el select de marca de fuente y actualizar el campo correspondiente
-    const selectSerieControl = document.getElementById('serie_control2');
-    selectSerieControl.addEventListener('change', function() {
-        serieControlInput.value = selectSerieControl.options[selectSerieControl.selectedIndex].text;
-    });
-
-    // Escuchar cambios en el select de marca de fuente y actualizar el campo correspondiente
-    const selectModeloFuente = document.getElementById('modelo_fuente2');
-    selectModeloFuente.addEventListener('change', function() {
-        modeloFuenteInput.value = selectModeloFuente.options[selectModeloFuente.selectedIndex].text;
-    });
-
-    // Llamar a la función inicialmente para establecer los valores correctos
-    actualizarCamposProducto();
-});
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Tu código existente...
 
     // Agregar funcionalidad para verificar si Almacén Origen y Almacén Destino son iguales
     const selectSalida = document.getElementById('almacen_salida_md');
@@ -632,21 +528,471 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-        // Obtener referencias a los campos de entrada y salida
-        const entradaMdInput = document.getElementsByName('entrada_md')[0];
-        const salidaMdInput = document.getElementsByName('salida_md')[0];
+    // Obtener referencias a los campos de entrada y salida
+    const salidaMdInput = document.getElementsByName('salida_md')[0];
+    const entradaMdInput = document.getElementsByName('entrada_md')[0];
 
-        // Función para actualizar el campo de salida_md
-        function actualizarSalidaMd() {
-            salidaMdInput.value = entradaMdInput.value; // Establecer el mismo valor que entrada_md
+    // Función para actualizar el campo entrada_md
+    function actualizarEntradaMd() {
+        entradaMdInput.value = salidaMdInput.value; // Establecer el mismo valor que salida_md
+    }
+
+    // Escuchar cambios en el campo salida_md y llamar a la función actualizarEntradaMd
+    salidaMdInput.addEventListener('input', actualizarEntradaMd);
+});
+</script>
+
+    <!--    MÓDULOS     -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const usoSelect = document.getElementById('uso');
+        const modeloSelect = document.getElementById('modelo_modulo1');
+        const pitchSelect = document.getElementById('pitch');
+        const medidaX = document.getElementById('medida_x');
+        const medidaY = document.getElementById('medida_y');
+        const pixelX = document.getElementById('pixel_x');
+        const pixelY = document.getElementById('pixel_y');
+        const serieModulo = document.getElementById('serie_modulo');
+        const referenciaModulo = document.getElementById('referencia_modulo');
+
+    // Evento para cambiar el uso
+    usoSelect.addEventListener('change', function () {
+        const usoId = this.value;
+
+        // Limpiar los campos dependientes
+        modeloSelect.innerHTML = '<option value="">Seleccione un modelo</option>';
+            pitchSelect.innerHTML = '<option value="">Seleccione un pitch</option>';
+            medidaX.value = '';
+            medidaY.value = '';
+            pixelX.value = '';
+            pixelY.value = '';
+            serieModulo.value = '';
+            referenciaModulo.value = '';
+
+        if (usoId) {
+            fetch(`fetch_modelo.php?uso=${usoId}`)
+                .then(response => response.json())
+                .then(data => {
+                    modeloSelect.innerHTML = '<option value="">Seleccione un modelo</option>';
+                    data.forEach(modelo => {
+                        const option = document.createElement('option');
+                        option.value = modelo.id;
+                        option.textContent = modelo.modelo_modulo;
+                        modeloSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error al obtener modelos:', error));
+        } else {
+            modeloSelect.innerHTML = '<option value="">Seleccione un modelo</option>';
         }
-
-        // Escuchar cambios en el campo entrada_md y llamar a la función actualizarSalidaMd
-        entradaMdInput.addEventListener('input', actualizarSalidaMd);
     });
+
+    // Evento para cambiar el modelo
+    modeloSelect.addEventListener('change', function () {
+        const modeloId = this.value;
+
+         // Limpiar los campos dependientes
+            pitchSelect.innerHTML = '<option value="">Seleccione un pitch</option>';
+            medidaX.value = '';
+            medidaY.value = '';
+            pixelX.value = '';
+            pixelY.value = '';
+            serieModulo.value = '';
+            referenciaModulo.value = '';
+
+        if (modeloId) {
+            fetch(`fetch_pitch.php?modelo=${modeloId}`)
+                .then(response => response.json())
+                .then(data => {
+                    pitchSelect.innerHTML = '<option value="">Seleccione un pitch</option>';
+                    data.forEach(pitch => {
+                        const option = document.createElement('option');
+                        option.value = pitch.id_car_mod;
+                        option.textContent = pitch.pitch;
+                        pitchSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error al obtener pitch:', error));
+        } else {
+            pitchSelect.innerHTML = '<option value="">Seleccione un pitch</option>';
+        }
+    });
+
+    // Evento para cambiar el pitch
+    pitchSelect.addEventListener('change', function () {
+    const pitchValue = this.value;
+
+    if (pitchValue) {
+        fetch(`fetch_medidas.php?pitch=${pitchValue}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    document.getElementById('medida_x').value = data[0].medida_x;
+                    document.getElementById('medida_y').value = data[0].medida_y;
+                    document.getElementById('pixel_x').value = data[0].pixel_x;
+                    document.getElementById('pixel_y').value = data[0].pixel_y;
+                    document.getElementById('serie_modulo').value = data[0].serie_modulo;
+                    document.getElementById('referencia_modulo').value = data[0].referencia_modulo;
+                }
+            })
+            .catch(error => console.error('Error al obtener medidas:', error));
+    } else {
+        document.getElementById('medida_x').value = '';
+        document.getElementById('medida_y').value = '';
+        document.getElementById('pixel_x').value = '';
+        document.getElementById('pixel_y').value = '';
+        document.getElementById('serie_modulo').value = '';
+        document.getElementById('referencia_modulo').value = '';
+        }
+    });
+});
+
 
 
 </script>
 
-<?php include('../../../../layout/admin/parte2.php');?>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const usoSelect = document.getElementById('uso');
+    const modeloSelect = document.getElementById('modelo_modulo1');
+    const pitchSelect = document.getElementById('pitch');
+    const productoSelect = document.getElementById('producto'); // Agregar referencia al campo "producto"
+    
+    
+    const uso3Field = document.getElementById('uso3');
+    const modeloModulo3Field = document.getElementById('modelo_modulo3');
+    const pitch3Field = document.getElementById('pitch3');
+    const medidaX3Field = document.getElementById('medida_x3');
+    const medidaY3Field = document.getElementById('medida_y3');
+    const pixelX3Field = document.getElementById('pixel_x3');
+    const pixelY3Field = document.getElementById('pixel_y3');
+    const serieModulo3Field = document.getElementById('serie_modulo3');
+    const referenciaModulo3Field = document.getElementById('referencia_modulo3');
 
+    function actualizarCampos() {
+        console.log('Valor de productoSelect:', productoSelect.value); // Debug: Verifica el valor seleccionado
+        if (productoSelect === "1" || productoSelect === "Modulo") {
+            // Si se selecciona "1" o "Módulo" en el campo "producto", deshabilitar todos los campos excepto uso3Field
+            uso3Field.disabled = false;
+            modeloModulo3Field.disabled = true;
+            pitch3Field.disabled = true;
+            medidaX3Field.disabled = true;
+            medidaY3Field.disabled = true;
+            pixelX3Field.disabled = true;
+            pixelY3Field.disabled = true;
+            serieModulo3Field.disabled = true;
+            referenciaModulo3Field.disabled = true;
+        } else if (usoSelect.value) {
+            // Deshabilitar todos los campos excepto modelo_modulo3
+            uso3Field.disabled = true;
+            pitch3Field.disabled = true;
+            medidaX3Field.disabled = true;
+            medidaY3Field.disabled = true;
+            pixelX3Field.disabled = true;
+            pixelY3Field.disabled = true;
+            serieModulo3Field.disabled = true;
+            referenciaModulo3Field.disabled = true;
+            modeloModulo3Field.disabled = false;
+
+            if (modeloSelect.value) {
+                // Si se selecciona uso y modelo_modulo1, habilitar pitch3 y medidas/píxeles
+                modeloModulo3Field.disabled = true;
+                pitch3Field.disabled = false;
+                medidaX3Field.disabled = false;
+                medidaY3Field.disabled = false;
+                pixelX3Field.disabled = false;
+                pixelY3Field.disabled = false;
+                serieModulo3Field.disabled = false;
+                referenciaModulo3Field.disabled = false;
+
+                if (pitchSelect.value) {
+                    // Si se selecciona pitch, deshabilitar pitch3 y dejar habilitadas medidas y píxeles
+                    pitch3Field.disabled = true;
+                }
+            }
+        } else {
+            // Si no se selecciona uso, habilitar todos los campos
+            uso3Field.disabled = false;
+            modeloModulo3Field.disabled = false;
+            pitch3Field.disabled = false;
+            medidaX3Field.disabled = false;
+            medidaY3Field.disabled = false;
+            pixelX3Field.disabled = false;
+            pixelY3Field.disabled = false;
+            serieModulo3Field.disabled = false;
+            referenciaModulo3Field.disabled = false;
+        }
+    }
+
+    // Llamar a la función al cambiar cualquiera de los tres campos
+    usoSelect.addEventListener('change', actualizarCampos);
+    modeloSelect.addEventListener('change', actualizarCampos);
+    pitchSelect.addEventListener('change', actualizarCampos);
+    
+    // Ejecutar la función al cargar la página para establecer el estado inicial
+    actualizarCampos();
+});
+</script>
+
+    <!--    CONTROLADORAS   -->
+
+<script>
+    document.getElementById('producto').addEventListener('change', function() {
+        const producto = this.value;
+        
+        if (producto == 2) { // Si selecciona "Controladora"
+            cargarMarcas();
+            document.getElementById('marca_control').disabled = false;
+        } else {
+            document.getElementById('marca_control').disabled = true;
+            document.getElementById('funcion_control').disabled = true;
+            document.getElementById('referencia_control').disabled = true;
+
+            // Limpia los campos
+            document.getElementById('marca_control').innerHTML = '<option value="">Seleccionar...</option>';
+            document.getElementById('funcion_control').innerHTML = '<option value="">Seleccionar...</option>';
+            document.getElementById('referencia_control').innerHTML = '<option value="">Seleccionar...</option>';
+        }
+    });
+
+    document.getElementById('marca_control').addEventListener('change', function() {
+        const id_car_ctrl = this.value;
+        // Limpia los campos
+        document.getElementById('funcion_control').innerHTML = '<option value="">Seleccionar...</option>';
+        document.getElementById('referencia_control').innerHTML = '<option value="">Seleccionar...</option>';
+        cargarFunciones(id_car_ctrl);
+        document.getElementById('funcion_control').disabled = false;
+    });
+
+    document.getElementById('funcion_control').addEventListener('change', function() {
+        const funcion = this.value;
+        cargarReferencias(funcion);
+        document.getElementById('referencia_control').disabled = false;
+    });
+
+    function cargarMarcas() {
+        fetch('cargar_marcas.php')
+            .then(response => response.json())
+            .then(data => {
+                let select = document.getElementById('marca_control');
+                select.innerHTML = '<option value="">Seleccionar...</option>';
+                data.forEach(marca => {
+                    select.innerHTML += `<option value="${marca.id_car_ctrl}">${marca.marca_control}</option>`;
+                });
+            });
+    }
+
+    function cargarFunciones(id_car_ctrl) {
+        fetch(`cargar_funciones.php?id_car_ctrl=${id_car_ctrl}`)
+            .then(response => response.json())
+            .then(data => {
+                let select = document.getElementById('funcion_control');
+                select.innerHTML = '<option value="">Seleccionar...</option>';
+                data.forEach(funcion => {
+                    select.innerHTML += `<option value="${funcion.id_car_ctrl}">${funcion.funcion_control}</option>`;
+                });
+            });
+    }
+
+    document.getElementById('funcion_control').addEventListener('change', function() {
+    const funcion = this.value;
+    const marca = document.getElementById('marca_control').value;
+
+    // Limpia los campos
+    document.getElementById('referencia_control').innerHTML = '<option value="">Seleccionar...</option>';
+    document.getElementById('sim').value = '';
+    document.getElementById('descripcion').value = '';
+    document.getElementById('puertos').value = '';
+    document.getElementById('pixel_maximo').value = '';
+    document.getElementById('pixel_x_maximo').value = '';
+    document.getElementById('pixel_y_maximo').value = '';
+    document.getElementById('pixel_x_puerto').value = '';
+
+    cargarReferencias(marca, funcion);
+    document.getElementById('referencia_control').disabled = false;
+});
+
+function cargarReferencias(marca, funcion) {
+    fetch(`cargar_referencias.php?marca=${marca}&funcion=${funcion}`)
+        .then(response => response.json())
+        .then(data => {
+            let select = document.getElementById('referencia_control');
+            select.innerHTML = '<option value="">Seleccionar...</option>';
+            data.forEach(referencia => {
+                select.innerHTML += `<option value="${referencia.id_referencia}">${referencia.referencia}</option>`;
+            });
+        });
+}
+
+// Añadir un event listener al campo 'referencia_control'
+document.getElementById('referencia_control').addEventListener('change', function() {
+    const idReferencia = this.value;
+    cargarDetalles(idReferencia);
+});
+
+function cargarDetalles(idReferencia) {
+    fetch(`cargar_detalles.php?id_referencia=${idReferencia}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);  // Depuración
+            // Llenar los campos con los datos correspondientes
+            document.getElementById('sim').value = data.sim;
+            document.getElementById('descripcion').value = data.descripcion;
+            document.getElementById('puertos').value = data.puertos;
+            document.getElementById('pixel_maximo').value = data.pixel_max;
+            document.getElementById('pixel_x_maximo').value = data.pixel_x_max;
+            document.getElementById('pixel_y_maximo').value = data.pixel_y_max;
+            document.getElementById('pixel_x_puerto').value = data.px_x_puerto;
+        });
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Obtener los elementos
+    const productoSelect = document.getElementById('producto');
+    const marcaControl = document.getElementById('marca_control');
+    const funcionControl = document.getElementById('funcion_control');
+    const referenciaControl = document.getElementById('referencia_control');
+
+    const marcaControl3 = document.getElementById('marca_control3');
+    const funcionControl3 = document.getElementById('funcion_control3');
+    const referenciaControl3 = document.getElementById('referencia_control3');
+    const pixelMaximo3 = document.getElementById('pixel_maximo3');
+    const pixelXMaximo3 = document.getElementById('pixel_x_maximo3');
+    const pixelYMaximo3 = document.getElementById('pixel_y_maximo3');
+    const sim3 = document.getElementById('sim3');
+    const puertos3 = document.getElementById('puertos3');
+    const pixelXPuerto3 = document.getElementById('pixel_x_puerto3');
+    const descripcion3 = document.getElementById('descripcion3');
+
+    // Agregar eventos para actualizar los campos al cambiar las selecciones
+    productoSelect.addEventListener('change', actualizarCampos);
+    marcaControl.addEventListener('change', actualizarCampos);
+    funcionControl.addEventListener('change', actualizarCampos);
+    referenciaControl.addEventListener('change', actualizarCampos);
+
+    // Ejecutar la función al cargar la página para establecer el estado inicial
+    actualizarCampos();
+});
+</script>
+
+    <!--    FUENTES     -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Obtener los elementos
+    const productoSelect = document.getElementById('producto');
+    const marcaFuenteSelect = document.getElementById('marca_fuente');
+    const tipoFuenteSelect = document.getElementById('tipo_fuente');
+    const modeloFuenteSelect = document.getElementById('modelo_fuente');
+    const voltajeFuenteSelect = document.getElementById('voltaje_fuente');
+    
+    const marcaFuente3 = document.getElementById('marca_fuente');
+    const tipoFuente3 = document.getElementById('tipo_fuente');
+    const modeloFuente3 = document.getElementById('modelo_fuente');
+    const voltajeFuente3 = document.getElementById('voltaje_fuente');
+
+    // Agregar eventos para actualizar los campos al cambiar las selecciones
+    productoSelect.addEventListener('change', actualizarCampos);
+    marcaFuenteSelect.addEventListener('change', actualizarCampos);
+    tipoFuenteSelect.addEventListener('change', actualizarCampos);
+    modeloFuenteSelect.addEventListener('change', actualizarCampos);
+    voltajeFuenteSelect.addEventListener('change', actualizarCampos);
+
+    // Ejecutar la función al cargar la página para establecer el estado inicial
+    actualizarCampos();
+});
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const productoSelect = document.getElementById('producto');
+    const marcaFuenteSelect = document.getElementById('marca_fuente');
+    const tipoFuenteSelect = document.getElementById('tipo_fuente');
+    const modeloFuenteSelect = document.getElementById('modelo_fuente');
+    const voltajeFuenteSelect = document.getElementById('voltaje_fuente');
+    
+    function actualizarCampos() {
+
+        if (productoSelect.value === '3') { // Si selecciona "Fuente"
+            cargarMarcasFuente();
+
+        } else {
+            // Limpia los campos y deshabilita si no es "Fuente"
+            marcaFuenteSelect.innerHTML = '<option value="">Seleccionar...</option>';
+            tipoFuenteSelect.innerHTML = '<option value="">Seleccionar...</option>';
+            modeloFuenteSelect.innerHTML = '<option value="">Seleccionar...</option>';
+            voltajeFuenteSelect.innerHTML = '<option value="">Seleccionar...</option>';
+        }
+    }
+
+    productoSelect.addEventListener('change', actualizarCampos);
+    marcaFuenteSelect.addEventListener('change', function() {
+        cargarTiposFuente(this.value);
+    });
+
+    tipoFuenteSelect.addEventListener('change', function() {
+        cargarModelosFuente(marcaFuenteSelect.value, this.value);
+    });
+
+                    /*  Código nuevo    */
+    modeloFuenteSelect.addEventListener('change', function() {
+    const idModeloFuente = this.value;
+    cargarVoltajeFuente(marcaFuenteSelect.value, tipoFuenteSelect.value, idModeloFuente);
+});
+                    /*  Fin Código Nuevo    */
+
+    function cargarMarcasFuente() {
+        fetch('cargar_marcas_fuente.php')
+            .then(response => response.json())
+            .then(data => {
+                marcaFuenteSelect.innerHTML = '<option value="">Seleccionar...</option>';
+                data.forEach(marca => {
+                    marcaFuenteSelect.innerHTML += `<option value="${marca.id_car_fuen}">${marca.marca_fuente}</option>`;
+                });
+            });
+    }
+
+    function cargarTiposFuente(idCarFuen) {
+        fetch(`cargar_tipos_fuente.php?id_car_fuen=${idCarFuen}`)
+            .then(response => response.json())
+            .then(data => {
+                tipoFuenteSelect.innerHTML = '<option value="">Seleccionar...</option>';
+                data.forEach(tipo => {
+                    tipoFuenteSelect.innerHTML += `<option value="${tipo.id_car_fuen}">${tipo.tipo_fuente}</option>`;
+                });
+            });
+    }
+
+                        /*  Código Nuevo    */
+    function cargarModelosFuente(idCarFuen, tipoFuente) {
+    fetch(`cargar_modelos_fuente.php?id_car_fuen=${idCarFuen}&tipo_fuente=${tipoFuente}`)
+        .then(response => response.json())
+        .then(data => {
+            modeloFuenteSelect.innerHTML = '<option value="">Seleccionar...</option>';
+            data.forEach(modelo => {
+                modeloFuenteSelect.innerHTML += `<option value="${modelo.id_referencias_fuentes}">${modelo.modelo_fuente}</option>`;
+            });
+        });
+}
+                        /*  Fin Código Nuevo    */
+
+                        /*  Código Nuevo    */
+    // Carga los valores de voltaje basados en la selección de marca, tipo y modelo
+    function cargarVoltajeFuente(idCarFuen, tipoFuente, modeloFuente) {
+        fetch(`cargar_voltaje_fuente.php?marca_fuente=${idCarFuen}&tipo_fuente=${tipoFuente}&modelo_fuente=${modeloFuente}`)
+            .then(response => response.json())
+            .then(data => {
+                voltajeFuenteSelect.innerHTML = '<option value="">Seleccionar...</option>';
+                data.forEach(voltaje => {
+                    voltajeFuenteSelect.innerHTML += `<option value="${voltaje}">${voltaje}</option>`;
+                });
+            });
+    }
+
+    // Ejecutar la función al cargar la página para establecer el estado inicial
+    actualizarCampos();
+});
+</script>

@@ -24,21 +24,47 @@ include('../../../layout/admin/parte1.php');
 
                         <hr>
 
-                        <div clase="row">
-                            <div class="card-tools ml-4">
-                                <div class="form-group">
-                                    <a href="../../producto/create_producto.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear Nuevo Producto</a>
+                        <div class="row justify-content-center">
+                            <!-- Contenedor principal para los botones -->
+                            <div class="card-tools d-flex justify-content-center w-100">
+                                <!-- Botón existente para crear un nuevo producto -->
+                                <div class="form-group mx-2">
+                                    <a href="../../producto/create_producto.php" class="btn btn-warning">
+                                        <i class="bi bi-plus-square"></i> Crear Nuevo Producto
+                                    </a>
                                 </div>
-                            </div>
 
-                            <div class="card-tools ml-4">
-                                <div class="form-group">
-                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#movimientoModal">
+                                <!-- Botón existente para crear un nuevo movimiento -->
+                                <div class="form-group mx-2">
+                                    <button type="button" class="btn" style="background-color: #20B2AA; color: white; border-color: #20B2AA;" data-toggle="modal" data-target="#movimientoModal">
                                         <i class="bi bi-plus-square"></i> Crear Nuevo Movimiento
                                     </button>
                                 </div>
+
+                                <!-- Primer botón adicional -->
+                                <div class="form-group mx-2">
+                                    <a href="../../producto/index_modulos.php" class="btn btn-primary">
+                                        <i class="bi bi-plus-square"></i> MODULOS
+                                    </a>
+                                </div>
+
+                                <!-- Segundo botón adicional -->
+                                <div class="form-group mx-2">
+                                    <a href="../../producto/index_control.php" class="btn btn-secondary">
+                                        <i class="bi bi-plus-square"></i> CONTROLADORAS
+                                    </a>
+                                </div>
+
+                                <!-- Tercer botón adicional -->
+                                <div class="form-group mx-2">
+                                    <a href="../../producto/index_fuentes.php" class="btn btn-success">
+                                        <i class="bi bi-plus-square"></i> FUENTES
+                                    </a>
+                                </div>
                             </div>
                         </div>
+
+
 
                         <div class="card-body">
                             <div class="table-responsive">
@@ -161,8 +187,8 @@ include('../../../layout/admin/parte1.php');
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entrada1/create_movimiento_entrada.php'">Movimiento de Entrada</button>
-                                                        <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/create_movimiento_salida.php'">Movimiento de Salida</button>
+                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entrada/create_movimiento_entrada.php'">Movimiento de Entrada</button>
+                                                        <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_salida/create_movimiento_salida.php'">Movimiento de Salida</button>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

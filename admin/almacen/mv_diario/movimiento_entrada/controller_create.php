@@ -52,46 +52,49 @@ if (!empty($_POST['pitch'])) { //serie_modulo
 $referencia_21 = !empty($_POST['pitch'/*serie_modulo*/]) ? $_POST['pitch'/*serie_modulo*/] : (!empty($_POST['referencia_control']) ? $_POST['referencia_control'] : $_POST['modelo_fuente']);
 
 // Función para realizar las consultas de validación y actualización
-function validarProductoEnAlmacen($pdo, $tabla, $referencia_21, $salida_md, $tipo, $almacen_salida_md) {
+function validarProductoEnAlmacen($pdo, $tabla,  $producto, $referencia_21, $salida_md, $almacen_salida_md) {
     if ($almacen_salida_md == 3) {
         // Si el almacén es el principal, comparar con id_almacen_principal
-        $sql_check = "SELECT * FROM $tabla WHERE id_almacen_principal = :referencia_21";
+        $sql_check = "SELECT * FROM $tabla WHERE tipo_producto = :producto AND producto = :referencia_21";
     } else {
         // Comparar con tipo_producto para los demás almacenes
-        $sql_check = "SELECT * FROM $tabla WHERE tipo_producto = :referencia_21";
+        $sql_check = "SELECT * FROM $tabla WHERE tipo_producto = :producto AND producto = :referencia_21";
     }
     $stmt_check = $pdo->prepare($sql_check);
+    $stmt_check->bindParam(':producto', $producto);
     $stmt_check->bindParam(':referencia_21', $referencia_21);
     $stmt_check->execute();
 
     if ($stmt_check->rowCount() > 0) {
         // Producto encontrado, actualizar existencias
         if ($almacen_salida_md == 3) {
-            $sql_update = "UPDATE $tabla SET cantidad_plena = cantidad_plena + :salida_md WHERE id_almacen_principal = :referencia_21";
+            $sql_update = "UPDATE $tabla SET cantidad_plena = cantidad_plena + :salida_md WHERE tipo_producto = :producto AND producto = :referencia_21";
         } else {
-            $sql_update = "UPDATE $tabla SET existencias = existencias + :salida_md WHERE tipo_producto = :referencia_21";
+            $sql_update = "UPDATE $tabla SET existencias = existencias + :salida_md WHERE tipo_producto = :producto AND producto = :referencia_21";
         }
 
         $stmt_update = $pdo->prepare($sql_update);
         $stmt_update->bindParam(':salida_md', $salida_md);
+        $stmt_update->bindParam(':producto', $producto);
         $stmt_update->bindParam(':referencia_21', $referencia_21);
         $stmt_update->execute();
 
-        $_SESSION['msj'] = "Producto encontrado en $tipo ($tabla) y actualizado correctamente.";
+        $_SESSION['msj'] = "Producto encontrado en $producto ($tabla) y actualizado correctamente.";
         return true; // Indica que se encontró y actualizó el producto
     } else {
         // Producto no encontrado, insertar nueva entrada
         if ($almacen_salida_md == 3) {
-            $sql_insert = "INSERT INTO $tabla (id_almacen_principal, cantidad_plena) VALUES (:referencia_21, :salida_md)";
+            $sql_insert = "INSERT INTO $tabla (tipo_producto, producto, cantidad_plena) VALUES (:producto, :referencia_21, :salida_md)";
         } else {
-            $sql_insert = "INSERT INTO $tabla (tipo_producto, existencias) VALUES (:referencia_21, :salida_md)";
+            $sql_insert = "INSERT INTO $tabla (tipo_producto, producto, existencias) VALUES (:producto, :referencia_21, :salida_md)";
         }
         $stmt_insert = $pdo->prepare($sql_insert);
+        $stmt_insert->bindParam(':producto', $producto);
         $stmt_insert->bindParam(':referencia_21', $referencia_21);
         $stmt_insert->bindParam(':salida_md', $salida_md);
         $stmt_insert->execute();
 
-        $_SESSION['msj'] = "Producto no encontrado en $tipo ($tabla), pero se ha creado una nueva entrada y actualizado correctamente.";
+        $_SESSION['msj'] = "Producto no encontrado en $producto ($tabla), pero se ha creado una nueva entrada y actualizado correctamente.";
         return false; // Indica que no se encontró el producto
     }
 }
@@ -110,16 +113,16 @@ $almacenes = [
 ];
 
 if (array_key_exists($almacen_salida_md, $almacenes)) {
-    validarProductoEnAlmacen($pdo, $almacenes[$almacen_salida_md], $referencia_21, $salida_md, 'salida', $almacen_salida_md);
+    validarProductoEnAlmacen($pdo, $almacenes[$almacen_salida_md], $producto, $referencia_21, $salida_md, $almacen_salida_md);
 }
 
 // Validaciones para almacen_entrada_md
 if (array_key_exists($almacen_entrada_md, $almacenes)) {
-    validarProductoEnAlmacen($pdo, $almacenes[$almacen_entrada_md], $referencia_21, $entrada_md, 'entrada', $almacen_entrada_md);
+    validarProductoEnAlmacen($pdo, $almacenes[$almacen_entrada_md], $producto, $referencia_21, $entrada_md, $almacen_entrada_md);
 }
 
 $sql = "INSERT INTO movimiento_diario 
-        (fecha, producto, pitch_modulo, serie_modulo, referencia_modulo, modelo_modulo, marca_control, referencia_control, funcion_control, marc_fuente1, modelo_fuente, tipo_fuente, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, referencia_1, referencia_2) 
+        (fecha, tipo_producto, pitch_modulo, serie_modulo, referencia_modulo, modelo_modulo, marca_control, referencia_control, funcion_control, marc_fuente1, modelo_fuente, tipo_fuente, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, referencia_1, referencia_2) 
         VALUES (:fecha, :producto, :pitch, :serie_modulo, :referencia_modulo, :modelo_modulo, :marca_control, :referencia_control, :funcion_control, :marca_fuente, :modelo_fuente, :tipo_fuente, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :referencia_1, :referencia_2)";
 
 $sentencia = $pdo->prepare($sql);
@@ -148,7 +151,7 @@ $sentencia->bindParam(':referencia_2', $referencia_2);
 
 if($sentencia->execute()){
     // Preparar la consulta para alma_total
-    $sql2 = "INSERT INTO alma_total (fecha_movimiento, producto_alma, salio, entro, ";
+    $sql2 = "INSERT INTO alma_total (fecha_movimiento, tipo_producto, producto, salio, entro, ";
 
     // Campos para salida
     switch ($almacen_salida_md) {
@@ -218,21 +221,23 @@ if($sentencia->execute()){
             break;
     }
 
-    $sql2 .= ") VALUES (:fecha, :referencia_21, :salida_md, :entrada_md, :salida_md, :entrada_md)";
+    $sql2 .= ") VALUES (:fecha, :producto, :referencia_21, :salida_md, :entrada_md, :salida_md, :entrada_md)";
 
     $sentencia_almacen = $pdo->prepare($sql2);
 
     $sentencia_almacen->bindParam(':fecha', $fecha);
+    $sentencia_almacen->bindParam(':producto', $producto);
     $sentencia_almacen->bindParam(':referencia_21', $referencia_21);
     $sentencia_almacen->bindParam(':salida_md', $salida_md);
     $sentencia_almacen->bindParam(':entrada_md', $entrada_md);
 
     if($sentencia_almacen->execute()){
         // Actualizar las existencias
-        $sql3 = "UPDATE alma_total SET existen_entra = existen_entra + :entrada_md - :salida_md WHERE producto_alma = :referencia_21";
+        $sql3 = "UPDATE alma_total SET existen_entra = existen_entra + :entrada_md - :salida_md WHERE tipo_producto = :producto AND producto = :referencia_21";
         $sentencia_existencia = $pdo->prepare($sql3);
         $sentencia_existencia->bindParam(':entrada_md', $entrada_md);
         $sentencia_existencia->bindParam(':salida_md', $salida_md);
+        $sentencia_existencia->bindParam(':producto', $producto);
         $sentencia_existencia->bindParam(':referencia_21', $referencia_21);
 
         if ($sentencia_existencia->execute()) {
