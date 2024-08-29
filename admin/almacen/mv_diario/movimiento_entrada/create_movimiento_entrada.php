@@ -377,12 +377,6 @@ include('../../../../layout/admin/parte1.php');
                                             <div class="form-group">
                                                 <label for="entrada_md">Entrada</label>
                                                 <input type="text" name="entrada_md" class="form-control" placeholder="Cantidad Entrada" >
-                                                <input type="hidden" name="pitch3" value="<?php echo $pitch_unico['pitch']; ?>">
-                                                <input type="hidden" name="marca_control3" value="<?php echo $marca_unica['marca_control']; ?>">
-                                                <input type="hidden" name="marca_fuente3" value="<?php echo $marca_fuente_unica['marca_fuente']; ?>">
-                                                <input type="hidden" name="serie_modulo3" value="<?php echo $serie['serie_modulo']; ?>">
-                                                <input type="hidden" name="serie_control3" value="<?php echo $control1['serie_control']; ?>">
-                                                <input type="hidden" name="modelo_fuente3" value="<?php echo $modelfuente['modelo_fuente']; ?>">
                                             </div>
                                         </div>
                                     </div>

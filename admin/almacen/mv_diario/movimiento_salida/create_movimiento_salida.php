@@ -339,11 +339,7 @@ include('../../../../layout/admin/parte1.php');
                                                     $query_almacen_entra->execute();
                                                     $almacenes_entras = $query_almacen_entra->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($almacenes_entras as $almacen_entra) {
-                                                        $id_almacen = $almacen_entra['id_asignacion'];
-                                                        $almacenentra = $almacen_entra['nombre_almacen'];
-                                                    ?>
-                                                    <option value="<?php echo $id_almacen; ?>"><?php echo $almacenentra; ?></option>
-                                                    <?php
+                                                        echo '<option value="' . $almacen_entra['id_asignacion'] . '">' . $almacen_entra['nombre_almacen'] . '</option>';
                                                     }
                                                     ?>
                                                 </select>
@@ -352,7 +348,7 @@ include('../../../../layout/admin/parte1.php');
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="entrada_md">Cantidad Salida</label>
+                                                <label for="entrada_md">Cantidad</label>
                                                 <input type="text" name="entrada_md" class="form-control" placeholder="Cantidad Entrada" required>
                                             </div>
                                         </div>
@@ -532,13 +528,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const salidaMdInput = document.getElementsByName('salida_md')[0];
     const entradaMdInput = document.getElementsByName('entrada_md')[0];
 
-    // Función para actualizar el campo entrada_md
-    function actualizarEntradaMd() {
-        entradaMdInput.value = salidaMdInput.value; // Establecer el mismo valor que salida_md
+    // Función para actualizar el campo salida_md
+    function actualizarSalidaMd() {
+        salidaMdInput.value = entradaMdInput.value; // Establecer el mismo valor que entrada_md
     }
 
-    // Escuchar cambios en el campo salida_md y llamar a la función actualizarEntradaMd
-    salidaMdInput.addEventListener('input', actualizarEntradaMd);
+    // Escuchar cambios en el campo entrada_md y llamar a la función actualizarSalidaMd
+    entradaMdInput.addEventListener('input', actualizarSalidaMd);
 });
 </script>
 
