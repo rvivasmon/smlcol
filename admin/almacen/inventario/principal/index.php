@@ -1,12 +1,12 @@
 <?php 
 
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
 
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
+include('../../../../layout/admin/sesion.php');
+include('../../../../layout/admin/datos_sesion_user.php');
 
-include('../../../layout/admin/parte1.php');
+include('../../../../layout/admin/parte1.php');
 
 ?>
 
@@ -21,22 +21,60 @@ include('../../../layout/admin/parte1.php');
                         <div class="card-header">
                             PRODUCTOS ACTIVOS
                         </div>
+
                         <hr>
-                        <div class="card-tools ml-4">
-                            <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Ingresar Nuevo Producto</a>
+
+                        <div class="row justify-content-center">
+                            <!-- Contenedor principal para los botones -->
+                            <div class="card-tools d-flex justify-content-center w-100">
+                                <!-- Botón existente para crear un nuevo producto -->
+                                <div class="form-group mx-2">
+                                    <a href="../../producto/create_producto.php" class="btn btn-warning">
+                                        <i class="bi bi-plus-square"></i> Crear Nuevo Producto
+                                    </a>
+                                </div>
+
+                                <!-- Botón existente para crear un nuevo movimiento -->
+                                <div class="form-group mx-2">
+                                    <button type="button" class="btn" style="background-color: #20B2AA; color: white; border-color: #20B2AA;" data-toggle="modal" data-target="#movimientoModal">
+                                        <i class="bi bi-plus-square"></i> Crear Nuevo Movimiento
+                                    </button>
+                                </div>
+
+                                <!-- Primer botón adicional -->
+                                <div class="form-group mx-2">
+                                    <a href="../../producto/index_modulos.php" class="btn btn-primary">
+                                        <i class="bi bi-plus-square"></i> MODULOS
+                                    </a>
+                                </div>
+
+                                <!-- Segundo botón adicional -->
+                                <div class="form-group mx-2">
+                                    <a href="../../producto/index_control.php" class="btn btn-secondary">
+                                        <i class="bi bi-plus-square"></i> CONTROLADORAS
+                                    </a>
+                                </div>
+
+                                <!-- Tercer botón adicional -->
+                                <div class="form-group mx-2">
+                                    <a href="../../producto/index_fuentes.php" class="btn btn-success">
+                                        <i class="bi bi-plus-square"></i> FUENTES
+                                    </a>
+                                </div>
+                            </div>
                         </div>
+
+
+
                         <div class="card-body">
                             <div class="table-responsive">
                             <table id="table_stcs" class="table table-striped table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Tipo Producto</th>
                                         <th>Producto</th>
                                         <th>Existencia</th>
-                                        <th>Marca Fuente</th>
-                                        <th>Modelo Fuente</th>
-                                        <th>Tipo Fuente</th>
-                                        <th>Voltaje Salida</th>
                                         <th>Fecha Creacion</th>
                                         <th><center>Acciones</center></th>
                                     </tr>
@@ -46,41 +84,28 @@ include('../../../layout/admin/parte1.php');
                                     $contador = 0;
                                     $query = $pdo->prepare('SELECT 
                                         ap.*,
-                                        t_productos.tipo_producto as nombre_producto,
-
-                                        cf.marca_fuente as fuen_marc,
-                                        cft.tipo_fuente as fuen_tipo
+                                        tp.tipo_producto AS nombre_tipo_producto
                                     FROM
                                         alma_principal AS ap
-                                    LEFT JOIN t_productos ON ap.tipo_producto = t_productos.id_producto
-
-                                    LEFT JOIN caracteristicas_fuentes AS cf ON ap.marca_fuente = cf.id_car_fuen
-                                    LEFT JOIN caracteristicas_fuentes AS cft ON ap.tipo_fuente = cft.id_car_fuen
-                                    WHERE
-                                        ap.tipo_producto = 3
+                                    INNER JOIN
+                                        t_productos AS tp ON ap.tipo_producto = tp.id_producto
                                     ');
 
                                     $query->execute();
                                     $almacenes_pricipales = $query->fetchAll(PDO::FETCH_ASSOC);
                                     foreach ($almacenes_pricipales as $almacen_pricipal){
                                         $id = $almacen_pricipal['id_almacen_principal'];
-                                        $fecha_ingreso = $almacen_pricipal['fecha_ingreso'];
-                                        $producto = $almacen_pricipal['nombre_producto'];
-                                        $marca_fuente = $almacen_pricipal['fuen_marc'];
-                                        $modelo_fuente = $almacen_pricipal['modelo_fuente'];
-                                        $tipo_fuente = $almacen_pricipal['fuen_tipo'];
-                                        $voltaje = $almacen_pricipal['voltaje_salida'];
+                                        $fecha_ingreso = $almacen_pricipal['CREATED_AT'];
+                                        $tipo_producto = $almacen_pricipal['nombre_tipo_producto'];
+                                        $producto = $almacen_pricipal['producto'];
                                         $existencia = $almacen_pricipal['cantidad_plena'];
                                         $contador = $contador + 1;
                                     ?>
                                         <tr>
                                             <td><?php echo $contador; ?></td>
+                                            <td><?php echo $tipo_producto; ?></td>
                                             <td><?php echo $producto; ?></td>
                                             <td><?php echo $existencia; ?></td>
-                                            <td><?php echo $marca_fuente; ?></td>
-                                            <td><?php echo $modelo_fuente; ?></td>
-                                            <td><?php echo $tipo_fuente; ?></td>
-                                            <td><?php echo $voltaje; ?></td>
                                             <td><?php echo $fecha_ingreso; ?></td>
                                             <td>
                                                 <center>
@@ -104,8 +129,29 @@ include('../../../layout/admin/parte1.php');
     </div>
 </div>
 
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="movimientoModal" tabindex="-1" aria-labelledby="movimientoModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="movimientoModalLabel">Seleccionar Tipo de Movimiento</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entrada/create_movimiento_entrada.php'">Movimiento de Entrada</button>
+                                                        <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_salida/create_movimiento_salida.php'">Movimiento de Salida</button>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-<?php include('../../../layout/admin/parte2.php'); ?>
+
+<?php include('../../../../layout/admin/parte2.php'); ?>
 
 <script>
     $(function () {

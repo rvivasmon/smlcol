@@ -248,15 +248,95 @@ foreach ($roles_permisos as $rol_permiso) {
                                                   // Condiciones para las direcciones específicas
                                                   if ($almacen['id'] == 3) {
                                                       if ($producto['id'] == 1) {
-                                                          $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
+                                                          $url_producto = $URL . "admin/almacen/inventario/principal/index_modulos.php";
                                                       } elseif ($producto['id'] == 2) {
-                                                          $url_producto = $URL . "admin/almacen/inventario/index_control.php";
+                                                          $url_producto = $URL . "admin/almacen/inventario/principal/index_control.php";
                                                       } elseif ($producto['id'] == 3) {
-                                                          $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
+                                                          $url_producto = $URL . "admin/almacen/inventario/principal/index_fuentes.php";
                                                       } elseif ($producto['id'] == 6) {
-                                                        $url_producto = $URL . "admin/almacen/inventario/index.php";
+                                                        $url_producto = $URL . "admin/almacen/inventario/principal/index.php";
                                                     }
                                                       // Agregar más condiciones según sea necesario
+                                                  } elseif ($almacen['id'] == 4) {
+                                                    if ($producto['id'] == 1) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
+                                                  } elseif ($producto['id'] == 2) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
+                                                  } elseif ($producto['id'] == 3) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
+                                                  } elseif ($producto['id'] == 6) {
+                                                    $url_producto = $URL . "admin/almacen/inventario/secundario/index.php";
+                                                }
+                                                  } elseif ($almacen['id'] == 5) {
+                                                    if ($producto['id'] == 1) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
+                                                  } elseif ($producto['id'] == 2) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
+                                                  } elseif ($producto['id'] == 3) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
+                                                  } elseif ($producto['id'] == 6) {
+                                                    $url_producto = $URL . "admin/almacen/inventario/importacion/index.php";
+                                                }
+                                                  } elseif ($almacen['id'] == 6) {
+                                                    if ($producto['id'] == 1) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
+                                                  } elseif ($producto['id'] == 2) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
+                                                  } elseif ($producto['id'] == 3) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
+                                                  } elseif ($producto['id'] == 6) {
+                                                    $url_producto = $URL . "admin/almacen/inventario/tecnica/index.php";
+                                                }
+                                                  } elseif ($almacen['id'] == 7) {
+                                                    if ($producto['id'] == 1) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
+                                                  } elseif ($producto['id'] == 2) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
+                                                  } elseif ($producto['id'] == 3) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
+                                                  } elseif ($producto['id'] == 6) {
+                                                    $url_producto = $URL . "admin/almacen/inventario/planta/index.php";
+                                                }
+                                                  } elseif ($almacen['id'] == 8) {
+                                                    if ($producto['id'] == 1) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
+                                                  } elseif ($producto['id'] == 2) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
+                                                  } elseif ($producto['id'] == 3) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
+                                                  } elseif ($producto['id'] == 6) {
+                                                    $url_producto = $URL . "admin/almacen/inventario/pruebas/index.php";
+                                                }
+                                                  } elseif ($almacen['id'] == 9) {
+                                                    if ($producto['id'] == 1) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
+                                                  } elseif ($producto['id'] == 2) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
+                                                  } elseif ($producto['id'] == 3) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
+                                                  } elseif ($producto['id'] == 6) {
+                                                    $url_producto = $URL . "admin/almacen/inventario/desechados/index.php";
+                                                }
+                                                  } elseif ($almacen['id'] == 10) {
+                                                    if ($producto['id'] == 1) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
+                                                  } elseif ($producto['id'] == 2) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
+                                                  } elseif ($producto['id'] == 3) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
+                                                  } elseif ($producto['id'] == 6) {
+                                                    $url_producto = $URL . "admin/almacen/inventario/soportetecnico/index.php";
+                                                }
+                                                  } elseif ($almacen['id'] == 11) {
+                                                    if ($producto['id'] == 1) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
+                                                  } elseif ($producto['id'] == 2) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
+                                                  } elseif ($producto['id'] == 3) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
+                                                  } elseif ($producto['id'] == 6) {
+                                                    $url_producto = $URL . "admin/almacen/inventario/aliados/index.php";
+                                                }
                                                   }
                                                   ?>
                                                   <li class="nav-item">
