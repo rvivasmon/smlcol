@@ -16,7 +16,7 @@ include('../../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Inventario Principal</h1>                
+                <h1 class="m-0">Inventario General Almacén Principal</h1>                
                     <div class="card card-blue">
                         <div class="card-header">
                             PRODUCTOS ACTIVOS
@@ -29,7 +29,7 @@ include('../../../../layout/admin/parte1.php');
                             <div class="card-tools d-flex justify-content-center w-100">
                                 <!-- Botón existente para crear un nuevo producto -->
                                 <div class="form-group mx-2">
-                                    <a href="../../producto/create_producto.php" class="btn btn-warning">
+                                    <a href="../../../producto/create_producto.php" class="btn btn-warning">
                                         <i class="bi bi-plus-square"></i> Crear Nuevo Producto
                                     </a>
                                 </div>
@@ -39,27 +39,6 @@ include('../../../../layout/admin/parte1.php');
                                     <button type="button" class="btn" style="background-color: #20B2AA; color: white; border-color: #20B2AA;" data-toggle="modal" data-target="#movimientoModal">
                                         <i class="bi bi-plus-square"></i> Crear Nuevo Movimiento
                                     </button>
-                                </div>
-
-                                <!-- Primer botón adicional -->
-                                <div class="form-group mx-2">
-                                    <a href="../../producto/index_modulos.php" class="btn btn-primary">
-                                        <i class="bi bi-plus-square"></i> MODULOS
-                                    </a>
-                                </div>
-
-                                <!-- Segundo botón adicional -->
-                                <div class="form-group mx-2">
-                                    <a href="../../producto/index_control.php" class="btn btn-secondary">
-                                        <i class="bi bi-plus-square"></i> CONTROLADORAS
-                                    </a>
-                                </div>
-
-                                <!-- Tercer botón adicional -->
-                                <div class="form-group mx-2">
-                                    <a href="../../producto/index_fuentes.php" class="btn btn-success">
-                                        <i class="bi bi-plus-square"></i> FUENTES
-                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -83,21 +62,34 @@ include('../../../../layout/admin/parte1.php');
                                     <?php
                                     $contador = 0;
                                     $query = $pdo->prepare('SELECT 
-                                        ap.*,
-                                        tp.tipo_producto AS nombre_tipo_producto
-                                    FROM
-                                        alma_principal AS ap
-                                    INNER JOIN
-                                        t_productos AS tp ON ap.tipo_producto = tp.id_producto
-                                    ');
+                                                            ap.*,
+                                                            productomovido.tipo_producto AS nombre_tipo,
+                                                            CASE
+                                                                when ap.tipo_producto = 1 then caracmodulos.serie_modulo
+                                                                when ap.tipo_producto = 2 then refecontrol.referencia
+                                                                when ap.tipo_producto = 3 then refefuentes.modelo_fuente
+                                                                else null
+                                                            end as nombre_producto
+                                                            FROM
+                                                                alma_principal AS ap
+                                                            INNER JOIN
+                                                                t_productos AS productomovido ON ap.tipo_producto = productomovido.id_producto
+                                                            LEFT JOIN
+                                                                caracteristicas_modulos AS caracmodulos ON ap.producto = caracmodulos.id_car_mod AND ap.tipo_producto = 1
+                                                            LEFT JOIN
+                                                                referencias_control AS refecontrol ON ap.producto = refecontrol.id_referencia AND ap.tipo_producto = 2
+                                                            LEFT JOIN
+                                                                referencias_fuente AS refefuentes ON ap.producto = refefuentes.id_referencias_fuentes AND ap.tipo_producto = 3;
+
+                                                        ');
 
                                     $query->execute();
                                     $almacenes_pricipales = $query->fetchAll(PDO::FETCH_ASSOC);
                                     foreach ($almacenes_pricipales as $almacen_pricipal){
                                         $id = $almacen_pricipal['id_almacen_principal'];
                                         $fecha_ingreso = $almacen_pricipal['CREATED_AT'];
-                                        $tipo_producto = $almacen_pricipal['nombre_tipo_producto'];
-                                        $producto = $almacen_pricipal['producto'];
+                                        $tipo_producto = $almacen_pricipal['nombre_tipo'];
+                                        $producto = $almacen_pricipal['nombre_producto'];
                                         $existencia = $almacen_pricipal['cantidad_plena'];
                                         $contador = $contador + 1;
                                     ?>

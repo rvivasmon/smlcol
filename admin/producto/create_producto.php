@@ -58,6 +58,7 @@ include('../../layout/admin/parte1.php');
                             <div class="col-md-0">
                                 <div class="form-group"> <!-- Se coloca aquí el usuario que está trabajando el archivo -->
                                     <input  class="form-control"  id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']?>" hidden>
+                                    <input  class="form-control"  id="nombreidusuario" name="nombreidusuario" value="<?php echo $sesion_usuario['id']?>" hidden>
                                 </div>
                             </div>
                         </div>

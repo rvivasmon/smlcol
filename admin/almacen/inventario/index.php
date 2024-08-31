@@ -68,82 +68,21 @@ include('../../../layout/admin/parte1.php');
 
                         <div class="card-body">
                             <div class="table-responsive">
-                            <table id="table_stcs" class="table table-striped table-hover table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Producto</th>
-                                        <th>Referencia 1</th>
-                                        <th>Referencia 2</th>
-                                        <th>Fecha Creacion</th>
-                                        <th><center>Acciones</center></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $contador = 0;
-                                    $query = $pdo->prepare('SELECT 
-                                        ap.*,
-                                        t_productos.tipo_producto as nombre_producto,
-                                        cm.pitch as nombre_pitch,
-                                        cms.modelo_modulo as modul_model,
-                                        cctr.marca_control as cont_marc,
-                                        cctrs.funcion_control as cont_fun,
-                                        cf.marca_fuente as fuen_marc,
-                                        cft.tipo_fuente as fuen_tipo
-                                    FROM
-                                        alma_principal AS ap
-                                    LEFT JOIN t_productos ON ap.tipo_producto = t_productos.id_producto
-                                    LEFT JOIN caracteristicas_modulos AS cm ON ap.pitch = cm.id_car_mod
-                                    LEFT JOIN caracteristicas_modulos AS cms ON ap.modelo_modulo = cms.id_car_mod
-                                    LEFT JOIN caracteristicas_control AS cctr ON ap.marca_control = cctr.id_car_ctrl
-                                    LEFT JOIN caracteristicas_control AS cctrs ON ap.funcion_control = cctrs.id_car_ctrl
-                                    LEFT JOIN caracteristicas_fuentes AS cf ON ap.marca_fuente = cf.id_car_fuen
-                                    LEFT JOIN caracteristicas_fuentes AS cft ON ap.tipo_fuente = cft.id_car_fuen
-                                    ');
-
-                                    $query->execute();
-                                    $almacenes_pricipales = $query->fetchAll(PDO::FETCH_ASSOC);
-                                    foreach ($almacenes_pricipales as $almacen_pricipal){
-                                        $id = $almacen_pricipal['id_almacen_principal'];
-                                        $fecha_ingreso = $almacen_pricipal['fecha_ingreso'];
-                                        $producto = $almacen_pricipal['nombre_producto'];
-                                        $pitch = $almacen_pricipal['nombre_pitch'];
-                                        $serie_modulo = $almacen_pricipal['serie_modulo'];
-                                        $referencia = $almacen_pricipal['referencia'];
-                                        $modelo_modulo = $almacen_pricipal['modul_model'];
-                                        $medida_x = $almacen_pricipal['medida_x'];
-                                        $medida_y = $almacen_pricipal['medida_y'];
-                                        $marca_control = $almacen_pricipal['cont_marc'];
-                                        $serie_control = $almacen_pricipal['serie_control'];
-                                        $funcion_control = $almacen_pricipal['cont_fun'];
-                                        $marca_fuente = $almacen_pricipal['fuen_marc'];
-                                        $modelo_fuente = $almacen_pricipal['modelo_fuente'];
-                                        $tipo_fuente = $almacen_pricipal['fuen_tipo'];
-                                        $voltaje = $almacen_pricipal['voltaje_salida'];
-                                        $existencia = $almacen_pricipal['cantidad_plena'];
-                                        $contador = $contador + 1;
-                                    ?>
+                                <table id="table_stcs" class="table table-striped table-hover table-bordered">
+                                    <thead>
                                         <tr>
-                                            <td><?php echo $contador; ?></td>
-                                            <td><?php echo $producto; ?></td>
-                                            <td><?php echo $existencia; ?></td>
-                                            <td><?php echo $pitch; ?></td>
-                                            <td><?php echo $fecha_ingreso; ?></td>
-                                            <td>
-                                                <center>
-                                                    <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                    <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
-                                                    <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
-                                                </center>
-                                            </td>
+                                            <th>ID</th>
+                                            <th>Producto</th>
+                                            <th>Referencia 1</th>
+                                            <th>Referencia 2</th>
+                                            <th>Fecha Creacion</th>
+                                            <th><center>Acciones</center></th>
                                         </tr>
-                                    <?php
-                                }                            
-                            ?>
-                        </tbody>
-                        </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div><!-- /.col -->

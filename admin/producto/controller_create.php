@@ -10,7 +10,7 @@ include('../../layout/admin/sesion.php');
 include('../../layout/admin/datos_sesion_user.php');
 
 $producto = $_POST['producto'];
-$sesion_id_usuario['id'];
+$id_usuario = $_POST['idusuario'];
 
     /*  CAMPOS VERIFICADORES MODULOS    */
     $uso = !empty($_POST['uso']) ? $_POST['uso'] : NULL;
@@ -241,24 +241,6 @@ if (!is_null($pitch)) {
             $sentencia_fuente_voltaje->bindParam(':modelo_fuente', $modelo_fuente); // Asegúrate de que $modulo_fuente contenga el id_referencia
             $sentencia_fuente_voltaje->execute();
                 }
-            }
-
-            // Determinar los valores para referencia_1 y referencia_2 basados en las condiciones especificadas
-            $referencia_1 = !is_null($pitch3) ? $pitch3 : (!is_null($marca_control3) ? $marca_control3 : $marca_fuente3);
-            $referencia_2 = !is_null($serie_modulo3) ? $serie_modulo3 : (!is_null($referencia_control3) ? $referencia_control3 : $modelo_fuente3);
-
-            // Insertar los datos en la tabla producto_creado
-            try {
-                $sql_insert_producto_creado = "INSERT INTO producto_creado (tipo_producto, referencia_1, referencia_2, usuario) 
-                                            VALUES (:tipo_producto, :referencia_1, :referencia_2, :usuario)";
-                $stmt_producto_creado = $pdo->prepare($sql_insert_producto_creado);
-                $stmt_producto_creado->bindParam(':tipo_producto', $producto);
-                $stmt_producto_creado->bindParam(':referencia_1', $referencia_1);
-                $stmt_producto_creado->bindParam(':referencia_2', $referencia_2);
-                $stmt_producto_creado->bindParam(':usuario', $sesion_usuario); // Asumiendo que $sesion_usuario está definida y contiene el ID del usuario
-                $stmt_producto_creado->execute();
-            } catch (PDOException $e) {
-                echo 'Error al guardar en producto_creado: ' . $e->getMessage();
             }
 
     header('Location:' . $URL . 'admin/almacen/inventario');

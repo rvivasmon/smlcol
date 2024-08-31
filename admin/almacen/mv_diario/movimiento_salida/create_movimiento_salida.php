@@ -15,7 +15,7 @@ include('../../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Movimientos de Salida Almacén Principal</h1>
+                    <h1 class="m-0">Movimientos de Salida del Almacén Principal</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
 

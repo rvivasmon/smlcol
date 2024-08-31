@@ -210,11 +210,6 @@ foreach ($roles_permisos as $rol_permiso) {
 
                         $productos = array(
                           array('id' => 6, 'nombre' => 'General'),
-                          array('id' => 1, 'nombre' => 'Módulo'),
-                          array('id' => 2, 'nombre' => 'Controladora'),
-                          array('id' => 3, 'nombre' => 'Fuente'),
-                          array('id' => 4, 'nombre' => 'LCD'),
-                          array('id' => 5, 'nombre' => 'Accesorios'),
                           // Agregar más productos según necesites
                         );
                       ?>

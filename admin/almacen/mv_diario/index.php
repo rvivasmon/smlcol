@@ -97,7 +97,7 @@ include('../../../layout/admin/parte1.php');
                                                                 referencias_control AS caraccontrol ON mvd.referencia_2 = caraccontrol.id_referencia AND mvd.tipo_producto = 2
                                                             LEFT JOIN
                                                                 referencias_fuente AS caracfuentes ON mvd.referencia_2 = caracfuentes.id_referencias_fuentes AND mvd.tipo_producto = 3;
-                                                                ');
+                                                            ');
                                         $query->execute();
                                         $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);
                                         foreach ($movidiarios as $movidiario){
