@@ -320,7 +320,7 @@ foreach ($roles_permisos as $rol_permiso) {
                                                   } elseif ($producto['id'] == 3) {
                                                       $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
                                                   } elseif ($producto['id'] == 6) {
-                                                    $url_producto = $URL . "admin/almacen/inventario/soportetecnico/index.php";
+                                                    $url_producto = $URL . "admin/almacen/inventario/soporte_tecnico/index.php";
                                                 }
                                                   } elseif ($almacen['id'] == 11) {
                                                     if ($producto['id'] == 1) {

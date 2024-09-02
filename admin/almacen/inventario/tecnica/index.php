@@ -16,7 +16,7 @@ include('../../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Inventario General Almacén Principal</h1>                
+                <h1 class="m-0">Inventario General Almacén Técnica</h1>                
                     <div class="card card-blue">
                         <div class="card-header">
                             PRODUCTOS ACTIVOS
@@ -62,35 +62,35 @@ include('../../../../layout/admin/parte1.php');
                                     <?php
                                     $contador = 0;
                                     $query = $pdo->prepare('SELECT 
-                                                            ap.*,
+                                                            al_tec.*,
                                                             productomovido.tipo_producto AS nombre_tipo,
                                                             CASE
-                                                                when ap.tipo_producto = 1 then caracmodulos.serie_modulo
-                                                                when ap.tipo_producto = 2 then refecontrol.referencia
-                                                                when ap.tipo_producto = 3 then refefuentes.modelo_fuente
+                                                                when al_tec.tipo_producto = 1 then caracmodulos.serie_modulo
+                                                                when al_tec.tipo_producto = 2 then refecontrol.referencia
+                                                                when al_tec.tipo_producto = 3 then refefuentes.modelo_fuente
                                                                 else null
                                                             end as nombre_producto
                                                             FROM
-                                                                alma_principal AS ap
+                                                                alma_tecnica AS al_tec
                                                             INNER JOIN
-                                                                t_productos AS productomovido ON ap.tipo_producto = productomovido.id_producto
+                                                                t_productos AS productomovido ON al_tec.tipo_producto = productomovido.id_producto
                                                             LEFT JOIN
-                                                                caracteristicas_modulos AS caracmodulos ON ap.producto = caracmodulos.id_car_mod AND ap.tipo_producto = 1
+                                                                caracteristicas_modulos AS caracmodulos ON al_tec.producto = caracmodulos.id_car_mod AND al_tec.tipo_producto = 1
                                                             LEFT JOIN
-                                                                referencias_control AS refecontrol ON ap.producto = refecontrol.id_referencia AND ap.tipo_producto = 2
+                                                                referencias_control AS refecontrol ON al_tec.producto = refecontrol.id_referencia AND al_tec.tipo_producto = 2
                                                             LEFT JOIN
-                                                                referencias_fuente AS refefuentes ON ap.producto = refefuentes.id_referencias_fuentes AND ap.tipo_producto = 3;
+                                                                referencias_fuente AS refefuentes ON al_tec.producto = refefuentes.id_referencias_fuentes AND al_tec.tipo_producto = 3;
 
                                                         ');
 
                                     $query->execute();
                                     $almacenes_pricipales = $query->fetchAll(PDO::FETCH_ASSOC);
                                     foreach ($almacenes_pricipales as $almacen_pricipal){
-                                        $id = $almacen_pricipal['id_almacen_principal'];
+                                        $id = $almacen_pricipal['id_tecnica'];
                                         $fecha_ingreso = $almacen_pricipal['CREATED_AT'];
                                         $tipo_producto = $almacen_pricipal['nombre_tipo'];
                                         $producto = $almacen_pricipal['nombre_producto'];
-                                        $existencia = $almacen_pricipal['cantidad_plena'];
+                                        $existencia = $almacen_pricipal['existencias'];
                                         $contador = $contador + 1;
                                     ?>
                                         <tr>
