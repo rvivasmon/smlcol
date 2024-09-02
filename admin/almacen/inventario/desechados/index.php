@@ -86,7 +86,7 @@ include('../../../../layout/admin/parte1.php');
                                     $query->execute();
                                     $almacenes_pricipales = $query->fetchAll(PDO::FETCH_ASSOC);
                                     foreach ($almacenes_pricipales as $almacen_pricipal){
-                                        $id = $almacen_pricipal['id_almacen_principal'];
+                                        $id = $almacen_pricipal['id_desechados'];
                                         $fecha_ingreso = $almacen_pricipal['CREATED_AT'];
                                         $tipo_producto = $almacen_pricipal['nombre_tipo'];
                                         $producto = $almacen_pricipal['nombre_producto'];

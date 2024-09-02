@@ -90,7 +90,7 @@ include('../../../../layout/admin/parte1.php');
                                         $fecha_ingreso = $almacen_pricipal['CREATED_AT'];
                                         $tipo_producto = $almacen_pricipal['nombre_tipo'];
                                         $producto = $almacen_pricipal['nombre_producto'];
-                                        $existencia = $almacen_pricipal['cantidad_plena'];
+                                        $existencia = $almacen_pricipal['existencias'];
                                         $contador = $contador + 1;
                                     ?>
                                         <tr>

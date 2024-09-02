@@ -45,7 +45,7 @@ include('../../../../layout/admin/parte1.php');
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="producto">Categoría</label>
-                                    <select name="producto" id="producto" class="form-control">
+                                    <select name="producto" id="producto" class="form-control" required>
                                         <option value="">Seleccione un Producto</option>
                                         <?php
                                         $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos ORDER BY tipo_producto ASC');
@@ -335,7 +335,7 @@ include('../../../../layout/admin/parte1.php');
                                                 <select name="almacen_salida_md" id="almacen_salida_md" class="form-control" required>
                                                     <option value="">Almacén Origen</option>
                                                     <?php 
-                                                    $query_almacen  = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes');
+                                                    $query_almacen  = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 3 AND nombre_almacen != "Principal"');
                                                         $query_almacen->execute();
                                                         $almacenes = $query_almacen->fetchAll(PDO::FETCH_ASSOC);
                                                         foreach($almacenes as $almacen) {

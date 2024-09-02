@@ -158,6 +158,12 @@ foreach ($roles_permisos as $rol_permiso) {
                           </a>
                           <ul class="nav nav-treeview">
                             <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/administracion/oc/" class="nav-link">
+                                <i class="fas fa-cog nav-icon"></i>
+                                <p>ORDEN DE COMPRA INTERNA</p>
+                              </a>
+                            </li>
+                            <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/administracion/tracking/tracking_col/index_tracking.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>COMPRA TECHLED</p>
@@ -345,12 +351,6 @@ foreach ($roles_permisos as $rol_permiso) {
                                       </li>
                                   <?php endforeach; ?>
                               </ul>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/almacen/inventario/index_almacenes.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Stock / Almacénes</p>
-                              </a>
                             </li>
                             <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/almacen/mv_diario" class="nav-link">
