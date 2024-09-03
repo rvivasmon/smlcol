@@ -5,49 +5,60 @@ include('../../../app/config/conexion.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Recolectar datos del formulario
+    try {
+        // Iniciar la transacción
+        $pdo->beginTransaction();
 
-    $fecha_creacion = $_POST['fecha'];
-    $pc = $_POST['pc'];
-    $tipo_pc = $_POST['tipo_pc'];
-    $oc= $_POST['oci_oc'];
-    $tipo_oc = $_POST['sml_psi_tl'];
-    $oc_resultante = $_POST['oc_resultante'];
-    $oc_cliente = $_POST['oc_cliente'];
-    $nom_cliente = $_POST['nom_cliente'];
-    $nom_contacto_admin = $_POST['nom_contacto_admin'];
-    $telefono_contacto = $_POST['telefono_contacto'];
-    $nom_contacto_cliente = $_POST['nom_contacto_cliente'];
-    $num_telefono = $_POST['num_telefono'];    
-    $fecha_aprobacion = $_POST['fecha_aprobacion'];
-    $estado_admon = $_POST['estado_admon'];
-    $vendedor = $_POST['vendedor'];
-    $estado_factura = $_POST['estado_factura'];
-    $num_factura_fecha = $_POST['num_factura_fecha'];
-    $acuerdo_pago = $_POST['acuerdo_pago'];
-    $ciudad = $_POST['ciudad'];
-    $lugar_instalacion = $_POST['lugar_instalacion'];
-    $estado_logistico = $_POST['estado_logistico'];
-    $dias_pactados = $_POST['dias_pactados'];
-    $proyecto = $_POST['proyecto'];
-    $observacion = $_POST['observacion'];
-    $num_factura = $_POST['num_factura'];
-    $num_items = $_POST['num_items'];
-        
+        // Recolectar datos del formulario
+        $fecha_creacion = $_POST['fecha'];
+        $id_pc = $_POST['id_pc'];
+        $pc = $_POST['pc21'];
+        $tipo_pc = $_POST['tipo_pc'];
+        $oc= $_POST['oci_oc'];
+        $tipo_oc = $_POST['sml_psi_tl'];
+        $oc_resultante = $_POST['oc_resultante'];
+        $oc_cliente = $_POST['oc_cliente'];
+        $nom_cliente = $_POST['nom_cliente'];
+        $nom_contacto_admin = $_POST['nom_contacto_admin'];
+        $telefono_contacto = $_POST['telefono_contacto'];
+        $nom_contacto_cliente = $_POST['nom_contacto_cliente'];
+        $num_telefono = $_POST['num_telefono'];    
+        $fecha_aprobacion = $_POST['fecha_aprobacion'];
+        $estado_admon = $_POST['estado_admon'];
+        $vendedor = $_POST['vendedor'];
+        $estado_factura = $_POST['estado_factura'];
+        $num_factura_fecha = $_POST['num_factura_fecha'];
+        $acuerdo_pago = $_POST['acuerdo_pago'];
+        $ciudad = $_POST['ciudad'];
+        $lugar_instalacion = $_POST['lugar_instalacion'];
+        $estado_logistico = $_POST['estado_logistico'];
+        $dias_pactados = $_POST['dias_pactados'];
+        $proyecto = $_POST['proyecto'];
+        $observacion = $_POST['observacion'];
+        $num_factura = $_POST['num_factura'];
+        $num_items = $_POST['num_items'];
 
+        // Lógica para obtener el valor de $contador
+        $query_get_contador = "SELECT MAX(contador) + 1 AS next_contador FROM oc WHERE oc = :oc AND tipo_oc = :tipo_oc";
+        $stmt_contador = $pdo->prepare($query_get_contador);
+        $stmt_contador->bindParam(':oc', $oc);
+        $stmt_contador->bindParam(':tipo_oc', $tipo_oc);
+        $stmt_contador->execute();
+        $result = $stmt_contador->fetch(PDO::FETCH_ASSOC);
+        $contador = $result['next_contador'] ?? 1; // Si es null, inicia en 1
 
         // Inserta los datos principales de la OC
-        $query_insert = "INSERT INTO oc (fecha_creacion, oc, pc, tipo_oc, tipo_pc, oc_cliente,fecha_aprobacion, estado_admon, vendedor, estado_factura, num_factura_fecha, acuerdo_pago, nom_contacto_admin, telefono_contacto, nom_cliente, nom_contacto_cliente, num_telefono, proyecto, ciudad, lugar_instalacion, estado_logistico, dias_pactados, observacion, num_factura, num_items, contador) 
-        VALUES (:oc, :pc, :tipo_oc, :tipo_pc, :oc_cliente, :fecha_creacion, :fecha_aprobacion, :estado_admon, :vendedor, :estado_factura, :num_factura_fecha, :acuerdo_pago, :nom_contacto_admin, :telefono_contacto, :nom_cliente, :nom_contacto_cliente, :num_telefono, :proyecto, :ciudad, :lugar_instalacion, :estado_logistico, :dias_pactados, :observacion, :num_factura, :num_items, :conta1, :conta2, :conta3, :conta4, :conta5, :conta6)";
+        $query_insert = "INSERT INTO oc (fecha_creacion, id_pc, pc, tipo_pc, oc, tipo_oc, oc_cliente, estado_admon, vendedor, estado_factura, num_factura_fecha, acuerdo_pago, nom_contacto_admin, telefono_contacto, nom_cliente, nom_contacto_cliente, num_telefono, proyecto, ciudad, lugar_instalacion, estado_logistico, dias_pactados, observacion, fecha_aprobacion, num_factura, num_items, contador, oc_resultante, usuario_crea_oc) 
+        VALUES (:fecha_creacion, :id_pc, :pc, :tipo_pc, :oc, :tipo_oc, :oc_cliente, :estado_admon, :vendedor, :estado_factura, :num_factura_fecha, :acuerdo_pago, :nom_contacto_admin, :telefono_contacto, :nom_cliente, :nom_contacto_cliente, :num_telefono, :proyecto, :ciudad, :lugar_instalacion, :estado_logistico, :dias_pactados, :observacion, :fecha_aprobacion, :num_factura, :num_items, :contador, :oc_resultante, :usuario)";
 
-        $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':oc', $oc_resultante);
-        $stmt->bindParam(':pc', $pc); // Ajusta el valor del pc si es necesario
-        $stmt->bindParam(':tipo_oc', $tipo_oc);
-        $stmt->bindParam(':tipo_pc', $tipo_pc);
-        $stmt->bindParam(':oc_cliente', $oc_cliente);
+        $stmt = $pdo->prepare($query_insert);
         $stmt->bindParam(':fecha_creacion', $fecha_creacion);
-        $stmt->bindParam(':fecha_aprovacion', $fecha_aprovacion);
+        $stmt->bindParam(':id_pc', $id_pc);
+        $stmt->bindParam(':pc', $pc);
+        $stmt->bindParam(':tipo_pc', $tipo_pc);
+        $stmt->bindParam(':oc', $oc);
+        $stmt->bindParam(':tipo_oc', $tipo_oc);
+        $stmt->bindParam(':oc_cliente', $oc_cliente);
         $stmt->bindParam(':estado_admon', $estado_admon);
         $stmt->bindParam(':vendedor', $vendedor);
         $stmt->bindParam(':estado_factura', $estado_factura);
@@ -64,22 +75,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':estado_logistico', $estado_logistico);
         $stmt->bindParam(':dias_pactados', $dias_pactados);
         $stmt->bindParam(':observacion', $observacion);
+        $stmt->bindParam(':fecha_aprobacion', $fecha_aprobacion);
         $stmt->bindParam(':num_factura', $num_factura);
         $stmt->bindParam(':num_items', $num_items);
-        $stmt->bindParam(':conta1', $conta1);
-        $stmt->bindParam(':conta2', $conta2);
-        $stmt->bindParam(':conta3', $conta3);
-        $stmt->bindParam(':conta4', $conta4);
-        $stmt->bindParam(':conta5', $conta5);
-        $stmt->bindParam(':conta6', $conta6);
+        $stmt->bindParam(':contador', $contador);
+        $stmt->bindParam(':oc_resultante', $oc_resultante);
+        $stmt->bindParam(':usuario', $usuario);
 
         $stmt->execute();
 
         // Obtener el ID del OC recién insertado
         $id_oc = $pdo->lastInsertId();
 
-// Insertar los ítems en la tabla 'tabla_items_oc' solo si existen
-if (count($_POST['descripcion']) > 0 && count($_POST['cantidad']) > 0 && count($_POST['instalacion']) > 0) {
+        // Insertar los ítems en la tabla 'tabla_items_oc' solo si existen
+        if (count($_POST['descripcion']) > 0 && count($_POST['cantidad']) > 0 && count($_POST['instalacion']) > 0) {
             $descripciones = $_POST['descripcion'];
             $cantidades = $_POST['cantidad'];
             $instalaciones = $_POST['instalacion'];
@@ -96,29 +105,38 @@ if (count($_POST['descripcion']) > 0 && count($_POST['cantidad']) > 0 && count($
                 $query_insert_item->bindParam(':id_oc', $id_oc);
                 $query_insert_item->execute();
             }
-            
-                // Confirmar la transacción
-                $pdo->commit();
+
+            // Confirmar la transacción
+            $pdo->commit();
 
         } else {
-            echo '<script>
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Debes agregar al menos un ítem para poder guardar el registro."
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirigir al usuario a la sección de agregar items (opcional)
-                    window.location.href = "url_de_la_seccion_de_agregar_items";
-                }
-            });
+            // Si no hay ítems, lanzar un error para hacer rollback
+            throw new Exception("Debes agregar al menos un ítem para poder guardar el registro.");
+        }
+
+        // Redirigir al usuario después de guardar
+        header('Location: ../../administracion/oc/');
+        exit;
+
+    } catch (Exception $e) {
+        // En caso de error, hacer rollback de la transacción
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+
+        echo '<script>
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "' . $e->getMessage() . '"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirigir al usuario a la sección de agregar items (opcional)
+                window.location.href = "url_de_la_seccion_de_agregar_items";
+            }
+        });
         </script>';
         exit;
     }
-        
-
-
-        // Redirigir al usuario después de guardar
-        header('Location: ../../admin/nueva_tarea_8-7-24/index_oc.php');
-
 }
+?>

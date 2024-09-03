@@ -17,10 +17,10 @@ $fecha_creacion = date('Y-m-d'); //Obtiene la fecha actual
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col">
-          <h1 class="m-0">OC</h1>
+          <h1 class="m-0">ORDEN DE COMPRAS</h1>
           <div class="card card-blue">
             <div class="card-header">
-              <a href="#" class="d-block"><?php echo $sesion_usuario['nombre'] ?></a>
+                <a href="#" class="d-block invisible"><?php echo $sesion_usuario['nombre'] ?></a>
             </div>
             <hr>
             
@@ -42,7 +42,7 @@ $fecha_creacion = date('Y-m-d'); //Obtiene la fecha actual
                                     <th hidden>Tipo OC</th>
                                     <th hidden>Tipo PC</th>
                                     <th hidden>OC Cliente</th>
-                                    <th hidden>Fecha Aprovacion</th>
+                                    <th hidden>Fecha Aprobacion</th>
                                     <th hidden>Estado Admon</th>
                                     <th hidden>Vendedor</th>
                                     <th hidden>Estado Factura</th>
@@ -78,7 +78,7 @@ $fecha_creacion = date('Y-m-d'); //Obtiene la fecha actual
                                     $oc_cliente = $oc_item['oc_cliente'];
                                     $nom_cliente = $oc_item['nom_cliente'];
                                     $fecha_creacion = $oc_item['fecha_creacion'];
-                                    $fecha_aprovacion = $oc_item['fecha_aprovacion'];
+                                    $fecha_aprobacion = $oc_item['fecha_aprobacion'];
                                     $estado_admon = $oc_item['estado_admon'];
                                     $vendedor = $oc_item['vendedor'];
                                     $estado_factura = $oc_item['estado_factura'];
@@ -109,7 +109,7 @@ $fecha_creacion = date('Y-m-d'); //Obtiene la fecha actual
                                         <td hidden><?php echo $tipo_oc; ?></td>
                                         <td hidden><?php echo $tipo_pc; ?></td>
                                         <td hidden><?php echo $oc_cliente; ?></td>                          
-                                        <td hidden><?php echo $fecha_aprovacion; ?></td>
+                                        <td hidden><?php echo $fecha_aprobacion; ?></td>
                                         <td hidden><?php echo $estado_admon; ?></td>
                                         <td hidden><?php echo $vendedor; ?></td>
                                         <td hidden><?php echo $estado_factura; ?></td>

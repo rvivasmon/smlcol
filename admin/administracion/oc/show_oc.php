@@ -14,13 +14,17 @@ $query_oc->execute();
 $oces = $query_oc->fetchAll(PDO::FETCH_ASSOC);
 foreach ($oces as $oc_item){
     $id = $oc_item['id'];
-    $oc = $oc_item['oc'];
+    $fecha_creacion = $oc_item['fecha_creacion'];
     $pc = $oc_item['pc'];
+
+
+    $oc = $oc_item['oc'];
+    
     $tipo_oc = $oc_item['tipo_oc'];
     $tipo_pc = $oc_item['tipo_pc'];
     $oc_cliente = $oc_item['oc_cliente'];
-    $fecha_creacion = $oc_item['fecha_creacion'];
-    $fecha_aprovacion = $oc_item['fecha_aprovacion'];
+    
+    $fecha_aprobacion = $oc_item['fecha_aprobacion'];
     $estado_admon = $oc_item['estado_admon'];
     $vendedor = $oc_item['vendedor'];
     $estado_factura = $oc_item['estado_factura'];
@@ -63,38 +67,15 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="card-body">
                     <div class="row">
-                    <div class="col-md-4">
+
+                        <div class="col-md-2">
                             <div class="form-group">
-                                <label for="id_oc">ID OC</label>
-                                <input type="text" name="id_oc" id="id_oc" value="<?php echo $id; ?>" class="form-control" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="usuario_crea_oc">Usuario Crea OC</label>
-                                <input type="text" name="usuario_crea_oc" id="usuario_crea_oc" value="<?php echo $sesion_usuario['nombre']?>" class="form-control" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="oc">OC</label>
-                                <input type="text" name="oc_resultante" id="oc_resultante" value="<?php echo $oc_item['oc']; ?>" class="form-control" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="tipo_oc">Tipo OC</label>
-                                <input type="text" name="tipo_oc" id="tipo_oc" value="<?php echo $oc_item['tipo_oc']; ?>" class="form-control" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="tipo_pc">Tipo Pc</label>
-                                <input type="text" name="tipo_pc" id="tipo_pc" value="<?php echo $oc_item['tipo_pc']; ?>" class="form-control" readonly>
+                                <label for="fecha_creacion">Fecha Creacion</label>
+                                <input type="text" name="fecha_creacion" id="fecha_creacion" value="<?php echo $oc_item['fecha_creacion']; ?>" class="form-control" readonly>
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label for="pc">PC</label>
                                 <input type="text" name="pc" id="pc" value="<?php echo $oc_item['pc']; ?>"class="form-control" readonly>
@@ -103,24 +84,58 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="col-md-4">
                             <div class="form-group">
+                                <label for="fecha_aprobacion">Fecha Aprobación</label>
+                                <input type="date" name="fecha_aprobacion" id="fecha_aprobacion" value="<?php echo $oc_item['fecha_aprobacion']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="id_oc">ID OC</label>
+                                <input type="text" name="id_oc" id="id_oc" value="<?php echo $id; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="usuario_crea_oc">Usuario Crea OC</label>
+                                <input type="text" name="usuario_crea_oc" id="usuario_crea_oc" value="<?php echo $sesion_usuario['nombre']?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="oc">OC</label>
+                                <input type="text" name="oc_resultante" id="oc_resultante" value="<?php echo $oc_item['oc']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tipo_oc">Tipo OC</label>
+                                <input type="text" name="tipo_oc" id="tipo_oc" value="<?php echo $oc_item['tipo_oc']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tipo_pc">Tipo Pc</label>
+                                <input type="text" name="tipo_pc" id="tipo_pc" value="<?php echo $oc_item['tipo_pc']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
                                 <label for="oc_cliente">OC Cliente</label>
                                 <input type="text" name="oc_cliente" id="oc_cliente" value="<?php echo $oc_item['oc_cliente']; ?>" class="form-control" readonly>
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="fecha_creacion">Fecha Creacion</label>
-                                <input type="text" name="fecha_creacion" id="fecha_creacion" value="<?php echo $oc_item['fecha_creacion']; ?>" class="form-control" readonly>
-                            </div>
-                        </div>
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="fecha_aprovacion">Fecha Aprobación</label>
-                                <input type="date" name="fecha_aprovacion" id="fecha_aprovacion" value="<?php echo $oc_item['fecha_aprovacion']; ?>" class="form-control" readonly>
-                            </div>
-                        </div>
+
+
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -248,49 +263,51 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
                     </div>
+
                     <!-- Ítems asociados -->
-                    <div class="row mb-2">
+                    <div class="row">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Visor de Ítems</h1>
+                            <h1 class="m-0">Items de OC</h1>
                         </div>
                     </div>
-                    
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th readonly>ID Item</th>
-                                <th readonly>Descripción</th>
-                                <th readonly>Cantidad</th>
-                                <th readonly>Instalacion</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th readonly>ID Item</th>
+                                    <th readonly>Descripción</th>
+                                    <th readonly>Cantidad</th>
+                                    <th readonly>Instalacion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <?php if (!empty($items)) : ?>
                                     <?php foreach ($items as $item) { ?>
                                         <tr>
-                                            <td><?php echo $item['id_item']; ?></td>
-                                            <td><?php echo $item['descripcion']; ?></td>
-                                            <td><?php echo $item['cantidad']; ?></td>
-                                            <td><?php echo $item['instalacion']; ?></td>
+                                                <td><?php echo $item['id_item']; ?></td>
+                                                <td><?php echo $item['descripcion']; ?></td>
+                                                <td><?php echo $item['cantidad']; ?></td>
+                                                <td><?php echo $item['instalacion']; ?></td>
                                         </tr>
                                     <?php } ?>
                                 <?php else : ?>
                                     <div class="card card-info">
-                                        <div class="card-header">
-                                            <center>
-                                                <label>NO HAY ITEMS ASOCIADOS A ESTE OC</label>
-                                            </center>
-                                        </div>
+                                            <div class="card-header">
+                                                <center>
+                                                    <label>NO HAY ITEMS ASOCIADOS A ESTE OC</label>
+                                                </center>
+                                            </div>
                                     </div>
                                 <?php endif; ?>
                             </tbody>
-                    </table>
+                        </table>
+
                     <hr>
+
                     <div class="row">
                         <div class="col-md-6">
-                            <a href="<?php echo $URL."admin/nueva_tarea_8-7-24/index_oc.php"; ?>" class="btn btn-default btn-block">Volver</a>
+                            <a href="<?php echo $URL."admin/administracion/oc/"; ?>" class="btn btn-default btn-block">Volver</a>
                         </div>
-                        <div class="col-md-2"></div>
                     </div>
                 </div>
             </div>

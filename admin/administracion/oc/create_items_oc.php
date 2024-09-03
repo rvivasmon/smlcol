@@ -26,6 +26,7 @@ include('../../../layout/admin/parte1.php');
                     Introduzca la información correspondiente
                 </div>
                 <div class="card-body">
+
                     <form action="controller_create_items_oc.php" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="id_oc" value="<?php echo htmlspecialchars($id_oc); ?>">
                         <div class="row">
@@ -59,8 +60,8 @@ include('../../../layout/admin/parte1.php');
                                 </div>
                             </div>
                         </div>
-
                     </form>
+
                 </div>
             </div>
         </div>

@@ -145,8 +145,8 @@ if ($oci_oc && $sml_psi_tl) {
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="fecha_aprovacion">Fecha Aprobación</label>
-                                    <input type="date" name="fecha_aprovacion" id="fecha_aprovacion" placeholder="Fecha Aprobación" class="form-control" required>
+                                    <label for="fecha_aprobacion">Fecha Aprobación</label>
+                                    <input type="date" name="fecha_aprobacion" id="fecha_aprobacion" placeholder="Fecha Aprobación" class="form-control" required>
                                 </div>
                             </div>
 

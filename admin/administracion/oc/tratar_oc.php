@@ -23,7 +23,7 @@ foreach ($oces as $oc_item){
     $tipo_pc = $oc_item['tipo_pc'];
     $oc_cliente = $oc_item['oc_cliente'];
     $fecha_creacion = $oc_item['fecha_creacion'];
-    $fecha_aprovacion = $oc_item['fecha_aprovacion'];
+    $fecha_aprobacion = $oc_item['fecha_aprobacion'];
     $estado_admon = $oc_item['estado_admon'];
     $vendedor = $oc_item['vendedor'];
     $estado_factura = $oc_item['estado_factura'];
@@ -127,8 +127,8 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="fecha_aprovacion">Fecha Aprobación</label>
-                                    <input type="date" name="fecha_aprovacion" id="fecha_aprovacion" value="<?php echo $oc_item['fecha_aprovacion']; ?>" class="form-control" readonly>
+                                    <label for="fecha_aprobacion">Fecha Aprobación</label>
+                                    <input type="date" name="fecha_aprobacion" id="fecha_aprobacion" value="<?php echo $oc_item['fecha_aprobacion']; ?>" class="form-control" readonly>
                                 </div>
                             </div>
 
@@ -325,7 +325,7 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <a href="<?php echo $URL."admin/nueva_tarea_8-7-24/index_oc.php"; ?>" class="btn btn-default btn-block">Cancelar</a>
+                                    <a href="<?php echo $URL."admin/administracion/oc/"; ?>" class="btn btn-default btn-block">Cancelar</a>
                                 </div>
                                 <div class="col-md-4">
                                     <button type="submit" onclick="return confirm('¿Está seguro de haber diligenciado correctamente los datos?')" class="btn btn-success btn-block">Generar POP</button>

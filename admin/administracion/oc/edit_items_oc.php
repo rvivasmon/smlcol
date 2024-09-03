@@ -72,7 +72,7 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="row">
                             <div class="col-md-4">
-                                <a href="<?php echo $URL."admin/nueva_tarea_8-7-24/index_oc.php";?>" class="btn btn-default btn-block">Cancelar</a>
+                                <a href="<?php echo $URL."admin/administracion/oc/tratar_oc.php?id=".$id_get; ?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" onclick="return confirm('¿Seguro de haber diligenciado correctamente los datos?')" class="btn btn-success btn-block">Guardar Cambios</button>

@@ -72,27 +72,27 @@ foreach ($roles_permisos as $rol_permiso) {
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datatables.net-buttons-bs4@2.2.0/css/buttons.bootstrap4.min.css">
 
       <title>Document</title>
-    <!-- <link rel="stylesheet" href="path/to/your/main.css"> --> <!-- Tu archivo CSS principal -->
+      <!-- <link rel="stylesheet" href="path/to/your/main.css"> --> <!-- Tu archivo CSS principal -->
 
-    <style>
-        /* Estilos para los submenús */
-    .nav-treeview .submenu > .nav-treeview {
-    display: none; /* Ocultar los submenús por defecto */
-    position: absolute; /* Posicionar los submenús de manera absoluta */
-    left: 100%; /* Mover los submenús hacia la derecha */
-    top: 0; /* Alinear los submenús en la parte superior */
-    z-index: 1000; /* Asegurarse de que los submenús se muestren por encima de otros elementos */
-    background: #343a40; /* Fondo del submenú */
-    border: 1px solid #495057; /* Borde del submenú */
-    width: 200px; /* Ancho opcional del submenú */
-}
+      <style>
+          /* Estilos para los submenús */
+      .nav-treeview .submenu > .nav-treeview {
+      display: none; /* Ocultar los submenús por defecto */
+      position: absolute; /* Posicionar los submenús de manera absoluta */
+      left: 100%; /* Mover los submenús hacia la derecha */
+      top: 0; /* Alinear los submenús en la parte superior */
+      z-index: 1000; /* Asegurarse de que los submenús se muestren por encima de otros elementos */
+      background: #343a40; /* Fondo del submenú */
+      border: 1px solid #495057; /* Borde del submenú */
+      width: 200px; /* Ancho opcional del submenú */
+      }
 
-/* Mostrar los submenús cuando el elemento padre está en hover */
-.nav-treeview .submenu:hover > .nav-treeview {
-    display: block; /* Mostrar los submenús cuando se hace hover */
-}
+      /* Mostrar los submenús cuando el elemento padre está en hover */
+      .nav-treeview .submenu:hover > .nav-treeview {
+          display: block; /* Mostrar los submenús cuando se hace hover */
+      }
 
-    </style>
+      </style>
 
     </head>
     <body class="hold-transition sidebar-mini">

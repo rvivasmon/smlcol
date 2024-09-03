@@ -16,10 +16,6 @@ $query_co = $pdo->prepare('SELECT * FROM oc ORDER BY id DESC LIMIT 1');
 $query_co->execute();
 $last_oc = $query_co->fetch(PDO::FETCH_ASSOC);
 
-// Calcular el número de factura
-$num_factura = ($last_oc) ? $last_oc['num_factura'] + 1 : 1;
-$num_factura_fecha = str_pad($num_factura, 3, '0', STR_PAD_LEFT) . ' - ' . date('Ymd');
-
 // Obtener opciones dinámicas
 $query_taunion = $pdo->prepare('SELECT id, consecutivo_primero_oc FROM oc_prefijos LIMIT 2');
 $query_taunion->execute();
@@ -56,7 +52,7 @@ $oci_oc = $_POST['oci_oc'] ?? '';
 
             <div class="card card-blue">
                 <div class="card-header">
-                    <a href="#" class="d-block"><?php echo $sesion_usuario['nombre']?></a>
+                    <a href="#" class="d-block invisible"><?php echo $sesion_usuario['nombre']?></a>
                     Introduzca la información correspondiente
                 </div>
 
@@ -66,6 +62,13 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                     <!-- Campos del formulario -->
 
                         <div class="row">
+                            <div class="col-md-0">
+                                <div class="form-group"> <!-- Se coloca aquí el usuario que está trabajando el archivo -->
+                                    <input  class="form-control"  id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']?>" hidden>
+                                    <input  class="form-control"  id="nombreidusuario" name="nombreidusuario" value="<?php echo $sesion_usuario['id']?>" hidden>
+                                </div>
+                            </div>
+
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Fecha</label>
@@ -75,11 +78,11 @@ $oci_oc = $_POST['oci_oc'] ?? '';
 
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="">PC</label>
+                                    <label for="">ID PC</label>
                                     <select name="pc" id="pc" class="form-control" required onchange="updateTipoPC()">
                                         <option value="">Seleccione el PC</option>
                                         <?php 
-                                            $query_proyecto = $pdo->prepare('SELECT id_proyecto_visor, tipo_proyecto_visor FROM oc_proyecto LIMIT 2');
+                                            $query_proyecto = $pdo->prepare('SELECT id_proyecto_visor, tipo_proyecto_visor FROM oc_proyecto');
                                             $query_proyecto->execute();
                                             $proyectos = $query_proyecto->fetchAll(PDO::FETCH_ASSOC);
                                             foreach($proyectos as $proyecto) {
@@ -92,7 +95,14 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label for="">PC</label>
+                                    <input type="text" class="form-control" name="pc21" id="pc21" value="" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
                                 <div class="form-group">
                                     <label for="">Tipo PC</label>
                                     <input type="text" class="form-control" name="tipo_pc" id="tipo_pc" value="" readonly>
@@ -103,7 +113,7 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                                 <div class="form-group">
                                     <label for="oci_oc">Orden de Compra</label>
                                     <select name="oci_oc" id="oci_oc" class="form-control" required onchange="validateAndUpdateCounter()">
-                                        <option value="">Seleccione el OCI-OC</option>
+                                        <option value="">Seleccione Orden</option>
                                         <?php foreach ($unionesa as $prefijos): ?>
                                             <option value="<?php echo $prefijos['consecutivo_primero_oc']; ?>"><?php echo $prefijos['consecutivo_primero_oc']; ?></option>
                                         <?php endforeach; ?>
@@ -114,18 +124,7 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Tipo OC</label>
-                                    <select name="sml_psi_tl" id="sml_psi_tl" class="form-control" required onchange="validateAndUpdateCounter()">
-                                        <option value="">Seleccione el SML-PSI-TL</option>
-                                        <?php 
-                                            $query_proyecto = $pdo->prepare('SELECT tipo_proyecto_visor FROM oc_proyecto LIMIT 3');
-                                            $query_proyecto->execute();
-                                            $proyectos = $query_proyecto->fetchAll(PDO::FETCH_ASSOC);
-                                            foreach($proyectos as $proyecto) {
-                                                $tipo_proyecto_visor = $proyecto['tipo_proyecto_visor'];
-                                                echo "<option value='$tipo_proyecto_visor'>$tipo_proyecto_visor</option>";
-                                            }
-                                        ?>
-                                    </select>
+                                    <input type="text" class="form-control" name="sml_psi_tl" id="sml_psi_tl" value="" readonly>
                                 </div>
                             </div>
 
@@ -148,7 +147,19 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="nom_cliente">Nombre del Cliente</label>
-                                    <input type="text" name="nom_cliente" id="nom_cliente" placeholder="Nombre del Cliente" class="form-control" required>
+                                    <select name="nom_cliente" id="nom_cliente" class="form-control" required onchange="updateTipoPC()">
+                                        <option value="">Seleccione Cliente</option>
+                                        <?php 
+                                            $query_proyecto = $pdo->prepare('SELECT id, nombre_comercial FROM clientes ORDER BY nombre_comercial ASC');
+                                            $query_proyecto->execute();
+                                            $proyectos = $query_proyecto->fetchAll(PDO::FETCH_ASSOC);
+                                            foreach($proyectos as $proyecto) {
+                                                $id_proyecto_visor = $proyecto['id'];
+                                                $tipo_proyecto_visor = $proyecto['nombre_comercial'];
+                                                echo "<option value='$id_proyecto_visor' data-tipo='$tipo_proyecto_visor'>$tipo_proyecto_visor</option>";
+                                            }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
 
@@ -192,28 +203,64 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="estado_admon">Estado Admon</label>
-                                    <input type="text" name="estado_admon" id="estado_admon" placeholder="Estado Admon" class="form-control" required>
+                                    <select name="estado_admon" id="estado_admon" class="form-control" required>
+                                    <option value="">Seleccione el Estado</option>
+                                        <?php 
+                                            $query_estados = $pdo->prepare('SELECT estado_admon FROM t_estado WHERE estado_admon IS NOT NULL AND estado_admon <> ""');
+                                            $query_estados->execute();
+                                            $estado = $query_estados->fetchAll(PDO::FETCH_ASSOC);
+                                            foreach($estado as $estados) {
+                                                $acuerdo_estado = $estados['estado_admon'];
+                                                $id_estado = $estados['id'];
+                                                echo "<option value='$id_estado'>$acuerdo_estado</option>";
+                                            }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="vendedor">Vendedor</label>
-                                    <input type="text" name="vendedor" id="vendedor" placeholder="Vendedor" class="form-control" required>
+                                    <select name="vendedor" id="vendedor" class="form-control" required>
+                                    <option value="">Seleccione el Estado</option>
+                                        <?php 
+                                            $query_estados = $pdo->prepare('SELECT nombre FROM usuarios WHERE nombre IS NOT NULL AND nombre <> "" AND id_cargo = "10" ORDER BY nombre');
+                                            $query_estados->execute();
+                                            $estado = $query_estados->fetchAll(PDO::FETCH_ASSOC);
+                                            foreach($estado as $estados) {
+                                                $acuerdo_estado = $estados['nombre'];
+                                                $id_estado = $estados['id'];
+                                                echo "<option value='$id_estado'>$acuerdo_estado</option>";
+                                            }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="estado_factura">Estado Factura</label>
-                                    <input type="text" name="estado_factura" id="estado_factura" placeholder="Estado Factura" class="form-control" required>
+                                    <select name="estado_factura" id="estado_factura" class="form-control" required>
+                                    <option value="">Seleccione el Estado</option>
+                                        <?php 
+                                            $query_estados = $pdo->prepare('SELECT estado_factura FROM t_estado WHERE estado_factura IS NOT NULL AND estado_factura <> ""');
+                                            $query_estados->execute();
+                                            $estado = $query_estados->fetchAll(PDO::FETCH_ASSOC);
+                                            foreach($estado as $estados) {
+                                                $acuerdo_estado = $estados['estado_factura'];
+                                                $id_estado = $estados['id'];
+                                                echo "<option value='$id_estado'>$acuerdo_estado</option>";
+                                            }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Número de Factura</label>
-                                    <input type="text" name="num_factura_fecha" id="num_factura_fecha" value="<?php echo $num_factura_fecha; ?>" class="form-control">
+                                    <input type="text" name="num_factura_fecha" id="num_factura_fecha" class="form-control">
                                 </div>
                             </div>
 
@@ -239,14 +286,28 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="">Número de Factura</label>
+                                    <label for="">Fecha de Factura</label>
                                     <input type="text" name="num_factura" id="num_factura" class="form-control">
                                 </div>
                             </div>
+
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="ciudad">Ciudad</label>
-                                    <input type="text" name="ciudad" id="ciudad" placeholder="Ciudad" class="form-control" required>
+                                    <select name="ciudad" id="ciudad" class="form-control" required>
+                                        <option value="">Seleccione la Ciudad</option>
+                                        <?php 
+                                            // Asegúrate de que $pdo esté correctamente definido antes de esta línea
+                                            $query_ciudades = $pdo->prepare('SELECT id, ciudad FROM t_ciudad WHERE ciudad IS NOT NULL AND ciudad <> "" ORDER BY ciudad');
+                                            $query_ciudades->execute();
+                                            $ciudades = $query_ciudades->fetchAll(PDO::FETCH_ASSOC); // Cambio de $ciudad a $ciudades
+                                            foreach ($ciudades as $ciudad) {
+                                                $nombre_ciudad = $ciudad['ciudad'];
+                                                $id_ciudad = $ciudad['id'];
+                                                echo "<option value='$id_ciudad'>$nombre_ciudad</option>"; // Asegúrate de usar comillas simples para PHP dentro de echo
+                                            }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
 
@@ -318,8 +379,6 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                                 </div>
                             </div>
 
-                            <!-- Los campos de elementos dinámicos se agregarán aquí -->
-                            <input type="hidden" name="num_factura" value="<?php echo $num_factura; ?>">
                         </div>
                         
                         <hr>
@@ -461,20 +520,27 @@ function updateTipoPC() {
 
     // Verifica si se ha seleccionado un valor
     if (selectedPC) {
-        // Realiza una solicitud AJAX para obtener el valor de "tipo_proyecto_visor"
+        // Realiza una solicitud AJAX para obtener los valores de "tipo_proyecto_visor" y "proyecto_visor"
         const xhr = new XMLHttpRequest();
         xhr.open('POST', 'get_tipo_pc.php', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function() {
             if (xhr.status === 200) {
-                // Actualiza el campo "tipo_pc" con el valor recibido
-                document.getElementById('tipo_pc').value = xhr.responseText;
+                // El resultado debe ser en formato JSON
+                const response = JSON.parse(xhr.responseText);
+
+                // Actualiza los campos del formulario con los valores recibidos
+                document.getElementById('tipo_pc').value = response.tipo_proyecto_visor || '';
+                document.getElementById('pc21').value = response.proyecto_visor || '';
+                document.getElementById('sml_psi_tl').value = response.tipo_proyecto_visor || '';
             }
         };
         xhr.send('id_proyecto_visor=' + selectedPC);
     } else {
-        // Si no se ha seleccionado un valor, limpia el campo "tipo_pc"
+        // Si no se ha seleccionado un valor, limpia los campos
         document.getElementById('tipo_pc').value = '';
+        document.getElementById('pc21').value = '';
+        document.getElementById('sml_psi_tl').value = '';
     }
 }
 </script>

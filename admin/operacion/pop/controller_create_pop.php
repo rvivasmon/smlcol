@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tipo_pc = $_POST['tipo_pc'];
     $oc_cliente = $_POST['oc_cliente'];
     $fecha_creacion = $_POST['fecha_creacion'];
-    $fecha_aprovacion = $_POST['fecha_aprovacion'];
+    $fecha_aprobacion = $_POST['fecha_aprobacion'];
     $estado_admon = $_POST['estado_admon'];
     $vendedor = $_POST['vendedor'];
     $estado_factura = $_POST['estado_factura'];
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     
     // Inserta los datos principales de la OC
-    $query = "INSERT INTO oc (oc, pc, tipo_oc, tipo_pc, oc_cliente, fecha_creacion, fecha_aprovacion, estado_admon, vendedor, estado_factura, num_factura_fecha, acuerdo_pago, nom_contacto_admin, telefono_contacto, nom_cliente, nom_contacto_cliente, num_telefono, proyecto, ciudad, lugar_instalacion, estado_logistico, dias_pactados, observacion, num_factura) VALUES (:oc, :pc, :tipo_oc, :tipo_pc, :oc_cliente, :fecha_creacion, :fecha_aprovacion, :estado_admon, :vendedor, :estado_factura, :num_factura_fecha, :acuerdo_pago, :nom_contacto_admin, :telefono_contacto, :nom_cliente, :nom_contacto_cliente, :num_telefono, :proyecto, :ciudad, :lugar_instalacion, :estado_logistico, :dias_pactados, :observacion, :num_factura)";
+    $query = "INSERT INTO oc (oc, pc, tipo_oc, tipo_pc, oc_cliente, fecha_creacion, fecha_aprobacion, estado_admon, vendedor, estado_factura, num_factura_fecha, acuerdo_pago, nom_contacto_admin, telefono_contacto, nom_cliente, nom_contacto_cliente, num_telefono, proyecto, ciudad, lugar_instalacion, estado_logistico, dias_pactados, observacion, num_factura) VALUES (:oc, :pc, :tipo_oc, :tipo_pc, :oc_cliente, :fecha_creacion, :fecha_aprobacion, :estado_admon, :vendedor, :estado_factura, :num_factura_fecha, :acuerdo_pago, :nom_contacto_admin, :telefono_contacto, :nom_cliente, :nom_contacto_cliente, :num_telefono, :proyecto, :ciudad, :lugar_instalacion, :estado_logistico, :dias_pactados, :observacion, :num_factura)";
 
     $stmt = $pdo->prepare($query);
 
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bindParam(':tipo_pc', $tipo_pc);
     $stmt->bindParam(':oc_cliente', $oc_cliente);
     $stmt->bindParam(':fecha_creacion', $fecha_creacion);
-    $stmt->bindParam(':fecha_aprovacion', $fecha_aprovacion);
+    $stmt->bindParam(':fecha_aprobacion', $fecha_aprobacion);
     $stmt->bindParam(':estado_admon', $estado_admon);
     $stmt->bindParam(':vendedor', $vendedor);
     $stmt->bindParam(':estado_factura', $estado_factura);
