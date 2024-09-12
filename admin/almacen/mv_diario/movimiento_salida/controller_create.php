@@ -102,7 +102,7 @@ function validarProductoEnAlmacen($pdo, $tabla,  $producto, $referencia_21, $sal
 // Validaciones para almacen_salida_md
 $almacenes = [
     3 => 'alma_principal',
-    4 => 'alma_secundario',
+    4 => 'alma_techled',
     5 => 'alma_importacion',
     6 => 'alma_tecnica',
     7 => 'alma_planta',
@@ -159,7 +159,7 @@ if($sentencia->execute()){
             $sql2 .= "id_principal";
             break;
         case 4:
-            $sql2 .= "id_secundario";
+            $sql2 .= "id_techled";
             break;
         case 5:
             $sql2 .= "importacion";
@@ -193,7 +193,7 @@ if($sentencia->execute()){
             $sql2 .= ", id_principal";
             break;
         case 4:
-            $sql2 .= ", id_secundario";
+            $sql2 .= ", id_techled";
             break;
         case 5:
             $sql2 .= ", importacion";

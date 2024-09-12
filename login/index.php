@@ -35,18 +35,24 @@ include('funcs/funcs.php');
       <div class="login-box">
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
+          
           <div class="card-header text-center">
             <a href="../../index2.html" class="h1"><b>SIGCP</b> - 2024 <small style="font-size: 35px;"><b>TECHLED</b> Group</small> <small style="font-size: 13px;">Versión 1.2</small> </a>
           </div>
           <div class="card-body">
-              <center>
-                <div style="display: flex; align-items: center;">
-                  <img src="<?php echo $URL?>/public/images/smlnegro.png" style= "width: 150px; margin-right: 20px;" alt="">
-                  <img src="<?php echo $URL?>/public/images/techled.png" style="width: 150px" alt="">
-                </div>
-              </center>
-              <!-- <div style="text-align: right; font-size: 12px;">Version 1.2</div> -->
 
+            <form action="controller_login.php" method="post" id="loginForm">
+              <input type="hidden" name="imagen_presionada" id="imagen_presionada" value="">
+                  <center>
+                    <div style="display: flex; align-items: center;">
+                      <a href="#" id="img1-link" class="img-link disabled-link">
+                        <img src="<?php echo $URL?>/public/images/smlnegro.png" style= "width: 150px; margin-right: 20px;" alt="">
+                      </a>
+                      <a href="#" id="img2-link" class="img-link disabled-link">
+                        <img src="<?php echo $URL?>/public/images/techled.png" style="width: 150px" alt="">
+                      </a>
+                    </div>
+                  </center>
 
               <br>
 
@@ -59,11 +65,9 @@ include('funcs/funcs.php');
                 </div>
               <?php } ?>
 
-            <form action="controller_login.php" method="post">
-
-              <label for="">Correo Electrónico</label>
+              <label for="correo">Correo Electrónico</label>
                 <div class="input-group mb-3">
-                  <input type="email" class="form-control" name="correo" placeholder="Email">
+                  <input type="email" class="form-control" id="correo" name="correo" placeholder="Email">
                     <div class="input-group-append">
                       <div class="input-group-text">
                         <span class="fas fa-envelope"></span>
@@ -73,7 +77,7 @@ include('funcs/funcs.php');
 
               <label for="password">Contraseña</label>
                 <div class="input-group mb-3">
-                  <input type="password" class="form-control" name="password" placeholder="Password">
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Password">
                     <div class="input-group-append">
                       <div class="input-group-text">
                         <span class="fas fa-lock"></span>
@@ -83,7 +87,7 @@ include('funcs/funcs.php');
 
               <label for="captcha">Captcha</label>
                 <div class="input-group mb-3">
-                  <input type="password" class="form-control" name="captcha" placeholder="Captcha">
+                  <input type="password" class="form-control" id="captcha" name="captcha" placeholder="Captcha">
                     <div class="input-group-append">
                       <div class="input-group-text">                
                           <img src="funcs/genera_codigo.php" alt="Código de Verificación" id="img-codigo">
@@ -101,14 +105,32 @@ include('funcs/funcs.php');
                 </div>
 
                 <div>
-
                   <div class="form-group">
                     <a href="" class="btn btn-default btn-block">Cancelar</a>
-                    <button type="submit" class= "btn btn-primary btn-block">Ingresar</button>
+                    <!-- <button type="submit" class= "btn btn-primary btn-block">Ingresar</button> -->
                   </div>        
                 </div>
 
             </form>
+
+            <script>
+              const img1Link = document.getElementById('img1-link');
+              const img2Link = document.getElementById('img2-link');
+              const imagenPresionadaInput = document.getElementById('imagen_presionada');
+              const loginForm = document.getElementById('loginForm');
+
+              img1Link.addEventListener('click', function(e) {
+                e.preventDefault();
+                imagenPresionadaInput.value = 'smlnegro';
+                loginForm.submit();
+              });
+
+              img2Link.addEventListener('click', function(e) {
+                e.preventDefault();
+                imagenPresionadaInput.value = 'techled';
+                loginForm.submit();
+              });
+            </script>
 
           </div>
           <!-- /.card-body -->
@@ -125,21 +147,60 @@ include('funcs/funcs.php');
       <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 
       <script>
-        const imgCodigo = document.getElementById('img-codigo')
-        const btnGenera = document.getElementById('regenera')
-        btnGenera.addEventListener('click', generaCodigo, false)
+        const imgCodigo = document.getElementById('img-codigo');
+        const btnGenera = document.getElementById('regenera');
+        const imgLinks = document.querySelectorAll('.img-link');
 
-        function generaCodigo(){
-          let url = 'funcs/genera_codigo.php'
+        const correo = document.getElementById('correo');
+        const password = document.getElementById('password');
+        const captcha = document.getElementById('captcha');
+
+        btnGenera.addEventListener('click', generaCodigo, false);
+
+        function generaCodigo() {
+          let url = 'funcs/genera_codigo.php';
 
           fetch(url)
           .then(response => response.blob())
           .then(data => {
-            if(data){
-              imgCodigo.src = URL.createObjectURL(data)
+            if (data) {
+              imgCodigo.src = URL.createObjectURL(data);
             }
-          })
+          });
         }
+
+        function checkFields() {
+          const correoValido = correo.value.trim() !== "";
+          const passwordValido = password.value.trim() !== "";
+          const captchaValido = captcha.value.trim() !== "";
+
+          if (correoValido && passwordValido && captchaValido) {
+            imgLinks.forEach(link => {
+              link.classList.remove('disabled-link');
+              link.href = "https://example.com"; // Aquí puedes definir las URLs de destino
+            });
+          } else {
+            imgLinks.forEach(link => {
+              link.classList.add('disabled-link');
+              link.href = "#";
+            });
+          }
+        }
+
+        document.querySelectorAll('#correo, #password, #captcha').forEach(input => {
+          input.addEventListener('input', checkFields);
+        });
+
+        // Inicia con los links deshabilitados
+        checkFields();
       </script>
+
+      <style>
+        .disabled-link {
+          pointer-events: none;
+          opacity: 0.6;
+        }
+      </style>
+
     </body>
   </html>

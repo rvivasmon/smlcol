@@ -3,10 +3,10 @@
 include('../../../../app/config/config.php');
 include('../../../../app/config/conexion.php');
 
-include('../../../../layout/admin/sesion.php');
-include('../../../../layout/admin/datos_sesion_user.php');
+include('../../../../layout_techled/admin/sesion.php');
+include('../../../../layout_techled/admin/datos_sesion_user.php');
 
-include('../../../../layout/admin/parte1.php');
+include('../../../../layout_techled/admin/parte1_techled.php');
 
 ?>
 
@@ -16,7 +16,7 @@ include('../../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Inventario General Almacén Secundario</h1>                
+                <h1 class="m-0">Inventario General Almacén Desechados</h1>                
                     <div class="card card-blue">
                         <div class="card-header">
                             PRODUCTOS ACTIVOS
@@ -62,31 +62,31 @@ include('../../../../layout/admin/parte1.php');
                                     <?php
                                     $contador = 0;
                                     $query = $pdo->prepare('SELECT 
-                                                            alsec.*,
+                                                            al_des.*,
                                                             productomovido.tipo_producto AS nombre_tipo,
                                                             CASE
-                                                                when alsec.tipo_producto = 1 then caracmodulos.serie_modulo
-                                                                when alsec.tipo_producto = 2 then refecontrol.referencia
-                                                                when alsec.tipo_producto = 3 then refefuentes.modelo_fuente
+                                                                when al_des.tipo_producto = 1 then caracmodulos.serie_modulo
+                                                                when al_des.tipo_producto = 2 then refecontrol.referencia
+                                                                when al_des.tipo_producto = 3 then refefuentes.modelo_fuente
                                                                 else null
                                                             end as nombre_producto
                                                             FROM
-                                                                alma_secundario AS alsec
+                                                                alma_desechados AS al_des
                                                             INNER JOIN
-                                                                t_productos AS productomovido ON alsec.tipo_producto = productomovido.id_producto
+                                                                t_productos AS productomovido ON al_des.tipo_producto = productomovido.id_producto
                                                             LEFT JOIN
-                                                                caracteristicas_modulos AS caracmodulos ON alsec.producto = caracmodulos.id_car_mod AND alsec.tipo_producto = 1
+                                                                caracteristicas_modulos AS caracmodulos ON al_des.producto = caracmodulos.id_car_mod AND al_des.tipo_producto = 1
                                                             LEFT JOIN
-                                                                referencias_control AS refecontrol ON alsec.producto = refecontrol.id_referencia AND alsec.tipo_producto = 2
+                                                                referencias_control AS refecontrol ON al_des.producto = refecontrol.id_referencia AND al_des.tipo_producto = 2
                                                             LEFT JOIN
-                                                                referencias_fuente AS refefuentes ON alsec.producto = refefuentes.id_referencias_fuentes AND alsec.tipo_producto = 3;
+                                                                referencias_fuente AS refefuentes ON al_des.producto = refefuentes.id_referencias_fuentes AND al_des.tipo_producto = 3;
 
                                                         ');
 
                                     $query->execute();
                                     $almacenes_pricipales = $query->fetchAll(PDO::FETCH_ASSOC);
                                     foreach ($almacenes_pricipales as $almacen_pricipal){
-                                        $id = $almacen_pricipal['id_secundario'];
+                                        $id = $almacen_pricipal['id_desechados'];
                                         $fecha_ingreso = $almacen_pricipal['CREATED_AT'];
                                         $tipo_producto = $almacen_pricipal['nombre_tipo'];
                                         $producto = $almacen_pricipal['nombre_producto'];
@@ -143,7 +143,7 @@ include('../../../../layout/admin/parte1.php');
                                         </div>
 
 
-<?php include('../../../../layout/admin/parte2.php'); ?>
+<?php include('../../../../layout_techled/admin/parte2_techled.php'); ?>
 
 <script>
     $(function () {

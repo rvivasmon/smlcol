@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Recolectar datos del formulario
         $fecha_creacion = $_POST['fecha'];
-        $id_pc = $_POST['id_pc'];
+        $id_pc = $_POST['pc'];
         $pc = $_POST['pc21'];
         $tipo_pc = $_POST['tipo_pc'];
         $oc= $_POST['oci_oc'];
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $estado_admon = $_POST['estado_admon'];
         $vendedor = $_POST['vendedor'];
         $estado_factura = $_POST['estado_factura'];
-        $num_factura_fecha = $_POST['num_factura_fecha'];
+        $factura_fecha = $_POST['factura_fecha'];
         $acuerdo_pago = $_POST['acuerdo_pago'];
         $ciudad = $_POST['ciudad'];
         $lugar_instalacion = $_POST['lugar_instalacion'];
@@ -48,8 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $contador = $result['next_contador'] ?? 1; // Si es null, inicia en 1
 
         // Inserta los datos principales de la OC
-        $query_insert = "INSERT INTO oc (fecha_creacion, id_pc, pc, tipo_pc, oc, tipo_oc, oc_cliente, estado_admon, vendedor, estado_factura, num_factura_fecha, acuerdo_pago, nom_contacto_admin, telefono_contacto, nom_cliente, nom_contacto_cliente, num_telefono, proyecto, ciudad, lugar_instalacion, estado_logistico, dias_pactados, observacion, fecha_aprobacion, num_factura, num_items, contador, oc_resultante, usuario_crea_oc) 
-        VALUES (:fecha_creacion, :id_pc, :pc, :tipo_pc, :oc, :tipo_oc, :oc_cliente, :estado_admon, :vendedor, :estado_factura, :num_factura_fecha, :acuerdo_pago, :nom_contacto_admin, :telefono_contacto, :nom_cliente, :nom_contacto_cliente, :num_telefono, :proyecto, :ciudad, :lugar_instalacion, :estado_logistico, :dias_pactados, :observacion, :fecha_aprobacion, :num_factura, :num_items, :contador, :oc_resultante, :usuario)";
+        $query_insert = "INSERT INTO oc (fecha_creacion, id_pc, pc, tipo_pc, oc, tipo_oc, oc_cliente, estado_admon, vendedor, estado_factura, factura_fecha, acuerdo_pago, nom_contacto_admin, telefono_contacto, nom_cliente, nom_contacto_cliente, num_telefono, proyecto, ciudad, lugar_instalacion, estado_logistico, dias_pactados, observacion, fecha_aprobacion, num_factura, num_items, contador, oc_resultante, usuario_crea_oc) 
+        VALUES (:fecha_creacion, :id_pc, :pc, :tipo_pc, :oc, :tipo_oc, :oc_cliente, :estado_admon, :vendedor, :estado_factura, :factura_fecha, :acuerdo_pago, :nom_contacto_admin, :telefono_contacto, :nom_cliente, :nom_contacto_cliente, :num_telefono, :proyecto, :ciudad, :lugar_instalacion, :estado_logistico, :dias_pactados, :observacion, :fecha_aprobacion, :num_factura, :num_items, :contador, :oc_resultante, :usuario)";
 
         $stmt = $pdo->prepare($query_insert);
         $stmt->bindParam(':fecha_creacion', $fecha_creacion);
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':estado_admon', $estado_admon);
         $stmt->bindParam(':vendedor', $vendedor);
         $stmt->bindParam(':estado_factura', $estado_factura);
-        $stmt->bindParam(':num_factura_fecha', $num_factura_fecha);
+        $stmt->bindParam(':factura_fecha', $factura_fecha);
         $stmt->bindParam(':acuerdo_pago', $acuerdo_pago);
         $stmt->bindParam(':nom_contacto_admin', $nom_contacto_admin);
         $stmt->bindParam(':telefono_contacto', $telefono_contacto);

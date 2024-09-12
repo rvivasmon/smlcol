@@ -22,7 +22,7 @@ include('../../../layout/admin/parte1.php');
             <hr>
             
             <div class="col-md-4">
-              <a type="button" href="<?php echo $URL; ?>admin/nueva_tarea_8-7-24/create_pop.php" class="btn btn-primary">INSERTAR UN NUEVO POP</a>
+              <a type="button" href="<?php echo $URL; ?>admin/operacion/pop/create_pop.php" class="btn btn-primary">INSERTAR UN NUEVO POP</a>
             </div>
            
             <div class="card-body">

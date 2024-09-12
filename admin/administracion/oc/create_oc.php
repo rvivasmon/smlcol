@@ -156,7 +156,7 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                                             foreach($proyectos as $proyecto) {
                                                 $id_proyecto_visor = $proyecto['id'];
                                                 $tipo_proyecto_visor = $proyecto['nombre_comercial'];
-                                                echo "<option value='$id_proyecto_visor' data-tipo='$tipo_proyecto_visor'>$tipo_proyecto_visor</option>";
+                                                echo "<option value='$tipo_proyecto_visor' data-tipo='$tipo_proyecto_visor'>$tipo_proyecto_visor</option>";
                                             }
                                         ?>
                                     </select>
@@ -206,13 +206,13 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                                     <select name="estado_admon" id="estado_admon" class="form-control" required>
                                     <option value="">Seleccione el Estado</option>
                                         <?php 
-                                            $query_estados = $pdo->prepare('SELECT estado_admon FROM t_estado WHERE estado_admon IS NOT NULL AND estado_admon <> ""');
-                                            $query_estados->execute();
-                                            $estado = $query_estados->fetchAll(PDO::FETCH_ASSOC);
-                                            foreach($estado as $estados) {
-                                                $acuerdo_estado = $estados['estado_admon'];
-                                                $id_estado = $estados['id'];
-                                                echo "<option value='$id_estado'>$acuerdo_estado</option>";
+                                            $query_admones = $pdo->prepare('SELECT estado_admon FROM t_estado WHERE estado_admon IS NOT NULL AND estado_admon <> ""');
+                                            $query_admones->execute();
+                                            $admon = $query_admones->fetchAll(PDO::FETCH_ASSOC);
+                                            foreach($admon as $admones) {
+                                                $acuerdo_admon = $admones['estado_admon'];
+                                                $id_admon = $admones['id'];
+                                                echo "<option value='$acuerdo_admon'>$acuerdo_admon</option>";
                                             }
                                         ?>
                                     </select>
@@ -225,13 +225,13 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                                     <select name="vendedor" id="vendedor" class="form-control" required>
                                     <option value="">Seleccione el Estado</option>
                                         <?php 
-                                            $query_estados = $pdo->prepare('SELECT nombre FROM usuarios WHERE nombre IS NOT NULL AND nombre <> "" AND id_cargo = "10" ORDER BY nombre');
-                                            $query_estados->execute();
-                                            $estado = $query_estados->fetchAll(PDO::FETCH_ASSOC);
-                                            foreach($estado as $estados) {
-                                                $acuerdo_estado = $estados['nombre'];
-                                                $id_estado = $estados['id'];
-                                                echo "<option value='$id_estado'>$acuerdo_estado</option>";
+                                            $query_vendedores = $pdo->prepare('SELECT nombre FROM usuarios WHERE nombre IS NOT NULL AND nombre <> "" AND id_cargo = "10" ORDER BY nombre');
+                                            $query_vendedores->execute();
+                                            $vendedor = $query_vendedores->fetchAll(PDO::FETCH_ASSOC);
+                                            foreach($vendedor as $vendedores) {
+                                                $acuerdo_vendedor = $vendedores['nombre'];
+                                                $id_vendedor = $vendedores['id'];
+                                                echo "<option value='$acuerdo_vendedor'>$acuerdo_vendedor</option>";
                                             }
                                         ?>
                                     </select>
@@ -250,7 +250,7 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                                             foreach($estado as $estados) {
                                                 $acuerdo_estado = $estados['estado_factura'];
                                                 $id_estado = $estados['id'];
-                                                echo "<option value='$id_estado'>$acuerdo_estado</option>";
+                                                echo "<option value='$acuerdo_estado'>$acuerdo_estado</option>";
                                             }
                                         ?>
                                     </select>
@@ -260,7 +260,7 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Número de Factura</label>
-                                    <input type="text" name="num_factura_fecha" id="num_factura_fecha" class="form-control">
+                                    <input type="text" name="factura_fecha" id="factura_fecha" class="form-control">
                                 </div>
                             </div>
 
@@ -304,7 +304,7 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                                             foreach ($ciudades as $ciudad) {
                                                 $nombre_ciudad = $ciudad['ciudad'];
                                                 $id_ciudad = $ciudad['id'];
-                                                echo "<option value='$id_ciudad'>$nombre_ciudad</option>"; // Asegúrate de usar comillas simples para PHP dentro de echo
+                                                echo "<option value='$nombre_ciudad'>$nombre_ciudad</option>"; // Asegúrate de usar comillas simples para PHP dentro de echo
                                             }
                                         ?>
                                     </select>

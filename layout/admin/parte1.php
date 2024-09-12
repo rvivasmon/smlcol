@@ -63,7 +63,7 @@ foreach ($roles_permisos as $rol_permiso) {
       <!-- Theme style -->
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3/dist/css/adminlte.min.css">
       <!-- Icon Logo -->
-      <link rel="icon" type="image/ico" href="../public/images/Logo.png">
+      <link rel="icon" type="image/ico" href="../../public/images/Logo.png">
       <!-- Ventana de alerta  sweetalert2-->
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <!-- DataTables -->
@@ -195,7 +195,7 @@ foreach ($roles_permisos as $rol_permiso) {
                     ?>
 
                     <?php
-                      if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Almacén") ){ ?>
+                      if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="14") ){ ?>
 
                       <?php
                         // Ejemplo de generación dinámica de submenús para Consulta Stock
@@ -203,7 +203,7 @@ foreach ($roles_permisos as $rol_permiso) {
                         // Ejemplo de datos simulados (reemplaza con tu lógica de datos real)
                         $almacenes = array(
                           array('id' => 3, 'nombre' => 'Almacén Principal'),
-                          array('id' => 4, 'nombre' => 'Almacén Secundario'),
+                          array('id' => 4, 'nombre' => 'Almacén Techled'),
                           array('id' => 5, 'nombre' => 'Almacén Importación'),
                           array('id' => 6, 'nombre' => 'Almacén Técnica'),
                           array('id' => 7, 'nombre' => 'Almacén Planta'),
@@ -211,6 +211,7 @@ foreach ($roles_permisos as $rol_permiso) {
                           array('id' => 9, 'nombre' => 'Almacén Desechados'),
                           array('id' => 10, 'nombre' => 'Almacén Soporte Técnico'),
                           array('id' => 11, 'nombre' => 'Almacén Aliados'),
+                          array('id' => 12, 'nombre' => 'Almacén General'),
                           // Agregar más almacenes según necesites
                         );
 
@@ -266,7 +267,7 @@ foreach ($roles_permisos as $rol_permiso) {
                                                   } elseif ($producto['id'] == 3) {
                                                       $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
                                                   } elseif ($producto['id'] == 6) {
-                                                    $url_producto = $URL . "admin/almacen/inventario/secundario/index.php";
+                                                    $url_producto = $URL . "admin/almacen/inventario/techled/index.php";
                                                 }
                                                   } elseif ($almacen['id'] == 5) {
                                                     if ($producto['id'] == 1) {
@@ -338,6 +339,16 @@ foreach ($roles_permisos as $rol_permiso) {
                                                   } elseif ($producto['id'] == 6) {
                                                     $url_producto = $URL . "admin/almacen/inventario/aliados/index.php";
                                                 }
+                                                  } elseif ($almacen['id'] == 12) {
+                                                    if ($producto['id'] == 1) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
+                                                  } elseif ($producto['id'] == 2) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
+                                                  } elseif ($producto['id'] == 3) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
+                                                  } elseif ($producto['id'] == 6) {
+                                                    $url_producto = $URL . "admin/almacen/inventario/almacenes/index.php";
+                                                }
                                                   }
                                                   ?>
                                                   <li class="nav-item">
@@ -358,12 +369,6 @@ foreach ($roles_permisos as $rol_permiso) {
                                 <p>Movimiento Diario</p>
                               </a>
                             </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/almacen/inventario/" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Productos Creados</p>
-                              </a>
-                            </li>
                           </ul>
                         </li>
 
@@ -372,7 +377,7 @@ foreach ($roles_permisos as $rol_permiso) {
                     ?>
 
                     <?php
-                      if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Administración") ){ ?>
+                      if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="14") ){ ?>
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
@@ -384,7 +389,7 @@ foreach ($roles_permisos as $rol_permiso) {
                           </a>
                           <ul class="nav nav-treeview">
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/operacion/pop/" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Status POP </p>
                               </a>
@@ -392,37 +397,7 @@ foreach ($roles_permisos as $rol_permiso) {
                             <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Tratamiento POP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
                                 <p>Status OP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tratamiento OP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>CAMPO LIBRE</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>smartled_bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>STC CLIENTE</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>OST CLIENTE</p>
                               </a>
                             </li>
                           </ul>
@@ -488,12 +463,6 @@ foreach ($roles_permisos as $rol_permiso) {
                           </a>
                           <ul class="nav nav-treeview">
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/crm/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Proyectos</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/crm/preproyectos/" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Pre Proyectos</p>
@@ -521,43 +490,7 @@ foreach ($roles_permisos as $rol_permiso) {
                             <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/usuarios" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Status POP </p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tratamiento POP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Status OP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tratamiento OP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>CAMPO LIBRE</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>smartled_bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>STC CLIENTE</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>OST CLIENTE</p>
+                                <p>Status DDI </p>
                               </a>
                             </li>
                           </ul>
@@ -580,39 +513,9 @@ foreach ($roles_permisos as $rol_permiso) {
                           </a>
                           <ul class="nav nav-treeview">
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/almacen/inventario/" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Tratamiento POP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Status OP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tratamiento OP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>CAMPO LIBRE</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>smartled_bd_sigcp_2024/soportetecnico/stc/index.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>STC CLIENTE</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>OST CLIENTE</p>
+                                <p>Productos Creados</p>
                               </a>
                             </li>
                           </ul>
@@ -635,45 +538,9 @@ foreach ($roles_permisos as $rol_permiso) {
                           </a>
                           <ul class="nav nav-treeview">
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/crm/proyectos/" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Status POP </p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tratamiento POP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Status OP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tratamiento OP</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>CAMPO LIBRE</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>smartled_bd_sigcp_2024/soportetecnico/stc" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>STC CLIENTE</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>OST CLIENTE</p>
+                                <p>Proyectos</p>
                               </a>
                             </li>
                           </ul>

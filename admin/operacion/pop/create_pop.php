@@ -1,10 +1,12 @@
 <?php
 
-include('../../app/config/config.php');
-include('../../app/config/conexion.php');
-include('../../layout/admin/sesion.php');
-include('../../layout/admin/datos_sesion_user.php');
-include('../../layout/admin/parte1.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
+
+include('../../../layout/admin/sesion.php');
+include('../../../layout/admin/datos_sesion_user.php');
+
+include('../../../layout/admin/parte1.php');
 
 $conta2 = 0;
 $conta3 = 0;
@@ -23,14 +25,14 @@ $last_oc = $query_co->fetch(PDO::FETCH_ASSOC);
 
 // Calcular el número de factura
 $num_factura = ($last_oc) ? $last_oc['num_factura'] + 1 : 1;
-$num_factura_fecha = str_pad($num_factura, 3, '0', STR_PAD_LEFT) . ' - ' . date('dmY');
+$factura_fecha = str_pad($num_factura, 3, '0', STR_PAD_LEFT) . ' - ' . date('dmY');
 
 // Obtener opciones dinámicas
-$query_taunion = $pdo->prepare('SELECT id, consecutivo_primero_oc FROM prefijos LIMIT 2');
+$query_taunion = $pdo->prepare('SELECT id, consecutivo_primero_oc FROM oc_prefijos LIMIT 2');
 $query_taunion->execute();
 $unionesa = $query_taunion->fetchAll(PDO::FETCH_ASSOC);
 
-$query_union = $pdo->prepare('SELECT id, consecutivo_segundo_oc FROM prefijos LIMIT 3');
+$query_union = $pdo->prepare('SELECT id, consecutivo_segundo_oc FROM oc_prefijos LIMIT 3');
 $query_union->execute();
 $uniones = $query_union->fetchAll(PDO::FETCH_ASSOC);
 
@@ -174,7 +176,7 @@ if ($oci_oc && $sml_psi_tl) {
                             <div class="col-md-0">
                                 <div class="form-group">
                                     <label for=""></label>
-                                    <input type="text" name="num_factura_fecha" id="num_factura_fecha" value="<?php echo $num_factura_fecha; ?>" class="form-control" hidden>
+                                    <input type="text" name="factura_fecha" id="factura_fecha" value="<?php echo $factura_fecha; ?>" class="form-control" hidden>
                                 </div>
                             </div>
 
@@ -182,9 +184,9 @@ if ($oci_oc && $sml_psi_tl) {
                                 <div class="form-group">
                                     <label for="">Acuerdo Pago</label>
                                     <select name="acuerdo_pago" id="acuerdo_pago" class="form-control" required>
-                                     <option value="">Seleccione el Acuerdo de Pago</option>
+                                    <option value="">Seleccione el Acuerdo de Pago</option>
                                         <?php 
-                                            $query_prefijos = $pdo->prepare('SELECT acuerdo_pago FROM prefijos LIMIT 3');
+                                            $query_prefijos = $pdo->prepare('SELECT acuerdo_pago FROM oc_prefijos LIMIT 3');
                                             $query_prefijos->execute();
                                             $prefi = $query_prefijos->fetchAll(PDO::FETCH_ASSOC);
                                             foreach($prefi as $prefijos) {
@@ -305,7 +307,7 @@ if ($oci_oc && $sml_psi_tl) {
     </div><!-- /.content-header -->
 </div><!-- /.content-wrapper -->
 
-<?php include('../../layout/admin/parte2.php');?>
+<?php include('../../../layout/admin/parte2.php');?>
 
 <script>
     document.getElementById('addItem').addEventListener('click', function() {
@@ -370,17 +372,6 @@ if ($oci_oc && $sml_psi_tl) {
         });
     });
 
-</script>
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        fetch('fetch_num_factura_fecha.php')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('num_factura_fecha').value = data.num_factura_fecha;
-            });
-    });
 </script>
 
 <script>
@@ -493,5 +484,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<?php include('../../layout/admin/parte2.php'); ?>
+<?php include('../../../layout/admin/parte2.php'); ?>
 prueba

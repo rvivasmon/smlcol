@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $estado_admon = $_POST['estado_admon'];
     $vendedor = $_POST['vendedor'];
     $estado_factura = $_POST['estado_factura'];
-    $num_factura_fecha = $_POST['num_factura_fecha'];
+    $factura_fecha = $_POST['factura_fecha'];
     $acuerdo_pago = $_POST['acuerdo_pago'];
     $nom_contacto_admin = $_POST['nom_contacto_admin'];
     $telefono_contacto = $_POST['telefono_contacto'];
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     
     // Inserta los datos principales de la OC
-    $query = "INSERT INTO oc (oc, pc, tipo_oc, tipo_pc, oc_cliente, fecha_creacion, fecha_aprobacion, estado_admon, vendedor, estado_factura, num_factura_fecha, acuerdo_pago, nom_contacto_admin, telefono_contacto, nom_cliente, nom_contacto_cliente, num_telefono, proyecto, ciudad, lugar_instalacion, estado_logistico, dias_pactados, observacion, num_factura) VALUES (:oc, :pc, :tipo_oc, :tipo_pc, :oc_cliente, :fecha_creacion, :fecha_aprobacion, :estado_admon, :vendedor, :estado_factura, :num_factura_fecha, :acuerdo_pago, :nom_contacto_admin, :telefono_contacto, :nom_cliente, :nom_contacto_cliente, :num_telefono, :proyecto, :ciudad, :lugar_instalacion, :estado_logistico, :dias_pactados, :observacion, :num_factura)";
+    $query = "INSERT INTO oc (oc, pc, tipo_oc, tipo_pc, oc_cliente, fecha_creacion, fecha_aprobacion, estado_admon, vendedor, estado_factura, factura_fecha, acuerdo_pago, nom_contacto_admin, telefono_contacto, nom_cliente, nom_contacto_cliente, num_telefono, proyecto, ciudad, lugar_instalacion, estado_logistico, dias_pactados, observacion, num_factura) VALUES (:oc, :pc, :tipo_oc, :tipo_pc, :oc_cliente, :fecha_creacion, :fecha_aprobacion, :estado_admon, :vendedor, :estado_factura, :factura_fecha, :acuerdo_pago, :nom_contacto_admin, :telefono_contacto, :nom_cliente, :nom_contacto_cliente, :num_telefono, :proyecto, :ciudad, :lugar_instalacion, :estado_logistico, :dias_pactados, :observacion, :num_factura)";
 
     $stmt = $pdo->prepare($query);
 
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bindParam(':estado_admon', $estado_admon);
     $stmt->bindParam(':vendedor', $vendedor);
     $stmt->bindParam(':estado_factura', $estado_factura);
-    $stmt->bindParam(':num_factura_fecha', $num_factura_fecha);
+    $stmt->bindParam(':factura_fecha', $factura_fecha);
     $stmt->bindParam(':acuerdo_pago', $acuerdo_pago);
     $stmt->bindParam(':nom_contacto_admin', $nom_contacto_admin);
     $stmt->bindParam(':telefono_contacto', $telefono_contacto);

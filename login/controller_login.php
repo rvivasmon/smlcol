@@ -11,6 +11,7 @@ $codigoVerificacion = $_SESSION['codigo_verificacion'] ?? '';
 $correo = $_POST['correo'] ?? '';
 $password = $_POST['password'] ?? '';
 $captcha1 = $_POST['captcha'] ?? '';
+$imagen_presionada = $_POST['imagen_presionada'] ?? ''; // Obtenemos la imagen presionada
 
 if (empty($correo) || empty($password) || empty($captcha1)) {
     setFlashData('error', 'Debe llenar todos los datos');
@@ -41,7 +42,12 @@ if ($usuario === false) {
             // Redirigir a la página de cambio de contraseña
             header('Location: ' . $URL . 'login/change_password.php');
         } else {
-            header('Location: ' . $URL . 'admin/');
+            // Redireccionar según la imagen presionada
+            if ($imagen_presionada === 'smlnegro') {
+                header('Location: ' . $URL . 'admin/');
+            } elseif ($imagen_presionada === 'techled') {
+                header('Location: ' . $URL . 'admin_techled/index_techled.php');
+            }
         }
     } else {
         header('Location: ' . $URL . 'login/error.php');

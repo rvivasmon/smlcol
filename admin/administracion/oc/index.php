@@ -82,7 +82,7 @@ $fecha_creacion = date('Y-m-d'); //Obtiene la fecha actual
                                     $estado_admon = $oc_item['estado_admon'];
                                     $vendedor = $oc_item['vendedor'];
                                     $estado_factura = $oc_item['estado_factura'];
-                                    $num_factura_fecha = $oc_item['num_factura_fecha'];
+                                    $factura_fecha = $oc_item['factura_fecha'];
                                     $acuerdo_pago = $oc_item['acuerdo_pago'];
                                     $nom_contacto_admin = $oc_item['nom_contacto_admin'];
                                     $telefono_contacto = $oc_item['telefono_contacto'];
@@ -113,7 +113,7 @@ $fecha_creacion = date('Y-m-d'); //Obtiene la fecha actual
                                         <td hidden><?php echo $estado_admon; ?></td>
                                         <td hidden><?php echo $vendedor; ?></td>
                                         <td hidden><?php echo $estado_factura; ?></td>
-                                        <td hidden><?php echo $num_factura_fecha; ?></td>
+                                        <td hidden><?php echo $factura_fecha; ?></td>
                                         <td hidden><?php echo $acuerdo_pago; ?></td>
                                         <td hidden><?php echo $nom_contacto_admin; ?></td>
                                         <td hidden><?php echo $telefono_contacto; ?></td>  
@@ -129,9 +129,9 @@ $fecha_creacion = date('Y-m-d'); //Obtiene la fecha actual
                                    
                                         <td>
                                             <center>
-                                                <a href="show_oc.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar Registro e Items <i class="fas fa-eye"></i></a>
-                                                <a href="tratar_oc.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Tratar Registro e Items<i class="fas fa-pen"></i></a>
-                                                <a href="delete_oc.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar Registro<i class="fas fa-trash"></i></a>
+                                                <a href="show_oc.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar<i class="fas fa-eye"></i></a>
+                                                <a href="tratar_oc.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Tratar<i class="fas fa-pen"></i></a>
+                                                <a href="delete_oc.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Eliminar<i class="fas fa-trash"></i></a>
                                             </center>
                                         </td>
                                     </tr>

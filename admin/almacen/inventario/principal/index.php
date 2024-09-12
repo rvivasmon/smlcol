@@ -80,7 +80,6 @@ include('../../../../layout/admin/parte1.php');
                                                                 referencias_control AS refecontrol ON ap.producto = refecontrol.id_referencia AND ap.tipo_producto = 2
                                                             LEFT JOIN
                                                                 referencias_fuente AS refefuentes ON ap.producto = refefuentes.id_referencias_fuentes AND ap.tipo_producto = 3;
-
                                                         ');
 
                                     $query->execute();

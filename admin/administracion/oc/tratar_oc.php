@@ -17,17 +17,18 @@ $query_oc->execute();
 $oces = $query_oc->fetchAll(PDO::FETCH_ASSOC);
 foreach ($oces as $oc_item){
     $id = $oc_item['id'];
-    $oc = $oc_item['oc'];
-    $pc = $oc_item['pc'];
-    $tipo_oc = $oc_item['tipo_oc'];
-    $tipo_pc = $oc_item['tipo_pc'];
-    $oc_cliente = $oc_item['oc_cliente'];
     $fecha_creacion = $oc_item['fecha_creacion'];
+    $pc = $oc_item['id_pc'];
+    $pc_combinado = $oc_item['pc'] . '-' . $oc_item['tipo_pc'];
+    $oc = $oc_item['oc'];
+    $tipo_oc = $oc_item['tipo_oc'];
+    $oc_cliente = $oc_item['oc_cliente'];
+    $oc_final = $oc_item['oc_resultante'];
     $fecha_aprobacion = $oc_item['fecha_aprobacion'];
     $estado_admon = $oc_item['estado_admon'];
     $vendedor = $oc_item['vendedor'];
     $estado_factura = $oc_item['estado_factura'];
-    $num_factura_fecha = $oc_item['num_factura_fecha'];
+    $factura_fecha = $oc_item['factura_fecha'];
     $acuerdo_pago = $oc_item['acuerdo_pago'];
     $nom_contacto_admin = $oc_item['nom_contacto_admin'];
     $telefono_contacto = $oc_item['telefono_contacto'];
@@ -61,215 +62,203 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
             </div><!-- /.row -->
 
             <div class="card card-green">
-            <div class="card-header">
-                    <a href="#" class="d-block"><?php echo $sesion_usuario['nombre']?></a>
+
+                <div class="card-header">
                     Introduzca la información correspondiente
                 </div>
                 <div class="card-body">
                     <form action="controller_tratar_oc.php" method="post" enctype="multipart/form-data">
-                        <div class="row">
-                        
-                        <div class="col-md-4">
+
+                    <div class="row">
+                        <div class="col-md-1">
                             <div class="form-group">
-                            <label for="id_oc">ID OC</label>
-                                <input type="text" name="id_oc" id="id_oc" value="<?php echo $id; ?>" class="form-control" readonly>
+                                <label for="fecha_creacion">Creacion</label>
+                                <input type="text" name="fecha_creacion" id="fecha_creacion" value="<?php echo $oc_item['fecha_creacion']; ?>" class="form-control" readonly>
+                            </div>
                         </div>
+
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label for="id_pc">ID PC</label>
+                                <input type="text" name="id_pc" id="id_pc" value="<?php echo $oc_item['id_pc']; ?>" class="form-control" readonly>
+                            </div>
                         </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="usuario_trata_oc">Usuario Trata OC</label>
-                                    <input type="text" name="usuario_trata_oc" id="usuario_trata_oc" value="<?php echo $sesion_usuario['nombre']; ?>" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-">
-                                <div class="form-group">
-                                    <label for=""></label>
-                                    <input type="text" name="usuario_crea_oc" id="usuario_crea_oc" value="<?php echo $sesion_usuario['nombre']; ?>" class="form-control" hidden>
-                                </div>
-                            </div>
-                            <div class="col-md-0">
-                                <div class="form-group">
-                                    <label for=""></label>
-                                    <input name="fecha_tratada_oc" id="fecha_tratada_oc" value="<?php echo $fecha_tratada_oc?>" class="form-control" hidden>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="oc">OC</label>
-                                    <input type="text" name="oc_resultante" id="oc_resultante" value="<?php echo $oc_item['oc']; ?>" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="tipo_oc">Tipo OC</label>
-                                    <input type="text" name="tipo_oc" id="tipo_oc" value="<?php echo $oc_item['tipo_oc']; ?>" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="tipo_pc">Tipo Pc</label>
-                                    <input type="text" name="tipo_pc" id="tipo_pc" value="<?php echo $oc_item['tipo_pc']; ?>" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="pc">PC</label>
-                                    <input type="text" name="pc" id="pc" value="<?php echo $oc_item['pc']; ?>"class="form-control " readonly>
-                                </div>
-                            </div>
 
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="fecha_creacion">Fecha Creacion</label>
-                                    <input type="text" name="fecha_creacion" id="fecha_creacion" value="<?php echo $oc_item['fecha_creacion']; ?>" class="form-control" readonly>
-                                </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label for="pc">PC</label>
+                                <input type="text" name="pc" id="pc" value="<?php echo $pc_combinado; ?>"class="form-control" readonly>
                             </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="fecha_aprobacion">Fecha Aprobación</label>
-                                    <input type="date" name="fecha_aprobacion" id="fecha_aprobacion" value="<?php echo $oc_item['fecha_aprobacion']; ?>" class="form-control" readonly>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="num_factura_fecha">Num Factura Fecha</label>
-                                    <input type="text" name="num_factura_fecha" id="num_factura_fecha" value="<?php echo $oc_item['num_factura_fecha']; ?>" class="form-control" readonly>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="proyecto">Proyecto</label>
-                                    <input type="text" name="proyecto" id="proyecto" value="<?php echo $oc_item['proyecto']; ?>" class="form-control" readonly>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="num_items">Num Ítems</label>
-                                    <input type="text" name="num_items" id="num_items" value="<?php echo $oc_item['num_items']; ?>" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="oc_cliente">OC Cliente</label>
-                                    <input type="text" name="oc_cliente" id="oc_cliente" value="<?php echo $oc_item['oc_cliente']; ?>" class="form-control">
-                                </div>  
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="estado_admon">Estado Admon</label>
-                                    <input type="text" name="estado_admon" id="estado_admon" value="<?php echo $oc_item['estado_admon']; ?>" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="vendedor">Vendedor</label>
-                                    <input type="text" name="vendedor" id="vendedor" value="<?php echo $oc_item['vendedor']; ?>" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="estado_factura">Estado Factura</label>
-                                    <input type="text" name="estado_factura" id="estado_factura" value="<?php echo $oc_item['estado_factura']; ?>" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="">Acuerdo Pago</label>
-                                    <select name="acuerdo_pago" id="acuerdo_pago" value="<?php echo $oc_item['acuerdo_pago']; ?>" class="form-control" required>
-                                        <?php 
-                                            $query_prefijos = $pdo->prepare('SELECT acuerdo_pago FROM oc_prefijos LIMIT 3');
-                                            $query_prefijos->execute();
-                                            $prefi = $query_prefijos->fetchAll(PDO::FETCH_ASSOC);
-                                            foreach($prefi as $prefijos) {
-                                                $acuerdo_pago = $prefijos['acuerdo_pago'];
-                                                echo "<option value='$acuerdo_pago '>$acuerdo_pago</option>";
-                                            }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="nom_contacto_admin">Nom Contacto Admin</label>
-                                    <input type="text" name="nom_contacto_admin" id="nom_contacto_admin" value="<?php echo $oc_item['nom_contacto_admin']; ?>" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="telefono_contacto">Teléfono Contacto</label>
-                                    <input type="text" name="telefono_contacto" id="telefono_contacto" value="<?php echo $oc_item['telefono_contacto']; ?>" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="nom_cliente">Nom Cliente</label>
-                                    <input type="text" name="nom_cliente" id="nom_cliente" value="<?php echo $oc_item['nom_cliente']; ?>" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="nom_contacto_cliente">Nom Contacto Cliente</label>
-                                    <input type="text" name="nom_contacto_cliente" id="nom_contacto_cliente" value="<?php echo $oc_item['nom_contacto_cliente']; ?>" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="num_telefono">Num Teléfono</label>
-                                    <input type="text" name="num_telefono" id="num_telefono" value="<?php echo $oc_item['num_telefono']; ?>" class="form-control">
-                                </div>
-                            </div>
-
-                            
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="ciudad">Ciudad</label>
-                                    <input type="text" name="ciudad" id="ciudad" value="<?php echo $oc_item['ciudad']; ?>" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="lugar_instalacion">Lugar Instalación</label>
-                                    <input type="text" name="lugar_instalacion" id="lugar_instalacion" value="<?php echo $oc_item['lugar_instalacion']; ?>" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="estado_logistico">Estado Logístico</label>
-                                    <input type="text" name="estado_logistico" id="estado_logistico" value="<?php echo $oc_item['estado_logistico']; ?>" class="form-control">
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="dias_pactados">Días Pactados</label>
-                                    <input type="number" name="dias_pactados" id="dias_pactados" value="<?php echo $oc_item['dias_pactados']; ?>" class="form-control" >
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="observacion">Observación</label>
-                                    <input type="text" name="observacion" id="observacion" value="<?php echo $oc_item['observacion']; ?>" class="form-control">
-                                </div>
-                            </div>
-
-                            
                         </div>
+
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label for="id_oc">ID OC</label>
+                                <input type="text" name="id_oc" id="id_oc" value="<?php echo $oc_final; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="oc_cliente">OC Cliente</label>
+                                <input type="text" name="oc_cliente" id="oc_cliente" value="<?php echo $oc_item['oc_cliente']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="fecha_aprobacion">Fecha Aprobación</label>
+                                <input type="date" name="fecha_aprobacion" id="fecha_aprobacion" value="<?php echo $oc_item['fecha_aprobacion']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="estado_admon">Estado Admon</label>
+                                <input type="text" name="estado_admon" id="estado_admon" value="<?php echo $estado_admon ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="factura_fecha"> Fecha Factura</label>
+                                <input type="text" name="factura_fecha" id="factura_fecha" value="<?php echo $oc_item['factura_fecha']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="num_factura">Num Factura</label>
+                                <input type="text" name="num_factura" id="num_factura" value="<?php echo $oc_item['num_factura']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="estado_factura">Estado Factura</label>
+                                <input type="text" name="estado_factura" id="estado_factura" value="<?php echo $oc_item['estado_factura']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="acuerdo_pago">Acuerdo Pago</label>
+                                <input type="text" name="acuerdo_pago" id="acuerdo_pago" value="<?php echo $oc_item['acuerdo_pago']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="dias_pactados">Días Pactados de Entrega</label>
+                                <input type="text" name="dias_pactados" id="dias_pactados" value="<?php echo $oc_item['dias_pactados']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="nom_cliente">Nom Cliente</label>
+                                <input type="text" name="nom_cliente" id="nom_cliente" value="<?php echo $oc_item['nom_cliente']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="nom_contacto_admin">Nom Contacto Admin</label>
+                                <input type="text" name="nom_contacto_admin" id="nom_contacto_admin" value="<?php echo $oc_item['nom_contacto_admin']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="telefono_contacto">Teléfono Contacto</label>
+                                <input type="text" name="telefono_contacto" id="telefono_contacto" value="<?php echo $oc_item['telefono_contacto']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="nom_contacto_cliente">Nom Contacto Cliente</label>
+                                <input type="text" name="nom_contacto_cliente" id="nom_contacto_cliente" value="<?php echo $oc_item['nom_contacto_cliente']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="num_telefono">Num Teléfono</label>
+                                <input type="text" name="num_telefono" id="num_telefono" value="<?php echo $oc_item['num_telefono']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label for="num_items">Num Ítems</label>
+                                <input type="text" name="num_items" id="num_items" value="<?php echo $oc_item['num_items']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="proyecto">Proyecto</label>
+                                <input type="text" name="proyecto" id="proyecto" value="<?php echo $oc_item['proyecto']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="ciudad">Ciudad</label>
+                                <input type="text" name="ciudad" id="ciudad" value="<?php echo $oc_item['ciudad']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="lugar_instalacion">Lugar Instalación</label>
+                                <input type="text" name="lugar_instalacion" id="lugar_instalacion" value="<?php echo $oc_item['lugar_instalacion']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="estado_logistico">Estado Logístico</label>
+                                <input type="text" name="estado_logistico" id="estado_logistico" value="<?php echo $oc_item['estado_logistico']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="vendedor">Vendedor</label>
+                                <input type="text" name="vendedor" id="vendedor" value="<?php echo $vendedor ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="observacion">Observación</label>
+                                <input type="text" name="observacion" id="observacion" value="<?php echo $oc_item['observacion']; ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="usuario_crea_oc">Usuario</label>
+                                <input type="text" name="usuario_crea_oc" id="usuario_crea_oc" value="<?php echo $sesion_usuario['nombre']?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
                         <!-- Ítems asociados -->
                         <div class="row mb-2">
                             <div class="col-sm-6">
@@ -279,21 +268,24 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
 
                         <hr>
 
-                        <div class="col-md-4">
-                            <a type="button" href="<?php echo $URL; ?>admin/nueva_tarea_8-7-24/create_items_oc.php" class="btn btn-primary">INSERTAR UN NUEVO ITEMS</a>
+                        <div class="row mb-4">  <!-- Agrega margen inferior al botón -->
+                            <div class="col-md-4">
+                                <a type="button" href="<?php echo $URL; ?>admin/nueva_tarea_8-7-24/create_items_oc.php" class="btn btn-primary">INSERTAR UN NUEVO ITEMS</a>
+                            </div>
                         </div>
                         
-                        
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th readonly>ID Item</th>
-                                    <th readonly>Descripción</th>
-                                    <th readonly>Cantidad</th>
-                                    <th readonly>Instalacion</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                        <div class="row">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th readonly>ID Item</th>
+                                        <th readonly>Descripción</th>
+                                        <th readonly>Cantidad</th>
+                                        <th readonly>Instalacion</th>
+                                        <th readonly>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     <?php if (!empty($items)) : ?>
                                         <?php foreach ($items as $item) { ?>
                                             <tr>
@@ -319,13 +311,15 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                         </div>
                                     <?php endif; ?>
                                 </tbody>
-                        </table>
+                            </table>
+                        </div>
+
                         <hr>
 
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <a href="<?php echo $URL."admin/administracion/oc/"; ?>" class="btn btn-default btn-block">Cancelar</a>
+                                    <a href="<?php echo $URL."admin/administracion/oc/"; ?>" class="btn btn-secondary btn-block">Cancelar</a>
                                 </div>
                                 <div class="col-md-4">
                                     <button type="submit" onclick="return confirm('¿Está seguro de haber diligenciado correctamente los datos?')" class="btn btn-success btn-block">Generar POP</button>

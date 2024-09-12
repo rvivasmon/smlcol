@@ -27,7 +27,7 @@ include('../../layout/admin/datos_sesion_user.php');
                         </div>
                         
                         <div class="card-body">
-                            <div class="table-responsive">
+                        <div class="table-responsive">
                                 <table id="table_usuarios" class="table table-striped table-hover table-bordered">
                                     <thead>
                                         <tr>
@@ -44,34 +44,48 @@ include('../../layout/admin/datos_sesion_user.php');
                                     <tbody>
                                         <?php
                                         $contador = 0;
-                                        $query = $pdo->prepare('SELECT
-                                            id_producto.*,
-                                            op.op as nombre_op
-                                        FROM 
-                                            id_producto
-                                        inner join op on id_producto.op = op.id
-                                        ');
+                                        $query = $pdo->prepare('SELECT DISTINCT
+                                                                    idp.*,
+                                                                    idp.id_producto AS id_producto,
+                                                                    op.op AS op,
+                                                                    pop_admin.pop AS pop,
+                                                                    clientes.nombre_comercial AS cliente,
+                                                                    t_ciudad.ciudad AS ciudad,
+                                                                    oc_admin.nombre_proyecto AS proyecto
+                                                                FROM 
+                                                                    id_producto as idp
+                                                                LEFT JOIN 
+                                                                    op ON idp.op = op.id
+                                                                LEFT JOIN 
+                                                                    pop_admin ON op.pop = pop_admin.id
+                                                                LEFT JOIN 
+                                                                    oc_admin ON pop_admin.oc = oc_admin.id
+                                                                LEFT JOIN 
+                                                                    clientes ON oc_admin.cliente = clientes.id
+                                                                LEFT JOIN 
+                                                                    t_ciudad ON oc_admin.ciudad = t_ciudad.id
+                                                            ');
 
                                         $query->execute();
                                         $productos = $query->fetchAll(PDO::FETCH_ASSOC);
                                         foreach ($productos as $producto){
                                             $id = $producto['id'];
-                                            $fecha = $producto['fecha'];
-                                            $op = $producto['nombre_op'];
-                                            $agente = $producto['agente'];
+                                            $proyecto = $producto['proyecto'];
+                                            $op = $producto['op'];
+                                            $pop = $producto['pop'];
                                             $id_prod = $producto['id_producto'];
-                                            $anio_mes_prod = $producto['anio_mes_prod'];
-                                            $contador_prod = $producto['contador_prod'];
+                                            $cliente = $producto['cliente'];
+                                            $ciudad = $producto['ciudad'];
                                             $contador = $contador + 1;
                                         ?>
                                             <tr>
                                                 <td><?php echo $contador; ?></td>
                                                 <td><?php echo $id_prod; ?></td>
                                                 <td><?php echo $op; ?></td>
-                                                <td><?php echo $agente; ?></td>
-                                                <td><?php echo $anio_mes_prod; ?></td>
-                                                <td><?php echo $contador_prod; ?></td>
-                                                <td><?php echo $fecha; ?></td>
+                                                <td><?php echo $pop; ?></td>
+                                                <td><?php echo $cliente; ?></td>
+                                                <td><?php echo $ciudad; ?></td>
+                                                <td><?php echo $proyecto; ?></td>
                                                 <td>
                                                     <center>
                                                         <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
