@@ -86,7 +86,7 @@ $hora_actual = date('H:i');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Creación Pre Proyecto</h1>
+                    <h1 class="m-0">Información Pre - Proyecto</h1>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -124,7 +124,7 @@ $hora_actual = date('H:i');
                                 </div>
                                 <div class="col-md-5">
                                     <label for="ciudad" class="d-block mb-0">Ciudad</label>
-                                    <input type="text" name="ciudad" id="ciudad" class="form-control">
+                                    <input type="text" name="ciudad" id="ciudad" class="form-control" required>
                                 </div>
                                 <div class="col-md-0">
                                     <input type="hidden" name="idusuario2" value="<?php echo $sesion_usuario['id']; ?>">
@@ -204,7 +204,9 @@ $hora_actual = date('H:i');
                                                     <select name="categoria_producto[]" id="categoria_producto_<?php echo $contador_ppc; ?>" class="form-control" onchange="cargarDatosRelacionados(this.value, <?php echo $contador_ppc; ?>)">
                                                         <option value="">Seleccione Categoría</option>
                                                         <?php foreach ($productos as $producto) : ?>
-                                                            <option value="<?php echo htmlspecialchars($producto['id_prod_terminado']); ?>"><?php echo htmlspecialchars($producto['categoria']); ?></option>
+                                                            <?php if ($producto['id_prod_terminado'] != 5) : // Excluye el registro con id 5 ?>
+                                                                <option value="<?php echo htmlspecialchars($producto['id_prod_terminado']); ?>"><?php echo htmlspecialchars($producto['categoria']); ?></option>
+                                                            <?php endif; ?>
                                                         <?php endforeach; ?>
                                                     </select>
                                                 </div>
@@ -228,7 +230,7 @@ $hora_actual = date('H:i');
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-4 items_pre">
+                                            <div class="col-md-4 items_pre" hidden>
                                                 <div class="form-group">
                                                     <label for="tipo_modulo" class="d-block mb-0">Tipo Módulo</label>
                                                     <select name="tipo_modulo[]" id="tipo_modulo_<?php echo $contador_ppc; ?>" class="form-control">
@@ -236,7 +238,7 @@ $hora_actual = date('H:i');
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 items_pre">
+                                            <div class="col-md-4 items_pre" hidden>
                                                 <div class="form-group">
                                                     <label for="pitch" class="d-block mb-0">Pitch</label>
                                                     <select name="pitch[]" id="pitch_<?php echo $contador_ppc; ?>" class="form-control">
@@ -293,8 +295,8 @@ $hora_actual = date('H:i');
                                 <th>Categoría</th>
                                 <th>Uso</th>
                                 <th>T. Producto</th>
-                                <th>T. Modelo Módulo</th>
-                                <th>Pitch</th>
+                                <th hidden>T. Modelo Módulo</th>
+                                <th hidden>Pitch</th>
                                 <th>X Disponible</th>
                                 <th>Y Disponible</th>
                                 <th>Justificación</th>
@@ -351,6 +353,12 @@ document.getElementById('btn_add_item').addEventListener('click', function() {
     const yDisponible = document.querySelector('input[name="y_disponible[]"]').value;
     const justificacion = document.querySelector('textarea[name="justificacion[]"]').value;
 
+    // Validar que los campos obligatorios no estén vacíos
+    if (!cantidadPantallas || !estado || !categoria || !uso || !xDisponible || !yDisponible) {
+    alert("Por favor, complete todos los campos obligatorios antes de añadir un ítem.");
+    return; // Detener la ejecución si hay campos vacíos
+    }
+
     // Crear una nueva fila en la tabla
     const tableBody = document.getElementById('table_body');
     const rowCount = tableBody.rows.length;
@@ -363,8 +371,8 @@ document.getElementById('btn_add_item').addEventListener('click', function() {
         <td>${categoria}</td>
         <td>${uso}</td>
         <td>${tipoProducto}</td>
-        <td>${tipoModulo}</td>
-        <td>${pitch}</td>
+        <td hidden>${tipoModulo}</td>
+        <td hidden>${pitch}</td>
         <td>${xDisponible}</td>
         <td>${yDisponible}</td>
         <td>${justificacion}</td>
@@ -426,16 +434,17 @@ document.getElementById('formulario_creacion_ppc').addEventListener('submit', fu
     document.addEventListener('DOMContentLoaded', function() {
     // Función para cargar los datos relacionados
     function cargarDatosRelacionados(categoria, tipo) {
+
         // Cargar usos basados en la categoría
         if (categoria) {
-            fetch(`filter_data.php?categoria=${categoria}`)
+            fetch(`filter_data.php?categoria=${categoria}&tipo=uso`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data); // Verifica la estructura de los datos recibidos
                     let usoSelect = document.querySelector(`#uso_${tipo}`);
                     usoSelect.innerHTML = '<option value="">Seleccione Uso</option>';
                     data.forEach(uso => {
-                        usoSelect.innerHTML += `<option value="${uso.id}">${uso.producto_uso}</option>`;
+                        usoSelect.innerHTML += `<option value="${uso.id_uso}">${uso.producto_uso}</option>`;
                     });
                 });
         } else {
@@ -444,7 +453,7 @@ document.getElementById('formulario_creacion_ppc').addEventListener('submit', fu
 
         // Cargar tipo producto basado en la categoría
         if (categoria) {
-            fetch(`filter_data.php?categoria=${categoria}`)
+            fetch(`filter_data.php?categoria=${categoria}&tipo=producto`)
                 .then(response => response.json())
                 .then(data => {
                     let tipoProductoSelect = document.querySelector(`#tipo_producto_${tipo}`);

@@ -51,7 +51,7 @@ if ($pre_proyecto) {
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                    <h1 class="m-0">PRE PROYECTOS</h1>
+                    <h1 class="m-0">Tratamiento de PRE PROYECTOS</h1>
                     <div class="card card-blue">
                         <div class="card-header">
                             Identificador
@@ -143,8 +143,8 @@ if ($pre_proyecto) {
                                             <th>Categoría</th>
                                             <th>Uso</th>
                                             <th>T. Producto</th>
-                                            <th>T. Modelo Módulo</th>
-                                            <th>Pitch</th>
+                                            <th hidden>T. Modelo Módulo</th>
+                                            <th hidden>Pitch</th>
                                             <th>X Disponible</th>
                                             <th>Y Disponible</th>
                                             <th>Justificación</th>
@@ -160,7 +160,7 @@ if ($pre_proyecto) {
                                                     t_categoria_productos.categoria AS nom_categoria,
                                                     tipo_prod.tipo_producto21 AS nom_producto,
                                                     modelo_prod.modelo_modulo AS nom_modelo,
-                                                    t_tipo_producto.producto_uso AS nom_uso,
+                                                    t_uso_productos.producto_uso AS nom_uso,
                                                     caracteristicas_modulos.pitch AS nom_pitch
                                                 FROM
                                                     item_preproyecto
@@ -168,7 +168,7 @@ if ($pre_proyecto) {
                                                 LEFT JOIN t_categoria_productos ON item_preproyecto.categoria = t_categoria_productos.id_prod_terminado
                                                 LEFT JOIN t_tipo_producto as tipo_prod ON item_preproyecto.tipo_producto = tipo_prod.id
                                                 LEFT JOIN t_tipo_producto as modelo_prod ON item_preproyecto.modelo_uso = modelo_prod.id
-                                                LEFT JOIN t_tipo_producto ON item_preproyecto.uso = t_tipo_producto.id
+                                                LEFT JOIN t_uso_productos ON item_preproyecto.uso = t_uso_productos.id_uso
                                                 LEFT JOIN caracteristicas_modulos ON item_preproyecto.pitch = caracteristicas_modulos.id_car_mod
                                                 WHERE
                                                     item_preproyecto.id_preproyec = :id_proyecto
@@ -188,8 +188,8 @@ if ($pre_proyecto) {
                                                     <td><?php echo htmlspecialchars($producto['nom_categoria'] ?? ''); ?></td>
                                                     <td><?php echo htmlspecialchars($producto['nom_uso'] ?? ''); ?></td>
                                                     <td><?php echo htmlspecialchars($producto['nom_producto'] ?? ''); ?></td>
-                                                    <td><?php echo htmlspecialchars($producto['nom_modelo'] ?? ''); ?></td>
-                                                    <td><?php echo htmlspecialchars($producto['nom_pitch'] ?? ''); ?></td>
+                                                    <td hidden><?php echo htmlspecialchars($producto['nom_modelo'] ?? ''); ?></td>
+                                                    <td hidden><?php echo htmlspecialchars($producto['nom_pitch'] ?? ''); ?></td>
                                                     <td><?php echo htmlspecialchars($producto['x_disponible'] ?? ''); ?></td>
                                                     <td><?php echo htmlspecialchars($producto['y_disponible'] ?? ''); ?></td>
                                                     <td><?php echo htmlspecialchars($producto['justificacion'] ?? ''); ?></td>

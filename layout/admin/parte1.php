@@ -468,6 +468,12 @@ foreach ($roles_permisos as $rol_permiso) {
                                 <p>Pre Proyectos</p>
                               </a>
                             </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/crm/proyectos/create.php" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Proyectos</p>
+                              </a>
+                            </li>
                           </ul>
                         </li>
 
@@ -537,12 +543,7 @@ foreach ($roles_permisos as $rol_permiso) {
                             </p>
                           </a>
                           <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/crm/proyectos/" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Proyectos</p>
-                              </a>
-                            </li>
+                          
                           </ul>
                         </li>
 
