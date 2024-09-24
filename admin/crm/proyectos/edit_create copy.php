@@ -71,6 +71,23 @@ if ($pre_proyecto) {
     exit;
 }
 
+// Obtener el valor de id_uso del formulario
+$id_uso = $proyecto['uso'];
+
+// Consulta para obtener los modelos filtrados por id_uso
+$query_modelo = $pdo->prepare("SELECT
+    id,
+    modelo_modulo
+FROM
+    t_tipo_producto
+WHERE
+    uso_modelo = :id_uso
+");
+$query_modelo->bindParam(':id_uso', $id_uso, PDO::PARAM_INT);
+$query_modelo->execute();
+$modelos = $query_modelo->fetchAll(PDO::FETCH_ASSOC);
+
+
 // Recuperar los datos de las opciones de 'sending', 'reciving', y 'controladora'
 $pixelxpantalla = isset($_POST['pixelxpantalla']) ? intval($_POST['pixelxpantalla']) : 0;
 
@@ -102,20 +119,6 @@ $result_controladora = $query_controladora->fetchAll(PDO::FETCH_ASSOC);
 $options_controladora = "";
 foreach ($result_controladora as $row) {
     $options_controladora .= "<option value=\"" . htmlspecialchars($row['id_referencia']) . "\">" . htmlspecialchars($row['referencia']) . "</option>";
-}
-
-// Suponiendo que ya tienes el valor de id_uso definido
-$id_uso = $proyecto['uso'];
-
-// Obtener modelos de la base de datos donde uso_modelo coincide con id_uso
-$query = $pdo->prepare("SELECT id, modelo_modulo FROM t_tipo_producto WHERE uso_modelo = :id_uso");
-$query->execute(['id_uso' => $id_uso]);
-$modelos = $query->fetchAll(PDO::FETCH_ASSOC);
-
-// Crear opciones para el campo modelo
-$options_modelo = '';
-foreach ($modelos as $modelo) {
-    $options_modelo .= '<option value="' . $modelo['id'] . '">' . $modelo['modelo_modulo'] . '</option>';
 }
 
 ?>
@@ -195,18 +198,63 @@ foreach ($modelos as $modelo) {
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="modelo">Modelo Producto</label>
-                                            <select name="modelo" id="modelo" class="form-control">
-                                                <option value="">Seleccione un modelo</option>
-                                                <?php echo $options_modelo; ?>
+                                            <select name="modelo" id="modelo" class="form-control" onchange="actualizarId()">
+                                                <option value="">Seleccione un Modelo</option>
+                                                <?php foreach($modelos as $modelo): ?>
+                                                    <option value="<?php echo $modelo['modelo_modulo']; ?>" data-id="<?php echo $modelo['id']; ?>">
+                                                        <?php echo $modelo['modelo_modulo']; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
+
+                                    <!-- Campo oculto para guardar el ID del modelo seleccionado -->
+                                    <input type="hidden" name="modelo_id1" id="modelo_id1" value="">
+
+                                    <?php
+                                    // Obtener el valor del modelo del formulario
+                                if (isset($modelo) && is_array($modelo)) {
+                                    $modeluso = $modelo['modelo_modulo'];
+                                    $modelo_id1 = $modelo['id'];
+
+                                    // Consulta para obtener los pitches filtrados por el modelo
+                                    $query_pitch = $pdo->prepare("SELECT 
+                                        id_car_mod,
+                                        pitch,
+                                        medida_x,
+                                        medida_y,
+                                        pixel_x,
+                                        pixel_y
+                                    FROM
+                                        caracteristicas_modulos
+                                    WHERE
+                                        modelo_modulo = :modelo_id1
+                                    ");
+                                    $query_pitch->bindParam(':modelo_id1', $modelo_id1, PDO::PARAM_STR);
+                                    $query_pitch->execute();
+                                    $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
+                                } else {
+                                    // Manejo de error: en caso de que $modelo no esté definido o no sea un array
+                                    echo "No hay Modelo disponible para este producto.";
+                                    $modeluso = ''; // Opcional: asignar un valor vacío para evitar errores posteriores
+                                    $modelo_id1 = ''; // Opcional: asignar un valor vacío para evitar errores posteriores
+                                }
+                                    ?>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="pitch_dispo">Pitch disponible</label>
                                             <select name="pitch_dispo" id="pitch_dispo" class="form-control">
-                                                <option value="">Seleccione un pitch</option>
+                                                <option value="">Seleccione Pitch</option>
+                                                <?php foreach ($pitches as $pitch): ?>
+                                                    <option value="<?php echo htmlspecialchars($pitch['id_car_mod']); ?>" 
+                                                            data-medida-x="<?php echo htmlspecialchars($pitch['medida_x']); ?>"
+                                                            data-medida-y="<?php echo htmlspecialchars($pitch['medida_y']); ?>"
+                                                            data-pitch="<?php echo htmlspecialchars($pitch['pitch']); ?>">  <!-- Agregar data-pitch -->
+                                                        <?php echo htmlspecialchars($pitch['pitch']); ?>
+                                                    </option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
@@ -506,27 +554,37 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const modeloSelect = document.getElementById('modelo');
-    const pitchSelect = document.getElementById('pitch_dispo');
+document.getElementById('modelo').addEventListener('change', function() {
+    const modeloId = this.options[this.selectedIndex].getAttribute('data-id');
+    
+    // Verificar el modeloId en la consola del navegador
+    console.log(`Modelo ID seleccionado: ${modeloId}`);
 
-    modeloSelect.addEventListener('change', function() {
-        const modeloId = this.value;
+    fetch(`obtener_pitch.php?modelo_id=${modeloId}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);  // Verificar la respuesta en la consola
 
-        // Realizar una solicitud AJAX para obtener pitch_dispo
-        fetch(`get_pitch.php?modelo_id=${modeloId}`)
-            .then(response => response.json())
-            .then(data => {
-                // Suponiendo que el campo pitch_dispo es un select
-                pitchSelect.innerHTML = ''; // Limpiar opciones actuales
-                data.forEach(pitch => {
-                    pitchSelect.innerHTML += `<option value="${pitch.id_car_mod}">${pitch.pitch}</option>`;
-                });
+            const pitchSelect = document.getElementById('pitch_dispo');
+            pitchSelect.innerHTML = '';  // Limpiar opciones anteriores
+
+            if (data.error) {
+                console.error(data.error);
+                return; // Manejar el error
+            }
+
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id_car_mod;
+                option.textContent = `${item.medida_x} x ${item.medida_y}`;
+                option.setAttribute('data-pitch', item.pitch);
+                option.setAttribute('data-medida-x', item.medida_x);
+                option.setAttribute('data-medida-y', item.medida_y);
+                pitchSelect.appendChild(option);
             });
-    });
-
-    // Triggers the change event on load to fill pitch_dispo based on the default selected model
-    modeloSelect.dispatchEvent(new Event('change'));
+        })
+        .catch(error => {
+            console.error('Error fetching pitch data:', error);
+        });
 });
-
 </script>

@@ -263,7 +263,7 @@ $hora_actual = date('H:i');
                                         <div class="row">
                                             <div class="col-md-12 items_pre">
                                                 <div class="form-group">
-                                                    <label for="justificacion" class="d-block mb-0">Justificación</label>
+                                                    <label for="justificacion" class="d-block mb-0">Observaciones</label>
                                                     <textarea name="justificacion[]" class="form-control" rows="2"></textarea>
                                                 </div>
                                             </div>
