@@ -78,11 +78,11 @@ if (!empty($alertas_pico_placa)) {
               <a href="#" class="d-block"><?php echo $sesion_usuario['nombre'] ?></a>
             </div>
             <hr>
-            <?php if ($cargo == 'Administrador'): ?>
+            <!--<?php if ($cargo == 'Administrador'): ?>-->
             <div class="col-md-4">
               <a type="button" href="<?php echo $URL; ?>admin/administracion/vehiculos/create.php" class="btn btn-primary">INSERTAR UN NUEVO VEHÍCULO</a>
             </div>
-            <?php endif; ?>
+            <!--<?php endif; ?>-->
             <div class="card-body">
               <div class="table-responsive">
                 <table id="tabla_vehiculo" class="table table-striped table-hover table-bordered">

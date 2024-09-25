@@ -188,11 +188,72 @@ foreach ($modelos as $modelo) {
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="row">
+                                    <!-- Formulario para agregar otro producto -->
+                                    <div id="formularioExtra" style="display: none;">
+                                        <h3>SISTEMA DE CONTROL</h3>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="sending">Sending</label>
+                                                    <select name="sending" id="sending" class="form-control">
+                                                        <option value="">Seleccione una tarjeta</option> <!-- Opción inicial -->
+                                                        <?php echo $options_sending; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="cantidadsending">Cantidad</label>
+                                                    <input type="text" name="cantidadsending" id="cantidadsending" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="reciving">Reciving</label>
+                                                    <select name="reciving" id="reciving" class="form-control">
+                                                        <option value="">Seleccione una tarjeta</option> <!-- Opción inicial -->
+                                                        <?php echo $options_reciving; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="cantidadReciving">Cantidad</label>
+                                                    <input type="text" name="cantidadReciving" id="cantidadReciving" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="controladora">Controladora</label>
+                                                    <select name="controladora" id="controladora" class="form-control">
+                                                        <option value="">Seleccione una tarjeta</option> <!-- Opción inicial -->
+                                                        <?php echo $options_controladora; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="cantidadControl">Cantidad</label>
+                                                    <input type="text" name="cantidadControl" id="cantidadControl" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="modelo">Modelo Producto</label>
                                             <select name="modelo" id="modelo" class="form-control">
@@ -202,7 +263,7 @@ foreach ($modelos as $modelo) {
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="pitch_dispo">Pitch disponible</label>
                                             <select name="pitch_dispo" id="pitch_dispo" class="form-control">
@@ -210,16 +271,15 @@ foreach ($modelos as $modelo) {
                                             </select>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="x_real">Tamaño módulo en X</label>
                                             <input type="text" name="x_real" id="x_real" class="form-control">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="y_real">Tamaño módulo en Y</label>
                                             <input type="text" name="y_real" id="y_real" class="form-control">
@@ -290,6 +350,7 @@ foreach ($modelos as $modelo) {
                                             </div>
                                         </div>
                                     </div>
+
                                     <!-- Nuevo Checkbox para mostrar/ocultar formulario -->
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -299,62 +360,6 @@ foreach ($modelos as $modelo) {
                                                 </label>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Formulario para agregar otro producto -->
-                        <div id="formularioExtra" style="display: none;">
-                            <h3>SISTEMA DE CONTROL</h3>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="sending">Sending</label>
-                                        <select name="sending" id="sending" class="form-control">
-                                            <?php echo $options_sending; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="cantidadsending">Cantidad</label>
-                                        <input type="text" name="cantidadsending" id="cantidadsending" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="reciving">Reciving</label>
-                                        <select name="reciving" id="reciving" class="form-control">
-                                            <?php echo $options_reciving; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="cantidadReciving">Cantidad</label>
-                                        <input type="text" name="cantidadReciving" id="cantidadReciving" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="controladora">Controladora</label>
-                                        <select name="controladora" id="controladora" class="form-control">
-                                            <?php echo $options_controladora; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="cantidadControl">Cantidad</label>
-                                        <input type="text" name="cantidadControl" id="cantidadControl" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -400,18 +405,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
+    // Variables para guardar los valores originales de x_real e y_real
+    let originalXReal, originalYReal;
+
     // Función para actualizar los campos x_real e y_real al cambiar el pitch
     pitchSelect.addEventListener('change', function() {
         const selectedOption = pitchSelect.options[pitchSelect.selectedIndex];
         xRealInput.value = selectedOption.getAttribute('data-medida-x') || '';
         yRealInput.value = selectedOption.getAttribute('data-medida-y') || '';
+
+        // Guardar los valores originales de x_real y y_real al seleccionar un pitch
+        originalXReal = xRealInput.value;
+        originalYReal = yRealInput.value;
+
         updateTotals();
         updateRectangulo();
     });
 
     // Evento para intercambiar valores de x_real e y_real cuando se marca el checkbox
     checkbox.addEventListener('change', function() {
-        [xRealInput.value, yRealInput.value] = checkbox.checked ? [yRealInput.value, xRealInput.value] : [xRealInput.value, yRealInput.value];
+        if (checkbox.checked) {
+            // Intercambiar los valores cuando se marque el checkbox
+            [xRealInput.value, yRealInput.value] = [yRealInput.value, xRealInput.value];
+        } else {
+            // Restaurar los valores originales cuando se desmarque el checkbox
+            xRealInput.value = originalXReal;
+            yRealInput.value = originalYReal;
+        }
+
         updateTotals();
         updateRectangulo();
     });
@@ -483,7 +504,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializar la página y sus eventos
     updateTotals();
     updateRectangulo();
-    
+
     pitchSelect.addEventListener('change', updatePixelPorPantalla);
     xRealInput.addEventListener('input', updatePixelPorPantalla);
     yRealInput.addEventListener('input', updatePixelPorPantalla);
@@ -491,6 +512,7 @@ document.addEventListener('DOMContentLoaded', function() {
     moduloYInput.addEventListener('input', updatePixelPorPantalla);
     checkbox.addEventListener('change', updatePixelPorPantalla);
 });
+
 </script>
 
 <script>
@@ -507,26 +529,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const modeloSelect = document.getElementById('modelo');
-    const pitchSelect = document.getElementById('pitch_dispo');
+        const modeloSelect = document.getElementById('modelo');
+        const pitchSelect = document.getElementById('pitch_dispo');
 
-    modeloSelect.addEventListener('change', function() {
-        const modeloId = this.value;
+        // Al seleccionar un modelo, realizar solicitud AJAX para obtener pitch_dispo
+        modeloSelect.addEventListener('change', function() {
+            const modeloId = this.value;
 
-        // Realizar una solicitud AJAX para obtener pitch_dispo
-        fetch(`get_pitch.php?modelo_id=${modeloId}`)
-            .then(response => response.json())
-            .then(data => {
-                // Suponiendo que el campo pitch_dispo es un select
-                pitchSelect.innerHTML = ''; // Limpiar opciones actuales
-                data.forEach(pitch => {
-                    pitchSelect.innerHTML += `<option value="${pitch.id_car_mod}">${pitch.pitch}</option>`;
+            // Realizar una solicitud AJAX para obtener pitch_dispo
+            fetch(`get_pitch.php?modelo_id=${modeloId}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Limpiar las opciones actuales del select
+                    pitchSelect.innerHTML = '<option value="">Seleccione un pitch</option>';
+                    
+                    // Agregar nuevas opciones al select
+                    data.forEach(item => {
+                        pitchSelect.innerHTML += `
+                            <option value="${item.id_car_mod}" 
+                                    data-pitch="${item.pitch}" 
+                                    data-medida-x="${item.medida_x}" 
+                                    data-medida-y="${item.medida_y}">
+                                ${item.pitch} / ${item.medida_x} x ${item.medida_y}
+                            </option>`;
+                    });
                 });
-            });
+        });
+
+        // Activar el evento 'change' en la carga de la página para el modelo predeterminado
+        modeloSelect.dispatchEvent(new Event('change'));
     });
-
-    // Triggers the change event on load to fill pitch_dispo based on the default selected model
-    modeloSelect.dispatchEvent(new Event('change'));
-});
-
 </script>
