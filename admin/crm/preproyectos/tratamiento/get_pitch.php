@@ -1,6 +1,6 @@
 <?php
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
 
 $modelo_id = $_GET['modelo_id'];
 

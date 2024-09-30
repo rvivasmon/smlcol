@@ -60,7 +60,7 @@ $fecha_asignacion_tarea = date('Y-m-d');
                         <div class="alert alert-danger">
                             Los documentos del vehículo están vencidos. No puede asignar una tarea.
                         </div>
-                        <a href="<?php echo $URL . "admin/vehiculos/index.php"; ?>" class="btn btn-default btn-block">Volver</a>
+                        <a href="<?php echo $URL . "admin/administracion/vehiculos/index.php"; ?>" class="btn btn-default btn-block">Volver</a>
                     <?php else: ?>
                         <form action="controller_tarea.php" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="id" value="<?php echo $id; ?>">

@@ -1,14 +1,15 @@
 <?php
 include('../../../app/config/config.php');
 include('../../../app/config/conexion.php');
+
 include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
+
 include('../../../layout/admin/parte1.php');
 
 $usuario_crea_vehiculo = $sesion_usuario['nombre'];
 
 $fecha_ingreso = date('Y-m-d'); //Obtiene la fecha actual
-
 
 ?>
 
@@ -29,26 +30,31 @@ $fecha_ingreso = date('Y-m-d'); //Obtiene la fecha actual
 
                 <div class="card-body">
                     <form action="controller_create.php" method="post" enctype="multipart/form-data">
+
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="form-group">
+                            <div class="form-group">
                                     <label for="">Fecha de Ingreso</label>
                                     <input name="fecha_ingreso" id="fecha_ingreso"  value="<?php echo $fecha_ingreso?>" class="form-control" readonly></input>
                                 </div>
                             </div>
+
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="">Usuario Que Ingresa el Vehiculo</label>
                                     <input name="usuario_crea_vehiculo" id="usuario_crea_vehiculo"  value="<?php echo $sesion_usuario['nombre']?>" class="form-control" readonly></input>
                                 </div>
                             </div>
+
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="">Placa del Vehiculo</label>
                                     <input type="text" name="placa" id="placa" placeholder="Placa del Vehiculo" class="form-control" required>
                                 </div>
                             </div>
+                        </div>
 
+                        <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="">Propietario del Vehículo</label>
@@ -79,8 +85,10 @@ $fecha_ingreso = date('Y-m-d'); //Obtiene la fecha actual
                                         <option value="Viernes">Viernes</option>
                                     </Select>
                                 </div>
-                            </div>
+                            </div>                            
+                        </div>
 
+                        <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="">Hasta cuándo tiene el Soat?</label>
@@ -101,25 +109,37 @@ $fecha_ingreso = date('Y-m-d'); //Obtiene la fecha actual
                                     <input name="kilometraje_actual" id="kilometraje_actual" placeholder="Cuál es el Kilometraje Actualmente del Vehiculo?" class="form-control" required></input>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Observación</label>
                                     <textarea name="observacion" id="observacion" cols="30" rows="4" placeholder="Observación" class="form-control" required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="es_electrico">¿Es Eléctrico?</label><br>
+                                    <input type="checkbox" id="es_electrico" name="es_electrico" value="1" onclick="toggleElectricFields()"> Eléctrico
+                                    <input type="hidden" name="es_electrico" value="0">
                                 </div>
                             </div>
                         </div>
 
                         <hr>
 
-                        <div class="col-md-9">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <a href="<?php echo $URL."admin/administracion/vehiculos/index.php";?>" class="btn btn-default btn-block">Cancelar</a>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <button type="submit" onclick="return confirm('¿Está seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Registrar Vehículo</button>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <a href="<?php echo $URL."admin/administracion/vehiculos/index.php";?>" class="btn btn-default btn-block">Cancelar</a>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button type="submit" onclick="return confirm('¿Está seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Registrar Vehículo</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -132,3 +152,35 @@ $fecha_ingreso = date('Y-m-d'); //Obtiene la fecha actual
 </div><!-- /.content-wrapper -->
 
 <?php include('../../../layout/admin/parte2.php');?>
+
+<script>
+    function toggleElectricFields() {
+        var esElectrico = document.getElementById('es_electrico').checked;
+        var picoPlaca = document.getElementById('pico_placa');
+        var tecnicomecanica = document.getElementById('tecnicomecanica_hasta');
+
+        if (esElectrico) {
+            // Deshabilita el campo de Tecnicomecánica
+            tecnicomecanica.value = ''; // Limpiar valor del campo
+            tecnicomecanica.setAttribute('disabled', 'disabled');
+            
+            // Cambiar Pico y Placa a "No Aplica" y deshabilitar
+            picoPlaca.innerHTML = '<option value="No Aplica">No Aplica</option>';
+            picoPlaca.setAttribute('readonly', 'readonly');
+        } else {
+            // Habilita el campo de Tecnicomecánica
+            tecnicomecanica.removeAttribute('disabled');
+
+            // Restaurar las opciones originales de Pico y Placa y habilitar
+            picoPlaca.innerHTML = `
+                <option value="">Seleccionar el Día Que Tiene Pico y Placa</option>
+                <option value="Lunes">Lunes</option>
+                <option value="Martes">Martes</option>
+                <option value="Miércoles">Miércoles</option>
+                <option value="Jueves">Jueves</option>
+                <option value="Viernes">Viernes</option>`;
+            picoPlaca.removeAttribute('disabled');
+        }
+    }
+</script>
+

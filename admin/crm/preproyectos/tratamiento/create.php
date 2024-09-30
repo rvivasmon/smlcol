@@ -1,11 +1,11 @@
 <?php 
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
 
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
+include('../../../../layout/admin/sesion.php');
+include('../../../../layout/admin/datos_sesion_user.php');
 
-include('../../../layout/admin/parte1.php');
+include('../../../../layout/admin/parte1.php');
 
 $id_get = $_GET['id'];
 
@@ -246,4 +246,4 @@ if ($pre_proyecto) {
     </div><!-- /.row -->
 </div><!-- /.content-header -->
 
-<?php include('../../../layout/admin/parte2.php'); ?>
+<?php include('../../../../layout/admin/parte2.php'); ?>

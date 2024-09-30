@@ -3,8 +3,10 @@
 // Incluir archivos necesarios
 include('../../../app/config/config.php');
 include('../../../app/config/conexion.php');
+
 include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
+
 include('../../../layout/admin/parte1.php');
 
 $cargo = $sesion_usuario['nombre_cargo']; // Obtener el cargo del usuario desde la sesión
@@ -53,48 +55,49 @@ if (!empty($alertas_pico_placa)) {
           <h1 class="m-0">VEHICULOS</h1>
           <?php if (!empty($alertas)): ?>
             <div class="alert alert-warning alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-              <h5><i class="icon fas fa-exclamation-triangle"></i>Alertas de Documentos Próximos a Vencer:</h5>
-              <ul>
-                <?php foreach ($alertas as $alerta): ?>
-                  <li>
-                    <?php echo "Vehículo con placa: " . $alerta['placa']; ?>
-                    <?php
-                      if ($alerta['soat_hasta'] <= $fecha_15_dias && $alerta['soat_hasta'] >= $fecha_actual) {
-                        echo " - SOAT vence el: " . $alerta['soat_hasta'];
-                      }
-                      if ($alerta['tecnicomecanica_hasta'] <= $fecha_15_dias && $alerta['tecnicomecanica_hasta'] >= $fecha_actual) {
-                        echo " - Tecnomecánica vence el: " . $alerta['tecnicomecanica_hasta'];
-                      }
-                    ?>
-                  </li>
-                <?php endforeach; ?>
-              </ul>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-exclamation-triangle"></i>Alertas de Documentos Próximos a Vencer:</h5>
+                <ul>
+                  <?php foreach ($alertas as $alerta): ?>
+                    <li>
+                      <?php echo "Vehículo con placa: " . $alerta['placa']; ?>
+                      <?php
+                        if ($alerta['soat_hasta'] <= $fecha_15_dias && $alerta['soat_hasta'] >= $fecha_actual) {
+                          echo " - SOAT vence el: " . $alerta['soat_hasta'];
+                        }
+                        if ($alerta['tecnicomecanica_hasta'] <= $fecha_15_dias && $alerta['tecnicomecanica_hasta'] >= $fecha_actual) {
+                          echo " - Tecnomecánica vence el: " . $alerta['tecnicomecanica_hasta'];
+                        }
+                      ?>
+                    </li>
+                  <?php endforeach; ?>
+                </ul>
             </div>
           <?php endif; ?>
 
           <div class="card card-blue">
             <div class="card-header">
-              <a href="#" class="d-block"><?php echo $sesion_usuario['nombre'] ?></a>
+              AREA DE GESTIÓN
             </div>
+
             <hr>
-            <!--<?php if ($cargo == 'Administrador'): ?>-->
-            <div class="col-md-4">
+
+            <div class="card-tools ml-4">
               <a type="button" href="<?php echo $URL; ?>admin/administracion/vehiculos/create.php" class="btn btn-primary">INSERTAR UN NUEVO VEHÍCULO</a>
             </div>
-            <!--<?php endif; ?>-->
+
             <div class="card-body">
               <div class="table-responsive">
-                <table id="tabla_vehiculo" class="table table-striped table-hover table-bordered">
+                <table id="table_vehiculo" class="table table-striped table-hover table-bordered">
                   <thead>
                     <tr>
                       <th>ID</th>
                       <th>Placa Del vehículo</th>
                       <th>Propietario Del vehículo</th>
                       <th>Clase Del vehículo</th>
-                      <th hidden>Tienen pico de placa</th>
-                      <th hidden>Tiene soat hasta</th>
-                      <th hidden>Tiene técnico mecánico hasta</th>
+                      <th>Tienen pico de placa</th>
+                      <th>Tiene soat hasta</th>
+                      <th>Tiene técnico mecánico hasta</th>
                       <th>Tarea A realizar</th>
                       <th>Clase de Tarea</th>
                       <th>Fecha tarea a realizar</th>
@@ -118,9 +121,9 @@ if (!empty($alertas_pico_placa)) {
                         <td><?php echo $vehiculo['placa']; ?></td>
                         <td><?php echo $vehiculo['propietario']; ?></td>
                         <td><?php echo $vehiculo['tipo_vehiculo']; ?></td>
-                        <td hidden><?php echo $vehiculo['pico_placa']; ?></td>
-                        <td hidden><?php echo $vehiculo['soat_hasta']; ?></td>
-                        <td hidden><?php echo $vehiculo['tecnicomecanica_hasta']; ?></td>
+                        <td><?php echo $vehiculo['pico_placa']; ?></td>
+                        <td><?php echo $vehiculo['soat_hasta']; ?></td>
+                        <td><?php echo $vehiculo['tecnicomecanica_hasta']; ?></td>
                         <td><?php echo $vehiculo['tarea_realizar']; ?></td>
                         <td><?php echo $vehiculo['clase_tarea']; ?></td>
                         <td><?php echo $vehiculo['fecha_tarea']; ?></td>
@@ -129,9 +132,10 @@ if (!empty($alertas_pico_placa)) {
                         <td hidden><?php echo $vehiculo['usuario']; ?></td>
                         <td>
                           <center>
-                            <a href="tarea.php?id=<?php echo $vehiculo['id']; ?>" class="btn btn-success btn-sm">Asignar Tareas<i class="fas fa-pen"></i></a>
-                            <a href="show.php?id=<?php echo $vehiculo['id']; ?>" class="btn btn-info btn-sm">Mostrar Tareas<i class="fas fa-eye"></i></a>
-                            <a href="terminacion.php?id=<?php echo $vehiculo['id']; ?>" class="btn btn-danger btn-sm">Terminar tarea<i class="fas fa-trash"></i></a>
+                            <a href="edit.php?id=<?php echo $vehiculo['id']; ?>" class="btn btn-warning btn-sm">Editar <i class="fas fa-pen"></i></a>
+                            <a href="tarea.php?id=<?php echo $vehiculo['id']; ?>" class="btn btn-success btn-sm">Asignar <i class="fas fa-pen"></i></a>
+                            <a href="show.php?id=<?php echo $vehiculo['id']; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
+                            <a href="terminacion.php?id=<?php echo $vehiculo['id']; ?>" class="btn btn-danger btn-sm">Terminar <i class="fas fa-trash"></i></a>
                           </center>
                         </td>
                       </tr>
@@ -151,7 +155,7 @@ if (!empty($alertas_pico_placa)) {
 
 <script>
   $(function () {
-    $("#tabla_vehiculo").DataTable({
+    $("#table_vehiculo").DataTable({
       "pageLength": 10,
       "language": {
         "emptyTable": "No hay información",
@@ -171,7 +175,33 @@ if (!empty($alertas_pico_placa)) {
           "next": "Siguiente",
           "previous": "Anterior"
         }
-      }
-    });
+      },
+      "responsive": true, "lengthChange": true, "autoWidth": false,
+            buttons: [{
+                extend: 'collection',
+                text: 'Reportes',
+                orientation: 'landscape',
+                buttons: [{
+                    text: 'Copiar',
+                    extend: 'copy',
+                }, {
+                    extend: 'pdf'
+                }, {
+                    extend: 'csv'
+                }, {
+                    extend: 'excel'
+                }, {
+                    text: 'Imprimir',
+                    extend: 'print'
+                }
+                ]
+            },
+                {
+                    extend: 'colvis',
+                    text: 'Visor de columnas',
+                    collectionLayout: 'fixed three-column'
+                }
+            ],
+    }).buttons().container().appendTo('#table_vehiculo_wrapper .col-md-6:eq(0)');
   });
 </script>

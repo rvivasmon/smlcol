@@ -1,11 +1,11 @@
 <?php 
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
 
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
+include('../../../../layout/admin/sesion.php');
+include('../../../../layout/admin/datos_sesion_user.php');
 
-include('../../../layout/admin/parte1.php');
+include('../../../../layout/admin/parte1.php');
 
 $item_id = isset($_GET['item_id']) ? $_GET['item_id'] : null;
 $preproyec_id = isset($_GET['preproyec_id']) ? $_GET['preproyec_id'] : null;
@@ -369,7 +369,7 @@ foreach ($modelos as $modelo) {
 
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/crm/proyectos/create.php?id=".$id_pre;?>" class="btn btn-default btn-block">Cancelar</a>
+                                <a href="<?php echo $URL."admin/crm/preproyectos/tratamiento/create.php?id=".$id_pre;?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" onclick="return confirm('Asegúrese de diligenciar correctamente los datos')" class="btn btn-success btn-block">Actualizar Proyecto</button>
@@ -387,7 +387,7 @@ foreach ($modelos as $modelo) {
     </div>
 </div>
 
-<?php include('../../../layout/admin/parte2.php'); ?>
+<?php include('../../../../layout/admin/parte2.php'); ?>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

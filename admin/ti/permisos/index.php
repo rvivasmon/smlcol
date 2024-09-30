@@ -20,9 +20,13 @@ include('../../../layout/admin/parte1.php');
                         <div class="card-header">
                             PERMISOS REGISTRADOS                        
                         </div>
-                        <div class="card-tools">
+
+                        <hr>
+
+                        <div class="card-tools ml-4">
                             <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear nuevo permiso</a>
                         </div>
+
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="table_permisos" class="table table-striped table-hover table-bordered">

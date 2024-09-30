@@ -69,7 +69,7 @@ include('../../../layout/admin/parte1.php');
                                                 <td><?php echo $ciudad; ?></td>
                                                 <td>
                                                     <center>
-                                                        <a href="<?php echo $URL."admin/crm/proyectos/create.php";?>?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Tratamiento<i class="fas fa-pen"></i></a>
+                                                        <a href="<?php echo $URL."admin/crm/preproyectos/tratamiento/create.php";?>?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Tratamiento<i class="fas fa-pen"></i></a>
                                                         <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar<i class="fas fa-trash"></i></a>
                                                     </center>
                                                 </td>
