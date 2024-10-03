@@ -53,7 +53,6 @@ if ($proyecto) {
     $telefono = $proyecto['x_disponible'];
     $ciudad = $proyecto['y_disponible'];
     $justificacion = $proyecto['justificacion'];
-    $id_tipoproducto = $proyecto['tipo_producto'];
 } else {
     echo "No se encontró el pre-proyecto.";
     exit;
@@ -70,6 +69,19 @@ if ($pre_proyecto) {
 } else {
     echo "No se encontró el pre-proyecto.";
     exit;
+}
+
+// Recuperar los datos de las opciones de 'sending', 'reciving', y 'controladora'
+$pixelxpantalla = isset($_POST['pixelxpantalla']) ? intval($_POST['pixelxpantalla']) : 0;
+
+// Opciones de 'controladora'
+$query_controladora = $pdo->prepare("SELECT * FROM referencias_control WHERE funcion IN (6, 9, 10, 12, 16) AND pixel_max > :pixelxpantalla");
+$query_controladora->bindParam(':pixelxpantalla', $pixelxpantalla, PDO::PARAM_INT);
+$query_controladora->execute();
+$result_controladora = $query_controladora->fetchAll(PDO::FETCH_ASSOC);
+$options_controladora = "";
+foreach ($result_controladora as $row) {
+    $options_controladora .= "<option value=\"" . htmlspecialchars($row['id_referencia']) . "\">" . htmlspecialchars($row['referencia']) . "</option>";
 }
 
 // Suponiendo que ya tienes el valor de id_uso definido
@@ -102,27 +114,27 @@ foreach ($modelos as $modelo) {
                     Introduzca la información correspondiente
                 </div>
                 <div class="card-body">
-                    <form  id="editaritems" action="controller_edit.php" method="post">
+                    <form action="controller_edit.php" method="post">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="pantallas"># Pantallas</label>
-                                            <input type="text" id="pantallas" name="pantallas" value="<?php echo htmlspecialchars($fecha); ?>" class="form-control" readonly>
+                                            <input type="text" name="pantallas" value="<?php echo htmlspecialchars($fecha); ?>" class="form-control" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="categoria">Categoría</label>
-                                            <input type="text" id="categoria" name="categoria" value="<?php echo htmlspecialchars($tipo); ?>" class="form-control" readonly>
+                                            <input type="text" name="categoria" value="<?php echo htmlspecialchars($tipo); ?>" class="form-control" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="uso">Uso Producto</label>
-                                            <input type="text" id="uso" name="uso" value="<?php echo htmlspecialchars($preproyecto); ?>" class="form-control" readonly>
-                                            <input type="hidden" id="id_uso" name="id_uso" value="<?php echo htmlspecialchars($id_uso); ?>" class="form-control">
+                                            <input type="text" name="uso" value="<?php echo htmlspecialchars($preproyecto); ?>" class="form-control" readonly>
+                                            <input type="hidden" name="id_uso" value="<?php echo htmlspecialchars($id_uso); ?>" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -131,9 +143,7 @@ foreach ($modelos as $modelo) {
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="tipo">Tipo Producto</label>
-                                            <input type="text" id="tipo" name="tipo" value="<?php echo htmlspecialchars($idprepro); ?>" class="form-control" readonly>
-                                            <!-- Campo oculto para almacenar el valor de $id_tipoproducto -->
-                                            <input type="hidden" id="id_tipoproducto" name="id_tipoproducto" value="<?php echo htmlspecialchars($id_tipoproducto); ?>">
+                                            <input type="text" name="tipo" value="<?php echo htmlspecialchars($idprepro); ?>" class="form-control" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -160,51 +170,24 @@ foreach ($modelos as $modelo) {
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <!-- Formulario para agregar otro producto -->
-                                        <div id="formularioExtra" style="display: none;">
-                                            <h3>SISTEMA DE CONTROL</h3>
+                                    <!-- Formulario para agregar otro producto -->
+                                    <div id="formularioExtra" style="display: none;">
+                                        <h3>SISTEMA DE CONTROL</h3>
 
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="controladora">Controladora</label>
-                                                        <select id="controladora" class="form-control">
-                                                            <option value="">Seleccione una controladora</option>
-                                                            <!-- Opciones serán llenadas por JavaScript -->
-                                                        </select>
-                                                        <label id="pixelMaxLabel" class="mt-2"></label> <!-- Label para mostrar pixel:max -->
-                                                        <!-- Campo (oculto) -->
-                                                        <input type="hidden" id="pixelMaxLabel_formatted" name="pixelMaxLabel_formatted" class="form-control">                                                    
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="cantidadControl">Cantidad</label>
-                                                        <input type="text" name="cantidadControl" id="cantidadControl" class="form-control">
-                                                        <label id="resultadoRestaLabel" class="mt-2"></label>
-                                                        <!-- Campo (oculto) -->
-                                                        <input type="hidden" id="resultadoresta" name="resultadoresta" class="form-control">
-                                                    </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="controladora">Controladora</label>
+                                                    <select name="controladora" id="controladora" class="form-control">
+                                                        <option value="">Seleccione una tarjeta</option> <!-- Opción inicial -->
+                                                        <?php echo $options_controladora; ?>
+                                                    </select>
                                                 </div>
                                             </div>
-
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label id="resultadoMultiplicacionLabel" class="mt-2"></label>
-                                                        <!-- Campo (oculto) -->
-                                                        <input type="hidden" id="resultadoMultiplicacion" class="form-control">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label id="pesoxpantallaLabel" class="mt-2"></label>
-                                                        <!-- Campo (oculto) -->
-                                                        <input type="hidden" id="pesoxpantallasin" class="form-control">
-                                                    </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="cantidadControl">Cantidad</label>
+                                                    <input type="text" name="cantidadControl" id="cantidadControl" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -236,14 +219,14 @@ foreach ($modelos as $modelo) {
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="x_real">Tamaño módulo en X</label>
-                                            <input type="text" name="x_real" id="x_real" class="form-control" readonly>
+                                            <input type="text" name="x_real" id="x_real" class="form-control">
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="y_real">Tamaño módulo en Y</label>
-                                            <input type="text" name="y_real" id="y_real" class="form-control" readonly>
+                                            <input type="text" name="y_real" id="y_real" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -256,13 +239,13 @@ foreach ($modelos as $modelo) {
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="x_total">X Real</label>
-                                                            <input type="text" name="x_total" id="x_total" class="form-control" readonly>
+                                                            <input type="text" name="x_total" id="x_total" class="form-control">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="y_total">Y Real</label>
-                                                            <input type="text" name="y_total" id="y_total" class="form-control" readonly>
+                                                            <input type="text" name="y_total" id="y_total" class="form-control">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -272,13 +255,13 @@ foreach ($modelos as $modelo) {
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="modulo_x"> Módulos en X</label>
-                                                            <input type="text" name="modulo_x" id="modulo_x" class="form-control" readonly>
+                                                            <input type="text" name="modulo_x" id="modulo_x" class="form-control">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="modulo_y">Módulos en Y</label>
-                                                            <input type="text" name="modulo_y" id="modulo_y" class="form-control" readonly>
+                                                            <input type="text" name="modulo_y" id="modulo_y" class="form-control">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -286,11 +269,8 @@ foreach ($modelos as $modelo) {
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="pixelxpantalla">Píxel por Pantalla</label>
-                                                            <!-- Nuevo campo para mostrar el valor con separador de miles -->
-                                                            <input type="text" id="pixelxpantalla_formatted" class="form-control" readonly>
-                                                            <!-- Campo original pixelxpantalla (oculto) -->
-                                                            <input type="hidden" id="pixelxpantalla" name="pixelxpantalla" value="">
+                                                            <label for="pixelxpantalla"> Píxel por Pantalla</label>
+                                                            <input type="numero" name="pixelxpantalla" id="pixelxpantalla" class="form-control" readonly>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -368,139 +348,73 @@ document.addEventListener('DOMContentLoaded', function() {
     const checkbox = document.getElementById('intercambiar');
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
-    const agregarProductoCheckbox = document.getElementById('agregar_Producto');
-    const formularioExtra = document.getElementById('formularioExtra');
-    const modeloSelect = document.getElementById('modelo');
-    const controladoraSelect = document.getElementById('controladora');
-    const cantidadControlInput = document.getElementById('cantidadControl');
 
-
+    // Variables para guardar los valores originales de x_real e y_real
     let originalXReal, originalYReal;
 
-    function initEvents() {
-        pitchSelect.addEventListener('change', onPitchChange);
-        checkbox.addEventListener('change', onCheckboxChange);
-        modeloSelect.addEventListener('change', onModeloChange);
-        agregarProductoCheckbox.addEventListener('change', onAgregarProductoChange);
-        xRealInput.addEventListener('input', updatePixelPorPantalla);
-        yRealInput.addEventListener('input', updatePixelPorPantalla);
-        moduloXInput.addEventListener('input', updatePixelPorPantalla);
-        moduloYInput.addEventListener('input', updatePixelPorPantalla);
-        document.getElementById('x_real').addEventListener('input', updateTotals);
-        document.getElementById('y_real').addEventListener('input', updateTotals);
-        document.getElementById('x_disp').addEventListener('input', updateTotals);
-        document.getElementById('y_disp').addEventListener('input', updateTotals);
-
-    }
-
-    function onPitchChange() {
+    // Función para actualizar los campos x_real e y_real al cambiar el pitch
+    pitchSelect.addEventListener('change', function() {
         const selectedOption = pitchSelect.options[pitchSelect.selectedIndex];
         xRealInput.value = selectedOption.getAttribute('data-medida-x') || '';
         yRealInput.value = selectedOption.getAttribute('data-medida-y') || '';
 
+        // Guardar los valores originales de x_real y y_real al seleccionar un pitch
         originalXReal = xRealInput.value;
         originalYReal = yRealInput.value;
 
         updateTotals();
         updateRectangulo();
-        updatePixelPorPantalla();
-    }
+    });
 
-    function onCheckboxChange() {
+    // Evento para intercambiar valores de x_real e y_real cuando se marca el checkbox
+    checkbox.addEventListener('change', function() {
         if (checkbox.checked) {
+            // Intercambiar los valores cuando se marque el checkbox
             [xRealInput.value, yRealInput.value] = [yRealInput.value, xRealInput.value];
         } else {
+            // Restaurar los valores originales cuando se desmarque el checkbox
             xRealInput.value = originalXReal;
             yRealInput.value = originalYReal;
         }
+
         updateTotals();
         updateRectangulo();
-    }
+    });
 
-    function onModeloChange() {
-        const modeloId = modeloSelect.value;
-
-        fetch(`get_pitch.php?modelo_id=${modeloId}`)
-            .then(response => response.json())
-            .then(data => {
-                pitchSelect.innerHTML = '<option value="">Seleccione un pitch</option>';
-                data.forEach(item => {
-                    pitchSelect.innerHTML += `
-                        <option value="${item.id_car_mod}" 
-                                data-pitch="${item.pitch}" 
-                                data-medida-x="${item.medida_x}" 
-                                data-medida-y="${item.medida_y}">
-                            ${item.pitch} / ${item.medida_x} x ${item.medida_y}
-                        </option>`;
-                });
-                pitchSelect.dispatchEvent(new Event('change'));
-            });
-    }
-
-    function onAgregarProductoChange() {
-        formularioExtra.style.display = agregarProductoCheckbox.checked ? 'block' : 'none';
-
-        if (agregarProductoCheckbox.checked) {
-            controladoraSelect.disabled = false;
-            const pixelMaxValue = parseFloat(pixelPorPantallaInput.value);
-            fetch(`get_controladoras.php?pixel_max=${pixelMaxValue}`)
-                .then(response => response.json())
-                .then(data => {
-                    controladoraSelect.innerHTML = '<option value="">Seleccione una controladora</option>';
-                    data.forEach(item => {
-                        controladoraSelect.innerHTML += `
-                            <option value="${item.id_referencia}">${item.referencia}</option>`;
-                    });
-                })
-                .catch(error => console.error('Error al obtener controladoras:', error));
-        } else {
-            controladoraSelect.disabled = true;
-            controladoraSelect.innerHTML = '<option value="">Seleccione una controladora</option>';
-        }
-    }
-
+    // Función para actualizar el total y los módulos
     function updateTotals() {
-    const xReal = parseFloat(xRealInput.value) || 1;
-    const yReal = parseFloat(yRealInput.value) || 1;
-    const xDisp = parseFloat(xDispInput.value) || 0;
-    const yDisp = parseFloat(yDispInput.value) || 0;
-
-    const xModulo = Math.round(xDisp / xReal);
-    const yModulo = Math.round(yDisp / yReal);
-
-    const xTotal = xModulo * xReal;
-    const yTotal = yModulo * yReal;
-
-    xTotalInput.value = xTotal;
-    yTotalInput.value = yTotal;
-    moduloXInput.value = xModulo;
-    moduloYInput.value = yModulo;
-
-    // Calcular el resultado de la multiplicación y redondearlo a 2 dígitos después del punto
-    let resultadoMultiplicacion = (xTotal * yTotal) / 1000;
-    resultadoMultiplicacion = resultadoMultiplicacion;  // Redondear
-
-    // Mostrar el resultado en el label con separadores de miles
-    document.getElementById('resultadoMultiplicacionLabel').textContent = `Mts²: ${parseFloat(resultadoMultiplicacion).toLocaleString('es')} Mts`;
-
-    // Almacenar el valor sin formato en el input oculto
-    document.getElementById('resultadoMultiplicacion').value = resultadoMultiplicacion;
-
-    updateFieldColors();
-    updatePixelPorPantalla();
-}
-
-
-    function updateFieldColors() {
-        const xTotal = parseFloat(xTotalInput.value) || 0;
-        const yTotal = parseFloat(yTotalInput.value) || 0;
+        const xReal = parseFloat(xRealInput.value) || 1;
+        const yReal = parseFloat(yRealInput.value) || 1;
         const xDisp = parseFloat(xDispInput.value) || 0;
         const yDisp = parseFloat(yDispInput.value) || 0;
+
+        const xModulo = Math.round(xDisp / xReal);
+        const yModulo = Math.round(yDisp / yReal);
+
+        const xTotal = xModulo * xReal;
+        const yTotal = yModulo * yReal;
+
+        xTotalInput.value = xTotal;
+        yTotalInput.value = yTotal;
+        moduloXInput.value = xModulo;
+        moduloYInput.value = yModulo;
+
+        updateFieldColors();
+        updatePixelPorPantalla();
+    }
+
+    // Función para actualizar el color de los campos basados en el total
+    function updateFieldColors() {
+        const xDisp = parseFloat(xDispInput.value) || 0;
+        const yDisp = parseFloat(yDispInput.value) || 0;
+        const xTotal = parseFloat(xTotalInput.value) || 0;
+        const yTotal = parseFloat(yTotalInput.value) || 0;
 
         xTotalInput.style.color = (xTotal > xDisp) ? 'red' : 'green';
         yTotalInput.style.color = (yTotal > yDisp) ? 'red' : 'green';
     }
 
+    // Función para dibujar el rectángulo en el canvas
     function updateRectangulo() {
         const xReal = parseFloat(xRealInput.value) || 0;
         const yReal = parseFloat(yRealInput.value) || 0;
@@ -515,6 +429,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.fillRect(10, 10, scaledX, scaledY);
     }
 
+    // Función para calcular los píxeles por pantalla
     function updatePixelPorPantalla() {
         const selectedOption = pitchSelect.options[pitchSelect.selectedIndex];
         const pitch = parseFloat(selectedOption.getAttribute('data-pitch')) || 1;
@@ -527,162 +442,68 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const pixelX = moduloX * Math.round(xReal / pitch);
         const pixelY = moduloY * Math.round(yReal / pitch);
-        pixelPorPantallaInput.value = pixelX * pixelY;
+        const totalPixels = pixelX * pixelY;
 
-        // Mostrar el valor formateado con separadores de miles
-        const pixelPorPantallaFormatted = document.getElementById('pixelxpantalla_formatted');
-        pixelPorPantallaFormatted.value = (pixelX * pixelY).toLocaleString();
+            // Aplicar formato con separadores de miles
+            pixelPorPantallaInput.value = totalPixels.toLocaleString();
     }
 
-    // Inicializar los eventos
-    initEvents();
+    // Inicializar la página y sus eventos
     updateTotals();
     updateRectangulo();
+
+    pitchSelect.addEventListener('change', updatePixelPorPantalla);
+    xRealInput.addEventListener('input', updatePixelPorPantalla);
+    yRealInput.addEventListener('input', updatePixelPorPantalla);
+    moduloXInput.addEventListener('input', updatePixelPorPantalla);
+    moduloYInput.addEventListener('input', updatePixelPorPantalla);
+    checkbox.addEventListener('change', updatePixelPorPantalla);
 });
+
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Variables
-    const controladoraSelect = document.getElementById('controladora');
-    const pixelMaxLabel = document.getElementById('pixelMaxLabel');
+    // Mostrar u ocultar formulario adicional
+    document.addEventListener('DOMContentLoaded', function() {
+        const agregarProductoCheckbox = document.getElementById('agregar_Producto');
+        const formularioExtra = document.getElementById('formularioExtra');
 
-    function actualizarResultadoResta() {
-        const pixelXPantalla = Number(document.getElementById('pixelxpantalla').value);
-        const pixelMaxLabelFormatted = Number(document.getElementById('pixelMaxLabel_formatted').value);
-
-        // Realizar la resta
-        const resultadoResta = pixelXPantalla - pixelMaxLabelFormatted;
-
-        // Mostrar el resultado en el label con separadores de mil
-        document.getElementById('resultadoRestaLabel').textContent = `Resultado: ${resultadoResta.toLocaleString('es')}`;
-        
-        // Asignar el valor sin formato al campo resultadoresta
-        document.getElementById('resultadoresta').value = resultadoResta; // Valor sin formatear
-    }
-
-    function onControladoraChange() {
-        const controladoraId = controladoraSelect.value;
-        
-        if (controladoraId) {
-            fetch(`get_pixel_max.php?controladora_id=${controladoraId}`)
-                .then(response => response.json())
-                .then(data => {
-                    const pixelMax = Number(data.pixel_max); // Obtener el valor sin formatear
-                    const pixelMaxFormatted = pixelMax.toLocaleString('es'); // Formatear con puntos de mil
-
-                    pixelMaxLabel.textContent = `Pixel Max: ${pixelMaxFormatted}`;
-                    document.getElementById('pixelMaxLabel_formatted').value = pixelMax; // Almacenar el valor sin puntos de mil
-                    
-                    // Actualizar el resultado de la resta cuando se cambia la controladora
-                    actualizarResultadoResta();
-                })
-                .catch(error => console.error('Error al obtener el pixel:max:', error));
-        } else {
-            pixelMaxLabel.textContent = ''; // Limpiar el label si no hay selección
-            document.getElementById('pixelMaxLabel_formatted').value = ''; // Limpiar el valor formateado
-            document.getElementById('resultadoRestaLabel').textContent = ''; // Limpiar el resultado de la resta
-        }
-    }
-
-    // Agregar un evento para que se actualice el resultado al cambiar el valor de pixelxpantalla
-    document.getElementById('pixelxpantalla').addEventListener('input', actualizarResultadoResta);
-
-    // Agregar el evento de cambio al select de controladora
-    controladoraSelect.addEventListener('change', onControladoraChange);
-
-    // Inicializa otros eventos si es necesario
-});
-
+        agregarProductoCheckbox.addEventListener('change', function() {
+            formularioExtra.style.display = this.checked ? 'block' : 'none';
+        });
+    });
 </script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const pitchSelect = document.getElementById('pitch_dispo');
-    const modeloSelect = document.getElementById('modelo');
-    const agregarProductoCheckbox = document.getElementById('agregar_Producto');
-    const formularioExtra = document.getElementById('formularioExtra');
-    const controladoraSelect = document.getElementById('controladora');
-    const cantidadControlInput = document.getElementById('cantidadControl');
-    const pixelMaxLabel = document.getElementById('pixelMaxLabel'); // Añadir referencia al label
-    const resultadoRestaLabel = document.getElementById('resultadoRestaLabel'); // Añadir referencia al label
-    const pesoxpantallaLabel = document.getElementById('pesoxpantallaLabel'); // Añadir referencia al peso con
-    const pesoxpantallasinInput = document.getElementById('pesoxpantallasin'); // Añadir referencia al peso sin
+        const modeloSelect = document.getElementById('modelo');
+        const pitchSelect = document.getElementById('pitch_dispo');
 
-    resultadoRestaLabel
+        // Al seleccionar un modelo, realizar solicitud AJAX para obtener pitch_dispo
+        modeloSelect.addEventListener('change', function() {
+            const modeloId = this.value;
 
-    // Inicializar eventos existentes
-    initEvents();
-
-    // Nueva función para resetear el formulario extra
-    function resetFormularioExtra() {
-        controladoraSelect.value = ''; // Resetea el campo de controladora
-        cantidadControlInput.value = ''; // Resetea el campo de cantidad
-        pixelMaxLabel.textContent = ''; // Resetea el label de pixelMaxLabel
-        resultadoRestaLabel.textContent = ''; // Resetea el label de pixelMaxLabel
-        pesoxpantallaLabel.textContent = ''; // Resetea el label de peso con
-        pesoxpantallasinInput.textContent = ''; // Resetea el input de peso sin        
-        formularioExtra.style.display = 'none'; // Oculta el formulario extra
-        agregarProductoCheckbox.checked = false; // Desmarca el checkbox
-    }
-
-    // Añadir eventos de cambio para los campos "modelo" y "pitch_dispo"
-    modeloSelect.addEventListener('change', resetFormularioExtra);
-    pitchSelect.addEventListener('change', resetFormularioExtra);
-
-    // Función que inicializa los eventos
-    function initEvents() {
-        // Agrega otros eventos que ya tienes...
-        agregarProductoCheckbox.addEventListener('change', onAgregarProductoChange);
-    }
-
-    // La función existente onAgregarProductoChange (asegúrate de que maneja la visibilidad del formulario extra)
-    function onAgregarProductoChange() {
-        formularioExtra.style.display = agregarProductoCheckbox.checked ? 'block' : 'none';
-        if (agregarProductoCheckbox.checked) {
-            controladoraSelect.disabled = false;
-            // Lógica para llenar las opciones de controladora
-        } else {
-            controladoraSelect.disabled = true;
-            controladoraSelect.innerHTML = '<option value="">Seleccione una controladora</option>';
-        }
-    }
-});
-
-</script>
-
-<script>
-    document.getElementById('pitch_dispo').addEventListener('change', function() {
-    const idTipoProducto = document.getElementById('id_tipoproducto').value;
-    const resultadoMultiplicacion = Number(document.getElementById('resultadoMultiplicacion').value);
-
-    if (idTipoProducto && resultadoMultiplicacion) {
-        // Hacer la solicitud AJAX para obtener el peso_producto21
-        fetch('get_pesos.php?id_tipoproducto=' + idTipoProducto)
-            .then(response => response.json())
-            .then(data => {
-                if (data.peso_producto21) {
-                    const pesoProducto21 = Number(data.peso_producto21);
+            // Realizar una solicitud AJAX para obtener pitch_dispo
+            fetch(`get_pitch.php?modelo_id=${modeloId}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Limpiar las opciones actuales del select
+                    pitchSelect.innerHTML = '<option value="">Seleccione un pitch</option>';
                     
-                   // Calcular el resultado
-                    const resultado = ((pesoProducto21 * resultadoMultiplicacion) / 1000000);
-
-                    // Redondear el resultado
-                    const resultadoRedondeado = Math.round(resultado);
-
-                    // Formatear el resultado con separador de miles y sin decimales
-                    const resultadoConPuntos = resultadoRedondeado.toLocaleString('es-CO', { 
-                        minimumFractionDigits: 0, 
-                        maximumFractionDigits: 0 
+                    // Agregar nuevas opciones al select
+                    data.forEach(item => {
+                        pitchSelect.innerHTML += `
+                            <option value="${item.id_car_mod}" 
+                                    data-pitch="${item.pitch}" 
+                                    data-medida-x="${item.medida_x}" 
+                                    data-medida-y="${item.medida_y}">
+                                ${item.pitch} / ${item.medida_x} x ${item.medida_y}
+                            </option>`;
                     });
+                });
+        });
 
-                    // Actualizar los campos en el formulario
-                    document.getElementById('pesoxpantallaLabel').textContent = "Peso: " + resultadoConPuntos + " Kgs";
-                    document.getElementById('pesoxpantallasin').value = resultado;
-                }
-            })
-            .catch(error => console.error('Error al obtener el peso_producto21:', error));
-    }
-});
-
+        // Activar el evento 'change' en la carga de la página para el modelo predeterminado
+        modeloSelect.dispatchEvent(new Event('change'));
+    });
 </script>

@@ -51,7 +51,7 @@ $query_estado->execute();
 $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
 
 // Consultar categorías de productos para el select de Categoría Producto
-$query_producto = $pdo->prepare('SELECT * FROM t_categoria_productos WHERE categoria IS NOT NULL AND categoria != "" ORDER BY categoria ASC');
+$query_producto = $pdo->prepare('SELECT * FROM t_categoria_productos WHERE categoria IS NOT NULL AND habilitado = "1" AND categoria != "" ORDER BY categoria ASC');
 $query_producto->execute();
 $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
 
@@ -135,29 +135,29 @@ $hora_actual = date('H:i');
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label for="nombre_proyecto" class="d-block mb-0">Proyecto</label>
-                                            <input type="text" name="nombre_proyecto" class="form-control" placeholder="Asignar" required>
+                                            <input type="text" name="nombre_proyecto" class="form-control" id="nombre_proyecto" placeholder="Asignar" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="cliente" class="d-block mb-0">Cliente</label>
-                                            <input type="text" name="cliente" class="form-control" placeholder="Cliente" required>
+                                            <input type="text" name="cliente" class="form-control" id="cliente" placeholder="Cliente" required>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label for="contacto_cliente" class="d-block mb-0">Contacto</label>
-                                            <input type="text" name="contacto_cliente" class="form-control" placeholder="Contacto" required>
+                                            <input type="text" name="contacto_cliente" class="form-control" id="contacto_cliente" placeholder="Contacto" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="telefono_contacto" class="d-block mb-0">Teléfono Contacto</label>
-                                            <input type="text" name="telefono_contacto" class="form-control" placeholder="Teléfono">
+                                            <input type="text" name="telefono_contacto" class="form-control" id="telefono_contacto" placeholder="Teléfono">
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label for="asesor_encargado" class="d-block mb-0">Asesor Encargado</label>
-                                            <input type="text" name="asesor_encargado" class="form-control" value="<?php echo htmlspecialchars($sesion_usuario['nombre']); ?>" readonly>
+                                            <input type="text" name="asesor_encargado" id="asesor_encargado" class="form-control" value="<?php echo htmlspecialchars($sesion_usuario['nombre']); ?>" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -179,7 +179,7 @@ $hora_actual = date('H:i');
                                                     <div class="col-md-4 items_pre">
                                                         <div class="form-group">
                                                             <label for="pantallas" class="d-block mb-0">Cantidad de Pantallas</label>
-                                                            <input type="text" name="pantallas[]" class="form-control">
+                                                            <input type="text" name="pantallas[]" id="pantallas[]" class="form-control">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 items_pre">
@@ -246,26 +246,26 @@ $hora_actual = date('H:i');
                                                     </div>
                                                     <div class="col-md-2 items_pre">
                                                         <div class="form-group">
-                                                            <label for="x_disponible" class="d-block mb-0">X Dispo en mts</label>
-                                                            <input type="text" name="x_dispo_mts[]" class="form-control">
+                                                            <label for="x_dispo_mts" class="d-block mb-0">X Dispo en mts</label>
+                                                            <input type="text" name="x_dispo_mts[]" id="x_dispo_mts" class="form-control">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2 items_pre">
                                                         <div class="form-group">
-                                                            <label for="y_disponible" class="d-block mb-0">Y Dispo en mts</label>
-                                                            <input type="text" name="y_dispo_mts[]" class="form-control">
+                                                            <label for="y_dispo_mts" class="d-block mb-0">Y Dispo en mts</label>
+                                                            <input type="text" name="y_dispo_mts[]" id="y_dispo_mts" class="form-control">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2 items_pre">
                                                         <div class="form-group">
                                                             <label for="x_disponible" class="d-block mb-0">X Dispo en mm</label>
-                                                            <input type="text" name="x_disponible[]" class="form-control">
+                                                            <input type="text" name="x_disponible[]" id="x_disponible" class="form-control" readonly />
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2 items_pre">
                                                         <div class="form-group">
                                                             <label for="y_disponible" class="d-block mb-0">Y Dispo en mm</label>
-                                                            <input type="text" name="y_disponible[]" class="form-control">
+                                                            <input type="text" name="y_disponible[]" id="y_disponible" class="form-control" readonly />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -413,6 +413,8 @@ document.getElementById('btn_add_item').addEventListener('click', function() {
     document.querySelector('select[name="pitch[]"]').selectedIndex = 0;
     document.querySelector('input[name="x_disponible[]"]').value = '';
     document.querySelector('input[name="y_disponible[]"]').value = '';
+    document.querySelector('input[name="x_dispo_mts[]"]').value = '';
+    document.querySelector('input[name="y_dispo_mts[]"]').value = '';
     document.querySelector('textarea[name="justificacion[]"]').value = '';
 });
 
@@ -594,5 +596,36 @@ document.addEventListener('DOMContentLoaded', function() {
   // Para deshabilitar por defecto al cargar la página
   categoriaProducto.dispatchEvent(new Event('change'));
 });
+
+</script>
+
+<script>
+// Seleccionar los campos de entrada
+const xDispoMts = document.getElementById('x_dispo_mts');
+const yDispoMts = document.getElementById('y_dispo_mts');
+const xDisponible = document.getElementById('x_disponible');
+const yDisponible = document.getElementById('y_disponible');
+
+// Función para actualizar los valores multiplicados por 1000
+function actualizarValores() {
+    console.log('Valor de x_dispo_mts:', xDispoMts.value);
+    console.log('Valor de y_dispo_mts:', yDispoMts.value);
+
+    // Multiplicar por 1000 y actualizar los campos correspondientes
+    if (xDispoMts.value) {
+        const xValue = (parseFloat(xDispoMts.value) * 1000).toFixed(0);
+        console.log('Nuevo valor de x_disponible:', xValue);
+        xDisponible.value = xValue;
+    }
+    if (yDispoMts.value) {
+        const yValue = (parseFloat(yDispoMts.value) * 1000).toFixed(0);
+        console.log('Nuevo valor de y_disponible:', yValue);
+        yDisponible.value = yValue;
+    }
+}
+
+// Agregar eventos para detectar cambios en los campos
+xDispoMts.addEventListener('input', actualizarValores);
+yDispoMts.addEventListener('input', actualizarValores);
 
 </script>
