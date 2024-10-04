@@ -122,7 +122,7 @@ foreach ($modelos as $modelo) {
                                         <div class="form-group">
                                             <label for="uso">Uso Producto</label>
                                             <input type="text" id="uso" name="uso" value="<?php echo htmlspecialchars($preproyecto); ?>" class="form-control" readonly>
-                                            <input type="hidden" id="id_uso" name="id_uso" value="<?php echo htmlspecialchars($id_uso); ?>" class="form-control">
+                                            <input type="hidden" id="id_uso1" name="id_uso1" value="<?php echo htmlspecialchars($id_uso); ?>" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -195,7 +195,7 @@ foreach ($modelos as $modelo) {
                                                     <div class="form-group">
                                                         <label id="resultadoMultiplicacionLabel" class="mt-2"></label>
                                                         <!-- Campo (oculto) -->
-                                                        <input type="hidden" id="resultadoMultiplicacion" class="form-control">
+                                                        <input type="hidden" id="resultadoMultiplicacioninput" class="form-control">
                                                     </div>
                                                 </div>
 
@@ -204,6 +204,32 @@ foreach ($modelos as $modelo) {
                                                         <label id="pesoxpantallaLabel" class="mt-2"></label>
                                                         <!-- Campo (oculto) -->
                                                         <input type="hidden" id="pesoxpantallasin" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label id="labelWattsConsumo" name="labelWattsConsumo" class="mt-2"></label>
+                                                        <!-- Campo (oculto) -->
+                                                        <input type="hidden" id="inputWattsConsumo" name="inputWattsConsumo" class="form-control">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label id="voltaje" name="voltaje" class="mt-2">Voltaje: 220 voltios</label>
+                                                        <!-- Campo (oculto) -->
+                                                        <input type="hidden" id="inputWattsConsumo" name="inputWattsConsumo" class="form-control">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label id="calibre" name="calibre" class="mt-2">Cable Calibre 12</label>
+                                                        <!-- Campo (oculto) -->
+                                                        <input type="hidden" id="inputWattsConsumo" name="inputWattsConsumo" class="form-control">
                                                     </div>
                                                 </div>
                                             </div>
@@ -286,7 +312,7 @@ foreach ($modelos as $modelo) {
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="pixelxpantalla">Píxel por Pantalla</label>
+                                                            <label id="pixelxpantalla">Píxel por Pantalla</label>
                                                             <!-- Nuevo campo para mostrar el valor con separador de miles -->
                                                             <input type="text" id="pixelxpantalla_formatted" class="form-control" readonly>
                                                             <!-- Campo original pixelxpantalla (oculto) -->
@@ -303,7 +329,7 @@ foreach ($modelos as $modelo) {
                                             <div class="form-group canvas-container">
                                                 <div class="col-md-6">
                                                     <div class="text-center">
-                                                        <label for="rectangulo"></label>
+                                                        <label id="rectangulo"></label>
                                                         <canvas id="canvas" width="180" height="180" style="border: 1px solid #000000;"></canvas>
                                                     </div>
                                                 </div>
@@ -355,6 +381,7 @@ foreach ($modelos as $modelo) {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Variables
     const pitchSelect = document.getElementById('pitch_dispo');
     const xRealInput = document.querySelector('input[name="x_real"]');
     const yRealInput = document.querySelector('input[name="y_real"]');
@@ -373,24 +400,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const modeloSelect = document.getElementById('modelo');
     const controladoraSelect = document.getElementById('controladora');
     const cantidadControlInput = document.getElementById('cantidadControl');
+    const originalValues = { x: null, y: null };
 
-
-    let originalXReal, originalYReal;
+    initEvents();
+    updateTotals();
+    updateRectangulo();
 
     function initEvents() {
         pitchSelect.addEventListener('change', onPitchChange);
         checkbox.addEventListener('change', onCheckboxChange);
         modeloSelect.addEventListener('change', onModeloChange);
         agregarProductoCheckbox.addEventListener('change', onAgregarProductoChange);
-        xRealInput.addEventListener('input', updatePixelPorPantalla);
-        yRealInput.addEventListener('input', updatePixelPorPantalla);
-        moduloXInput.addEventListener('input', updatePixelPorPantalla);
-        moduloYInput.addEventListener('input', updatePixelPorPantalla);
-        document.getElementById('x_real').addEventListener('input', updateTotals);
-        document.getElementById('y_real').addEventListener('input', updateTotals);
-        document.getElementById('x_disp').addEventListener('input', updateTotals);
-        document.getElementById('y_disp').addEventListener('input', updateTotals);
+        addInputEventListeners([xRealInput, yRealInput, moduloXInput, moduloYInput, xDispInput, yDispInput], updatePixelPorPantalla);
+    }
 
+    function addInputEventListeners(inputs, callback) {
+        inputs.forEach(input => {
+            input.addEventListener('input', callback);
+        });
     }
 
     function onPitchChange() {
@@ -398,8 +425,8 @@ document.addEventListener('DOMContentLoaded', function() {
         xRealInput.value = selectedOption.getAttribute('data-medida-x') || '';
         yRealInput.value = selectedOption.getAttribute('data-medida-y') || '';
 
-        originalXReal = xRealInput.value;
-        originalYReal = yRealInput.value;
+        originalValues.x = xRealInput.value;
+        originalValues.y = yRealInput.value;
 
         updateTotals();
         updateRectangulo();
@@ -410,8 +437,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (checkbox.checked) {
             [xRealInput.value, yRealInput.value] = [yRealInput.value, xRealInput.value];
         } else {
-            xRealInput.value = originalXReal;
-            yRealInput.value = originalYReal;
+            xRealInput.value = originalValues.x;
+            yRealInput.value = originalValues.y;
         }
         updateTotals();
         updateRectangulo();
@@ -423,73 +450,80 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`get_pitch.php?modelo_id=${modeloId}`)
             .then(response => response.json())
             .then(data => {
-                pitchSelect.innerHTML = '<option value="">Seleccione un pitch</option>';
-                data.forEach(item => {
-                    pitchSelect.innerHTML += `
-                        <option value="${item.id_car_mod}" 
-                                data-pitch="${item.pitch}" 
-                                data-medida-x="${item.medida_x}" 
-                                data-medida-y="${item.medida_y}">
-                            ${item.pitch} / ${item.medida_x} x ${item.medida_y}
-                        </option>`;
-                });
+                updatePitchSelect(data);
                 pitchSelect.dispatchEvent(new Event('change'));
-            });
+            })
+            .catch(error => console.error('Error al obtener pitches:', error));
+    }
+
+    function updatePitchSelect(data) {
+        pitchSelect.innerHTML = '<option value="">Seleccione un pitch</option>';
+        data.forEach(item => {
+            pitchSelect.innerHTML += `
+                <option value="${item.id_car_mod}" 
+                        data-pitch="${item.pitch}" 
+                        data-medida-x="${item.medida_x}" 
+                        data-medida-y="${item.medida_y}">
+                    ${item.pitch} / ${item.medida_x} x ${item.medida_y}
+                </option>`;
+        });
     }
 
     function onAgregarProductoChange() {
         formularioExtra.style.display = agregarProductoCheckbox.checked ? 'block' : 'none';
+        controladoraSelect.disabled = !agregarProductoCheckbox.checked;
 
         if (agregarProductoCheckbox.checked) {
-            controladoraSelect.disabled = false;
-            const pixelMaxValue = parseFloat(pixelPorPantallaInput.value);
-            fetch(`get_controladoras.php?pixel_max=${pixelMaxValue}`)
-                .then(response => response.json())
-                .then(data => {
-                    controladoraSelect.innerHTML = '<option value="">Seleccione una controladora</option>';
-                    data.forEach(item => {
-                        controladoraSelect.innerHTML += `
-                            <option value="${item.id_referencia}">${item.referencia}</option>`;
-                    });
-                })
-                .catch(error => console.error('Error al obtener controladoras:', error));
+            fetchControladoras();
         } else {
-            controladoraSelect.disabled = true;
             controladoraSelect.innerHTML = '<option value="">Seleccione una controladora</option>';
+
+                    // Reiniciar los campos cuando el checkbox se desmarca
+                    (document.getElementById('pixelMaxLabel_formatted')).value = ''; // Reinicia el valor del input
+                    (document.getElementById('resultadoresta')).value = ''; // Reinicia el valor del input
+                    (document.getElementById('pixelMaxLabel')).textContent = ''; // Reinicia el texto del label
+                    (document.getElementById('resultadoRestaLabel')).textContent = ''; // Reinicia el texto del label
         }
     }
 
+    function fetchControladoras() {
+        const pixelMaxValue = parseFloat(pixelPorPantallaInput.value);
+        fetch(`get_controladoras.php?pixel_max=${pixelMaxValue}`)
+            .then(response => response.json())
+            .then(data => {
+                controladoraSelect.innerHTML = '<option value="">Seleccione una controladora</option>';
+                data.forEach(item => {
+                    controladoraSelect.innerHTML += `
+                        <option value="${item.id_referencia}">${item.referencia}</option>`;
+                });
+            })
+            .catch(error => console.error('Error al obtener controladoras:', error));
+    }
+
     function updateTotals() {
-    const xReal = parseFloat(xRealInput.value) || 1;
-    const yReal = parseFloat(yRealInput.value) || 1;
-    const xDisp = parseFloat(xDispInput.value) || 0;
-    const yDisp = parseFloat(yDispInput.value) || 0;
+        const xReal = Number(xRealInput.value) || 1;
+        const yReal = Number(yRealInput.value) || 1;
+        const xDisp = Number(xDispInput.value) || 0;
+        const yDisp = Number(yDispInput.value) || 0;
 
-    const xModulo = Math.round(xDisp / xReal);
-    const yModulo = Math.round(yDisp / yReal);
+        const xModulo = Math.floor(xDisp / xReal);
+        const yModulo = Math.floor(yDisp / yReal);
 
-    const xTotal = xModulo * xReal;
-    const yTotal = yModulo * yReal;
+        const xTotal = xModulo * xReal;
+        const yTotal = yModulo * yReal;
 
-    xTotalInput.value = xTotal;
-    yTotalInput.value = yTotal;
-    moduloXInput.value = xModulo;
-    moduloYInput.value = yModulo;
+        xTotalInput.value = xTotal;
+        yTotalInput.value = yTotal;
+        moduloXInput.value = xModulo;
+        moduloYInput.value = yModulo;
 
-    // Calcular el resultado de la multiplicación y redondearlo a 2 dígitos después del punto
-    let resultadoMultiplicacion = (xTotal * yTotal) / 1000;
-    resultadoMultiplicacion = resultadoMultiplicacion;  // Redondear
+        const resultadoMultiplicacion = Math.round((xTotal * yTotal) / 1000);
+        document.getElementById('resultadoMultiplicacionLabel').textContent = `Mts²: ${Number(resultadoMultiplicacion).toLocaleString('es')} Mts`;
+        document.getElementById('resultadoMultiplicacioninput').value = resultadoMultiplicacion;
 
-    // Mostrar el resultado en el label con separadores de miles
-    document.getElementById('resultadoMultiplicacionLabel').textContent = `Mts²: ${parseFloat(resultadoMultiplicacion).toLocaleString('es')} Mts`;
-
-    // Almacenar el valor sin formato en el input oculto
-    document.getElementById('resultadoMultiplicacion').value = resultadoMultiplicacion;
-
-    updateFieldColors();
-    updatePixelPorPantalla();
-}
-
+        updateFieldColors();
+        updatePixelPorPantalla();
+    }
 
     function updateFieldColors() {
         const xTotal = parseFloat(xTotalInput.value) || 0;
@@ -529,35 +563,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const pixelY = moduloY * Math.round(yReal / pitch);
         pixelPorPantallaInput.value = pixelX * pixelY;
 
-        // Mostrar el valor formateado con separadores de miles
-        const pixelPorPantallaFormatted = document.getElementById('pixelxpantalla_formatted');
-        pixelPorPantallaFormatted.value = (pixelX * pixelY).toLocaleString();
+        document.getElementById('pixelxpantalla_formatted').value = (pixelX * pixelY).toLocaleString();
     }
 
-    // Inicializar los eventos
-    initEvents();
-    updateTotals();
-    updateRectangulo();
-});
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Variables
-    const controladoraSelect = document.getElementById('controladora');
+    // Parte del script para actualizar el resultado de la resta
     const pixelMaxLabel = document.getElementById('pixelMaxLabel');
+    const resultadoRestaLabel = document.getElementById('resultadoRestaLabel');
+
+    document.getElementById('pixelxpantalla').addEventListener('input', actualizarResultadoResta);
+    controladoraSelect.addEventListener('change', onControladoraChange);
 
     function actualizarResultadoResta() {
-        const pixelXPantalla = Number(document.getElementById('pixelxpantalla').value);
+        const pixelXPantalla = Number(pixelPorPantallaInput.value);
         const pixelMaxLabelFormatted = Number(document.getElementById('pixelMaxLabel_formatted').value);
-
-        // Realizar la resta
         const resultadoResta = pixelXPantalla - pixelMaxLabelFormatted;
 
-        // Mostrar el resultado en el label con separadores de mil
-        document.getElementById('resultadoRestaLabel').textContent = `Resultado: ${resultadoResta.toLocaleString('es')}`;
-        
-        // Asignar el valor sin formato al campo resultadoresta
+        resultadoRestaLabel.textContent = `Resultado: ${resultadoResta.toLocaleString('es')}`;
         document.getElementById('resultadoresta').value = resultadoResta; // Valor sin formatear
     }
 
@@ -568,46 +589,37 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch(`get_pixel_max.php?controladora_id=${controladoraId}`)
                 .then(response => response.json())
                 .then(data => {
-                    const pixelMax = Number(data.pixel_max); // Obtener el valor sin formatear
-                    const pixelMaxFormatted = pixelMax.toLocaleString('es'); // Formatear con puntos de mil
-
-                    pixelMaxLabel.textContent = `Pixel Max: ${pixelMaxFormatted}`;
-                    document.getElementById('pixelMaxLabel_formatted').value = pixelMax; // Almacenar el valor sin puntos de mil
-                    
-                    // Actualizar el resultado de la resta cuando se cambia la controladora
+                    const pixelMax = Number(data.pixel_max);
+                    const pixelMaxFormatted = pixelMax.toLocaleString('es');
+                    document.getElementById('pixelMaxLabel').textContent = `Pixel Max: ${pixelMaxFormatted}`;
+                    document.getElementById('pixelMaxLabel_formatted').value = pixelMax; // Guardar el valor para cálculos
                     actualizarResultadoResta();
                 })
-                .catch(error => console.error('Error al obtener el pixel:max:', error));
-        } else {
-            pixelMaxLabel.textContent = ''; // Limpiar el label si no hay selección
-            document.getElementById('pixelMaxLabel_formatted').value = ''; // Limpiar el valor formateado
-            document.getElementById('resultadoRestaLabel').textContent = ''; // Limpiar el resultado de la resta
+                .catch(error => console.error('Error al obtener pixel_max:', error));
         }
     }
-
-    // Agregar un evento para que se actualice el resultado al cambiar el valor de pixelxpantalla
-    document.getElementById('pixelxpantalla').addEventListener('input', actualizarResultadoResta);
-
-    // Agregar el evento de cambio al select de controladora
-    controladoraSelect.addEventListener('change', onControladoraChange);
-
-    // Inicializa otros eventos si es necesario
 });
-
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+
+document.addEventListener('DOMContentLoaded', function() {
     const pitchSelect = document.getElementById('pitch_dispo');
     const modeloSelect = document.getElementById('modelo');
     const agregarProductoCheckbox = document.getElementById('agregar_Producto');
     const formularioExtra = document.getElementById('formularioExtra');
     const controladoraSelect = document.getElementById('controladora');
-    const cantidadControlInput = document.getElementById('cantidadControl');
     const pixelMaxLabel = document.getElementById('pixelMaxLabel'); // Añadir referencia al label
+    const pixelMaxLabelInput = document.getElementById('pixelMaxLabel_formatted'); // Añadir referencia al peso sin
+    const cantidadControlInput = document.getElementById('cantidadControl');
     const resultadoRestaLabel = document.getElementById('resultadoRestaLabel'); // Añadir referencia al label
+    const resultadorestaInput = document.getElementById('resultadoresta'); // Añadir referencia al peso sin
+    const resultadoMultiplicacionLabel = document.getElementById('resultadoMultiplicacionLabel'); // Añadir referencia al peso sin
+    const resultadoMultiplicacionInput = document.getElementById('resultadoMultiplicacioninput'); // Añadir referencia al peso sin
     const pesoxpantallaLabel = document.getElementById('pesoxpantallaLabel'); // Añadir referencia al peso con
     const pesoxpantallasinInput = document.getElementById('pesoxpantallasin'); // Añadir referencia al peso sin
+    const LabelWattsConsumo = document.getElementById('labelWattsConsumo'); // Añadir referencia al peso con
+    const InputWattsConsumo = document.getElementById('inputWattsConsumo'); // Añadir referencia al peso sin
 
     resultadoRestaLabel
 
@@ -616,14 +628,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Nueva función para resetear el formulario extra
     function resetFormularioExtra() {
-        controladoraSelect.value = ''; // Resetea el campo de controladora
-        cantidadControlInput.value = ''; // Resetea el campo de cantidad
-        pixelMaxLabel.textContent = ''; // Resetea el label de pixelMaxLabel
-        resultadoRestaLabel.textContent = ''; // Resetea el label de pixelMaxLabel
-        pesoxpantallaLabel.textContent = ''; // Resetea el label de peso con
-        pesoxpantallasinInput.textContent = ''; // Resetea el input de peso sin        
-        formularioExtra.style.display = 'none'; // Oculta el formulario extra
+
+        controladoraSelect.value = '';  // Resetea
+        pixelMaxLabelInput.value = '';  // Resetea
+        cantidadControlInput.value = '';    // Resetea
+        resultadorestaInput.value = ''; // Resetea
+        pixelMaxLabel.textContent = ''; //  Resetea
+        resultadoRestaLabel.textContent = '';   //  Resetea
         agregarProductoCheckbox.checked = false; // Desmarca el checkbox
+        formularioExtra.style.display = 'none'; // Oculta el formulario extra
+
     }
 
     // Añadir eventos de cambio para los campos "modelo" y "pitch_dispo"
@@ -652,9 +666,10 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script>
-    document.getElementById('pitch_dispo').addEventListener('change', function() {
+document.getElementById('agregar_Producto').addEventListener('change', function(){
+    const idUso = Number(document.getElementById('id_uso1').value);
     const idTipoProducto = document.getElementById('id_tipoproducto').value;
-    const resultadoMultiplicacion = Number(document.getElementById('resultadoMultiplicacion').value);
+    const resultadoMultiplicacion = Number(document.getElementById('resultadoMultiplicacioninput').value);
 
     if (idTipoProducto && resultadoMultiplicacion) {
         // Hacer la solicitud AJAX para obtener el peso_producto21
@@ -664,8 +679,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.peso_producto21) {
                     const pesoProducto21 = Number(data.peso_producto21);
                     
-                   // Calcular el resultado
-                    const resultado = ((pesoProducto21 * resultadoMultiplicacion) / 1000000);
+                    // Calcular el resultado
+                    const resultado = ((resultadoMultiplicacion * pesoProducto21) / 1000000);
 
                     // Redondear el resultado
                     const resultadoRedondeado = Math.round(resultado);
@@ -681,8 +696,86 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('pesoxpantallasin').value = resultado;
                 }
             })
-            .catch(error => console.error('Error al obtener el peso_producto21:', error));
+        .catch(error => console.error('Error al obtener el peso_producto21:', error));
     }
+
+    // Verifica si id_uso es 1, 2, 3, 4 o 5
+    if ([1, 2, 3, 4, 5].includes(idUso)) {
+        // Realiza la consulta a la base de datos (usando AJAX o fetch)
+        fetch(`consumo_wats.php?id_uso=${idUso}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Datos recibidos:', data);  // Verificar la respuesta
+
+            if (data && data.consumo_wats) {
+                const consumoWats = Number(data.consumo_wats); // Obtén el valor del campo "consumo_wats"
+                console.log('consumo_wats:', consumoWats);  // Verificar el valor de consumo_wats
+
+                let resultadoConsumo = Math.round((consumoWats * resultadoMultiplicacion) / 1000);
+                console.log('Resultado redondeado:', resultadoConsumo);  // Verificar el resultado redondeado
+
+                // Actualiza el input y el label
+                document.getElementById('inputWattsConsumo').value = resultadoConsumo;
+                document.getElementById('labelWattsConsumo').textContent = `Consumo: ${resultadoConsumo.toLocaleString('es')} Watts`;
+            } else {
+                console.log('Error: No se encontró consumo_wats.');
+            }
+        })
+        .catch(error => console.log('Error en la solicitud:', error));
+    } else {
+        console.log('El id_uso no es válido para la búsqueda de consumo_wats.');
+    }
+
 });
 
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkbox = document.getElementById('intercambiar');
+    const resultadoResta = document.getElementById('resultadoresta');
+    const resultadoRestaLabel = document.getElementById('resultadoRestaLabel');
+    const inputWattsConsumo = document.getElementById('inputWattsConsumo');
+    const labelWattsConsumo = document.getElementById('labelWattsConsumo');
+    const pesoxpantallaLabel = document.getElementById('pesoxpantallaLabel');
+    const pesoxpantallasin = document.getElementById('pesoxpantallasin');
+
+    checkbox.addEventListener('change', function() {
+        updateFields();
+    });
+
+    function updateFields() {
+        // Obtener los valores actuales de los campos que necesites
+        const xReal = parseFloat(document.querySelector('input[name="x_real"]').value) || 0;
+        const yReal = parseFloat(document.querySelector('input[name="y_real"]').value) || 0;
+        const moduloX = parseInt(document.getElementById('modulo_x').value) || 0;
+        const moduloY = parseInt(document.getElementById('modulo_y').value) || 0;
+
+        let newXReal, newYReal;
+
+        // Intercambiar valores si el checkbox está marcado
+        if (checkbox.checked) {
+            newXReal = yReal;
+            newYReal = xReal;
+        } else {
+            newXReal = xReal;
+            newYReal = yReal;
+        }
+
+        // Realiza los cálculos que necesitas y actualiza los campos
+        const result = newXReal * moduloX - newYReal * moduloY; // Ejemplo de cálculo para "resultadoresta"
+        resultadoResta.value = result.toFixed(2); // Redondea a 2 decimales
+        resultadoRestaLabel.textContent = `Resultado: ${result.toFixed(2)}`; // Actualiza la etiqueta
+
+        // Actualiza inputWattsConsumo y labelWattsConsumo
+        const wattsConsumo = (newXReal + newYReal) * 10; // Ejemplo de cálculo
+        inputWattsConsumo.value = wattsConsumo.toFixed(2);
+        labelWattsConsumo.textContent = `Watts Consumo: ${wattsConsumo.toFixed(2)}`;
+
+        // Actualiza pesoxpantallaLabel y pesoxpantallasin
+        const pesoPorPantalla = (newXReal + newYReal) * 5; // Ejemplo de cálculo
+        pesoxpantallaLabel.textContent = `Peso por Pantalla: ${pesoPorPantalla.toFixed(2)}`;
+        pesoxpantallasin.value = pesoPorPantalla.toFixed(2);
+    }
+});
 </script>

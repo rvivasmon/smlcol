@@ -61,44 +61,45 @@ if ($pre_proyecto) {
                             <div class="container-fluid">
 
                                 <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="fecha" class="d-block mb-0">Fecha</label>
-                                                <input type="date" id="fecha" name="fecha" class="form-control" value="<?php echo $fecha; ?>" readonly>
-                                            </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="fecha" class="d-block mb-0">Fecha</label>
+                                            <input type="date" id="fecha" name="fecha" class="form-control" value="<?php echo $fecha; ?>" readonly>
                                         </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="hora" class="d-block mb-0">Hora</label>
-                                                    <input type="time" id="hora" name="hora" class="form-control" value="<?php echo date('H:i', strtotime($fecha)); ?>" readonly>
-                                                </div>
-                                            </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="hora" class="d-block mb-0">Hora</label>
+                                            <input type="time" id="hora" name="hora" class="form-control" value="<?php echo date('H:i', strtotime($fecha)); ?>" readonly>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="row">
-                                        <div class="col-md-3">
+                                    <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="tipo_proyecto" class="d-block mb-0">Tipo Proyecto</label>
                                                 <select name="tipo_proyecto" id="tipo_proyecto" class="form-control" readonly>
                                                     <option value="<?php echo htmlspecialchars($tipo); ?>"><?php echo htmlspecialchars($tipo); ?></option>
                                                 </select>
                                             </div>
-                                        </div>
-                                        <div class="col-md-3">
+                                    </div>
+                                    <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="id_proyecto" class="d-block mb-0">Id Proyecto</label>
                                                 <input type="text" name="id_proyecto" id="id_proyecto" class="form-control" value="<?php echo htmlspecialchars($idprepro); ?>" readonly>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
+                                    </div>
+                                    <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="ciudad" class="d-block mb-0">Ciudad</label>
                                                 <input type="text" name="ciudad" id="ciudad" class="form-control" value="<?php echo htmlspecialchars($ciudad); ?>">
                                             </div>
-                                        </div>
-                                        <div class="col-md-0">
+                                    </div>
+                                    <div class="col-md-0">
                                             <input type="hidden" name="idusuario2" value="<?php echo $sesion_usuario['id']; ?>">
-                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="row">
@@ -230,9 +231,124 @@ if ($pre_proyecto) {
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6">
+                                                <!-- Botón para abrir el modal -->
                                                 <div class="form-group">
-                                                    <a href="" class="btn btn-warning btn-block">Añadir Item</a>
+                                                    <a href="#" class="btn btn-warning btn-block" data-toggle="modal" data-target="#addItemModal">Añadir Item</a>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="addItemModalLabel">Añadir Item</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="addItemForm">
+                                                    <div class="form-group cloned-section">
+                                                        <div class="row">
+                                                            <div class="col-md-4 items_pre">
+                                                                <div class="form-group">
+                                                                    <label for="items" class="d-block mb-0">Items</label>
+                                                                    <input type="text" name="items[]" class="form-control" value="1" readonly>
+                                                                    <input type="hidden" id="item_data" name="item_data">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4 items_pre">
+                                                                <div class="form-group">
+                                                                    <label for="pantallas" class="d-block mb-0">Cantidad de Pantallas</label>
+                                                                    <input type="text" name="pantallas[]" id="pantallas[]" class="form-control" required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4 items_pre">
+                                                                <label for="estado" class="d-block mb-0">Estado</label>
+                                                                <select name="estado[]" class="form-control" required>
+                                                                    <option value="1">Nuevo</option>
+                                                                    <?php foreach ($estados as $estado) : ?>
+                                                                        <option value="<?php echo htmlspecialchars($estado['id']); ?>">
+                                                                            <?php echo htmlspecialchars($estado['estado_ppc']); ?>
+                                                                        </option>
+                                                                    <?php endforeach; ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-4 items_pre">
+                                                                <div class="form-group">
+                                                                    <label for="categoria_producto" class="d-block mb-0">Categoría Producto</label>
+                                                                    <select name="categoria_producto[]" class="form-control" onchange="cargarDatosRelacionados(this.value)">
+                                                                        <option value="">Seleccione Categoría</option>
+                                                                        <?php foreach ($productos as $producto) : ?>
+                                                                            <?php if ($producto['id_prod_terminado'] != 5) : ?>
+                                                                                <option value="<?php echo htmlspecialchars($producto['id_prod_terminado']); ?>">
+                                                                                    <?php echo htmlspecialchars($producto['categoria']); ?>
+                                                                                </option>
+                                                                            <?php endif; ?>
+                                                                        <?php endforeach; ?>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4 items_pre">
+                                                                <div class="form-group">
+                                                                    <label for="uso" class="d-block mb-0">Uso</label>
+                                                                    <select name="uso[]" class="form-control">
+                                                                        <option value="">Seleccione Uso</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4 items_pre">
+                                                                <div class="form-group">
+                                                                    <label for="tipo_producto" class="d-block mb-0">Tipo Producto</label>
+                                                                    <select name="tipo_producto[]" class="form-control">
+                                                                        <option value="">Seleccione Tipo</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-2 items_pre">
+                                                                <div class="form-group">
+                                                                    <label for="x_dispo_mts" class="d-block mb-0">X Dispo en mts</label>
+                                                                    <input type="text" name="x_dispo_mts[]" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2 items_pre">
+                                                                <div class="form-group">
+                                                                    <label for="y_dispo_mts" class="d-block mb-0">Y Dispo en mts</label>
+                                                                    <input type="text" name="y_dispo_mts[]" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2 items_pre">
+                                                                <div class="form-group">
+                                                                    <label for="x_disponible" class="d-block mb-0">X Dispo en mm</label>
+                                                                    <input type="text" name="x_disponible[]" class="form-control" readonly />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2 items_pre">
+                                                                <div class="form-group">
+                                                                    <label for="y_disponible" class="d-block mb-0">Y Dispo en mm</label>
+                                                                    <input type="text" name="y_disponible[]" class="form-control" readonly />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12 items_pre">
+                                                                <div class="form-group">
+                                                                    <label for="justificacion" class="d-block mb-0">Observaciones</label>
+                                                                    <textarea name="justificacion[]" class="form-control" rows="2"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Guardar Item</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -247,3 +363,31 @@ if ($pre_proyecto) {
 </div><!-- /.content-header -->
 
 <?php include('../../../../layout/admin/parte2.php'); ?>
+
+<script>
+    $(document).ready(function () {
+    $('#addItemForm').on('submit', function (e) {
+        e.preventDefault(); // Evitar el envío normal del formulario
+
+        // Obtener los datos del formulario
+        var formData = $(this).serialize();
+
+        // Realizar la solicitud AJAX para guardar los datos
+        $.ajax({
+            url: 'guardar_item.php', // URL del archivo PHP que procesará la solicitud
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                // Manejar la respuesta del servidor
+                alert(response); // Muestra un mensaje con la respuesta
+                $('#addItemModal').modal('hide'); // Cierra el modal
+                location.reload(); // Recargar la página para actualizar la tabla
+            },
+            error: function () {
+                alert('Error al guardar el item.'); // Manejar errores
+            }
+        });
+    });
+});
+
+</script>
