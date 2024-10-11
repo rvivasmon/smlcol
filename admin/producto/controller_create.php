@@ -11,6 +11,15 @@ include('../../layout/admin/datos_sesion_user.php');
 
 $producto = $_POST['producto'];
 $id_usuario = $_POST['idusuario'];
+$almagrupo = $_POST['almacen_grupo'];
+
+    $evidencias = $_POST['archivo_adjunto'];
+
+    $nombreDelArchivo = date( "Y-m-d-h-i");
+    $filename = $nombreDelArchivo."__".$_FILES['archivo_adjunto']['name'];
+    $location1 = "../../img_uploads/".$filename;
+
+    move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'],$location1);
 
     /*  CAMPOS VERIFICADORES MODULOS    */
     $uso = !empty($_POST['uso']) ? $_POST['uso'] : NULL;
@@ -112,8 +121,8 @@ try {
     $pitch_final = !empty($pitch) ? $pitch : $pitch3;
 
     if (!is_null($pitch_final) && !is_null($medida_x3) && !is_null($medida_y3) && !is_null($pixel_x3) && !is_null($pixel_y3) && !is_null($serie_modulo3) && !is_null($referencia_modulo3)) {
-        $sql_modulo1 = "INSERT INTO caracteristicas_modulos (pitch, modelo_modulo, medida_x, medida_y, pixel_x, pixel_y, serie_modulo, referencia_modulo) 
-                        VALUES (:pitch, :modelo_modulo1, :medida_x3, :medida_y3, :pixel_x3, :pixel_y3, :serie_modulo3, :referencia_modulo3)";
+        $sql_modulo1 = "INSERT INTO caracteristicas_modulos (pitch, modelo_modulo, medida_x, medida_y, pixel_x, pixel_y, serie_modulo, referencia_modulo, ruta, almacen) 
+                        VALUES (:pitch, :modelo_modulo1, :medida_x3, :medida_y3, :pixel_x3, :pixel_y3, :serie_modulo3, :referencia_modulo3, :evidencias, :almagrupo)";
         $sentencia_modulo1 = $pdo->prepare($sql_modulo1);
         $sentencia_modulo1->bindParam(':pitch', $pitch_final);
         $sentencia_modulo1->bindParam(':modelo_modulo1', $modelo_modulo1);
@@ -123,6 +132,8 @@ try {
         $sentencia_modulo1->bindParam(':pixel_y3', $pixel_y3);
         $sentencia_modulo1->bindParam(':serie_modulo3', $serie_modulo3);
         $sentencia_modulo1->bindParam(':referencia_modulo3', $referencia_modulo3);
+        $sentencia_modulo1->bindParam(':evidencias', $filename);
+        $sentencia_modulo1->bindParam(':almagrupo', $almagrupo);
         $sentencia_modulo1->execute();
     }
 
@@ -190,8 +201,8 @@ if (!is_null($pitch)) {
 
         // Si alguno de los campos relacionados a "referencias_control" tiene datos, se ejecuta la inserción en la tabla "referencias_control"
         if ((!is_null($referencia_control3) || !is_null($pixel_maximo3) || !is_null($pixel_x_maximo3) || !is_null($pixel_y_maximo3) || !is_null($sim3) || !is_null($puertos3) || !is_null($pixel_x_puerto3) || !is_null($descripcion3))) {
-            $sql_referencia =   "INSERT INTO referencias_control (marca, funcion, referencia, descripcion, sim, puertos, px_x_puerto, pixel_max, pixel_x_max, pixel_y_max) 
-                                VALUES (:marca_control, :funcion_control, :referencia_control3, :descripcion3, :sim3, :puertos3, :pixel_x_puerto3, :pixel_maximo3, :pixel_x_maximo3, :pixel_y_maximo3)";
+            $sql_referencia =   "INSERT INTO referencias_control (marca, funcion, referencia, descripcion, sim, puertos, px_x_puerto, pixel_max, pixel_x_max, pixel_y_max, ruta, almacen) 
+                                VALUES (:marca_control, :funcion_control, :referencia_control3, :descripcion3, :sim3, :puertos3, :pixel_x_puerto3, :pixel_maximo3, :pixel_x_maximo3, :pixel_y_maximo3, :evidencias, :almagrupo)";
             $sentencia_referencia = $pdo->prepare($sql_referencia);
             $sentencia_referencia->bindParam(':marca_control', $marca_control);
             $sentencia_referencia->bindParam(':funcion_control', $funcion_control);
@@ -203,6 +214,8 @@ if (!is_null($pitch)) {
             $sentencia_referencia->bindParam(':pixel_maximo3', $pixel_maximo3);
             $sentencia_referencia->bindParam(':pixel_x_maximo3', $pixel_x_maximo3);
             $sentencia_referencia->bindParam(':pixel_y_maximo3', $pixel_y_maximo3);
+            $sentencia_referencia->bindParam(':evidencias', $filename);
+            $sentencia_referencia->bindParam(':almagrupo', $almagrupo);
             $sentencia_referencia->execute();
         }
 
@@ -225,11 +238,13 @@ if (!is_null($pitch)) {
 
         // Condicional para insertar en referencias_fuentes si "modelo_fuente3" tiene datos
         if (!is_null($modelo_fuente3)) {
-            $sql_fuente_modelo = "INSERT INTO referencias_fuente (marca_fuente, tipo_fuente, modelo_fuente) VALUES (:marca_fuente, :tipo_fuente, :modelo_fuente3)";
+            $sql_fuente_modelo = "INSERT INTO referencias_fuente (marca_fuente, tipo_fuente, modelo_fuente, ruta, almacen) VALUES (:marca_fuente, :tipo_fuente, :modelo_fuente3, :evidencias, :almagrupo)";
             $sentencia_fuente_modelo = $pdo->prepare($sql_fuente_modelo);
             $sentencia_fuente_modelo->bindParam(':marca_fuente', $marca_fuente);
             $sentencia_fuente_modelo->bindParam(':tipo_fuente', $tipo_fuente);
             $sentencia_fuente_modelo->bindParam(':modelo_fuente3', $modelo_fuente3);
+            $sentencia_fuente_modelo->bindParam(':evidencias', $filename);
+            $sentencia_fuente_modelo->bindParam(':almagrupo', $almagrupo);
             $sentencia_fuente_modelo->execute();
         }
 

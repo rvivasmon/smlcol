@@ -21,7 +21,7 @@ include('../../layout/admin/parte1.php');
                     Introduzca la información correspondiente
                 </div>
                 <div class="card-body">
-                    <form action="controller_create.php" method="POST" id="productForm">
+                    <form action="controller_create.php" method="POST" id="productForm" enctype="multipart/form-data">
 
                         <div class="row">
                             <div class="col-md-2">
@@ -56,7 +56,7 @@ include('../../layout/admin/parte1.php');
                                 </div>
                             </div>
                             <div class="col-md-0">
-                                <div class="form-group"> <!-- Se coloca aquí el usuario que está trabajando el archivo -->
+                                <div class="form-group"> <!-- Se coloca aquí el usuario que está trabajando el  -->
                                     <input  class="form-control"  id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']?>" hidden>
                                     <input  class="form-control"  id="nombreidusuario" name="nombreidusuario" value="<?php echo $sesion_usuario['id']?>" hidden>
                                 </div>
@@ -325,8 +325,42 @@ include('../../layout/admin/parte1.php');
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="imagen_producto">Imagen</label>
-                                                <input type="file" id="imagen_producto" name="imagen_producto" class="form-control-file" accept="image/*">
+                                                <label for="archivo_adjunto">Archivo Adjunto</label>
+                                                <br>
+                                                <output id="list" style="position: relative; width: 300px; height: 300px; overflow: hidden;"></output>
+                                                <input type="file" name="archivo_adjunto[]" id="file" class="form-control-file" multiple>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="almacen_grupo">ALMACEN</label>
+                                                <select id="almacen_grupo" name="almacen_grupo" class="form-control">
+                                                    <option value="">Seleccione un Almacen</option>
+                                                    <?php
+                                                    $query_almagrupo = $pdo->prepare('SELECT id, almacenes FROM almacenes_grupo WHERE almacenes IS NOT NULL AND almacenes != "" ORDER BY almacenes ASC');
+                                                    $query_almagrupo->execute();
+                                                    $almagrupos = $query_almagrupo->fetchAll(PDO::FETCH_ASSOC);
+                                                    foreach ($almagrupos as $almagrupo): ?>
+                                                        <option value="<?php echo $almagrupo['id']; ?>">
+                                                            <?php echo $almagrupo['almacenes']; ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>                                               
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">        
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-default" onclick="prevImage()">Anterior</button>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-default" onclick="nextImage()">Siguiente</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1159,4 +1193,54 @@ document.addEventListener('DOMContentLoaded', function () {
                         /*  Fin Código Nuevo    */
 
 });
+</script>
+
+<script>
+    var currentImageIndex = 0; // Índice de la imagen actual
+
+    function archivo(evt) {
+    var files = evt.target.files; // FileList object
+
+    for (var i = 0, f; f = files[i]; i++) {
+        var reader = new FileReader();
+        // Si el archivo es una imagen
+        if (f.type.match('image.*')) {
+            reader.onload = (function(theFile) {
+                return function(e) {
+                    // Insertamos la imagen
+                    var img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.width = 200; // Tamaño de la imagen
+                    img.style.display = "none"; // Ocultamos la imagen
+                    document.getElementById("list").appendChild(img);
+                };
+                    })(f);
+                }
+                // Lectura del archivo
+                reader.readAsDataURL(f);
+            }
+            showImage(currentImageIndex); // Mostramos la primera imagen
+        }
+
+    document.getElementById('file').addEventListener('change', archivo, false);
+
+    function showImage(index) {
+    var images = document.getElementById("list").getElementsByTagName("img");
+    for (var i = 0; i < images.length; i++) {
+        images[i].style.display = "none"; // Ocultamos todas las imágenes
+    }
+        images[index].style.display = "block"; // Mostramos la imagen actual
+    }
+
+    function nextImage() {
+        var images = document.getElementById("list").getElementsByTagName("img");
+        currentImageIndex = (currentImageIndex + 1) % images.length; // Avanzamos al siguiente índice circularmente
+        showImage(currentImageIndex);
+    }
+
+    function prevImage() {
+        var images = document.getElementById("list").getElementsByTagName("img");
+        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Retrocedemos al índice anterior circularmente
+        showImage(currentImageIndex);
+    }
 </script>

@@ -7,13 +7,11 @@ include('../../layout/admin/sesion.php');
 include('../../layout/admin/datos_sesion_user.php');
 
 
-?>
+include('../../layout/admin/parte1.php');
 
-<?php include('../../layout/admin/parte1.php'); ?>
-
-<?php 
     $id_producto = $_GET['id_producto'];
     $proyecto = $_GET['proyecto'];
+
 ?>
 
 <div class="content-wrapper">
@@ -30,9 +28,8 @@ include('../../layout/admin/datos_sesion_user.php');
                 <a href="#" class="d-block"><?php echo $sesion_usuario['nombre']?></a>                    
             </div>
             <div class="card-body"> 
-                <form id="formulario" action="controller_create.php" method="post" enctype= "multipart/form-data"> 
-
-                    <div class="row"> 
+                <form id="formulario" action="controller_create.php" method="post" enctype= "multipart/form-data">
+                    <div class="row">
                         <div class="col-md-9">
                             <div class="form-group">
                                 <div class="row">
@@ -90,7 +87,6 @@ include('../../layout/admin/datos_sesion_user.php');
                                             <option value="Llamada">LLAMADA</option>
                                             <option value="Whatsapp">WHATSAPP</option>
                                             <option value="Otro" selected>OTRO</option>
-                                            
                                         </select>
                                     </div>
                                 </div>
@@ -100,13 +96,13 @@ include('../../layout/admin/datos_sesion_user.php');
                                             <label for=""></label>
                                             <input type="text" name="ticketexterno" class="form-control" placeholder="Ticket Externo" hidden>
                                         </div>
-                                    </div>  
-                                    
+                                    </div>
+
                                     <div class="col-md-0">
                                         <div class="form-group">
                                             <label for=""></label>
                                             <select name="tiposervicio" id="tiposervicio" class="form-control" hidden>
-                                                <?php 
+                                                <?php
                                                 $valor_actual_en_edicion = $stc['tipo_servicio'];
                                                 $query_servicio = $pdo->prepare('SELECT * FROM t_tipo_servicio');
                                                 $query_servicio->execute();
@@ -135,12 +131,12 @@ include('../../layout/admin/datos_sesion_user.php');
                                             <label for="">Proyecto</label>
                                             <input type="text" name="proyecto" class="form-control" value="<?php echo $proyecto; ?>"  readonly>
                                         </div>
-                                    </div>                                      
+                                    </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="">Estado</label>
                                             <input name="idestado" id="idestado" class="form-control" value="CON FALLAS" readonly>
-                                            <select name="idestado" id="idestado" class="form-control"  hidden>                                                   
+                                            <select name="idestado" id="idestado" class="form-control"  hidden>
                                                 
                                                 <?php
                                                 $valor_actual_en_edicion = $stc['estado'];
@@ -159,7 +155,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                                 ?>
                                             </select>
                                         </div>
-                                    </div>                                                                               
+                                    </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="">Ciudad</label>
@@ -180,14 +176,14 @@ include('../../layout/admin/datos_sesion_user.php');
                                                 ?>
                                             </select>
                                         </div>
-                                    </div>                             
-                                </div> 
+                                    </div>
+                                </div>
 
                                 <div class = "row">
                                     <div class="col-md-0">
                                         <div class="form-group"> <!-- Se coloca aquí el usuario que está trabajando el archivo -->
                                             <label for=""></label>
-                                            <input  class="form-control"  id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']?>" hidden>                                            
+                                            <input  class="form-control"  id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']?>" hidden>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -217,7 +213,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                             <label for="">Persona Contacto</label>
                                             <input type="text" name="personacontacto" class="form-control" placeholder="Persona Contacto" required>
                                         </div>
-                                    </div>  
+                                    </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Medio de Contacto</label>
@@ -226,7 +222,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                     </div>
                                 </div>
                                     
-                                <div class = "row">                                        
+                                <div class = "row">
                                     <div class="col-md-5">
                                         <div class="form-group">
                                             <label for="">Falla</label>
@@ -239,7 +235,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                             <textarea  name="observacion" id="" cols="30" rows="4" class="form-control" placeholder="Observación..." required></textarea>
                                         </div>
                                     </div>
-                                </div>                            
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -300,13 +296,11 @@ include('../../layout/admin/datos_sesion_user.php');
                                         </script>
                                 </div>
                             </div>
-                            
-                            
                         </div>
-                                
-                        <hr>
 
-                        <div class="row">
+                    <hr>
+
+                    <div class="row">
                             <div class="col-md-9">
                                 <div class="form-group">
                                     <div class="row">
@@ -331,7 +325,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                    </div>
                 </form>                    
             </div>
         </div>

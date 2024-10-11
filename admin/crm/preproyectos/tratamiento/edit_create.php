@@ -209,7 +209,7 @@ foreach ($modelos as $modelo) {
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-md-4">
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label id="labelWattsConsumo" name="labelWattsConsumo" class="mt-2"></label>
                                                         <!-- Campo (oculto) -->
@@ -217,17 +217,28 @@ foreach ($modelos as $modelo) {
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-4">
+                                                <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label id="voltaje" name="voltaje" class="mt-2">Voltaje: 220 voltios</label>
+                                                        <label id="labelWattsConsumoPromedio" name="labelWattsConsumoPromedio" class="mt-2"></label>
+                                                        <!-- Campo (oculto) -->
+                                                        <input type="hidden" id="inputWattsConsumoPromedio" name="inputWattsConsumoPromedio" class="form-control">
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label id="voltaje" name="voltaje" class="mt-2">Voltaje: 220 volts</label>
                                                         <!-- Campo (oculto) -->
                                                         <input type="hidden" id="inputWattsConsumo" name="inputWattsConsumo" class="form-control">
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-4">
+                                                <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label id="calibre" name="calibre" class="mt-2">Cable Calibre 12</label>
+                                                        <label id="calibre" name="calibre" class="mt-2">Cable # 12</label>
                                                         <!-- Campo (oculto) -->
                                                         <input type="hidden" id="inputWattsConsumo" name="inputWattsConsumo" class="form-control">
                                                     </div>
@@ -319,6 +330,12 @@ foreach ($modelos as $modelo) {
                                                             <input type="hidden" id="pixelxpantalla" name="pixelxpantalla" value="">
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="modulos_total_pre"> Total Modulos</label>
+                                                            <input type="text" id="modulos_total_pre1" name="modulos_total_pre1" class="form-control" readonly>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -400,6 +417,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const modeloSelect = document.getElementById('modelo');
     const controladoraSelect = document.getElementById('controladora');
     const cantidadControlInput = document.getElementById('cantidadControl');
+    const modulosTotalPreInput = document.getElementById('modulos_total_pre1');
     const originalValues = { x: null, y: null };
 
     initEvents();
@@ -523,7 +541,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
         updateFieldColors();
         updatePixelPorPantalla();
+
+        // Llama a la función para actualizar modulos_total_pre
+        actualizarModulosTotalPre();  // Agrega esta línea
     }
+
+    // Función para actualizar el valor de modulos_total_pre
+    function actualizarModulosTotalPre() {
+        const moduloX21 = parseInt(moduloXInput.value) || 0; // Convierte a número o asigna 0 si está vacío
+        const moduloY21 = parseInt(moduloYInput.value) || 0; // Convierte a número o asigna 0 si está vacío
+        const total = moduloX21 + moduloY21; // Suma los valores
+
+        // Actualiza el campo modulos_total_pre
+        modulosTotalPreInput.value = total; // Asigna el total al input
+    }
+
+    // Añade eventos de cambio o entrada para ambos campos
+    moduloXInput.addEventListener('input', actualizarModulosTotalPre);
+    moduloYInput.addEventListener('input', actualizarModulosTotalPre);
 
     function updateFieldColors() {
         const xTotal = parseFloat(xTotalInput.value) || 0;
@@ -666,116 +701,103 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script>
-document.getElementById('agregar_Producto').addEventListener('change', function(){
+document.getElementById('agregar_Producto').addEventListener('change', function() {
     const idUso = Number(document.getElementById('id_uso1').value);
     const idTipoProducto = document.getElementById('id_tipoproducto').value;
     const resultadoMultiplicacion = Number(document.getElementById('resultadoMultiplicacioninput').value);
 
     if (idTipoProducto && resultadoMultiplicacion) {
-        // Hacer la solicitud AJAX para obtener el peso_producto21
-        fetch('get_pesos.php?id_tipoproducto=' + idTipoProducto)
-            .then(response => response.json())
-            .then(data => {
-                if (data.peso_producto21) {
-                    const pesoProducto21 = Number(data.peso_producto21);
-                    
-                    // Calcular el resultado
-                    const resultado = ((resultadoMultiplicacion * pesoProducto21) / 1000000);
-
-                    // Redondear el resultado
-                    const resultadoRedondeado = Math.round(resultado);
-
-                    // Formatear el resultado con separador de miles y sin decimales
-                    const resultadoConPuntos = resultadoRedondeado.toLocaleString('es-CO', { 
-                        minimumFractionDigits: 0, 
-                        maximumFractionDigits: 0 
-                    });
-
-                    // Actualizar los campos en el formulario
-                    document.getElementById('pesoxpantallaLabel').textContent = "Peso: " + resultadoConPuntos + " Kgs";
-                    document.getElementById('pesoxpantallasin').value = resultado;
-                }
-            })
-        .catch(error => console.error('Error al obtener el peso_producto21:', error));
+        obtenerPesoProducto21(idTipoProducto, resultadoMultiplicacion);
     }
 
-    // Verifica si id_uso es 1, 2, 3, 4 o 5
     if ([1, 2, 3, 4, 5].includes(idUso)) {
-        // Realiza la consulta a la base de datos (usando AJAX o fetch)
-        fetch(`consumo_wats.php?id_uso=${idUso}`)
+        obtenerConsumoWatts(idUso, resultadoMultiplicacion);
+        obtenerConsumoPromedio(idUso, resultadoMultiplicacion);
+    } else {
+        console.log('El id_uso no es válido para la búsqueda de consumo_wats.');
+    }
+});
+
+function obtenerPesoProducto21(idTipoProducto, resultadoMultiplicacion) {
+    fetch('get_pesos.php?id_tipoproducto=' + idTipoProducto)
         .then(response => response.json())
         .then(data => {
-            console.log('Datos recibidos:', data);  // Verificar la respuesta
+            if (data.peso_producto21) {
+                const pesoProducto21 = Number(data.peso_producto21);
+                const resultado = ((resultadoMultiplicacion * pesoProducto21) / 1000000);
+                const resultadoRedondeado = Math.round(resultado);
+                const resultadoConPuntos = resultadoRedondeado.toLocaleString('es-CO', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
 
+                document.getElementById('pesoxpantallaLabel').textContent = "Peso: " + resultadoConPuntos + " Kgs";
+                document.getElementById('pesoxpantallasin').value = resultado;
+            } else {
+                console.log('Error: No se encontró peso_producto21.');
+            }
+        })
+        .catch(error => console.error('Error al obtener el peso_producto21:', error));
+}
+
+function obtenerConsumoWatts(idUso, resultadoMultiplicacion) {
+    fetch(`consumo_wats.php?id_uso=${idUso}`)
+        .then(response => response.json())
+        .then(data => {
             if (data && data.consumo_wats) {
-                const consumoWats = Number(data.consumo_wats); // Obtén el valor del campo "consumo_wats"
-                console.log('consumo_wats:', consumoWats);  // Verificar el valor de consumo_wats
+                const consumoWats = Number(data.consumo_wats);
+                const resultadoConsumo = Math.round((consumoWats * resultadoMultiplicacion) / 1000);
 
-                let resultadoConsumo = Math.round((consumoWats * resultadoMultiplicacion) / 1000);
-                console.log('Resultado redondeado:', resultadoConsumo);  // Verificar el resultado redondeado
-
-                // Actualiza el input y el label
                 document.getElementById('inputWattsConsumo').value = resultadoConsumo;
-                document.getElementById('labelWattsConsumo').textContent = `Consumo: ${resultadoConsumo.toLocaleString('es')} Watts`;
+                document.getElementById('labelWattsConsumo').textContent = `Cons. Máximo: ${resultadoConsumo.toLocaleString('es')} Watts`;
             } else {
                 console.log('Error: No se encontró consumo_wats.');
             }
         })
         .catch(error => console.log('Error en la solicitud:', error));
-    } else {
-        console.log('El id_uso no es válido para la búsqueda de consumo_wats.');
-    }
+}
 
-});
+                                                                                                                function obtenerConsumoPromedio(idUso, resultadoMultiplicacion) {
+                                                                                                                    fetch(`consumo_wats.php?id_uso=${idUso}`)
+                                                                                                                        .then(response => response.json())
+                                                                                                                        .then(data => {
+                                                                                                                            if (data && data.consumo_promedio) {
+                                                                                                                                const consumoWats = Number(data.consumo_promedio);
+                                                                                                                                const resultadoConsumo = Math.round((consumoWats * resultadoMultiplicacion) / 1000);
 
-</script>
+                                                                                                                                document.getElementById('inputWattsConsumoPromedio').value = resultadoConsumo;
+                                                                                                                                document.getElementById('labelWattsConsumoPromedio').textContent = `Cons. Promedio: ${resultadoConsumo.toLocaleString('es')} Watts`;
+                                                                                                                            } else {
+                                                                                                                                console.log('Error: No se encontró consumo_wats.');
+                                                                                                                            }
+                                                                                                                        })
+                                                                                                                        .catch(error => console.log('Error en la solicitud:', error));
+                                                                                                                }
 
-<script>
 document.addEventListener('DOMContentLoaded', function() {
     const checkbox = document.getElementById('intercambiar');
-    const resultadoResta = document.getElementById('resultadoresta');
-    const resultadoRestaLabel = document.getElementById('resultadoRestaLabel');
-    const inputWattsConsumo = document.getElementById('inputWattsConsumo');
-    const labelWattsConsumo = document.getElementById('labelWattsConsumo');
-    const pesoxpantallaLabel = document.getElementById('pesoxpantallaLabel');
-    const pesoxpantallasin = document.getElementById('pesoxpantallasin');
-
-    checkbox.addEventListener('change', function() {
-        updateFields();
-    });
-
-    function updateFields() {
-        // Obtener los valores actuales de los campos que necesites
-        const xReal = parseFloat(document.querySelector('input[name="x_real"]').value) || 0;
-        const yReal = parseFloat(document.querySelector('input[name="y_real"]').value) || 0;
-        const moduloX = parseInt(document.getElementById('modulo_x').value) || 0;
-        const moduloY = parseInt(document.getElementById('modulo_y').value) || 0;
-
-        let newXReal, newYReal;
-
-        // Intercambiar valores si el checkbox está marcado
-        if (checkbox.checked) {
-            newXReal = yReal;
-            newYReal = xReal;
-        } else {
-            newXReal = xReal;
-            newYReal = yReal;
-        }
-
-        // Realiza los cálculos que necesitas y actualiza los campos
-        const result = newXReal * moduloX - newYReal * moduloY; // Ejemplo de cálculo para "resultadoresta"
-        resultadoResta.value = result.toFixed(2); // Redondea a 2 decimales
-        resultadoRestaLabel.textContent = `Resultado: ${result.toFixed(2)}`; // Actualiza la etiqueta
-
-        // Actualiza inputWattsConsumo y labelWattsConsumo
-        const wattsConsumo = (newXReal + newYReal) * 10; // Ejemplo de cálculo
-        inputWattsConsumo.value = wattsConsumo.toFixed(2);
-        labelWattsConsumo.textContent = `Watts Consumo: ${wattsConsumo.toFixed(2)}`;
-
-        // Actualiza pesoxpantallaLabel y pesoxpantallasin
-        const pesoPorPantalla = (newXReal + newYReal) * 5; // Ejemplo de cálculo
-        pesoxpantallaLabel.textContent = `Peso por Pantalla: ${pesoPorPantalla.toFixed(2)}`;
-        pesoxpantallasin.value = pesoPorPantalla.toFixed(2);
-    }
+    checkbox.addEventListener('change', updateFields);
 });
+
+function updateFields() {
+    const xReal = parseFloat(document.querySelector('input[name="x_real"]').value) || 0;
+    const yReal = parseFloat(document.querySelector('input[name="y_real"]').value) || 0;
+    const moduloX = parseInt(document.getElementById('modulo_x').value) || 0;
+    const moduloY = parseInt(document.getElementById('modulo_y').value) || 0;
+
+    let newXReal = checkbox.checked ? yReal : xReal;
+    let newYReal = checkbox.checked ? xReal : yReal;
+
+    const result = newXReal * moduloX - newYReal * moduloY;
+    document.getElementById('resultadoresta').value = result.toFixed(2);
+    document.getElementById('resultadoRestaLabel').textContent = `Resultado: ${result.toFixed(2)}`;
+
+    const wattsConsumo = (newXReal + newYReal) * 10; // Ejemplo de cálculo
+    document.getElementById('inputWattsConsumo').value = wattsConsumo.toFixed(2);
+    document.getElementById('labelWattsConsumo').textContent = `Watts Consumo: ${wattsConsumo.toFixed(2)}`;
+
+    const pesoPorPantalla = (newXReal + newYReal) * 5; // Ejemplo de cálculo
+    document.getElementById('pesoxpantallaLabel').textContent = `Peso por Pantalla: ${pesoPorPantalla.toFixed(2)}`;
+    document.getElementById('pesoxpantallasin').value = pesoPorPantalla.toFixed(2);
+}
 </script>

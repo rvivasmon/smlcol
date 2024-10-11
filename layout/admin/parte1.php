@@ -369,6 +369,12 @@ foreach ($roles_permisos as $rol_permiso) {
                                 <p>Movimiento Diario</p>
                               </a>
                             </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/almacen/crear_productosV1/create.php" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Crear Producto V1.2</p>
+                              </a>
+                            </li>
                           </ul>
                         </li>
 
@@ -462,6 +468,24 @@ foreach ($roles_permisos as $rol_permiso) {
                             </p>
                           </a>
                           <ul class="nav nav-treeview">
+                          <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/administracion/clientes/contacto/create.php" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Contactos</p>
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/administracion/clientes/contacto/create_posible_cliente.php" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Posible nuevo</p>
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/almacen/crear_modulos/" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Modulos para Ventas</p>
+                              </a>
+                            </li>
                             <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/crm/preproyectos/" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -567,6 +591,12 @@ foreach ($roles_permisos as $rol_permiso) {
                               <a href="<?php echo $URL;?>admin/ti/ciudades" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Listado Ciudades</p>
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/ti/partes_modulos/nits/" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Listado NITS</p>
                               </a>
                             </li>
                             <li class="nav-item">

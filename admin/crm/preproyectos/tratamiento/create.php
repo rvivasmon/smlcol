@@ -44,6 +44,36 @@ if ($pre_proyecto) {
     exit;
 }
 
+// Consultar estados para el select de Estado
+$query_estado = $pdo->prepare('SELECT * FROM t_estado WHERE estado_ppc IS NOT NULL AND estado_ppc != "" ORDER BY estado_ppc ASC');
+$query_estado->execute();
+$estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
+
+// Consultar categorías de productos para el select de Categoría Producto
+$query_producto = $pdo->prepare('SELECT * FROM t_categoria_productos WHERE categoria IS NOT NULL AND habilitado = "1" AND categoria != "" ORDER BY categoria ASC');
+$query_producto->execute();
+$productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
+
+// Consultar usos de productos para el select de Uso
+$query_uso = $pdo->prepare('SELECT * FROM t_uso_productos WHERE producto_uso IS NOT NULL AND producto_uso != "" ORDER BY producto_uso ASC');
+$query_uso->execute();
+$usos = $query_uso->fetchAll(PDO::FETCH_ASSOC);
+
+// Consultar Modelo de modulo para el select de Tipo Módulo
+$query_modelmod = $pdo->prepare('SELECT * FROM t_tipo_producto WHERE modelo_modulo IS NOT NULL AND modelo_modulo != "" ORDER BY modelo_modulo ASC');
+$query_modelmod->execute();
+$modelo_modulo = $query_modelmod->fetchAll(PDO::FETCH_ASSOC);
+
+// Consultar tipos de productos para el select de Tipo Producto
+$query_tipo_producto = $pdo->prepare('SELECT * FROM t_tipo_producto WHERE tipo_producto21 IS NOT NULL AND tipo_producto21 != "" ORDER BY tipo_producto21 ASC');
+$query_tipo_producto->execute();
+$tipos_productos = $query_tipo_producto->fetchAll(PDO::FETCH_ASSOC);
+
+// Consultar pitches para el select de Pitch
+$query_pitch = $pdo->prepare('SELECT * FROM caracteristicas_modulos WHERE pitch IS NOT NULL AND pitch != "" ORDER BY pitch ASC');
+$query_pitch->execute();
+$pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <div class="content-wrapper">
@@ -263,7 +293,7 @@ if ($pre_proyecto) {
                                                             </div>
                                                             <div class="col-md-4 items_pre">
                                                                 <div class="form-group">
-                                                                    <label for="pantallas" class="d-block mb-0">Cantidad de Pantallas</label>
+                                                                    <label for="pantallas" class="d-block mb-0">Pantallas</label>
                                                                     <input type="text" name="pantallas[]" id="pantallas[]" class="form-control" required>
                                                                 </div>
                                                             </div>
@@ -313,25 +343,25 @@ if ($pre_proyecto) {
                                                             </div>
                                                         </div>
                                                         <div class="row">
-                                                            <div class="col-md-2 items_pre">
+                                                            <div class="col-md-3 items_pre">
                                                                 <div class="form-group">
                                                                     <label for="x_dispo_mts" class="d-block mb-0">X Dispo en mts</label>
                                                                     <input type="text" name="x_dispo_mts[]" class="form-control">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-2 items_pre">
+                                                            <div class="col-md-3 items_pre">
                                                                 <div class="form-group">
                                                                     <label for="y_dispo_mts" class="d-block mb-0">Y Dispo en mts</label>
                                                                     <input type="text" name="y_dispo_mts[]" class="form-control">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-2 items_pre">
+                                                            <div class="col-md-3 items_pre">
                                                                 <div class="form-group">
                                                                     <label for="x_disponible" class="d-block mb-0">X Dispo en mm</label>
                                                                     <input type="text" name="x_disponible[]" class="form-control" readonly />
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-2 items_pre">
+                                                            <div class="col-md-3 items_pre">
                                                                 <div class="form-group">
                                                                     <label for="y_disponible" class="d-block mb-0">Y Dispo en mm</label>
                                                                     <input type="text" name="y_disponible[]" class="form-control" readonly />
@@ -389,5 +419,4 @@ if ($pre_proyecto) {
         });
     });
 });
-
 </script>
