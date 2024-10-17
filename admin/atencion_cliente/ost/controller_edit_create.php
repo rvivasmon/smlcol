@@ -62,8 +62,8 @@ $sentencia = $pdo->prepare($sql);
 
 // Ejecuta la consulta
 if ($sentencia->execute($parametros)) {
-    // Si la actualización en OST fue exitosa y el estado es 5, actualiza el estado_ticket
-    if ($estado == 5) {
+    // Si la actualización en OST fue exitosa y el estado es 5 o 6, actualiza el estado_ticket
+    if ($estado == 5 || $estado == 6) {
         $sql_update_ticket = "UPDATE ost SET estado_ticket = :estado_ticket WHERE id = :id";
         $stmt_update_ticket = $pdo->prepare($sql_update_ticket);
         $nuevo_estado_ticket = 2; // Nuevo valor para estado_ticket
@@ -71,6 +71,36 @@ if ($sentencia->execute($parametros)) {
         $stmt_update_ticket->bindParam(':id', $id_usuario, PDO::PARAM_INT); // Asumiendo que $id_ost es el ID del ticket en la tabla stc
         $stmt_update_ticket->execute();
     }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $estado = $_POST['estado'];
+        $id_ost = $_POST['id_ost'];
+        $id_stc = $_POST['id_stc']; // Asegúrate de obtener este valor en tu formulario
+    
+        // Si el estado es 5 o 6, mostramos el modal de confirmación en el lado del cliente (JS)
+    
+        // Si el usuario selecciona "Sí", actualizamos estado_ticket a 2 en la tabla "stc"
+        if (isset($_POST['cerrar_stc']) && $_POST['cerrar_stc'] == 'yes') {
+            $sql_update_ticket = "UPDATE stc SET estado_ticket = :estado_ticket WHERE id = :id_stc";
+            $stmt_update_ticket = $pdo->prepare($sql_update_ticket);
+            $nuevo_estado_ticket = 2;
+            $stmt_update_ticket->bindParam(':estado_ticket', $nuevo_estado_ticket, PDO::PARAM_INT);
+            $stmt_update_ticket->bindParam(':id_stc', $id_stc, PDO::PARAM_INT);
+            $stmt_update_ticket->execute();
+    
+        // Si el usuario selecciona "No", incrementamos el campo contador_casos en la tabla "stc"
+        } elseif (isset($_POST['cerrar_stc']) && $_POST['cerrar_stc'] == 'no') {
+            $sql_update_casos = "UPDATE stc SET contador_casos = contador_casos + 1 WHERE id = :id_stc";
+            $stmt_update_casos = $pdo->prepare($sql_update_casos);
+            $stmt_update_casos->bindParam(':id_stc', $id_stc, PDO::PARAM_INT);
+            $stmt_update_casos->execute();
+    
+            // Redireccionamos a la edición de STC
+            header('Location: ../stc/edit.php?id_stc=' . $id_stc);
+            exit();
+        }
+    }
+    
 
     // Redirige o maneja el mensaje de éxito
     session_start();

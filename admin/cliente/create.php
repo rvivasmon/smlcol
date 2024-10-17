@@ -239,92 +239,92 @@ include('../../layout/admin/parte1.php');
                             </div>
                         </div>
                         <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="archivo_adjunto">Archivo Adjunto</label>
-                                    <br>
-                                    <output id="list" style="position: relative; width: 300px; height: 300px; overflow: hidden;"></output>
-                                    <input type="file" name="archivo_adjunto" id="file" class="form-control-file" multiple>
+                            <div class="form-group">
+                                <label for="archivo_adjunto">Archivo Adjunto</label>
+                                <br>
+                                <output id="list" style="position: relative; width: 300px; height: 300px; overflow: hidden;"></output>
+                                <input type="file" name="archivo_adjunto" id="file" class="form-control-file" multiple>
 
-                                        <script>
-                                            var currentImageIndex = 0; // Índice de la imagen actual
+                                <script>
+                                    var currentImageIndex = 0; // Índice de la imagen actual
 
-                                            function archivo(evt) {
-                                            var files = evt.target.files; // FileList object
+                                    function archivo(evt) {
+                                    var files = evt.target.files; // FileList object
 
-                                                for (var i = 0, f; f = files[i]; i++) {
-                                                    var reader = new FileReader();
-                                                    // Si el archivo es una imagen
-                                                    if (f.type.match('image.*')) {
-                                                        reader.onload = (function(theFile) {
-                                                            return function(e) {
-                                                                // Insertamos la imagen
-                                                                var img = document.createElement('img');
-                                                                img.src = e.target.result;
-                                                                img.width = 200; // Tamaño de la imagen
-                                                                img.style.display = "none"; // Ocultamos la imagen
-                                                                document.getElementById("list").appendChild(img);
-                                                        };
-                                                            })(f);
-                                                        }
-                                                        // Lectura del archivo
-                                                        reader.readAsDataURL(f);
-                                                    }
-                                                    showImage(currentImageIndex); // Mostramos la primera imagen
-                                                }
-
-                                                document.getElementById('file').addEventListener('change', archivo, false);
-
-                                                function showImage(index) {
-                                                var images = document.getElementById("list").getElementsByTagName("img");
-                                                for (var i = 0; i < images.length; i++) {
-                                                    images[i].style.display = "none"; // Ocultamos todas las imágenes
-                                                }
-                                                images[index].style.display = "block"; // Mostramos la imagen actual
+                                        for (var i = 0, f; f = files[i]; i++) {
+                                            var reader = new FileReader();
+                                            // Si el archivo es una imagen
+                                            if (f.type.match('image.*')) {
+                                                reader.onload = (function(theFile) {
+                                                    return function(e) {
+                                                        // Insertamos la imagen
+                                                        var img = document.createElement('img');
+                                                        img.src = e.target.result;
+                                                        img.width = 200; // Tamaño de la imagen
+                                                        img.style.display = "none"; // Ocultamos la imagen
+                                                        document.getElementById("list").appendChild(img);
+                                                    };
+                                                })(f);
                                             }
+                                            // Lectura del archivo
+                                            reader.readAsDataURL(f);
+                                        }
+                                        showImage(currentImageIndex); // Mostramos la primera imagen
+                                    }
 
-                                            function nextImage() {
-                                            var images = document.getElementById("list").getElementsByTagName("img");
-                                            currentImageIndex = (currentImageIndex + 1) % images.length; // Avanzamos al siguiente índice circularmente
-                                                    showImage(currentImageIndex);
-                                            }
+                                    document.getElementById('file').addEventListener('change', archivo, false);
 
-                                            function prevImage() {
-                                                var images = document.getElementById("list").getElementsByTagName("img");
-                                                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Retrocedemos al índice anterior circularmente
-                                                showImage(currentImageIndex);
-                                            }
-                                        </script>
-                                </div>
+                                    function showImage(index) {
+                                        var images = document.getElementById("list").getElementsByTagName("img");
+                                        for (var i = 0; i < images.length; i++) {
+                                            images[i].style.display = "none"; // Ocultamos todas las imágenes
+                                        }
+                                        images[index].style.display = "block"; // Mostramos la imagen actual
+                                    }
+
+                                    function nextImage() {
+                                        var images = document.getElementById("list").getElementsByTagName("img");
+                                        currentImageIndex = (currentImageIndex + 1) % images.length; // Avanzamos al siguiente índice circularmente
+                                            showImage(currentImageIndex);
+                                    }
+
+                                    function prevImage() {
+                                        var images = document.getElementById("list").getElementsByTagName("img");
+                                        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Retrocedemos al índice anterior circularmente
+                                        showImage(currentImageIndex);
+                                    }
+                                </script>
                             </div>
                         </div>
+                    </div>
 
                     <hr>
 
                     <div class="row">
-                            <div class="col-md-9">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <a href="<?php echo $URL."admin/clientes/index.php";?>" class="btn btn-default btn-block">Cancelar</a>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Crear Falla de Pantalla</button>
-                                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <a href="<?php echo $URL."admin/clientes/index.php";?>" class="btn btn-default btn-block">Cancelar</a>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Crear Falla de Pantalla</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">        
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <button type="button" class="btn btn-default" onclick="prevImage()">Anterior</button>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <button type="button" class="btn btn-default" onclick="nextImage()">Siguiente</button>
-                                        </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">        
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <button type="button" class="btn btn-default" onclick="prevImage()">Anterior</button>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <button type="button" class="btn btn-default" onclick="nextImage()">Siguiente</button>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </form>                    
             </div>

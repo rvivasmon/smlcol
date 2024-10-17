@@ -16,7 +16,7 @@ include('../../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Usuarios SML</h1>
+                <h1 class="m-0">Refresh de Módulos Disponibles</h1>
                     <div class="card card-blue">
                         <div class="card-header">
                             ACTIVOS
@@ -55,7 +55,7 @@ include('../../../../layout/admin/parte1.php');
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>NITS</th>
+                                            <th>REFRESH</th>
                                             <th>Habilitado</th>
                                             <th><center>Acciones</center></th>
                                         </tr>

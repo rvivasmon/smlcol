@@ -1,6 +1,6 @@
 <?php
-include('../../../../app/config/config.php');
-include('../../../../app/config/conexion.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
 
 $nombre = $_POST['nombre'];
 $celular = $_POST['celular'];

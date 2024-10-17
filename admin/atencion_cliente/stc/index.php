@@ -92,9 +92,7 @@ include('../../../layout/admin/parte1.php');
                                 <tr>
                                     <th>ID</th>
                                     <th>ID STC</th>
-                                    <th>Fecha Ingreso</th>
-                                    <th>Medio Ingreso</th>
-                                    <th>Ticket Externo</th>
+                                    <th>Fecha Ingreso</th>                                    
                                     <th>Tipo Servicio</th>
                                     <th>ID Producto</th>
                                     <th>Falla</th>
@@ -105,14 +103,13 @@ include('../../../layout/admin/parte1.php');
                                     <th>Estado</th>
                                     <th>Persona Contacto</th>
                                     <th>Medio de Contacto</th>
-                                    <th>Archivos Adjuntos</th>
                                     <th><center>Acciones</center></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 $contador = 0;
-                                $query = $pdo->prepare('SELECT stc.*, t_tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_cliente, t_ciudad.ciudad AS nombre_ciudad, t_estado.estadostc AS nombre_estado FROM stc JOIN t_tipo_servicio ON stc.tipo_servicio = t_tipo_servicio.id JOIN clientes ON stc.cliente = clientes.id JOIN t_ciudad ON stc.ciudad = t_ciudad.id JOIN t_estado ON stc.estado = t_estado.id WHERE stc.estado_ticket = "1" AND stc.tipo_servicio NOT IN (3, 4) AND stc.estado <> 5');
+                                $query = $pdo->prepare('SELECT stc.*, t_tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_cliente, t_ciudad.ciudad AS nombre_ciudad, t_estado.estadostc AS nombre_estado FROM stc JOIN t_tipo_servicio ON stc.tipo_servicio = t_tipo_servicio.id JOIN clientes ON stc.cliente = clientes.id JOIN t_ciudad ON stc.ciudad = t_ciudad.id JOIN t_estado ON stc.estado = t_estado.id WHERE stc.estado_ticket IN (1,2)');  // Esto se quitó de esta misma línea, del final:    (AND stc.tipo_servicio NOT IN (3, 4) AND stc.estado <> 5)
 
                                 $query->execute();
                                 $stcs = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -121,7 +118,6 @@ include('../../../layout/admin/parte1.php');
                                     $id_stc = $stc['id_stc'];
                                     $fecha_ingreso = $stc['fecha_ingreso'];
                                     $medio_ingreso = $stc['medio_ingreso'];
-                                    $ticket_externo = $stc['ticket_externo'];
                                     $servicio = $stc['nombre_servicio'];
                                     $id_producto = $stc['id_producto'];
                                     $falla = $stc['falla'];
@@ -138,9 +134,7 @@ include('../../../layout/admin/parte1.php');
                                     <tr>
                                         <td><?php echo $contador; ?></td>
                                         <td><?php echo $id_stc; ?></td>
-                                        <td><?php echo $fecha_ingreso; ?></td>
-                                        <td><?php echo $medio_ingreso; ?></td>
-                                        <td><?php echo $ticket_externo; ?></td>
+                                        <td><?php echo $fecha_ingreso; ?></td>                                        
                                         <td><a href="#" class="servicio-link" data-toggle="modal" data-target="#servicioModal"><?php echo $servicio; ?></a></td>
                                         <td><?php echo $id_producto; ?></td>
                                         <td><?php echo $falla; ?></td>
@@ -152,11 +146,11 @@ include('../../../layout/admin/parte1.php');
                                         <td><?php echo $persona_contacto; ?></td>
                                         <td><?php echo $medio_contacto; ?></td>
                                         <!--<td><?php echo $evidencia; ?></td>-->
-                                        <td><img src="<?php echo $URL."/img_uploads/". $stc['evidencias'];?>" width="50px" alt=""></td>
+                                        <!--<td><img src="<?php echo $URL."/img_uploads/". $stc['evidencias'];?>" width="50px" alt=""></td>-->
                                         <td>
                                             <center>
                                                 <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
+                                                <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Tratar <i class="fas fa-pen"></i></a>
                                                 <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
                                             </center>
                                         </td>
@@ -215,7 +209,7 @@ include('../../../layout/admin/parte1.php');
 <script>
     $(function () {
         $("#table_stcs").DataTable({
-            "pageLength": 10,
+            "pageLength": 30,
             "language": {
                 "emptyTable": "No hay información",
                 "info": "Mostrando_START_ a _END_ de _TOTAL_ Órdenes",
@@ -264,8 +258,6 @@ include('../../../layout/admin/parte1.php');
         }).buttons().container().appendTo('#table_stcs_wrapper .col-md-6:eq(0)');
     });
 </script>
-
-
 
 <script>
   $(document).ready(function() {

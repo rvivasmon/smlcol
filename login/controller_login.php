@@ -6,43 +6,37 @@ session_start();
 
 include_once('funcs/funcs.php');
 
-$codigoVerificacion = $_SESSION['codigo_verificacion'] ?? '';
-
+// Obtener los datos enviados desde el formulario
 $correo = $_POST['correo'] ?? '';
 $password = $_POST['password'] ?? '';
-$captcha1 = $_POST['captcha'] ?? '';
 $imagen_presionada = $_POST['imagen_presionada'] ?? ''; // Obtenemos la imagen presionada
 
-if (empty($correo) || empty($password) || empty($captcha1)) {
+// Validar que los campos de correo y contraseña no estén vacíos
+if (empty($correo) || empty($password)) {
     setFlashData('error', 'Debe llenar todos los datos');
     redirect('index.php');
 }
 
-$captcha = sha1($captcha1);
-
-if ($codigoVerificacion !== $captcha) {
-    $_SESSION['codigo_verificacion'] = '';
-    setFlashData('error', 'El código de verificación es incorrecto');
-    redirect('index.php');
-}
-
+// Buscar al usuario en la base de datos
 $query_login = $pdo->prepare("SELECT * FROM usuarios WHERE email = :correo AND estado = '1'");
 $query_login->bindParam(':correo', $correo);
 $query_login->execute();
 
 $usuario = $query_login->fetch(PDO::FETCH_ASSOC);
 
+// Verificar si el usuario existe
 if ($usuario === false) {
     header('Location: ' . $URL . 'login/error.php');
 } else {
+    // Verificar si la contraseña es correcta
     if (password_verify($password, $usuario['contraseña'])) {
         $_SESSION['sesion_email'] = $correo;
-        
+
+        // Redirigir si es la primera vez que inicia sesión
         if ($usuario['primera_vez'] == 1) {
-            // Redirigir a la página de cambio de contraseña
             header('Location: ' . $URL . 'login/change_password.php');
         } else {
-            // Redireccionar según la imagen presionada
+            // Redirigir según la imagen presionada
             if ($imagen_presionada === 'smlnegro') {
                 header('Location: ' . $URL . 'admin/');
             } elseif ($imagen_presionada === 'techled') {

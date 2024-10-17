@@ -37,13 +37,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $contador_ost = $_POST['contador_ost'];
     $anio_mes_ost = $_POST['anio_mes_ost'];
 
-    
+
     // Inserta los datos en la tabla OST
-    $sql = "INSERT INTO ost (id_ost, fecha_ost, ticket_externo, medio_ingreso, tipo_servicio, id_producto, proyecto, ciudad, cliente, falla, persona_contacto, email_contacto, estado, observacion, contador_ost, anio_mes_ost) VALUES (:id_ost, :fecha_ost, :ticket_externo, :medio_ingreso, :tipo_servicio, :id_producto, :proyecto, :ciudade, :Clientes, :falla, :persona_contacto, :medio_contacto, :estado, :observacion, :contador_ost, :anio_mes_ost)";
+    $sql = "INSERT INTO ost (id_ost, id_stc, fecha_ost, ticket_externo, medio_ingreso, tipo_servicio, id_producto, proyecto, ciudad, cliente, falla, persona_contacto, email_contacto, estado, observacion, contador_ost, anio_mes_ost) VALUES (:id_ost, :id_stc, :fecha_ost, :ticket_externo, :medio_ingreso, :tipo_servicio, :id_producto, :proyecto, :ciudade, :Clientes, :falla, :persona_contacto, :medio_contacto, :estado, :observacion, :contador_ost, :anio_mes_ost)";
 
 
     $sentencia = $pdo->prepare($sql);
     $sentencia->bindParam(':id_ost', $id_ost);
+    $sentencia->bindParam(':id_stc', $id_stc);
     $sentencia->bindParam(':fecha_ost', $fecha_ost);
     $sentencia->bindParam(':ticket_externo', $ticket_externo);
     $sentencia->bindParam(':medio_ingreso', $medio_ingreso);

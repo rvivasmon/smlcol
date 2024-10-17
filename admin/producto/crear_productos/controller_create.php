@@ -6,14 +6,19 @@ error_reporting(E_ALL);
 
 include('../../../app/config/config.php');
 include('../../../app/config/conexion.php');
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
 
 $producto = $_POST['producto'];
 $id_usuario = $_POST['idusuario'];
 $almagrupo = $_POST['almacen_grupo'];
 
 $evidencias = $_POST['archivo_adjunto'];
+
+$nombreDelArchivo = date( "Y-m-d-h-i-s");
+$filename = $nombreDelArchivo."__".$_FILES['archivo_adjunto']['name'];
+$location = "../../../img_uploads/".$filename;
+
+move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'],$location);
+
 
     /*  CAMPOS VERIFICADORES MODULOS    */
     $uso = !empty($_POST['uso']) ? $_POST['uso'] : NULL;
@@ -26,6 +31,7 @@ $evidencias = $_POST['archivo_adjunto'];
     $pixel_y = !empty($_POST['pixel_y']) ? $_POST['pixel_y'] : NULL;
     $serie_modulo = !empty($_POST['serie_modulo']) ? $_POST['serie_modulo'] : NULL;
     $referencia_modulo = !empty($_POST['referencia_modulo']) ? $_POST['referencia_modulo'] : NULL;
+    $ruta = !empty($_POST['archivo_adjunto']) ? $_POST['archivo_adjunto'] : NULL;
 
     /*  CAMPOS CREACIÓN CONTROLADORAS   */
     $marca_control3 = !empty($_POST['marca_control']) ? $_POST['marca_control'] : NULL;
@@ -44,26 +50,6 @@ $evidencias = $_POST['archivo_adjunto'];
     $tipo_fuente = !empty($_POST['tipo_fuente']) ? $_POST['tipo_fuente'] : NULL;
     $voltaje_fuente = !empty($_POST['voltaje_fuente']) ? $_POST['voltaje_fuente'] : NULL;
     $modelo_fuente = !empty($_POST['modelo_fuente']) ? $_POST['modelo_fuente'] : NULL;
-
-    if (isset($_FILES['archivo_adjunto'])) {
-        $evidencias = $_FILES['archivo_adjunto'];
-    
-        if ($evidencias['error'] == 0) {
-            // Aquí puedes proceder a mover el archivo y realizar las demás operaciones.
-            $nombreDelArchivo = date("Y-m-d-h-i") . "__" . $evidencias['name'];
-            $location1 = "../../../img_uploads/" . $nombreDelArchivo;
-    
-            if (!move_uploaded_file($evidencias['tmp_name'], $location1)) {
-                die('Error al mover la imagen.');
-            }
-        } else {
-            die('Error al subir el archivo: ' . $evidencias['error']);
-        }
-    } else {
-        die('No se ha subido ningún archivo.');
-    }
-    
-    
 
 try {
     if ($producto == 1 || $producto == 'módulo') {
@@ -88,12 +74,12 @@ try {
         }
 
     } elseif ($producto == 2 || $producto == 'controladora') {
-        if (isset($marca_control, $funcion_control, $referencia_control3, $descripcion3, $sim3, $puertos3, $pixel_x_puerto3, $pixel_maximo3, $pixel_x_maximo3, $pixel_y_maximo3)) {
+        if (isset($marca_control3, $funcion_control3, $sim3, $puertos3, $referencia_control3, $descripcion3, $pixel_x_puerto3, $pixel_maximo3, $pixel_x_maximo3, $pixel_y_maximo3)) {
             $sql_referencia = "INSERT INTO referencias_control (marca, funcion, referencia, descripcion, sim, puertos, px_x_puerto, pixel_max, pixel_x_max, pixel_y_max, ruta, almacen) 
-                            VALUES (:marca_control, :funcion_control, :referencia_control3, :descripcion3, :sim3, :puertos3, :pixel_x_puerto3, :pixel_maximo3, :pixel_x_maximo3, :pixel_y_maximo3, :evidencias, :almagrupo)";
+                            VALUES (:marca_control3, :funcion_control3, :referencia_control3, :descripcion3, :sim3, :puertos3, :pixel_x_puerto3, :pixel_maximo3, :pixel_x_maximo3, :pixel_y_maximo3, :evidencias, :almagrupo)";
             $sentencia_referencia = $pdo->prepare($sql_referencia);
-            $sentencia_referencia->bindParam(':marca_control', $marca_control);
-            $sentencia_referencia->bindParam(':funcion_control', $funcion_control);
+            $sentencia_referencia->bindParam(':marca_control3', $marca_control3);
+            $sentencia_referencia->bindParam(':funcion_control3', $funcion_control3);
             $sentencia_referencia->bindParam(':referencia_control3', $referencia_control3);
             $sentencia_referencia->bindParam(':descripcion3', $descripcion3);
             $sentencia_referencia->bindParam(':sim3', $sim3);
@@ -108,26 +94,24 @@ try {
         }
 
     } elseif ($producto == 3 || $producto == 'fuente') {
-        if (isset($marca_fuente, $tipo_fuente, $modelo_fuente3)) {
-            $sql_fuente_modelo = "INSERT INTO referencias_fuente (marca_fuente, tipo_fuente, modelo_fuente, ruta, almacen) 
-                                VALUES (:marca_fuente, :tipo_fuente, :modelo_fuente3, :evidencias, :almagrupo)";
+        if (isset($marca_fuente, $tipo_fuente, $voltaje_fuente, $modelo_fuente)) {
+            $sql_fuente_modelo = "INSERT INTO referencias_fuente (marca_fuente, tipo_fuente, voltaje_salida, modelo_fuente, ruta, almacen) VALUES (:marca_fuente, :tipo_fuente, :voltaje_fuente, :modelo_fuente, :evidencias, :almagrupo)";
             $sentencia_fuente_modelo = $pdo->prepare($sql_fuente_modelo);
             $sentencia_fuente_modelo->bindParam(':marca_fuente', $marca_fuente);
             $sentencia_fuente_modelo->bindParam(':tipo_fuente', $tipo_fuente);
-            $sentencia_fuente_modelo->bindParam(':modelo_fuente3', $modelo_fuente3);
+            $sentencia_fuente_modelo->bindParam(':voltaje_fuente', $voltaje_fuente);
+            $sentencia_fuente_modelo->bindParam(':modelo_fuente', $modelo_fuente);
             $sentencia_fuente_modelo->bindParam(':evidencias', $filename);
             $sentencia_fuente_modelo->bindParam(':almagrupo', $almagrupo);
             $sentencia_fuente_modelo->execute();
         }
     }
 
-    // Redirección y mensaje de éxito
+    header('Location:' . $URL . 'admin/almacen/inventario');
     session_start();
     $_SESSION['msj'] = "Se ha registrado el usuario de manera correcta";
-    header('Location:' . $URL . 'admin/almacen/inventario');
-    exit(); // Asegúrate de detener la ejecución después de redirigir
-
 } catch (PDOException $e) {
     echo 'Error: ' . $e->getMessage();
 }
+    
 ?>

@@ -26,35 +26,36 @@ $usuario = $sesion_usuario['nombre'];
                     Introduzca la información correspondiente
                 </div>
                 <div class="card-body">
-                    <form action="controller_create.php" method="POST" enctype="multipart/form-data">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="producto">Categoría</label>
-                                    <select name="producto" id="producto" class="form-control">
-                                        <option value="">Seleccione un Producto</option>
-                                        <?php
-                                        $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos ORDER BY tipo_producto ASC');
-                                        $query_producto->execute();
-                                        $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach($productos as $producto) {
-                                            echo '<option value="' . $producto['id_producto'] . '">' . $producto['tipo_producto'] . '</option>';
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-0">
-                                <div class="form-group"> <!-- Se coloca aquí el usuario que está trabajando el  -->
-                                    <input  class="form-control"  id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']?>" hidden>
-                                    <input  class="form-control"  id="nombreidusuario" name="nombreidusuario" value="<?php echo $sesion_usuario['id']?>" hidden>
-                                </div>
-                            </div>
-                        </div>
+                    <form id="" action="controller_create.php" method="POST" enctype="multipart/form-data">
 
                         <div class="row">
                             <div class="col-md-7">
                                 <div class="form-group">
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="producto">Categoría</label>
+                                                <select name="producto" id="producto" class="form-control">
+                                                    <option value="">Seleccione un Producto</option>
+                                                    <?php
+                                                    $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos ORDER BY tipo_producto ASC');
+                                                    $query_producto->execute();
+                                                    $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
+                                                    foreach($productos as $producto) {
+                                                        echo '<option value="' . $producto['id_producto'] . '">' . $producto['tipo_producto'] . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-0">
+                                            <div class="form-group"> <!-- Se coloca aquí el usuario que está trabajando el  -->
+                                                <input  class="form-control"  id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']?>" hidden>
+                                                <input  class="form-control"  id="nombreidusuario" name="nombreidusuario" value="<?php echo $sesion_usuario['id']?>" hidden>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="row mb-2">
                                         <div class="col-sm-6">
@@ -85,7 +86,7 @@ $usuario = $sesion_usuario['nombre'];
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4 campo Modulo">
+                                        <div class="col-md-5 campo Modulo">
                                             <div class="form-group">
                                                 <label for="modelo_modulo1">Modelo</label>
                                                 <select id="modelo_modulo1" name="modelo_modulo1" class="form-control">
@@ -381,7 +382,8 @@ $usuario = $sesion_usuario['nombre'];
                                                 <label for="archivo_adjunto">Archivo Adjunto</label>
                                                 <br>
                                                 <output id="list" style="position: relative; width: 300px; height: 300px; overflow: hidden;"></output>
-                                                <input type="file" name="archivo_adjunto[]" id="file" class="form-control-file" multiple>
+                                                <input type="file" name="archivo_adjunto" id="file" class="form-control-file" multiple >
+
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -418,45 +420,6 @@ $usuario = $sesion_usuario['nombre'];
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Campo para escanear código de barras -->
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="codigo_barras">Escanear Código de Barras</label>
-                                    <input type="text" id="codigo_barras" class="form-control" autofocus onkeypress="agregarSerial(event)">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tabla para mostrar los códigos escaneados -->
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-bordered" id="tabla_seriales">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Código de Barras</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="lista_seriales">
-                                        <!-- Aquí se agregan los seriales escaneados -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Campo oculto para enviar los seriales -->
-                        <input type="hidden" id="seriales" name="seriales" value="">
-
-                        <div class="row">
-                            <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/almacen/crear_modulos/";?>" class="btn btn-default btn-block">Cancelar</a>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Registrar Modulo</button>
                             </div>
                         </div>
 
@@ -584,52 +547,52 @@ $usuario = $sesion_usuario['nombre'];
         }
     }
 </script>
-<script>
-    var currentImageIndex = 0; // Índice de la imagen actual
+                                        <script>
+                                            var currentImageIndex = 0; // Índice de la imagen actual
 
-    function archivo(evt) {
-    var files = evt.target.files; // FileList object
+                                            function archivo(evt) {
+                                            var files = evt.target.files; // FileList object
 
-    for (var i = 0, f; f = files[i]; i++) {
-        var reader = new FileReader();
-        // Si el archivo es una imagen
-        if (f.type.match('image.*')) {
-            reader.onload = (function(theFile) {
-                return function(e) {
-                    // Insertamos la imagen
-                    var img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.width = 200; // Tamaño de la imagen
-                    img.style.display = "none"; // Ocultamos la imagen
-                    document.getElementById("list").appendChild(img);
-                };
-                    })(f);
-                }
-                // Lectura del archivo
-                reader.readAsDataURL(f);
-            }
-            showImage(currentImageIndex); // Mostramos la primera imagen
-        }
+                                                for (var i = 0, f; f = files[i]; i++) {
+                                                    var reader = new FileReader();
+                                                    // Si el archivo es una imagen
+                                                    if (f.type.match('image.*')) {
+                                                        reader.onload = (function(theFile) {
+                                                            return function(e) {
+                                                                // Insertamos la imagen
+                                                                var img = document.createElement('img');
+                                                                img.src = e.target.result;
+                                                                img.width = 200; // Tamaño de la imagen
+                                                                img.style.display = "none"; // Ocultamos la imagen
+                                                                document.getElementById("list").appendChild(img);
+                                                        };
+                                                            })(f);
+                                                        }
+                                                        // Lectura del archivo
+                                                        reader.readAsDataURL(f);
+                                                    }
+                                                    showImage(currentImageIndex); // Mostramos la primera imagen
+                                                }
 
-    document.getElementById('file').addEventListener('change', archivo, false);
+                                                document.getElementById('file').addEventListener('change', archivo, false);
 
-    function showImage(index) {
-    var images = document.getElementById("list").getElementsByTagName("img");
-    for (var i = 0; i < images.length; i++) {
-        images[i].style.display = "none"; // Ocultamos todas las imágenes
-    }
-        images[index].style.display = "block"; // Mostramos la imagen actual
-    }
+                                                function showImage(index) {
+                                                var images = document.getElementById("list").getElementsByTagName("img");
+                                                for (var i = 0; i < images.length; i++) {
+                                                    images[i].style.display = "none"; // Ocultamos todas las imágenes
+                                                }
+                                                images[index].style.display = "block"; // Mostramos la imagen actual
+                                            }
 
-    function nextImage() {
-        var images = document.getElementById("list").getElementsByTagName("img");
-        currentImageIndex = (currentImageIndex + 1) % images.length; // Avanzamos al siguiente índice circularmente
-        showImage(currentImageIndex);
-    }
+                                            function nextImage() {
+                                            var images = document.getElementById("list").getElementsByTagName("img");
+                                            currentImageIndex = (currentImageIndex + 1) % images.length; // Avanzamos al siguiente índice circularmente
+                                                    showImage(currentImageIndex);
+                                            }
 
-    function prevImage() {
-        var images = document.getElementById("list").getElementsByTagName("img");
-        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Retrocedemos al índice anterior circularmente
-        showImage(currentImageIndex);
-    }
-</script>
+                                            function prevImage() {
+                                                var images = document.getElementById("list").getElementsByTagName("img");
+                                                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Retrocedemos al índice anterior circularmente
+                                                showImage(currentImageIndex);
+                                            }
+                                        </script>

@@ -369,12 +369,6 @@ foreach ($roles_permisos as $rol_permiso) {
                                 <p>Movimiento Diario</p>
                               </a>
                             </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/almacen/crear_productosV1/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Crear Producto V1.2</p>
-                              </a>
-                            </li>
                           </ul>
                         </li>
 
@@ -469,15 +463,9 @@ foreach ($roles_permisos as $rol_permiso) {
                           </a>
                           <ul class="nav nav-treeview">
                           <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/administracion/clientes/contacto/create.php" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/crm/contacto/index.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Contactos</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/administracion/clientes/contacto/create_posible_cliente.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Posible nuevo</p>
+                                <p>LIstado de Contactos</p>
                               </a>
                             </li>
                             <li class="nav-item">
@@ -548,6 +536,12 @@ foreach ($roles_permisos as $rol_permiso) {
                                 <p>Productos Creados</p>
                               </a>
                             </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/ti/partes_modulos/nits/" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Caracteristicas Módulos</p>
+                              </a>
+                            </li>
                           </ul>
                         </li>
 
@@ -591,12 +585,6 @@ foreach ($roles_permisos as $rol_permiso) {
                               <a href="<?php echo $URL;?>admin/ti/ciudades" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Listado Ciudades</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/ti/partes_modulos/nits/" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Listado NITS</p>
                               </a>
                             </li>
                             <li class="nav-item">
@@ -769,6 +757,31 @@ foreach ($roles_permisos as $rol_permiso) {
                               <a href="<?php echo $URL;?>admin/cliente" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Listado Pantallas</p>
+                              </a>
+                            </li>
+                          </ul>
+                        </li>
+
+                    <?php
+                      }
+                    ?>
+
+<?php
+                      if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="14") ){ ?>
+
+                        <li class="nav-item">
+                          <a href="#" class="nav-link active">
+                            <i class="nav-icon fas fa-cogs"></i>
+                            <p>
+                              INGRESO PRODUCTO
+                              <i class="right fas fa-angle-left"></i>
+                            </p>
+                          </a>
+                          <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/producto/producto_ingreso/create_producto.php" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Ingresar Producto</p>
                               </a>
                             </li>
                           </ul>

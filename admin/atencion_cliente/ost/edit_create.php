@@ -16,6 +16,7 @@ $query->execute( [":id_get" => $id_get]);
 $osts = $query->fetchAll(PDO::FETCH_ASSOC);
 foreach ($osts as $ost){
     $id = $ost['id'];
+    $id_stc = $ost['id_stc'];
     $id_ost = $ost['id_ost'];
     $fecha_ingreso = $ost['fecha_ost'];
     $medio_ingreso = $ost['medio_ingreso'];
@@ -303,6 +304,15 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
 
+                        <!-- Modal de confirmación -->
+                        <div id="confirmModal" style="display:none;">
+                            <p>¿Desea cerrar la STC?</p>
+                            <button id="confirmYes">Sí</button>
+                            <button id="confirmNo">No</button>
+                        </div>
+
+                        <input type="hidden" name="cerrar_stc" id="cerrar_stc" value="">
+
                     </form>
                 </div>
             </div>
@@ -311,3 +321,35 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 <?php include('../../../layout/admin/parte2.php');?>
+
+<script>
+    document.getElementById("guardarForm").addEventListener("submit", function(event) {
+    var estado = document.getElementById("estado").value;
+    
+    if (estado == 5 || estado == 6) {
+        event.preventDefault(); // Detener la acción predeterminada (envío del formulario)
+        document.getElementById("confirmModal").style.display = "block"; // Mostrar el modal
+    }
+});
+
+document.getElementById("confirmYes").addEventListener("click", function() {
+    document.getElementById("confirmModal").style.display = "none"; 
+    cerrarSTC(true); // Llamar función que actualiza estado_ticket a 2
+});
+
+document.getElementById("confirmNo").addEventListener("click", function() {
+    document.getElementById("confirmModal").style.display = "none";
+    cerrarSTC(false); // Llamar función que incrementa contador_casos
+});
+
+document.getElementById("confirmYes").addEventListener("click", function() {
+    document.getElementById("cerrar_stc").value = "yes";
+    document.getElementById("guardarForm").submit();
+});
+
+document.getElementById("confirmNo").addEventListener("click", function() {
+    document.getElementById("cerrar_stc").value = "no";
+    document.getElementById("guardarForm").submit();
+});
+
+</script>

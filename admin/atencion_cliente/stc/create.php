@@ -95,7 +95,7 @@ include('../../../layout/admin/parte1.php');
                                                 <input type="text" name="ticketexterno" class="form-control" placeholder="Ticket Externo">
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-3" hidden>
                                             <div class="form-group">
                                                 <label for="">Tipo de Servicio</label>
                                                 <select name="tiposervicio" id="tiposervicio" class="form-control" required>
@@ -184,7 +184,7 @@ include('../../../layout/admin/parte1.php');
                                                 <label for="">Estado</label>
                                                 <select name="idestado" id="idestado" class="form-control" required>
                                                     <?php 
-                                                    $query_estado = $pdo->prepare('SELECT * FROM t_estado');
+                                                    $query_estado = $pdo->prepare('SELECT * FROM t_estado WHERE estadostc IS NOT NULL AND estadostc != ""');
                                                     $query_estado->execute();
                                                     $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($estados as $estado) {

@@ -26,7 +26,7 @@ include('../../../layout/admin/parte1.php');
                         <div clase="row">
                             <div class="card-tools ml-4">
                                 <div class="form-group">
-                                    <a href="../../producto/create_producto.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear Nuevo Producto</a>
+                                    <a href="../../../admin/producto/crear_productos/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear Nuevo Producto</a>
                                 </div>
                             </div>
 
@@ -149,8 +149,8 @@ include('../../../layout/admin/parte1.php');
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entrada/create_movimiento_entrada.php'">Movimiento de Entrada</button>
-                                                        <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_salida/create_movimiento_salida.php'">Movimiento de Salida</button>
+                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entradaV1/create_movimiento_entrada_final.php'">Movimiento de Entrada</button>
+                                                        <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_salidaV1/create_movimiento_salida_final.php'">Movimiento de Salida</button>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

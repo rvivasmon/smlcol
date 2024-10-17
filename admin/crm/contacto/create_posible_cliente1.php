@@ -1,24 +1,26 @@
 <?php
 
 
-include('../../../../app/config/config.php');
-include('../../../../app/config/conexion.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
 
-include('../../../../layout/admin/sesion.php');
-include('../../../../layout/admin/datos_sesion_user.php');
+include('../../../layout/admin/sesion.php');
+include('../../../layout/admin/datos_sesion_user.php');
 
-include('../../../../layout/admin/parte1.php');
+include('../../../layout/admin/parte1.php');
 
-
-// Obtener el ID del contacto y el tipo de contacto
-$contacto_id = $_POST['contacto_id'];
-$tipo_contacto = $_POST['tipo_contacto'];
-$nombre = $_POST['nombre'];
+$id_get = $_GET['id'];
 
 // Consulta para obtener el nombre del tipo de contacto basado en el ID
-$stmt = $pdo->prepare("SELECT tipo FROM contactos_tipos WHERE id = ?");
-$stmt->execute([$tipo_contacto]);
-$tipo_contacto_nombre = $stmt->fetchColumn();
+$query = $pdo->prepare("SELECT contactos.*, contactos_tipos.tipo as nombre_tipo FROM contactos JOIN contactos_tipos ON contactos.tipo_contacto = contactos_tipos.id WHERE contactos.id = '$id_get'");
+$query->execute();
+$contactos = $query->fetchAll(PDO::FETCH_ASSOC);
+foreach ($contactos as $contacto){
+    $contacto_id = $contacto['id'];
+    $nombre = $contacto['nombre'];
+    $usuario = $contacto['usuario'];
+    $tipo_contacto_nombre = $contacto['nombre_tipo'];
+}
 
 ?>
 
@@ -27,7 +29,7 @@ $tipo_contacto_nombre = $stmt->fetchColumn();
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Crear Nuevo Contacto</h1>
+                    <h1 class="m-0">Crear Nuevo Cliente</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
@@ -45,7 +47,7 @@ $tipo_contacto_nombre = $stmt->fetchColumn();
                                     <div class="form-group">
                                         <!-- Campo oculto para vincular al contacto -->
                                         <input type="hidden" name="contacto_id" value="<?php echo $contacto_id; ?>">
-                                        <input type="hidden" name="user" value="<?php echo $sesion_usuario['id']; ?>">
+                                        <input type="hidden" name="user" value="<?php echo $usuario; ?>">
 
                                         <div class="row">
                                             <div class="col-md-4">
@@ -84,12 +86,6 @@ $tipo_contacto_nombre = $stmt->fetchColumn();
                                                     <input type="text" id="telefono" name="telefono"class="form-control" required>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="tipoE">Tipo Empresa:</label>
-                                                    <input type="text" id="tipoE" name="tipoE"class="form-control" required>
-                                                </div>
-                                            </div>
                                         </div>
 
                                         <div class="row">
@@ -116,8 +112,11 @@ $tipo_contacto_nombre = $stmt->fetchColumn();
                                 <div class="col-md-9">
                                     <div class="form-group">
                                         <div class="row">
+                                            <div class="col-md-4">
+                                                <a href="<?php echo $URL."admin/crm/contacto/index.php";?>" class="btn btn-default btn-block">Cancelar</a>
+                                            </div>
                                             <div class="col-md-5">
-                                                <button type="submit" class="btn btn-primary">Guardar</button>
+                                                <button type="submit" class="btn btn-primary btn-block">Guardar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -134,4 +133,4 @@ $tipo_contacto_nombre = $stmt->fetchColumn();
     </div>
 </div>
 
-    <?php include('../../../../layout/admin/parte2.php'); ?>
+    <?php include('../../../layout/admin/parte2.php'); ?>

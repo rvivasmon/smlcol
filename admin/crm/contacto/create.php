@@ -1,10 +1,10 @@
 <?php
 
-include('../../../../app/config/config.php');
-include('../../../../app/config/conexion.php');
-include('../../../../layout/admin/sesion.php');
-include('../../../../layout/admin/datos_sesion_user.php');
-include('../../../../layout/admin/parte1.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
+include('../../../layout/admin/sesion.php');
+include('../../../layout/admin/datos_sesion_user.php');
+include('../../../layout/admin/parte1.php');
 
 ?>
 
@@ -70,9 +70,15 @@ include('../../../../layout/admin/parte1.php');
 
                                 <hr>
 
-                                <div class="col-md-5">
-                                    <button type="submit" class="btn btn-primary">Guardar Contacto</button>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <a href="<?php echo $URL."admin/crm/contacto/index.php";?>" class="btn btn-default btn-block">Cancelar</a>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn btn-primary btn-block">Guardar Contacto</button>
+                                    </div>
                                 </div>
+                                
                             </form>
                         </div>
                     </div>
@@ -83,4 +89,4 @@ include('../../../../layout/admin/parte1.php');
     </div>
 </div>
 
-<?php include('../../../../layout/admin/parte2.php'); ?>
+<?php include('../../../layout/admin/parte2.php'); ?>

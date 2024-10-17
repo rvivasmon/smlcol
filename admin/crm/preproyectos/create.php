@@ -122,8 +122,8 @@ $hora_actual = date('H:i');
                                             <input type="text" name="id_proyecto" id="id_proyecto" class="form-control" value="<?php echo htmlspecialchars($id_ppc); ?>" readonly>
                                         </div>
                                         <div class="col-md-5">
-                                            <label for="ciudad" class="d-block mb-0">Ciudad</label>
-                                            <input type="text" name="ciudad" id="ciudad" class="form-control" required>
+                                            <label for="nombre_proyecto" class="d-block mb-0">Proyecto</label>
+                                            <input type="text" name="nombre_proyecto" class="form-control" id="nombre_proyecto" placeholder="Asignar" required>
                                         </div>
                                         <div class="col-md-0">
                                             <input type="hidden" name="idusuario2" value="<?php echo $sesion_usuario['id']; ?>">
@@ -134,28 +134,38 @@ $hora_actual = date('H:i');
 
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <label for="nombre_proyecto" class="d-block mb-0">Proyecto</label>
-                                            <input type="text" name="nombre_proyecto" class="form-control" id="nombre_proyecto" placeholder="Asignar" required>
-                                        </div>
-                                        <div class="col-md-6">
                                             <label for="cliente" class="d-block mb-0">Cliente</label>
-                                            <input type="text" name="cliente" class="form-control" id="cliente" placeholder="Cliente" required>
-                                        </div>
-                                    </div>
+                                            <select name="cliente" id="cliente" class="form-control">
 
-                                    <div class="row">
+                                            </select>
+                                        </div>
                                         <div class="col-md-6">
                                             <label for="contacto_cliente" class="d-block mb-0">Contacto</label>
-                                            <input type="text" name="contacto_cliente" class="form-control" id="contacto_cliente" placeholder="Contacto" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="telefono_contacto" class="d-block mb-0">Teléfono Contacto</label>
-                                            <input type="text" name="telefono_contacto" class="form-control" id="telefono_contacto" placeholder="Teléfono">
+                                            <input type="text" name="contacto_cliente" class="form-control" id="contacto_cliente" placeholder="Contacto" readonly>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-md-6">
+                                            <label for="telefono_contacto" class="d-block mb-0">Teléfono Contacto</label>
+                                            <input type="text" name="telefono_contacto" class="form-control" id="telefono_contacto" placeholder="Teléfono"readonly>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="telefono_empresa" class="d-block mb-0">Teléfono Empresa</label>
+                                            <input type="text" name="telefono_contacto" class="form-control" id="telefono_empresa" placeholder="Teléfono" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            <label for="direccion" class="d-block mb-0">Dirección</label>
+                                            <input type="text" name="direccion" id="direccion" class="form-control" readonly>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="ciudad" class="d-block mb-0">Ciudad</label>
+                                            <input type="text" name="ciudad" id="ciudad" class="form-control" readonly>
+                                        </div>
+                                        <div class="col-md-6" hidden>
                                             <label for="asesor_encargado" class="d-block mb-0">Asesor Encargado</label>
                                             <input type="text" name="asesor_encargado" id="asesor_encargado" class="form-control" value="<?php echo htmlspecialchars($sesion_usuario['nombre']); ?>" readonly>
                                         </div>

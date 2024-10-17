@@ -1,22 +1,24 @@
 <?php 
 
-include('../../../../app/config/config.php');
-include('../../../../app/config/conexion.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
 
-include('../../../../layout/admin/sesion.php');
-include('../../../../layout/admin/datos_sesion_user.php');
+include('../../../layout/admin/sesion.php');
+include('../../../layout/admin/datos_sesion_user.php');
 
-include('../../../../layout/admin/parte1.php');
+
+include('../../../layout/admin/parte1.php');
 
 
 ?>
+
 
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Productos Disponibles</h1>
+                <h1 class="m-0">Clientes SML</h1>
                     <div class="card card-blue">
                         <div class="card-header">
                             ACTIVOS
@@ -24,74 +26,47 @@ include('../../../../layout/admin/parte1.php');
 
                         <hr>
 
-                        <div class="row">
-                            <div class="card-tools ml-4">
-                                <a href="../nits/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo NITS</strong></a>
-                            </div>
-
-                            <div class="card-tools ml-4">
-                                <a href="../pitch/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo PITCH</strong></a>
-                            </div>
-
-                            <div class="card-tools ml-4">
-                                <a href="../refresh/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo REFRESH</strong></a>
-                            </div>
-
-                            <div class="card-tools ml-4">
-                                <a href="../tamanos/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> <strong>Crear Nuevo TAMAÑO</strong></a>
-                            </div>
-
-                            <div class="card-tools ml-4">
-                                <a href="../tipos/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo TIPO</strong></a>
-                            </div>
-
-                            <div class="card-tools ml-4">
-                                <a href="../productos/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo PRODUCTO</strong></a>
-                            </div>
+                        <div class="card-tools ml-4">
+                            <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square">Crear Nuevo Contacto</i></a>
                         </div>
 
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="table_usuarios" class="table table-striped table-hover table-bordered">
+                                <table id="table_contactos" class="table table-striped table-hover table-bordered">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>PRODUCTOS</th>
-                                            <th>Habilitado</th>
+                                            <th>Contacto</th>
                                             <th><center>Acciones</center></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                         $contador = 0;
-                                        $query = $pdo->prepare('SELECT * FROM t_tipo_producto WHERE tipo_producto21 IS NOT NULL AND tipo_producto21 != "" ORDER BY tipo_producto21');
+                                        $query = $pdo->prepare('SELECT * FROM contactos');
+
                                         $query->execute();
-                                        $productos = $query->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach ($productos as $producto){
-                                            $id = $producto['id'];
-                                            $nombre_producto = $producto['tipo_producto21'];
-                                            $habilitado = $producto['habilitar_producto'];
+                                        $contactos = $query->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($contactos as $contacto){
+                                            $id = $contacto['id'];
+                                            $nombre = $contacto['nombre'];
                                             $contador = $contador + 1;
                                         ?>
                                             <tr>
                                                 <td><?php echo $contador; ?></td>
-                                                <td><?php echo $nombre_producto; ?></td>
-                                                <td>
-                                                    <div style="display: flex; justify-content: center; align-items: center;">
-                                                    <input type="checkbox" name="habilitado_<?php echo $id; ?>" value="1" <?php echo ($habilitado == 1) ? 'checked' : ''?>>
-                                                    </div>
-                                                </td>
+                                                <td><?php echo $nombre; ?></td>                                                
                                                 <td>
                                                     <center>
-                                                        <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
+                                                        <a href="index_posibles.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar Clientes <i class="fas fa-eye"></i></a>
                                                         <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
                                                         <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
+                                                        <a href="create_posible_cliente1.php?id=<?php echo $id; ?>" class="btn btn-warning btn-sm">Crear Cliente <i class="fas fa-pen"></i></a>
                                                     </center>
                                                 </td>
                                             </tr>
                                         <?php
-                                    }                            
-                                ?>
+                                        }                            
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -103,11 +78,11 @@ include('../../../../layout/admin/parte1.php');
     </div>
 </div>
 
-<?php include('../../../../layout/admin/parte2.php');?>
+<?php include('../../../layout/admin/parte2.php');?>
 
 <script>
     $(function () {
-        $("#table_usuarios").DataTable({
+        $("#table_contactos").DataTable({
             "pageLength": 10,
             "language": {
                 "emptyTable": "No hay información",
@@ -154,6 +129,6 @@ include('../../../../layout/admin/parte1.php');
                     collectionLayout: 'fixed three-column'
                 }
             ],
-        }).buttons().container().appendTo('#table_usuarios_wrapper .col-md-6:eq(0)');
+        }).buttons().container().appendTo('#table_contactos_wrapper .col-md-6:eq(0)');
     });
 </script>
