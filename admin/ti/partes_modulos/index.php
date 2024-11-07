@@ -1,12 +1,12 @@
 <?php 
 
-include('../../../../app/config/config.php');
-include('../../../../app/config/conexion.php');
+include('../../../app/config/config.php');
+include('../../../app/config/conexion.php');
 
-include('../../../../layout/admin/sesion.php');
-include('../../../../layout/admin/datos_sesion_user.php');
+include('../../../layout/admin/sesion.php');
+include('../../../layout/admin/datos_sesion_user.php');
 
-include('../../../../layout/admin/parte1.php');
+include('../../../layout/admin/parte1.php');
 
 
 ?>
@@ -26,27 +26,27 @@ include('../../../../layout/admin/parte1.php');
 
                         <div class="row">
                             <div class="card-tools ml-4">
-                                <a href="../nits/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo NITS</strong></a>
+                                <a href="nits/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo NITS</strong></a>
                             </div>
 
                             <div class="card-tools ml-4">
-                                <a href="../pitch/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo PITCH</strong></a>
+                                <a href="pitch/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo PITCH</strong></a>
                             </div>
 
                             <div class="card-tools ml-4">
-                                <a href="../refresh/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo REFRESH</strong></a>
+                                <a href="refresh/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo REFRESH</strong></a>
                             </div>
 
                             <div class="card-tools ml-4">
-                                <a href="../tamanos/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> <strong>Crear Nuevo TAMAÑO</strong></a>
+                                <a href="tamanos/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> <strong>Crear Nuevo TAMAÑO</strong></a>
                             </div>
 
                             <div class="card-tools ml-4">
-                                <a href="../tipos/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo TIPO</strong></a>
+                                <a href="tipos/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo TIPO para Ventas</strong></a>
                             </div>
 
                             <div class="card-tools ml-4">
-                                <a href="../productos/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo PRODUCTO</strong></a>
+                                <a href="productos/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo PRODUCTO Para Ventas</strong></a>
                             </div>
                         </div>
 
@@ -97,13 +97,95 @@ include('../../../../layout/admin/parte1.php');
                             </div>
                         </div>
                     </div>
+
+                    <div class="card card-blue">
+                        <div class="card-header">
+                            ACTIVOS
+                        </div>
+
+                        <hr>
+
+                    <!--<div class="row">
+                            <div class="card-tools ml-4">
+                                <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo NITS</strong></a>
+                            </div>
+
+                            <div class="card-tools ml-4">
+                                <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo PITCH</strong></a>
+                            </div>
+
+                            <div class="card-tools ml-4">
+                                <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo REFRESH</strong></a>
+                            </div>
+
+                            <div class="card-tools ml-4">
+                                <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> <strong>Crear Nuevo TAMAÑO</strong></a>
+                            </div>
+
+                            <div class="card-tools ml-4">
+                                <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo TIPO</strong></a>
+                            </div>
+
+                            <div class="card-tools ml-4">
+                                <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo PRODUCTO</strong></a>
+                            </div>
+                        </div>-->
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="table_usuarios" class="table table-striped table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>NITS</th>
+                                            <th>Habilitado</th>
+                                            <th><center>Acciones</center></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $contador = 0;
+                                        $query = $pdo->prepare('SELECT * FROM tabla_nits_refresh WHERE refresh IS NOT NULL AND refresh != "" ORDER BY refresh');
+                                        $query->execute();
+                                        $refreshes = $query->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($refreshes as $refresh){
+                                            $id = $refresh['id'];
+                                            $nombre_refresh = $refresh['refresh'];
+                                            $habilitado = $refresh['habilitar_refresh'];
+                                            $contador = $contador + 1;
+                                        ?>
+                                            <tr>
+                                                <td><?php echo $contador; ?></td>
+                                                <td><?php echo $nombre_refresh; ?></td>
+                                                <td>
+                                                    <div style="display: flex; justify-content: center; align-items: center;">
+                                                    <input type="checkbox" name="habilitado_<?php echo $id; ?>" value="1" <?php echo ($habilitado == 1) ? 'checked' : ''?>>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <center>
+                                                        <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
+                                                        <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
+                                                        <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
+                                                    </center>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                    }                            
+                                ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
 </div>
 
-<?php include('../../../../layout/admin/parte2.php');?>
+<?php include('../../../layout/admin/parte2.php');?>
 
 <script>
     $(function () {

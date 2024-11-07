@@ -26,12 +26,6 @@ include('../../../layout/admin/parte1.php');
                         <div clase="row">
                             <div class="card-tools ml-4">
                                 <div class="form-group">
-                                    <a href="../../../admin/producto/crear_productos/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear Nuevo Producto</a>
-                                </div>
-                            </div>
-
-                            <div class="card-tools ml-4">
-                                <div class="form-group">
                                     <button type="button" class="btn" style="background-color: #20B2AA; color: white; border-color: #20B2AA;" data-toggle="modal" data-target="#movimientoModal">
                                         <i class="bi bi-plus-square"></i> Crear Nuevo Movimiento
                                     </button>
@@ -63,16 +57,16 @@ include('../../../layout/admin/parte1.php');
                                         $query = $pdo->prepare('SELECT
                                                                 mvd.*,
                                                                 productomovido.tipo_producto AS nombre_producto,
-                                                                almacen_origen.nombre_almacen AS almacenes_origen,
-                                                                almacen_destino.nombre_almacen AS almacenes_destino,
+                                                                almacen_origen.nombre_almacen AS almacen_origen,
+                                                                almacen_destino.nombre_almacen AS almacen_destino,
                                                                 CASE
-                                                                    WHEN mvd.tipo_producto = 1 THEN caracmod.pitch
+                                                                    WHEN mvd.tipo_producto = 1 THEN tp.pitch
                                                                     WHEN mvd.tipo_producto = 2 THEN caraccon.marca_control
                                                                     WHEN mvd.tipo_producto = 3 THEN caracfuen.marca_fuente
                                                                     ELSE NULL
                                                                 END AS nombre_referencia_1,
                                                                 CASE
-                                                                    WHEN mvd.tipo_producto = 1 THEN caracmodulos.serie_modulo
+                                                                    WHEN mvd.tipo_producto = 1 THEN tmc.serie
                                                                     WHEN mvd.tipo_producto = 2 THEN caraccontrol.referencia
                                                                     WHEN mvd.tipo_producto = 3 THEN caracfuentes.modelo_fuente
                                                                     ELSE NULL
@@ -81,18 +75,18 @@ include('../../../layout/admin/parte1.php');
                                                                 movimiento_diario AS mvd
                                                             INNER JOIN
                                                                 t_productos AS productomovido ON mvd.tipo_producto = productomovido.id_producto
-                                                            INNER JOIN
+                                                            LEFT JOIN
                                                                 t_asignar_todos_almacenes AS almacen_origen ON mvd.almacen_origen1 = almacen_origen.id_asignacion
-                                                            INNER JOIN
+                                                            LEFT JOIN
                                                                 t_asignar_todos_almacenes AS almacen_destino ON mvd.almacen_destino1 = almacen_destino.id_asignacion
                                                             LEFT JOIN
-                                                                caracteristicas_modulos AS caracmod ON mvd.referencia_1 = caracmod.id_car_mod AND mvd.tipo_producto = 1
+                                                                tabla_pitch AS tp ON mvd.referencia_1 = tp.id AND mvd.tipo_producto = 1
                                                             LEFT JOIN
                                                                 caracteristicas_control AS caraccon ON mvd.referencia_1 = caraccon.id_car_ctrl AND mvd.tipo_producto = 2
                                                             LEFT JOIN
                                                                 caracteristicas_fuentes AS caracfuen ON mvd.referencia_1 = caracfuen.id_car_fuen AND mvd.tipo_producto = 3
                                                             LEFT JOIN
-                                                                caracteristicas_modulos AS caracmodulos ON mvd.referencia_2 = caracmodulos.id_car_mod AND mvd.tipo_producto = 1
+                                                                producto_modulo_creado AS tmc ON mvd.referencia_2 = tmc.id AND mvd.tipo_producto = 1
                                                             LEFT JOIN
                                                                 referencias_control AS caraccontrol ON mvd.referencia_2 = caraccontrol.id_referencia AND mvd.tipo_producto = 2
                                                             LEFT JOIN
@@ -106,8 +100,8 @@ include('../../../layout/admin/parte1.php');
                                             $producto = $movidiario['nombre_producto'];
                                             $referencia1 = $movidiario['nombre_referencia_1'];
                                             $referencia2 = $movidiario['nombre_referencia_2'];
-                                            $almacen_origen1 = $movidiario['almacenes_origen'];
-                                            $almacen_destino1 = $movidiario['almacenes_destino'];
+                                            $almacen_origen1 = $movidiario['almacen_origen'];
+                                            $almacen_destino1 = $movidiario['almacen_destino'];
                                             $destino = $movidiario['op'];
                                             $cantidades = $movidiario['cantidad_entrada'];
                                             $observaciones = $movidiario['observaciones'];

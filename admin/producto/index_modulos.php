@@ -45,15 +45,27 @@ include('../../layout/admin/parte1.php');
                                 <tbody>
                                     <?php
                                     $contador = 0;
-                                    $query = $pdo->prepare('SELECT * FROM producto_modulo_creado WHERE habilitar = "1"');
+                                    $query = $pdo->prepare('SELECT
+                                                                        pmc.*,
+                                                                        tp.pitch AS nombre_pitch,
+                                                                        ttp.modelo_modulo AS nombre_tipo_modelo
+                                                                    FROM
+                                                                        producto_modulo_creado AS pmc
+                                                                    INNER JOIN
+                                                                        tabla_pitch AS tp ON pmc.pitch = tp.id
+                                                                    INNER JOIN
+                                                                        t_tipo_producto AS ttp ON pmc.modelo = ttp.id
+                                                                    WHERE
+                                                                        habilitar = "1"
+                                                                    ');
 
                                     $query->execute();
                                     $almacenes_pricipales = $query->fetchAll(PDO::FETCH_ASSOC);
                                     foreach ($almacenes_pricipales as $almacen_pricipal){
                                         $id = $almacen_pricipal['id'];
                                         $fecha_ingreso = $almacen_pricipal['CREATED_AT'];
-                                        $producto = $almacen_pricipal['modelo'];
-                                        $pitch = $almacen_pricipal['pitch'];
+                                        $producto = $almacen_pricipal['nombre_tipo_modelo'];
+                                        $pitch = $almacen_pricipal['nombre_pitch'];
                                         $serie_modulo = $almacen_pricipal['serie'];
                                         $referencia = $almacen_pricipal['referencia'];
                                         $medida_x = $almacen_pricipal['tamano_x'];

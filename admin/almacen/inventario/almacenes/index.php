@@ -55,7 +55,7 @@ include('../../../../layout/admin/parte1.php');
                                                                     at.*,
                                                                     productomovido.tipo_producto AS nombre_tipo,
                                                                 CASE
-                                                                    when at.tipo_producto = 1 then caracmodulos.serie_modulo
+                                                                    when at.tipo_producto = 1 then caracmodulos.serie
                                                                     when at.tipo_producto = 2 then refecontrol.referencia
                                                                     when at.tipo_producto = 3 then refefuentes.modelo_fuente
                                                                     else null
@@ -65,7 +65,7 @@ include('../../../../layout/admin/parte1.php');
                                                                 INNER JOIN
                                                                     t_productos AS productomovido ON at.tipo_producto = productomovido.id_producto
                                                                 LEFT JOIN
-                                                                    caracteristicas_modulos AS caracmodulos ON at.producto = caracmodulos.id_car_mod AND at.tipo_producto = 1
+                                                                    producto_modulo_creado AS caracmodulos ON at.producto = caracmodulos.id AND at.tipo_producto = 1
                                                                 LEFT JOIN
                                                                     referencias_control AS refecontrol ON at.producto = refecontrol.id_referencia AND at.tipo_producto = 2
                                                                 LEFT JOIN

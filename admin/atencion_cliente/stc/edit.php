@@ -135,7 +135,7 @@ foreach ($stcs as $stc){
                                                 <select name="idestado" id="idestado" class="form-control" required>
                                                     <?php
                                                     $valor_actual_en_edicion = $stc['estado'];
-                                                    $query_estado = $pdo->prepare('SELECT * FROM t_estado');
+                                                    $query_estado = $pdo->prepare('SELECT * FROM t_estado WHERE estadostc IS NOT NULL AND estadostc != ""');
                                                     $query_estado->execute();
                                                     $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($estados as $estado) {
@@ -281,3 +281,23 @@ foreach ($stcs as $stc){
     </div>
 </div>
 <?php include('../../../layout/admin/parte2.php');?>
+
+<script>
+    // Obtener los selectores por su ID
+    const tipoServicioSelect = document.getElementById('tiposervicio');
+    const idEstadoSelect = document.getElementById('idestado');
+
+    // Función para sincronizar los valores cuando cambia "tiposervicio"
+    tipoServicioSelect.addEventListener('change', function() {
+        if (tipoServicioSelect.value === '3') {
+            idEstadoSelect.value = '3';
+        }
+    });
+
+    // Función para sincronizar los valores cuando cambia "idestado"
+    idEstadoSelect.addEventListener('change', function() {
+        if (idEstadoSelect.value === '3') {
+            tipoServicioSelect.value = '3';
+        }
+    });
+</script>

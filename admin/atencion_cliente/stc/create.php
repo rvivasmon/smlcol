@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include('../../../app/config/config.php');
 include('../../../app/config/conexion.php');
@@ -7,7 +7,6 @@ include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
 
 include('../../../layout/admin/parte1.php');
-
 
 ?>
 
@@ -73,25 +72,25 @@ include('../../../layout/admin/parte1.php');
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <label for="">Fecha de Ingreso</label>
-                                                <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value= "<?php echo date('Y-m-d'); ?>" readonly>
+                                                <label for="fechaingreso">Fecha de Ingreso</label>
+                                                <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value="<?php echo date('Y-m-d'); ?>" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">Ingreso</label>
-                                                <select class="form-control"  id="medio_ingreso" name="medio_ingreso" value="<?php echo $medio_ingreso;?>" required>
+                                                <select id="medio_ingreso" name="medio_ingreso" class="form-control" value="<?php echo $medio_ingreso; ?>" required>
                                                     <option value="">Seleccionar Medio</option>
-                                                    <option value="Email">EMAIL</option>
-                                                    <option value="Llamada">LLAMADA</option>
-                                                    <option value="Whatsapp">WHATSAPP</option>
-                                                    <option value="Otro">OTRO</option>
+                                                    <option value="email">EMAIL</option>
+                                                    <option value="llamada">LLAMADA</option>
+                                                    <option value="whatsapp">WHATSAPP</option>
+                                                    <option value="otro">OTRO</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <label for="">Ticket Externo</label>
+                                                <label for="ticketexterno">Ticket Externo</label>
                                                 <input type="text" name="ticketexterno" class="form-control" placeholder="Ticket Externo">
                                             </div>
                                         </div>
@@ -100,9 +99,7 @@ include('../../../layout/admin/parte1.php');
                                                 <label for="">Tipo de Servicio</label>
                                                 <select name="tiposervicio" id="tiposervicio" class="form-control" required>
                                                     <option value="">Seleccionat Tipo de Servicio</option>
-                                                    
                                                     <?php
-
                                                     $query_servicio = $pdo->prepare('SELECT * FROM t_tipo_servicio WHERE id = 5'); // Modificación en la consulta SQL para obtener solo el servicio con ID 5
                                                     $query_servicio->execute();
                                                     $servicio = $query_servicio->fetch(PDO::FETCH_ASSOC); // Utilizamos fetch en lugar de fetchAll, ya que esperamos solo una fila
@@ -119,27 +116,25 @@ include('../../../layout/admin/parte1.php');
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="">ID Producto</label>
-                                                <input type="text" name="idproducto" class="form-control" placeholder="ID Producto" required>
+                                                <input type="text" name="idproducto" id="idproducto" class="form-control" placeholder="ID Producto" required readonly>
                                             </div>
-                                        </div>                                    
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
                                             <div class="form-group">
-
                                                 <label for="">Cliente</label>
                                                 <select name="idcliente" id="idcliente" class="form-control" required>
                                                     <option value="">Seleccionar Cliente</option>
-
-                                                    <?php 
+                                                    <?php
                                                     $query_cliente = $pdo->prepare('SELECT * FROM clientes ORDER BY nombre_comercial ASC');
                                                     $query_cliente->execute();
                                                     $clientes = $query_cliente->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($clientes as $cliente) {
                                                         $id_cliente = $cliente['id'];
-                                                        $cliente = $cliente['nombre_comercial'];
+                                                        $cliente_nombre = $cliente['nombre_comercial'];
                                                         ?>
-                                                        <option value="<?php echo $id_cliente; ?>"><?php echo $cliente; ?></option>
+                                                        <option value="<?php echo $id_cliente; ?>"><?php echo $cliente_nombre; ?></option>
                                                     <?php
                                                     }
                                                     ?>
@@ -151,26 +146,15 @@ include('../../../layout/admin/parte1.php');
                                                 <label for="">Ciudad</label>
                                                 <select name="idciudad" id="idciudad" class="form-control" required>
                                                     <option value="">Seleccionar Ciudad</option>
-
-                                                    <?php 
-                                                    $query_ciudad = $pdo->prepare('SELECT * FROM t_ciudad ORDER BY ciudad ASC');
-                                                    $query_ciudad->execute();
-                                                    $ciudades = $query_ciudad->fetchAll(PDO::FETCH_ASSOC);
-                                                    foreach($ciudades as $ciudad) {
-                                                        $id_ciudad = $ciudad['id'];
-                                                        $ciudad = $ciudad['ciudad'];
-                                                        ?>
-                                                        <option value="<?php echo $id_ciudad; ?>"><?php echo $ciudad; ?></option>
-                                                    <?php
-                                                    }
-                                                    ?>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="">Proyecto</label>
-                                                <input type="text" name="proyecto" class="form-control" placeholder="Proyecto" required>
+                                                <label for="">Lugar de instalación</label>
+                                                <select name="proyecto" id="proyecto" class="form-control" required>
+                                                    <option value="">Seleccione un Lugar</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -183,8 +167,8 @@ include('../../../layout/admin/parte1.php');
                                             <div class="form-group">
                                                 <label for="">Estado</label>
                                                 <select name="idestado" id="idestado" class="form-control" required>
-                                                    <?php 
-                                                    $query_estado = $pdo->prepare('SELECT * FROM t_estado WHERE estadostc IS NOT NULL AND estadostc != ""');
+                                                    <?php
+                                                    $query_estado = $pdo->prepare('SELECT * FROM t_estado WHERE id = "1"');
                                                     $query_estado->execute();
                                                     $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($estados as $estado) {
@@ -198,9 +182,9 @@ include('../../../layout/admin/parte1.php');
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>                                
+                                    </div>
                                     <div class="row">
-                                        <div class="col-md-0"> <!-- Se coloca aquí el usuario que está trabajando el archivo --> 
+                                        <div class="col-md-0"> <!-- Se coloca aquí el usuario que está trabajando el archivo -->
                                             <div class="form-group">
                                                 <label for=""></label>
                                                 <input type="text" name="usuario" class="form-control" value="<?php echo $sesion_nombre; ?>" hidden>
@@ -231,61 +215,14 @@ include('../../../layout/admin/parte1.php');
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="archivo_adjunto">Archivo Adjunto</label>
+
                                     <br>
+
                                     <output id="list" style="position: relative; width: 300px; height: 300px; overflow: hidden;"></output>
                                     <input type="file" name="archivo_adjunto" id="file" class="form-control-file" multiple>
 
-                                        <script>
-                                            var currentImageIndex = 0; // Índice de la imagen actual
-
-                                            function archivo(evt) {
-                                            var files = evt.target.files; // FileList object
-
-                                                for (var i = 0, f; f = files[i]; i++) {
-                                                    var reader = new FileReader();
-                                                    // Si el archivo es una imagen
-                                                    if (f.type.match('image.*')) {
-                                                        reader.onload = (function(theFile) {
-                                                            return function(e) {
-                                                                // Insertamos la imagen
-                                                                var img = document.createElement('img');
-                                                                img.src = e.target.result;
-                                                                img.width = 200; // Tamaño de la imagen
-                                                                img.style.display = "none"; // Ocultamos la imagen
-                                                                document.getElementById("list").appendChild(img);
-                                                        };
-                                                            })(f);
-                                                        }
-                                                        // Lectura del archivo
-                                                        reader.readAsDataURL(f);
-                                                    }
-                                                    showImage(currentImageIndex); // Mostramos la primera imagen
-                                                }
-
-                                                document.getElementById('file').addEventListener('change', archivo, false);
-
-                                                function showImage(index) {
-                                                var images = document.getElementById("list").getElementsByTagName("img");
-                                                for (var i = 0; i < images.length; i++) {
-                                                    images[i].style.display = "none"; // Ocultamos todas las imágenes
-                                                }
-                                                images[index].style.display = "block"; // Mostramos la imagen actual
-                                            }
-
-                                            function nextImage() {
-                                            var images = document.getElementById("list").getElementsByTagName("img");
-                                            currentImageIndex = (currentImageIndex + 1) % images.length; // Avanzamos al siguiente índice circularmente
-                                                    showImage(currentImageIndex);
-                                            }
-
-                                            function prevImage() {
-                                                var images = document.getElementById("list").getElementsByTagName("img");
-                                                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Retrocedemos al índice anterior circularmente
-                                                showImage(currentImageIndex);
-                                            }
-                                        </script>
                                 </div>
-                            </div> 
+                            </div>
                         </div>
 
                         <hr>
@@ -304,7 +241,7 @@ include('../../../layout/admin/parte1.php');
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="form-group">        
+                                <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <button type="button" class="btn btn-default" onclick="prevImage()">Anterior</button>
@@ -316,13 +253,64 @@ include('../../../layout/admin/parte1.php');
                                 </div>
                             </div>
                         </div>
-                    
                     </form>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
     </div>
 </div>
+
+<?php include('../../../layout/admin/parte2.php');?>
+
+<script>
+    var currentImageIndex = 0; // Índice de la imagen actual
+
+function archivo(evt) {
+    var files = evt.target.files; // FileList object
+
+    for (var i = 0, f; f = files[i]; i++) {
+    var reader = new FileReader();
+        // Si el archivo es una imagen
+        if (f.type.match('image.*')) {
+            reader.onload = (function(theFile) {
+        return function(e) {
+            // Insertamos la imagen
+            var img = document.createElement('img');
+            img.src = e.target.result;
+            img.width = 200; // Tamaño de la imagen
+            img.style.display = "none"; // Ocultamos la imagen
+            document.getElementById("list").appendChild(img);
+        };
+    })(f);
+}
+    // Lectura del archivo
+    reader.readAsDataURL(f);
+    }
+    showImage(currentImageIndex); // Mostramos la primera imagen
+}
+
+document.getElementById('file').addEventListener('change', archivo, false);
+
+function showImage(index) {
+    var images = document.getElementById("list").getElementsByTagName("img");
+        for (var i = 0; i < images.length; i++) {
+            images[i].style.display = "none"; // Ocultamos todas las imágenes
+        }
+    images[index].style.display = "block"; // Mostramos la imagen actual
+}
+
+function nextImage() {
+    var images = document.getElementById("list").getElementsByTagName("img");
+        currentImageIndex = (currentImageIndex + 1) % images.length; // Avanzamos al siguiente índice circularmente
+    showImage(currentImageIndex);
+}
+
+function prevImage() {
+    var images = document.getElementById("list").getElementsByTagName("img");
+        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Retrocedemos al índice anterior circularmente
+    showImage(currentImageIndex);
+}
+</script>
 
 <script>
     document.getElementById("formulario").addEventListener("submit", function(event) {
@@ -339,7 +327,78 @@ include('../../../layout/admin/parte1.php');
             event.preventDefault();
         }
     });
-    
 </script>
 
-<?php include('../../../layout/admin/parte2.php');?>
+<script>
+document.getElementById('idcliente').addEventListener('change', function() {
+    var clienteId = this.value;
+    var ciudadSelect = document.getElementById('idciudad');
+    ciudadSelect.innerHTML = '<option value="">Seleccionar Ciudad</option>'; // Opción predeterminada
+    var proyectoSelect = document.getElementById('proyecto');
+    proyectoSelect.innerHTML = '<option value="">Seleccionar Ciudad</option>'; // Opción predeterminada
+
+    var idproductoInput = document.getElementById('idproducto');
+    idproductoInput.value = ''; //Limpia el valor
+    
+
+    if (clienteId) {
+        // Realizar la solicitud AJAX para obtener las ciudades
+        fetch(`obtener_ciudades.php?cliente_id=${clienteId}`)
+            .then(response => response.json())
+            .then(ciudades => {
+                ciudades.forEach(function(ciudad) {
+                    var option = document.createElement('option');
+                    option.value = ciudad.ciudad_id; // Asignar el ID de la ciudad como valor
+                    option.textContent = ciudad.nombre_ciudad; // Mostrar el nombre de la ciudad
+                    ciudadSelect.appendChild(option);
+                });
+            });
+    }
+});
+
+document.getElementById('idciudad').addEventListener('change', function() {
+    var clienteId = document.getElementById('idcliente').value;
+    var ciudadId = this.value;
+
+    // Limpiar el select de proyectos
+    var proyectoSelect = document.getElementById('proyecto');
+    proyectoSelect.innerHTML = '<option value="">Seleccione un proyecto</option>';
+
+    if (clienteId && ciudadId) {
+        // Cargar los proyectos asociados al cliente y la ciudad seleccionada
+        fetch(`obtener_lugar_instalacion.php?cliente_id=${clienteId}&ciudad_id=${ciudadId}`)
+            .then(response => response.json())
+            .then(proyectos => {
+                proyectos.forEach(function(proyecto) {
+                    var option = document.createElement('option');
+                    option.value = proyecto.id;
+                    option.textContent = proyecto.lugar_instalacion;
+                    proyectoSelect.appendChild(option);
+                });
+            });
+    }
+});
+
+document.getElementById('proyecto').addEventListener('change', function() {
+    var proyectoId = this.value;
+
+    if (proyectoId) {
+        // Llamada AJAX para obtener el id_producto basado en el proyecto seleccionado
+        fetch(`obtener_id_producto.php?proyecto_id=${proyectoId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Verifica que el producto exista antes de colocarlo en el campo
+                if (data.id_producto) {
+                    document.querySelector('input[name="idproducto"]').value = data.id_producto;
+                } else {
+                    document.querySelector('input[name="idproducto"]').value = ''; // Limpia el campo si no se encuentra el producto
+                    alert("No se encontró un producto correspondiente para este proyecto.");
+                }
+            })
+            .catch(error => console.error('Error al obtener el ID del producto:', error));
+    } else {
+        document.querySelector('input[name="idproducto"]').value = ''; // Limpia el campo si no se selecciona un proyecto
+    }
+});
+
+</script>

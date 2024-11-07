@@ -9,7 +9,6 @@ include_once('funcs/funcs.php');
 // Obtener los datos enviados desde el formulario
 $correo = $_POST['correo'] ?? '';
 $password = $_POST['password'] ?? '';
-$imagen_presionada = $_POST['imagen_presionada'] ?? ''; // Obtenemos la imagen presionada
 
 // Validar que los campos de correo y contraseña no estén vacíos
 if (empty($correo) || empty($password)) {
@@ -36,12 +35,9 @@ if ($usuario === false) {
         if ($usuario['primera_vez'] == 1) {
             header('Location: ' . $URL . 'login/change_password.php');
         } else {
-            // Redirigir según la imagen presionada
-            if ($imagen_presionada === 'smlnegro') {
-                header('Location: ' . $URL . 'admin/');
-            } elseif ($imagen_presionada === 'techled') {
-                header('Location: ' . $URL . 'admin_techled/index_techled.php');
-            }
+
+            header('Location: ' . $URL . 'admin/');
+
         }
     } else {
         header('Location: ' . $URL . 'login/error.php');

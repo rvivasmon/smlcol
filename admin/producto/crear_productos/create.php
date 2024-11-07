@@ -39,7 +39,7 @@ $usuario = $sesion_usuario['nombre'];
                                                 <select name="producto" id="producto" class="form-control">
                                                     <option value="">Seleccione un Producto</option>
                                                     <?php
-                                                    $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos ORDER BY tipo_producto ASC');
+                                                    $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos WHERE habilitar = "1" ORDER BY tipo_producto ASC');
                                                     $query_producto->execute();
                                                     $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($productos as $producto) {
@@ -90,16 +90,7 @@ $usuario = $sesion_usuario['nombre'];
                                             <div class="form-group">
                                                 <label for="modelo_modulo1">Modelo</label>
                                                 <select id="modelo_modulo1" name="modelo_modulo1" class="form-control">
-                                                    <option value="">Seleccione un modelo</option>
-                                                    <?php
-                                                    $query_modelo = $pdo->prepare('SELECT id, modelo_modulo FROM t_tipo_producto WHERE modelo_modulo IS NOT NULL AND modelo_modulo != "" ORDER BY modelo_modulo ASC');
-                                                    $query_modelo->execute();
-                                                    $modelos = $query_modelo->fetchAll(PDO::FETCH_ASSOC);
-                                                    foreach ($modelos as $modelo): ?>
-                                                        <option value="<?php echo $modelo['id']; ?>">
-                                                            <?php echo $modelo['modelo_modulo']; ?>
-                                                        </option>
-                                                    <?php endforeach; ?>
+
                                                 </select>
                                             </div>
                                         </div>
@@ -113,7 +104,7 @@ $usuario = $sesion_usuario['nombre'];
                                                     $query_pitch->execute();
                                                     $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach ($pitches as $pitch): ?>
-                                                        <option value="<?php echo $pitch['pitch']; ?>">
+                                                        <option value="<?php echo $pitch['id']; ?>">
                                                             <?php echo $pitch['pitch']; ?>
                                                         </option>
                                                     <?php endforeach; ?>
@@ -172,7 +163,7 @@ $usuario = $sesion_usuario['nombre'];
                                                 <input type="text" id="serie_modulo" name="serie_modulo" class="form-control" placeholder="Serie Módulo" >
                                             </div>
                                         </div>
-                                        <div class="col-md-4 campo Modulo">
+                                        <div class="col-md-4 campo Modulo" hidden>
                                             <div class="form-group">
                                                 <label for="referencia_modulo">Referencia Módulo</label>
                                                 <input type="text" id="referencia_modulo" name="referencia_modulo" class="form-control" placeholder="Referencia Módulo" >
@@ -204,7 +195,7 @@ $usuario = $sesion_usuario['nombre'];
                                             <div class="form-group">
                                                 <label for="funcion_control">Función</label>
                                                 <select id="funcion_control" name="funcion_control" class="form-control">
-                                                    <option value="">Seleccione una Marca</option>
+                                                    <option value="">Seleccione una Función</option>
                                                     <?php
                                                     $query_marca_fuente = $pdo->prepare("SELECT * FROM caracteristicas_control WHERE funcion_control IS NOT NULL AND funcion_control != '' ORDER BY funcion_control ASC");
                                                     $query_marca_fuente->execute();
@@ -383,7 +374,6 @@ $usuario = $sesion_usuario['nombre'];
                                                 <br>
                                                 <output id="list" style="position: relative; width: 300px; height: 300px; overflow: hidden;"></output>
                                                 <input type="file" name="archivo_adjunto" id="file" class="form-control-file" multiple >
-
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -400,14 +390,14 @@ $usuario = $sesion_usuario['nombre'];
                                                             <?php echo $almagrupo['almacenes']; ?>
                                                         </option>
                                                     <?php endforeach; ?>
-                                                </select>                                               
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <div class="form-group">        
+                                            <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <button type="button" class="btn btn-default" onclick="prevImage()">Anterior</button>
@@ -432,7 +422,11 @@ $usuario = $sesion_usuario['nombre'];
 
 <?php include('../../../layout/admin/parte2.php'); ?>
 
+
 <script>
+
+    // Código para ingresar productos con pistola
+
     let seriales = [];
     
     // Función que se activa cuando se escanea un código de barras
@@ -596,3 +590,61 @@ $usuario = $sesion_usuario['nombre'];
                                                 showImage(currentImageIndex);
                                             }
                                         </script>
+
+<script>
+$(document).ready(function() {
+    // Escuchar cambios en el campo 'uso'
+    $('#uso').change(function() {
+        var id_uso = $(this).val(); // Obtener el valor seleccionado (id_uso)
+
+        // Verificar que haya un valor seleccionado
+        if (id_uso !== "") {
+            // Realizar petición AJAX
+            $.ajax({
+                url: 'get_modelos.php', // Archivo PHP que hará la consulta
+                type: 'POST',
+                data: { id_uso: id_uso }, // Enviar el id_uso
+                success: function(response) {
+                    // Rellenar el select 'modelo_modulo1' con los datos recibidos
+                    $('#modelo_modulo1').html(response);
+                },
+                error: function() {
+                    alert('Hubo un error al cargar los modelos.');
+                }
+            });
+        } else {
+            // Limpiar el campo 'modelo_modulo1' si no se selecciona un 'uso'
+            $('#modelo_modulo1').html('<option value="">Seleccione un Modelo</option>');
+        }
+    });
+});
+</script>
+
+<script>
+    $(document).ready(function() {
+        // Detectar cuando cambie el valor del campo 'producto'
+        $('#producto').change(function() {
+            limpiarCampos(); // Llama a la función que limpia los campos
+        });
+
+        // Función para limpiar todos los campos del formulario, excluyendo el campo 'producto'
+        function limpiarCampos() {
+            // Limpiar todos los inputs de texto, select y textarea, excepto el campo 'producto'
+            $('input[type="text"]').not('#producto').val('');  // Limpiar campos de texto excepto 'producto'
+            $('input[type="number"]').val(''); // Limpiar campos numéricos
+            $('input[type="file"]').val('');   // Limpiar campo de archivo
+            $('select').not('#producto').val(''); // Limpiar selects excepto 'producto'
+            $('textarea').val('');             // Limpiar textareas
+
+            // También puedes vaciar los campos ocultos, si es necesario
+            $('input[type="hidden"]').val('');
+
+            // Si tienes algún campo específico que necesitas manejar aparte, puedes hacerlo aquí.
+            $('#list').empty(); // Vaciar la lista de imágenes si es necesario
+            $('#lista_seriales').empty(); // Vaciar la tabla de seriales
+            seriales = []; // Reiniciar la lista de seriales (si usas esa variable)
+        }
+    });
+</script>
+
+

@@ -65,7 +65,7 @@ include('../../../../layout/admin/parte1.php');
                                                             ap.*,
                                                             productomovido.tipo_producto AS nombre_tipo,
                                                             CASE
-                                                                when ap.tipo_producto = 1 then caracmodulos.serie_modulo
+                                                                when ap.tipo_producto = 1 then caracmodulos.serie
                                                                 when ap.tipo_producto = 2 then refecontrol.referencia
                                                                 when ap.tipo_producto = 3 then refefuentes.modelo_fuente
                                                                 else null
@@ -75,7 +75,7 @@ include('../../../../layout/admin/parte1.php');
                                                             INNER JOIN
                                                                 t_productos AS productomovido ON ap.tipo_producto = productomovido.id_producto
                                                             LEFT JOIN
-                                                                caracteristicas_modulos AS caracmodulos ON ap.producto = caracmodulos.id_car_mod AND ap.tipo_producto = 1
+                                                                producto_modulo_creado AS caracmodulos ON ap.producto = caracmodulos.id AND ap.tipo_producto = 1
                                                             LEFT JOIN
                                                                 referencias_control AS refecontrol ON ap.producto = refecontrol.id_referencia AND ap.tipo_producto = 2
                                                             LEFT JOIN
@@ -131,8 +131,8 @@ include('../../../../layout/admin/parte1.php');
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entrada/create_movimiento_entrada.php'">Movimiento de Entrada</button>
-                                                        <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_salida/create_movimiento_salida.php'">Movimiento de Salida</button>
+                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entradaV1/create_movimiento_entrada_final.php'">Movimiento de Entrada</button>
+                                                        <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_salidaV1/create_movimiento_salida_final.php'">Movimiento de Salida</button>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

@@ -37,7 +37,7 @@ include('funcs/funcs.php');
         <div class="card card-outline card-primary">
           
           <div class="card-header text-center">
-            <a href="../../index2.html" class="h1"><b>SIGCP</b> - 2024 <small style="font-size: 35px;"><b>TECHLED</b> Group</small> <small style="font-size: 13px;">Versión 1.2</small> </a>
+            <a class="h1"><b>SIGCP</b> - 2024 <small style="font-size: 35px;"><b>TECHLED</b> Group</small> <small style="font-size: 13px;">Versión 1.2</small> </a>
           </div>
           <div class="card-body">
 
@@ -45,10 +45,10 @@ include('funcs/funcs.php');
               <input type="hidden" name="imagen_presionada" id="imagen_presionada" value="">
                   <center>
                     <div style="display: flex; align-items: center;">
-                      <a href="#" id="img1-link" class="img-link disabled-link">
+                      <a id="" class="">
                         <img src="<?php echo $URL?>/public/images/smlnegro.png" style= "width: 150px; margin-right: 20px;" alt="">
                       </a>
-                      <a href="#" id="img2-link" class="img-link disabled-link">
+                      <a id="img" class="img">
                         <img src="<?php echo $URL?>/public/images/techled.png" style="width: 150px" alt="">
                       </a>
                     </div>
@@ -85,52 +85,14 @@ include('funcs/funcs.php');
                     </div>
                 </div>
 
-              <label for="captcha">Captcha</label>
-                <div class="input-group mb-3">
-                  <input type="password" class="form-control" id="captcha" name="captcha" placeholder="Captcha">
-                    <div class="input-group-append">
-                      <div class="input-group-text">                
-                          <img src="funcs/genera_codigo.php" alt="Código de Verificación" id="img-codigo">
-                          &nbsp;
-                            <button type="button" class="btn btn-secondary btn-sm" id="regenera">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
-                                <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
-                                <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
-                              </svg>
-                            </button>
-                          &nbsp;
-                          Generar nuevo                
-                      </div>
-                    </div>
-                </div>
-
                 <div>
                   <div class="form-group">
                     <a href="" class="btn btn-default btn-block">Cancelar</a>
-                    <!-- <button type="submit" class= "btn btn-primary btn-block">Ingresar</button> -->
+                    <button type="submit" class= "btn btn-primary btn-block">Ingresar</button>
                   </div>        
                 </div>
 
             </form>
-
-            <script>
-              const img1Link = document.getElementById('img1-link');
-              const img2Link = document.getElementById('img2-link');
-              const imagenPresionadaInput = document.getElementById('imagen_presionada');
-              const loginForm = document.getElementById('loginForm');
-
-              img1Link.addEventListener('click', function(e) {
-                e.preventDefault();
-                imagenPresionadaInput.value = 'smlnegro';
-                loginForm.submit();
-              });
-
-              img2Link.addEventListener('click', function(e) {
-                e.preventDefault();
-                imagenPresionadaInput.value = 'techled';
-                loginForm.submit();
-              });
-            </script>
 
           </div>
           <!-- /.card-body -->

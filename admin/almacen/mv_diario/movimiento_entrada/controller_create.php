@@ -112,6 +112,7 @@ $almacenes = [
     11 => 'alma_aliados'
 ];
 
+// Validar almacen de salida
 if (array_key_exists($almacen_salida_md, $almacenes)) {
     validarProductoEnAlmacen($pdo, $almacenes[$almacen_salida_md], $producto, $referencia_21, $salida_md, $almacen_salida_md);
 }

@@ -54,7 +54,7 @@ move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'],$location);
 try {
     if ($producto == 1 || $producto == 'módulo') {
         // Verifica que todas las variables estén definidas
-        if (isset($uso, $modelo_modulo1, $pitch, $medida_modulo, $medida_x, $medida_y, $pixel_x, $pixel_y, $serie_modulo, $referencia_modulo)) {
+        if (isset($uso, $modelo_modulo1, $pitch, $medida_modulo, $medida_x, $medida_y, $pixel_x, $pixel_y, $serie_modulo, /*$referencia_modulo*/)) {
             $sql_modulo1 = "INSERT INTO producto_modulo_creado (uso, modelo, pitch, tamano, tamano_x, tamano_y, pixel_x, pixel_y, serie, referencia, ruta, almacen) 
                             VALUES (:uso, :modelo_modulo1, :pitch, :medida_modulo, :medida_x, :medida_y, :pixel_x, :pixel_y, :serie_modulo, :referencia_modulo, :evidencias, :almagrupo)";
             $sentencia_modulo1 = $pdo->prepare($sql_modulo1);
@@ -74,7 +74,7 @@ try {
         }
 
     } elseif ($producto == 2 || $producto == 'controladora') {
-        if (isset($marca_control3, $funcion_control3, $sim3, $puertos3, $referencia_control3, $descripcion3, $pixel_x_puerto3, $pixel_maximo3, $pixel_x_maximo3, $pixel_y_maximo3)) {
+        if (isset($marca_control3, $funcion_control3, $referencia_control3)) {
             $sql_referencia = "INSERT INTO referencias_control (marca, funcion, referencia, descripcion, sim, puertos, px_x_puerto, pixel_max, pixel_x_max, pixel_y_max, ruta, almacen) 
                             VALUES (:marca_control3, :funcion_control3, :referencia_control3, :descripcion3, :sim3, :puertos3, :pixel_x_puerto3, :pixel_maximo3, :pixel_x_maximo3, :pixel_y_maximo3, :evidencias, :almagrupo)";
             $sentencia_referencia = $pdo->prepare($sql_referencia);

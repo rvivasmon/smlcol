@@ -8,6 +8,13 @@ include('../../../../layout/admin/datos_sesion_user.php');
 
 include('../../../../layout/admin/parte1.php');
 
+    // Consulta para obtener módulos sin referencia
+    $query_referencia = $pdo->prepare('SELECT id, serie FROM producto_modulo_creado WHERE referencia IS NULL');
+    $query_referencia->execute();
+    
+    // Obtener los módulos sin referencia
+    $modulosSinReferencia = $query_referencia->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <div class="content-wrapper">
@@ -76,12 +83,12 @@ include('../../../../layout/admin/parte1.php');
                                     <select id="pitch" name="pitch" class="form-control">
                                         <option value="">Seleccione un pitch</option>
                                         <?php 
-                                        $query_pitch = $pdo->prepare('SELECT id, pitch FROM tabla_pitch ORDER BY pitch ASC');
+                                        $query_pitch = $pdo->prepare('SELECT DISTINCT pmc.pitch, tp.pitch AS pitch_nombre FROM producto_modulo_creado AS pmc INNER JOIN tabla_pitch AS tp ON pmc.pitch = tp.id ORDER BY pmc.pitch ASC');
                                         $query_pitch->execute();
                                         $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
                                         foreach ($pitches as $pitch): ?>
-                                        <option value="<?php echo $pitch['id']; ?>">
-                                            <?php echo $pitch['pitch']; ?>
+                                        <option value="<?php echo $pitch['pitch']; ?>">
+                                            <?php echo $pitch['pitch_nombre']; ?>
                                         </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -290,6 +297,107 @@ include('../../../../layout/admin/parte1.php');
     </div>
 </div>
 
+
+<?php if (!empty($modulosSinReferencia)): ?>
+    <div id="modalReferencia" class="modal" tabindex="-1" role="dialog" style="display:block;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Actualizar Referencias Faltantes</h5>
+                    <button type="button" class="close" aria-label="Close" onclick="cerrarModal()" disabled>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <?php foreach ($modulosSinReferencia as $modulo): ?>
+                        <form action="actualizar_referencia.php" method="POST" enctype="multipart/form-data" onsubmit="return validarFormulario(this);">
+                            <input type="hidden" name="id" value="<?php echo $modulo['id']; ?>">
+                            <p>El módulo con serie <strong><?php echo $modulo['serie']; ?></strong> no tiene referencia.</p>
+                            <div class="form-group">
+                                <label for="referencia">Ingrese la referencia:</label>
+                                <input type="text" name="referencia" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="imagen">Subir imagen:</label>
+                                <input type="file" name="archivo_adjunto" id="archivo_adjunto" class="form-control-file" accept="image/*" required>
+                                </div>
+                            <button type="submit" class="btn btn-primary">Actualizar Referencia</button>
+                        </form>
+                        <hr>
+                    <?php endforeach; ?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModal()" disabled>Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
+
+    <style>
+    .modal {
+        display: none; /* Oculto por defecto */
+        position: fixed;
+        z-index: 1050;
+        padding-top: 50px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.5); /* Fondo oscuro */
+    }
+    .modal-content {
+        background-color: #fff;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+</style>
+
+<script>
+    function cerrarModal() {
+        document.getElementById('modalReferencia').style.display = 'none';
+    }
+</script>
+
+<script>
+    function validarFormulario(form) {
+        // Obtener los valores de referencia e imagen
+        var referencia = form.referencia.value.trim();
+        var imagen = form.imagen.value;
+
+        // Validar que ambos campos estén diligenciados
+        if (referencia === "" || imagen === "") {
+            alert("Por favor, complete todos los campos antes de enviar.");
+            return false; // Evita el envío del formulario
+        }
+        return true; // Permite el envío del formulario
+    }
+
+    function cerrarModal() {
+        // Ocultar el modal solo si no existen formularios con campos incompletos
+        var forms = document.querySelectorAll('#modalReferencia form');
+        var completo = true;
+
+        forms.forEach(function(form) {
+            if (!validarFormulario(form)) {
+                completo = false;
+            }
+        });
+
+        if (completo) {
+            document.getElementById('modalReferencia').style.display = 'none';
+        } else {
+            alert("Por favor, complete todas las referencias e imágenes antes de cerrar el modal.");
+        }
+    }
+</script>
+
+    
+
     <?php include('../../../../layout/admin/parte2.php');?>
 
     <script>
@@ -401,18 +509,33 @@ include('../../../../layout/admin/parte1.php');
     </script>
 
     <script>
-        // Script para MODULOS
-    document.getElementById('producto').addEventListener('change', function() {
-        document.getElementById('serie_modulo').value = '';  // Limpia el campo 'serie_modulo'
-        document.getElementById('referencia_control35').value = '';
-        document.getElementById('modelo_fuente35').value = '';
-        document.getElementById('marca_control').value = '';
-        document.getElementById('marca_fuente').value = '';
-        document.getElementById('pitch').value = '';
+    $(document).ready(function() {
+        // Detectar cuando cambie el valor del campo 'producto'
+        $('#producto').change(function() {
+            limpiarCampos(); // Llama a la función que limpia los campos
+        });
+
+        // Función para limpiar todos los campos del formulario, excluyendo el campo 'producto'
+        function limpiarCampos() {
+            // Limpiar todos los inputs de texto, select y textarea, excepto el campo 'producto'
+            $('input[type="text"]').not('#producto, #almacen_entrada_md').val('');  // Limpiar campos de texto excepto 'producto'
+            $('input[type="number"]').val(''); // Limpiar campos numéricos
+            $('input[type="file"]').val('');   // Limpiar campo de archivo
+            $('select').not('#producto, #almacen_entrada_md').val(''); // Limpiar selects excepto 'producto'
+            $('textarea').val('');             // Limpiar textareas
+
+            // También puedes vaciar los campos ocultos, si es necesario
+            $('input[type="hidden"]').val('');
+
+            // Si tienes algún campo específico que necesitas manejar aparte, puedes hacerlo aquí.
+            $('#list').empty(); // Vaciar la lista de imágenes si es necesario
+            $('#lista_seriales').empty(); // Vaciar la tabla de seriales
+            seriales = []; // Reiniciar la lista de seriales (si usas esa variable)
+        }
     });
 
     document.getElementById('pitch').addEventListener('change', function() {
-    var pitchValue = this.value;
+    var pitchId = this.value;
 
     // Hacer una solicitud AJAX para obtener los registros filtrados
     var xhr = new XMLHttpRequest();
@@ -433,7 +556,7 @@ include('../../../../layout/admin/parte1.php');
             });
         }
     };
-    xhr.send('pitch=' + pitchValue);
+    xhr.send('pitch_id=' + pitchId);
 });
 
 
@@ -464,4 +587,4 @@ document.getElementById('marca_fuente').addEventListener('change', function() {
     };
     xhr.send('marca_fuente=' + marcaFuenteValue);
 });
-    </script>
+</script>

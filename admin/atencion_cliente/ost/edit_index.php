@@ -18,7 +18,7 @@ $ultimo_registro_ost = $query_ultimo_registro_ost->fetch(PDO::FETCH_ASSOC);
 // Verificar si hay un último registro
 if ($ultimo_registro_ost) {
     // Obtener el año y mes del último registro en formato YYYYMM
-    $ultimo_anio_mes = date('Ym', strtotime($ultimo_registro_ost['fecha_ost']));
+    $ultimo_anio_mes = $ultimo_registro_ost['anio_mes_ost'];
 
     // Si el mes y año del último registro son iguales al mes y año actuales, continuar con el contador
     if ($ultimo_anio_mes == $anio_mes_ost) {
@@ -36,6 +36,14 @@ $id_ost = 'OST-' . $anio_mes_ost . '-' . sprintf('%03d', $contador_ost);
 
 // Fin del código para generar el ID OST
 $id_get = $_GET['id'];
+
+// Contar cuántas veces se repite el id_stc en la tabla 'ost'
+$query_contador = $pdo->prepare("SELECT COUNT(*) as total FROM ost WHERE id_stc = :id_get");
+$query_contador->execute([':id_get' => $id_get]);
+$contador_result = $query_contador->fetch(PDO::FETCH_ASSOC);
+
+// Incrementar el valor en 1
+$casos_ost = $contador_result['total'] + 1;
 
 $query = $pdo->prepare("SELECT stc.*, t_tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_clientes, t_ciudad.ciudad AS nombre_ciudad, t_estado.estadostc AS nombre_estado FROM stc JOIN t_tipo_servicio ON stc.tipo_servicio = t_tipo_servicio.id JOIN t_estado ON stc.estado = t_estado.id JOIN clientes ON stc.cliente = clientes.id JOIN t_ciudad ON stc.ciudad = t_ciudad.id WHERE stc.id = :id_get");
 
@@ -68,7 +76,7 @@ include('../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Tratamiento OST</h1>
+                    <h1 class="m-0">Asignación de OST</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
@@ -88,7 +96,6 @@ include('../../../layout/admin/parte1.php');
                                     <input type="hidden" name="id_1" value="<?php echo $id; ?>">
                                 </div>
                             </div>
-                            
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="fecha_ingreso">Fecha Ingreso</label>
@@ -100,6 +107,8 @@ include('../../../layout/admin/parte1.php');
                                     <label for="">Medio Ingreso</label>
                                     <input type="text" name="medio_ingreso" value="<?php echo $medio_ingreso;?>" class="form-control" readonly>
                                     <input type="hidden" name="contador_ost" value="<?php echo $contador_ost; ?>">
+                                    <input type="hidden" name="casos_ost" value="<?php echo $casos_ost; ?>">
+
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -112,22 +121,20 @@ include('../../../layout/admin/parte1.php');
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="">Tipo Servicio</label>
-                                    <select name="tipo_servicio" id="tipo_servicio" class="form-control" value="<?php echo $tipo_servicio; ?>" required>
-
+                                    <select name="tipo_servicio" id="tipo_servicio" class="form-control" required>
+                                        <option value="" disabled selected>Seleccione un Tipo de Servicio</option>
                                         <?php
-                                            $query_servicio = $pdo->prepare('SELECT * FROM t_tipo_servicio');
+                                            $query_servicio = $pdo->prepare('SELECT * FROM t_tipo_servicio ORDER BY servicio_ost ASC');
                                             $query_servicio->execute();
                                             $servicios = $query_servicio->fetchAll(PDO::FETCH_ASSOC);
                                             foreach($servicios as $servicio) {
                                                 $id_servicio = $servicio['id'];
                                                 $nombre_servicio = $servicio['servicio_ost'];
-                                                $selected = ($id_servicio == 4) ? 'selected' : '';
                                         ?>                                           
-                                            <option value="<?php echo $id_servicio; ?>" <?php echo $selected; ?>><?php echo $nombre_servicio; ?></option>
+                                            <option value="<?php echo $id_servicio; ?>"><?php echo $nombre_servicio; ?></option>
                                         <?php
                                             }
-                                        ?>
-                                    
+                                        ?>                                    
                                     </select>
                                 </div>
                             </div>
@@ -180,14 +187,15 @@ include('../../../layout/admin/parte1.php');
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Estado</label>
-                                    <select name="estado" value="<?php echo $nombre_estado; ?>" id="estado" class="form-control" required>
+                                    <select name="estado" value="" id="estado" class="form-control" required>
+                                    <option value="" disabled selected>Seleccione un Estado</option>
                                     <?php
-                                        $query_estado = $pdo->prepare('SELECT * FROM t_estado');
+                                        $query_estado = $pdo->prepare('SELECT * FROM t_estado WHERE id = "2"');
                                         $query_estado->execute();
                                         $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
                                         foreach($estados as $estado) {
                                             $id_estado = $estado['id'];
-                                            $estado = $estado['estadostc'];
+                                            $estado = $estado['estadoost'];
                                             ?>
                                             <option value="<?php echo $id_estado; ?>"><?php echo $estado; ?></option>
                                         <?php

@@ -14,7 +14,7 @@ include('../../../layout/admin/datos_sesion_user.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                    <h1 class="m-0">OST NUEVAS PARA TRATAR - SMARTLED</h1>
+                    <h1 class="m-0">TICKETS A TRATAR PARA ASIGNAR OST - SMARTLED</h1>
                         <div class="card card-blue">
                             <div class="card-header">
                                 CASOS ACTIVOS

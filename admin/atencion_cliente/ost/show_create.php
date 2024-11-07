@@ -62,14 +62,19 @@ include('controller_show_create.php');
                                     <input type="text" name="idproducto" class="form-control" value="<?php echo $id_producto; ?>" disabled>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group">
                                     <label for="">N° OST</label>
                                     <input type="text" name="numost" class="form-control" value="<?php echo $num_ost; ?>" disabled>
                                 </div>
                             </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label for="">CASO</label>
+                                    <input type="text" name="caso" id="caso" class="form-control" value="<?php echo $contador_casos; ?>" disabled>
+                                </div>
+                            </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">

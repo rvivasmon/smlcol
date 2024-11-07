@@ -15,7 +15,7 @@ include('../../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Crear Nueva Solicitud</h1>
+                    <h1 class="m-0">Crear Nueva Solicitud a China</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
@@ -66,7 +66,9 @@ include('../../../../layout/admin/parte1.php');
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Category 1</label>
+                                                <label for="">Tipo Módulo</label>
+                                                <label for="">Marca Fuentes</label>
+                                                <label for="">Marca Control</label>
                                                 <select class= "form-control" name="categoria" id="categoria">
                                                 <option value="">Seleccione la categoría</option>
                                                     <?php 
@@ -95,6 +97,8 @@ include('../../../../layout/admin/parte1.php');
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
+                                                <label for="">Pitch</label>
+                                                <label for="">Tipo Modulo</label>
                                                 <label for="">Category 2</label>
                                                 <select class="form-control" name="categoria" id="categoria">
                                                 <option value="">Seleccione la categoría</option>

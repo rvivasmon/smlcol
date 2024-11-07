@@ -9,6 +9,12 @@ include('../../../layout/admin/datos_sesion_user.php');
 include('../../../layout/admin/parte1.php');
 include('controller_show.php');
 
+// Consulta para obtener los casos relacionados con el id_stc
+$casosQuery = $pdo->prepare('SELECT id, id_ost FROM ost WHERE id_stc = :id');
+$casosQuery->bindParam(':id', $id, PDO::PARAM_INT);
+$casosQuery->execute();
+$casos = $casosQuery->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <div class="content-wrapper">
@@ -29,13 +35,7 @@ include('controller_show.php');
                         <div class="col-md-9">
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col-md-0">
-                                        <div class="form-group">
-                                            <label for=""></label>
-                                            <input type="text" name="idstc" class="form-control" value="<?php echo $id_stc; ?>" hidden>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1.5">
+                                    <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="">Fecha de Ingreso</label>
                                             <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value= "<?php echo $fecha_ingreso; ?>" disabled>
@@ -43,16 +43,22 @@ include('controller_show.php');
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <label for="">Medio de Ingreso</label>
-                                            <input class="form-control"  id="medio_ingreso" name="medio_ingreso" value="<?php echo $medio_ingreso; ?>" disabled>
+                                            <label for="">ID STC</label>
+                                            <input class="form-control"  id="id_stc" name="id_stc" value="<?php echo $id_stc; ?>" disabled>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <label for="">Ticket Externo</label>
-                                            <input type="text" name="ticketexterno" class="form-control" value="<?php echo $ticket_externo; ?>" disabled>
+                                            <label for="">CASOS</label>
+                                            <input type="text" name="casos" id="casos" class="form-control" value="<?php echo $casos1; ?>" disabled>
                                         </div>
                                     </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="">Ingreso</label>
+                                            <input class="form-control"  id="medio_ingreso" name="medio_ingreso" value="<?php echo $medio_ingreso; ?>" disabled>
+                                        </div>
+                                    </div>                                    
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="">Tipo de Servicio</label>
@@ -66,8 +72,14 @@ include('controller_show.php');
                                         </div>
                                     </div>
                                 </div>
-                            
+
                                 <div class="row">
+                                    <div class="col-md-0">
+                                        <div class="form-group">
+                                            <label for=""></label>
+                                            <input type="text" name="idstc" class="form-control" value="<?php echo $id_stc; ?>" hidden>
+                                        </div>
+                                    </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="">Cliente</label>
@@ -105,7 +117,7 @@ include('controller_show.php');
                                         </div>
                                     </div>                            
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -117,6 +129,23 @@ include('controller_show.php');
                                         <div class="form-group">
                                             <label for="">Observación</label>
                                             <textarea name="observacion" id="" cols="30" rows="4" class="form-control" disabled><?php echo $observacion; ?></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                        <label for="">Casos Asociados</label>
+                                            <ul class="list-group">
+                                                <?php foreach ($casos as $caso): ?>
+                                                    <li class="list-group-item">
+                                                        <a href="detalles_caso.php?id=<?php echo $caso['id']; ?>" target="_blank" onclick="window.open(this.href, 'Detalles del Caso', 'width=600,height=400'); return false;">
+                                                            ID: <?php echo $caso['id_ost']; ?>
+                                                        </a>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>

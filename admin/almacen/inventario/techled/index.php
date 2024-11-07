@@ -65,17 +65,17 @@ include('../../../../layout/admin/parte1.php');
                                                             altec.*,
                                                             productomovido.tipo_producto AS nombre_tipo,
                                                             CASE
-                                                                when altec.tipo_producto = 1 then caracmodulos.serie_modulo
+                                                                when altec.tipo_producto = 1 then caracmodulos.serie
                                                                 when altec.tipo_producto = 2 then refecontrol.referencia
                                                                 when altec.tipo_producto = 3 then refefuentes.modelo_fuente
                                                                 else null
                                                             end as nombre_producto
                                                             FROM
-                                                                alma_techled AS altec
+                                                                alma_secundario AS altec
                                                             INNER JOIN
                                                                 t_productos AS productomovido ON altec.tipo_producto = productomovido.id_producto
                                                             LEFT JOIN
-                                                                caracteristicas_modulos AS caracmodulos ON altec.producto = caracmodulos.id_car_mod AND altec.tipo_producto = 1
+                                                                producto_modulo_creado AS caracmodulos ON altec.producto = caracmodulos.id AND altec.tipo_producto = 1
                                                             LEFT JOIN
                                                                 referencias_control AS refecontrol ON altec.producto = refecontrol.id_referencia AND altec.tipo_producto = 2
                                                             LEFT JOIN
@@ -132,8 +132,8 @@ include('../../../../layout/admin/parte1.php');
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entrada/create_movimiento_entrada.php'">Movimiento de Entrada</button>
-                                                        <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_salida/create_movimiento_salida.php'">Movimiento de Salida</button>
+                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entradaV1/create_movimiento_entrada_final.php'">Movimiento de Entrada</button>
+                                                        <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_salidaV1/create_movimiento_salida_final.php'">Movimiento de Salida</button>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

@@ -50,12 +50,12 @@ include('../../../../layout/admin/parte1.php');
                                         ap.*,
                                         t_productos.tipo_producto as nombre_producto,
                                         cm.pitch as nombre_pitch,
-                                        cms.modelo_modulo as modul_model
+                                        cms.modelo as modul_model
                                     FROM
                                         alma_principal AS ap
                                     LEFT JOIN t_productos ON ap.tipo_producto = t_productos.id_producto
-                                    LEFT JOIN caracteristicas_modulos AS cm ON ap.pitch = cm.id_car_mod
-                                    LEFT JOIN caracteristicas_modulos AS cms ON ap.modelo_modulo = cms.id_car_mod
+                                    LEFT JOIN producto_modulo_creado AS cm ON ap.pitch = cm.id
+                                    LEFT JOIN producto_modulo_creado AS cms ON ap.modelo = cms.id
                                     WHERE
                                         ap.tipo_producto = 1
                                     ');

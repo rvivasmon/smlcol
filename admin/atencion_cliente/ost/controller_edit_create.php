@@ -9,10 +9,11 @@ include('../../../layout/admin/datos_sesion_user.php');
 // Obtiene los datos del formulario
 $id_ost = $_POST['id_ost'];
 $tipo_servicio = $_POST['tipo_servicio'];
-$estado = $_POST['estado'];
+$estado = $_POST['estado35'];
 $observacion = $_POST['observacion'];
 $id_usuario = $_POST['id_usuario'];    
 $tecnico_tratante = $_POST['tecnico_tratante'];
+$id_stc = $_POST['id_stc'];
 
 // Manejo de archivos
 $archivos = $_FILES['archivo_adjunto'];
@@ -47,6 +48,7 @@ $parametros = [
     ':observacion' => $observacion,
     ':tecnico_tratante' => $tecnico_tratante,
     ':id' => $id_usuario
+    
 ];
 
 $sql = "UPDATE ost SET tipo_servicio = :tipo_servicio, estado = :estado, observacion = :observacion, tecnico_tratante = :tecnico_tratante";
@@ -87,16 +89,17 @@ if ($sentencia->execute($parametros)) {
             $stmt_update_ticket->bindParam(':estado_ticket', $nuevo_estado_ticket, PDO::PARAM_INT);
             $stmt_update_ticket->bindParam(':id_stc', $id_stc, PDO::PARAM_INT);
             $stmt_update_ticket->execute();
-    
+
         // Si el usuario selecciona "No", incrementamos el campo contador_casos en la tabla "stc"
         } elseif (isset($_POST['cerrar_stc']) && $_POST['cerrar_stc'] == 'no') {
+    
             $sql_update_casos = "UPDATE stc SET contador_casos = contador_casos + 1 WHERE id = :id_stc";
             $stmt_update_casos = $pdo->prepare($sql_update_casos);
             $stmt_update_casos->bindParam(':id_stc', $id_stc, PDO::PARAM_INT);
             $stmt_update_casos->execute();
-    
+
             // Redireccionamos a la edición de STC
-            header('Location: ../stc/edit.php?id_stc=' . $id_stc);
+            header('Location: edit_index.php?id=' . $id_stc);
             exit();
         }
     }

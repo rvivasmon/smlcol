@@ -17,11 +17,11 @@ imagefill($imagen, 0, 0, $colorFondo);
 $colorText = imagecolorallocate($imagen, 50, 50, 50);
 $colorSecundario = imagecolorallocate($imagen,  0, 0, 128);
 
-for ($i = 0; $i < 6; $i++) {
+for ($i = 0; $i < 1; $i++) {
     imageline($imagen, 0, rand(0, $alto), $ancho, rand(0, $alto), $colorSecundario);
 }
 
-for ($i = 0; $i < 500; $i++) {
+for ($i = 0; $i < 100; $i++) {
     imagesetpixel($imagen, rand(0, $ancho), rand(0, $alto), $colorSecundario);
 }
 

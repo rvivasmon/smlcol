@@ -22,6 +22,7 @@ foreach ($datos_stcs as $dato_stc){
     $estado = $dato_stc['nombre_estado'];
     $persona_contacto = $dato_stc['persona_contacto'];
     $medio_contacto = $dato_stc['email_contacto'];
+    $casos1 = $dato_stc['contador_casos'];
     $evidencia = $dato_stc['evidencias'];
 }
 

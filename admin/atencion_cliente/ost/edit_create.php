@@ -34,6 +34,7 @@ foreach ($osts as $ost){
     $tipo_servicio_actual = $ost['tipo_servicio'];
     $estado_actual = $ost['estado'];
     $tecnico_tratante_actual = $ost['tecnico_tratante'];
+    $contador_casos = $ost['contador_casos'];
     $evidencia = $ost['evidencia'];
 }
 
@@ -60,19 +61,26 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                     Modifique la información correspondiente
                 </div>
                 <div class="card-body">
-                    <form action="controller_edit_create.php" method="post" enctype="multipart/form-data">
+                    <form id="guardarForm" action="controller_edit_create.php" method="post" enctype="multipart/form-data">
                         
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">ID OST</label>
                                                 <input type="text" name="id_ost" value="<?php echo $id_ost;?>" class="form-control" readonly>
+                                                <input type="text" name="contador_casos" value="<?php echo $contador_casos;?>" hidden>
+                                                <input type="text" name="id_stc" value="<?php echo $id_stc;?>" hidden>
                                             </div>
                                         </div>
-                                        
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label for="">CASO</label>
+                                                <input type="text" name="contador_casos" value="<?php echo $contador_casos;?>" class="form-control" readonly>
+                                            </div>
+                                        </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="fecha_ingreso"> Fecha Ingreso</label>
@@ -150,8 +158,8 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">Técnico Tratante</label>
-                                                
                                                     <select name="tecnico_tratante" id="tecnico_tratante" class="form-control" required>
+                                                    <option value="" disabled selected>Seleccione un Tipo de Servicio</option>
                                                         <?php foreach ($tecnicos as $tecnico) {
                                                             $selected = ($tecnico['id'] == $tecnico_tratante_actual) ? 'selected' : '';
                                                             echo "<option value='{$tecnico['id']}' $selected>{$tecnico['nombre']}</option>";
@@ -162,7 +170,7 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="">Estado</label>
-                                                <select name="estado" id="estado" class="form-control" required>
+                                                <select name="estado35" id="estado35" class="form-control" required>
                                                 <?php
                                                     $query_estado = $pdo->prepare('SELECT * FROM t_estado');
                                                     $query_estado->execute();
@@ -187,7 +195,8 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                                             <div class="form-group">
                                                 <label for="">Observación</label>
                                                 <textarea name="observacion" id="" cols="30" rows="4" class="form-control" required><?php echo $observacion;?></textarea>
-                                                <input type="text" name="id_usuario" value="<?php echo $id_get;?>" hidden>
+                                                <input type="text" name="id_usuario" id="id_usuario" value="<?php echo $id_get;?>" hidden>
+                                                <input type="text" name="id_stc" value="<?php echo $id_stc;?>" hidden>
                                             </div>
                                         </div>
                                     </div>
@@ -212,65 +221,6 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                                     <output id="list" style="position: relative; width: 50px; height: 50px; overflow: hidden;"></output>
                                     <input type="file" name="archivo_adjunto[]" id="file" class="form-control-file" multiple>
 
-                                    <script>
-                                        function archivo(evt) {
-                                            var files = evt.target.files; // FileList object
-                                            var container = document.getElementById("list");
-                                            container.innerHTML = "";
-                                            for (var i = 0, f; f = files[i]; i++) {
-                                                var reader = new FileReader();
-                                                // Si el archivo es una imagen
-                                                if (f.type.match('image.*')) {
-                                                    reader.onload = (function(theFile) {
-                                                        return function(e) {
-                                                            // Insertamos la imagen
-                                                            var img = document.createElement('img');
-                                                            img.src = e.target.result;
-                                                            img.width = 200; // Tamaño de la imagen
-                                                            img.classList.add('preview-image');
-                                                            img.style.display = (container.children.length === 0) ? 'block' : 'none';
-                                                            container.appendChild(img);
-                                                        };
-                                                    })(f);
-                                                    // Lectura del archivo
-                                                    reader.readAsDataURL(f);
-                                                }
-                                            }
-                                        }
-                                        document.getElementById('file').addEventListener('change', archivo, false);
-
-                                        function prevImage() {
-                                            var images = document.getElementsByClassName('preview-image');
-                                            var currentIndex = getCurrentImageIndex(images);
-                                            if (currentIndex > 0) {
-                                                showImage(images, currentIndex - 1);
-                                            }
-                                        }
-
-                                        function nextImage() {
-                                            var images = document.getElementsByClassName('preview-image');
-                                            var currentIndex = getCurrentImageIndex(images);
-                                            if (currentIndex < images.length - 1) {
-                                                showImage(images, currentIndex + 1);
-                                            }
-                                        }
-
-                                        function getCurrentImageIndex(images) {
-                                            for (var i = 0; i < images.length; i++) {
-                                                if (images[i].style.display === 'block') {
-                                                    return i;
-                                                }
-                                            }
-                                            return -1;
-                                        }
-
-                                        function showImage(images, index) {
-                                            for (var i = 0; i < images.length; i++) {
-                                                images[i].style.display = 'none';
-                                            }
-                                            images[index].style.display = 'block';
-                                        }
-                                    </script>
                                 </div>
                             </div>
                         </div>
@@ -304,12 +254,16 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
 
-                        <!-- Modal de confirmación -->
-                        <div id="confirmModal" style="display:none;">
-                            <p>¿Desea cerrar la STC?</p>
-                            <button id="confirmYes">Sí</button>
-                            <button id="confirmNo">No</button>
-                        </div>
+                            <!-- Modal de confirmación -->
+                            <div id="confirmModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:#fff; padding: 100px; border:1px solid #000; z-index:1000;">
+                                <p>¿Desea cerrar la STC?</p>
+                                <button id="confirmYes" class="btn btn-success">Sí</button>
+                                <button id="confirmNo" class="btn btn-danger">No</button>
+                            </div>
+
+                            <!-- Un fondo oscuro para el modal -->
+                            <div id="modalBackground" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;"></div>
+
 
                         <input type="hidden" name="cerrar_stc" id="cerrar_stc" value="">
 
@@ -323,8 +277,68 @@ $tecnicos = $query_tecnicos->fetchAll(PDO::FETCH_ASSOC);
 <?php include('../../../layout/admin/parte2.php');?>
 
 <script>
+    function archivo(evt) {
+                                            var files = evt.target.files; // FileList object
+                                            var container = document.getElementById("list");
+                                            container.innerHTML = "";
+                                            for (var i = 0, f; f = files[i]; i++) {
+                                                var reader = new FileReader();
+                                                // Si el archivo es una imagen
+                                                if (f.type.match('image.*')) {
+                                                    reader.onload = (function(theFile) {
+                                                        return function(e) {
+                                                            // Insertamos la imagen
+                                                            var img = document.createElement('img');
+                                                            img.src = e.target.result;
+                                                            img.width = 200; // Tamaño de la imagen
+                                                            img.classList.add('preview-image');
+                                                            img.style.display = (container.children.length === 0) ? 'block' : 'none';
+                                                            container.appendChild(img);
+                                                        };
+                                                    })(f);
+                                                    // Lectura del archivo
+                                                    reader.readAsDataURL(f);
+                                                }
+                                            }
+                                        }
+    document.getElementById('file').addEventListener('change', archivo, false);
+
+    function prevImage() {
+                                            var images = document.getElementsByClassName('preview-image');
+                                            var currentIndex = getCurrentImageIndex(images);
+                                            if (currentIndex > 0) {
+                                                showImage(images, currentIndex - 1);
+                                            }
+                                        }
+
+    function nextImage() {
+                                            var images = document.getElementsByClassName('preview-image');
+                                            var currentIndex = getCurrentImageIndex(images);
+                                            if (currentIndex < images.length - 1) {
+                                                showImage(images, currentIndex + 1);
+                                            }
+                                        }
+
+    function getCurrentImageIndex(images) {
+                                            for (var i = 0; i < images.length; i++) {
+                                                if (images[i].style.display === 'block') {
+                                                    return i;
+                                                }
+                                            }
+                                            return -1;
+                                        }
+
+    function showImage(images, index) {
+        for (var i = 0; i < images.length; i++) {
+            images[i].style.display = 'none';
+        }
+        images[index].style.display = 'block';
+    }
+</script>
+
+<script>
     document.getElementById("guardarForm").addEventListener("submit", function(event) {
-    var estado = document.getElementById("estado").value;
+    var estado = document.getElementById("estado35").value;
     
     if (estado == 5 || estado == 6) {
         event.preventDefault(); // Detener la acción predeterminada (envío del formulario)

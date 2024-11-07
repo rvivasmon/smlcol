@@ -431,6 +431,25 @@ foreach ($roles_permisos as $rol_permiso) {
                                 <p>Tratamiento Soporte Técnico (TSTC)</p>
                               </a>
                             </li>
+                          </ul>
+                        </li>
+
+                    <?php
+                      }
+                    ?>
+
+                    <?php
+                      if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="15") ){ ?>
+
+                        <li class="nav-item">
+                          <a href="#" class="nav-link active">
+                            <i class="nav-icon fas fa-hard-hat"></i>
+                            <p>
+                              VISITA TÉCNICA
+                              <i class="right fas fa-angle-left"></i>
+                            </p>
+                          </a>
+                          <ul class="nav nav-treeview">
                             <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/atencion_cliente/ost" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -537,7 +556,7 @@ foreach ($roles_permisos as $rol_permiso) {
                               </a>
                             </li>
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/ti/partes_modulos/nits/" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/ti/partes_modulos/index.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Caracteristicas Módulos</p>
                               </a>

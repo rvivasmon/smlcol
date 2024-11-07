@@ -23,5 +23,6 @@ foreach ($datos_osts as $dato_ost){
     $persona_contacto = $dato_ost['persona_contacto'];
     $medio_contacto = $dato_ost['email_contacto'];
     $num_ost = $dato_ost['id_ost'];
+    $contador_casos = $dato_ost['contador_casos'];
 }
 
