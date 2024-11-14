@@ -74,6 +74,25 @@ include('../../../../layout/admin/parte1.php');
                             </div>
                         </div>
 
+                        <div class="row">
+                                <div class="col-md-1">
+                                    <div class="form-group"> <!-- Se coloca aquí el usuario que está trabajando el archivo -->
+                                        <label for="posicion1">UBICACIÓN</label>
+                                        <select name="posicion1" id="posicion1" class="form-control" required>
+                                            <option value="">Posición</option>
+                                            <?php
+                                            $query_posicion = $pdo->prepare('SELECT * FROM distribucion_almacen');
+                                            $query_posicion->execute();
+                                            $posiciones = $query_posicion->fetchAll(PDO::FETCH_ASSOC);
+                                            foreach($posiciones as $posicion) {
+                                                echo '<option value="' . $posicion['id'] . '">' . $posicion['posiciones'] . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- MODULO -->
 
                         <div class="row">
@@ -83,7 +102,15 @@ include('../../../../layout/admin/parte1.php');
                                     <select id="pitch" name="pitch" class="form-control">
                                         <option value="">Seleccione un pitch</option>
                                         <?php 
-                                        $query_pitch = $pdo->prepare('SELECT DISTINCT pmc.pitch, tp.pitch AS pitch_nombre FROM producto_modulo_creado AS pmc INNER JOIN tabla_pitch AS tp ON pmc.pitch = tp.id ORDER BY pmc.pitch ASC');
+                                        $query_pitch = $pdo->prepare('SELECT DISTINCT
+                                                                                pmc.pitch, tp.pitch AS pitch_nombre
+                                                                            FROM
+                                                                                producto_modulo_creado AS pmc
+                                                                            INNER JOIN
+                                                                                tabla_pitch AS tp ON pmc.pitch = tp.id
+                                                                            ORDER BY
+                                                                                tp.pitch ASC
+                                                                            ');
                                         $query_pitch->execute();
                                         $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
                                         foreach ($pitches as $pitch): ?>
@@ -310,7 +337,7 @@ include('../../../../layout/admin/parte1.php');
                 </div>
                 <div class="modal-body">
                     <?php foreach ($modulosSinReferencia as $modulo): ?>
-                        <form action="actualizar_referencia.php" method="POST" enctype="multipart/form-data" onsubmit="return validarFormulario(this);">
+                        <form action="controller_actualizar_referencia.php" method="POST" enctype="multipart/form-data" onsubmit="return validarFormulario(this);">
                             <input type="hidden" name="id" value="<?php echo $modulo['id']; ?>">
                             <p>El módulo con serie <strong><?php echo $modulo['serie']; ?></strong> no tiene referencia.</p>
                             <div class="form-group">
@@ -319,8 +346,8 @@ include('../../../../layout/admin/parte1.php');
                             </div>
                             <div class="form-group">
                                 <label for="imagen">Subir imagen:</label>
-                                <input type="file" name="archivo_adjunto" id="archivo_adjunto" class="form-control-file" accept="image/*" required>
-                                </div>
+                                <input type="file" name="archivo_adjunto" id="archivo_adjunto" class="form-control-file" accept="image/*">
+                            </div>
                             <button type="submit" class="btn btn-primary">Actualizar Referencia</button>
                         </form>
                         <hr>
@@ -335,7 +362,7 @@ include('../../../../layout/admin/parte1.php');
 <?php endif; ?>
 
 
-    <style>
+<style>
     .modal {
         display: none; /* Oculto por defecto */
         position: fixed;

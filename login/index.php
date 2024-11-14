@@ -67,7 +67,7 @@ include('funcs/funcs.php');
 
               <label for="correo">Correo Electrónico</label>
                 <div class="input-group mb-3">
-                  <input type="email" class="form-control" id="correo" name="correo" placeholder="Email">
+                  <input type="email" class="form-control" id="correo" name="correo" placeholder="Email" value="">
                     <div class="input-group-append">
                       <div class="input-group-text">
                         <span class="fas fa-envelope"></span>
@@ -77,7 +77,7 @@ include('funcs/funcs.php');
 
               <label for="password">Contraseña</label>
                 <div class="input-group mb-3">
-                  <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="">
                     <div class="input-group-append">
                       <div class="input-group-text">
                         <span class="fas fa-lock"></span>
@@ -109,6 +109,12 @@ include('funcs/funcs.php');
       <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 
       <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("correo").value = "";
+            document.getElementById("password").value = "";
+        });
+
         const imgCodigo = document.getElementById('img-codigo');
         const btnGenera = document.getElementById('regenera');
         const imgLinks = document.querySelectorAll('.img-link');

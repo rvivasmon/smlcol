@@ -1,29 +1,29 @@
 <?php 
 
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
 
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
+include('../../../../layout/admin/sesion.php');
+include('../../../../layout/admin/datos_sesion_user.php');
 
-include('../../../layout/admin/parte1.php');
+include('../../../../layout/admin/parte1.php');
 
 $id_get = $_GET['id'];
 
-$query = $pdo->prepare("SELECT usuarios.*, cargo.descripcion AS nombre_cargo, t_estado.estado_general AS nombre_estado, usuarios.id_cargo AS id_cargo_usuario FROM usuarios JOIN cargo ON usuarios.id_cargo = cargo.id_cargo JOIN t_estado ON usuarios.estado = t_estado.id WHERE usuarios.id = '$id_get'");
+$query = $pdo->prepare("SELECT * FROM alma_principal WHERE id_alma_principal = '$id_get'");
 
-$query->execute();
+$query->execute(['id_get' => $id_get]);
 $usuarios = $query->fetchAll(PDO::FETCH_ASSOC);
 foreach ($usuarios as $usuario){
-    $id = $usuario['id'];
-    $nombres = $usuario['nombre'];
-    $correos = $usuario['email'];
-    $usuario_uso = $usuario['usuario'];
-    $cargo = $usuario['nombre_cargo'];
-    $estado = $usuario['nombre_estado'];
-    $valor_actual_en_edicion = $usuario['estado'];
-    $valor_actual_en_edicion_cargo = $usuario['id_cargo_usuario'];
-    $pass = $usuario['contraseña'];
+    $id = $usuario['id_alma_principal'];
+    $nombres = $usuario['tipo_producto'];
+    $correos = $usuario['posicion'];
+    $usuario_uso = $usuario['cantidad_plena'];
+    $cargo = $usuario['producto'];
+    $estado = $usuario['observacion'];
+    $valor_actual_en_edicion = $usuario['funcion_control'];
+    $valor_actual_en_edicion_cargo = $usuario['tipo_fuente'];
+    $pass = $usuario['referencia'];
 
 }
 
@@ -127,7 +127,6 @@ foreach ($usuarios as $usuario){
                                 </div>
                             </div>
                         </div>
-
                         <hr>
 
                         <div class="row">
@@ -138,6 +137,7 @@ foreach ($usuarios as $usuario){
                                 <button type="submit" onclick="return confirm('Asegurese de diligenciar correctamente los datos')" class="btn btn-success btn-block">Actualizar Usuario</button>
                             </div>
                         </div>
+
                     </form>
                 </div>
             </div>
@@ -146,4 +146,4 @@ foreach ($usuarios as $usuario){
     </div>
 </div>
 
-<?php include('../../../layout/admin/parte2.php');?>
+<?php include('../../../../layout/admin/parte2.php');?>

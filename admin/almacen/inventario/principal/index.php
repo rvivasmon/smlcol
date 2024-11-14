@@ -16,7 +16,7 @@ include('../../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Inventario General Almacén Principal</h1>                
+                    <h1 class="m-0">Inventario General del Almacén Principal</h1>                
                     <div class="card card-blue">
                         <div class="card-header">
                             PRODUCTOS ACTIVOS
@@ -27,10 +27,22 @@ include('../../../../layout/admin/parte1.php');
                         <div class="row justify-content-center">
                             <!-- Contenedor principal para los botones -->
                             <div class="card-tools d-flex justify-content-center w-100">
-                                <!-- Botón existente para crear un nuevo producto -->
+                                <!-- Botón para ingresar a Módulos -->
                                 <div class="form-group mx-2">
-                                    <a href="../../../producto/create_producto.php" class="btn btn-warning">
-                                        <i class="bi bi-plus-square"></i> Crear Nuevo Producto
+                                    <a href="modulos/" class="btn btn-success">
+                                        <i class="bi bi-plus-square"></i> Módulos
+                                    </a>
+                                </div>
+                                <!-- Botón para ingresar a Controladoras -->
+                                <div class="form-group mx-2">
+                                    <a href="control/" class="btn btn-danger">
+                                        <i class="bi bi-plus-square"></i> Controladoras
+                                    </a>
+                                </div>
+                                <!-- Botón para ingresar a Fuentes -->
+                                <div class="form-group mx-2">
+                                    <a href="fuentes/" class="btn btn-warning">
+                                        <i class="bi bi-plus-square"></i> Fuentes
                                     </a>
                                 </div>
 
@@ -43,75 +55,76 @@ include('../../../../layout/admin/parte1.php');
                             </div>
                         </div>
 
-
-
                         <div class="card-body">
                             <div class="table-responsive">
-                            <table id="table_stcs" class="table table-striped table-hover table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Tipo Producto</th>
-                                        <th>Producto</th>
-                                        <th>Existencia</th>
-                                        <th>Fecha Creacion</th>
-                                        <th><center>Acciones</center></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $contador = 0;
-                                    $query = $pdo->prepare('SELECT 
-                                                            ap.*,
-                                                            productomovido.tipo_producto AS nombre_tipo,
-                                                            CASE
-                                                                when ap.tipo_producto = 1 then caracmodulos.serie
-                                                                when ap.tipo_producto = 2 then refecontrol.referencia
-                                                                when ap.tipo_producto = 3 then refefuentes.modelo_fuente
-                                                                else null
-                                                            end as nombre_producto
-                                                            FROM
-                                                                alma_principal AS ap
-                                                            INNER JOIN
-                                                                t_productos AS productomovido ON ap.tipo_producto = productomovido.id_producto
-                                                            LEFT JOIN
-                                                                producto_modulo_creado AS caracmodulos ON ap.producto = caracmodulos.id AND ap.tipo_producto = 1
-                                                            LEFT JOIN
-                                                                referencias_control AS refecontrol ON ap.producto = refecontrol.id_referencia AND ap.tipo_producto = 2
-                                                            LEFT JOIN
-                                                                referencias_fuente AS refefuentes ON ap.producto = refefuentes.id_referencias_fuentes AND ap.tipo_producto = 3;
-                                                        ');
-
-                                    $query->execute();
-                                    $almacenes_pricipales = $query->fetchAll(PDO::FETCH_ASSOC);
-                                    foreach ($almacenes_pricipales as $almacen_pricipal){
-                                        $id = $almacen_pricipal['id_almacen_principal'];
-                                        $fecha_ingreso = $almacen_pricipal['CREATED_AT'];
-                                        $tipo_producto = $almacen_pricipal['nombre_tipo'];
-                                        $producto = $almacen_pricipal['nombre_producto'];
-                                        $existencia = $almacen_pricipal['cantidad_plena'];
-                                        $contador = $contador + 1;
-                                    ?>
+                                <table id="table_stcs" class="table table-striped table-hover table-bordered">
+                                    <thead>
                                         <tr>
-                                            <td><?php echo $contador; ?></td>
-                                            <td><?php echo $tipo_producto; ?></td>
-                                            <td><?php echo $producto; ?></td>
-                                            <td><?php echo $existencia; ?></td>
-                                            <td><?php echo $fecha_ingreso; ?></td>
-                                            <td>
-                                                <center>
-                                                    <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                    <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
-                                                    <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
-                                                </center>
-                                            </td>
+                                            <th>ID</th>
+                                            <th>Tipo Producto</th>
+                                            <th>Producto</th>
+                                            <th><center>Ubicación</center></th>
+                                            <th><center>Existencia</center></th>
+                                            <!--<th><center>Acciones</center></th>-->
                                         </tr>
-                                    <?php
-                                }                            
-                            ?>
-                        </tbody>
-                        </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $contador = 0;
+                                        $query = $pdo->prepare('SELECT 
+                                                                ap.*,
+                                                                productomovido.tipo_producto AS nombre_tipo,
+                                                                da.posiciones AS nombre_ubicacion,
+                                                                CASE
+                                                                    when ap.tipo_producto = 1 then caracmodulos.serie
+                                                                    when ap.tipo_producto = 2 then refecontrol.referencia
+                                                                    when ap.tipo_producto = 3 then refefuentes.modelo_fuente
+                                                                    else null
+                                                                end as nombre_producto
+                                                                FROM
+                                                                    alma_principal AS ap
+                                                                LEFT JOIN
+                                                                    distribucion_almacen AS da ON ap.posicion = da.id
+                                                                INNER JOIN
+                                                                    t_productos AS productomovido ON ap.tipo_producto = productomovido.id_producto
+                                                                LEFT JOIN
+                                                                    producto_modulo_creado AS caracmodulos ON ap.producto = caracmodulos.id AND ap.tipo_producto = 1
+                                                                LEFT JOIN
+                                                                    referencias_control AS refecontrol ON ap.producto = refecontrol.id_referencia AND ap.tipo_producto = 2
+                                                                LEFT JOIN
+                                                                    referencias_fuente AS refefuentes ON ap.producto = refefuentes.id_referencias_fuentes AND ap.tipo_producto = 3
+                                                            ');
+
+                                        $query->execute();
+                                        $almacenes_pricipales = $query->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($almacenes_pricipales as $almacen_pricipal){
+                                            $id = $almacen_pricipal['id_almacen_principal'];
+                                            $ubicacion = $almacen_pricipal['nombre_ubicacion'];
+                                            $tipo_producto = $almacen_pricipal['nombre_tipo'];
+                                            $producto = $almacen_pricipal['nombre_producto'];
+                                            $existencia = $almacen_pricipal['cantidad_plena'];
+                                            $contador = $contador + 1;
+                                        ?>
+                                            <tr>
+                                                <td><?php echo $contador; ?></td>
+                                                <td><?php echo $tipo_producto; ?></td>
+                                                <td><?php echo $producto; ?></td>
+                                                <td><center><?php echo $ubicacion; ?></center></td>
+                                                <td><center><?php echo $existencia; ?></center></td>
+                                                <!--<td>
+                                                    <center>
+                                                        <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
+                                                        <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
+                                                        <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
+                                                    </center>
+                                                </td>-->
+                                            </tr>
+                                        <?php
+                                        }                            
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div><!-- /.col -->
@@ -120,26 +133,26 @@ include('../../../../layout/admin/parte1.php');
     </div>
 </div>
 
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="movimientoModal" tabindex="-1" aria-labelledby="movimientoModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="movimientoModalLabel">Seleccionar Tipo de Movimiento</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entradaV1/create_movimiento_entrada_final.php'">Movimiento de Entrada</button>
-                                                        <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_salidaV1/create_movimiento_salida_final.php'">Movimiento de Salida</button>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+<!-- Modal -->
+<div class="modal fade" id="movimientoModal" tabindex="-1" aria-labelledby="movimientoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="movimientoModalLabel">Seleccionar Tipo de Movimiento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entradaV1/create_movimiento_entrada_final.php'">Movimiento de Entrada</button>
+                <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_salidaV1/create_movimiento_salida_final.php'">Movimiento de Salida</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <?php include('../../../../layout/admin/parte2.php'); ?>
@@ -147,15 +160,15 @@ include('../../../../layout/admin/parte1.php');
 <script>
     $(function () {
         $("#table_stcs").DataTable({
-            "pageLength": 10,
+            "pageLength": 20,
             "language": {
                 "emptyTable": "No hay información",
-                "info": "Mostrando_START_ a _END_ de _TOTAL_ Órdenes",
-                "infoEmpty": "Mostrando 0 a 0 de 0 Usuarios",
-                "infoFiltered": "(Filtrado de _MAX_ total Órdenes)",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Productos",
+                "infoEmpty": "Mostrando 0 a 0 de 0 Productos",
+                "infoFiltered": "(Filtrado de _MAX_ total Productos)",
                 "infoPostFix": "",
                 "thousands": ",",
-                "lengthMenu": "Mostrar _MENU_ Órdenes",
+                "lengthMenu": "Mostrar _MENU_ Productos",
                 "loadingRecords": "Cargando...",
                 "processing": "Procesando...",
                 "search": "Buscador:",
@@ -193,17 +206,15 @@ include('../../../../layout/admin/parte1.php');
                     collectionLayout: 'fixed three-column'
                 }
             ],
-        }).buttons().container().appendTo('#table_stcs_wrapper .col-md-6:eq(0)');
+        }).buttons().container().appendTo('#table_stcs_wrapper .col-md-6:eq(0)')
     });
 </script>
 
-
-
 <script>
-  $(document).ready(function() {
+$(document).ready(function() {
     $('.servicio-link').click(function() {
       // Abre el modal correspondiente cuando se hace clic en el enlace del servicio
-      $('#servicioModal').modal('show');
+    $('#servicioModal').modal('show');
     });
-  });
+});
 </script>
