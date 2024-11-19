@@ -133,6 +133,14 @@ include('../../../../layout/admin/parte1.php');
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-2 campo Modulo">
+                                <div class="form-group">
+                                    <label for="referencia_modulo">Referencia</label>
+                                        <input type="text" id="campo_referencia" name="referencia" class="form-control" readonly>
+                                        <!-- Campos ocultos para almacenar los valores de serie y referencia -->
+                                        <input type="hidden" id="campo_serie" name="serie">
+                                </div>
+                            </div>
                         </div>
 
                             <!-- CONTROLADORA -->
@@ -564,6 +572,9 @@ include('../../../../layout/admin/parte1.php');
     document.getElementById('pitch').addEventListener('change', function() {
     var pitchId = this.value;
 
+        // Limpiar el campo "campo_referencia" cuando cambie el pitch
+        document.getElementById('campo_referencia').value = '';
+
     // Hacer una solicitud AJAX para obtener los registros filtrados
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'get_serie_modulo.php', true);
@@ -614,4 +625,23 @@ document.getElementById('marca_fuente').addEventListener('change', function() {
     };
     xhr.send('marca_fuente=' + marcaFuenteValue);
 });
+</script>
+
+<script>
+    document.getElementById('serie_modulo').addEventListener('change', function() {
+    var selectedOption = this.options[this.selectedIndex];
+
+    // Obtener el valor de referencia desde el atributo 'data-referencia' del option seleccionado
+    var referencia = selectedOption.getAttribute('data-referencia');
+    var serie = selectedOption.textContent.split(' / ')[0]; // Extraer solo la parte de la serie, antes del "/"
+
+    // Puedes usar estos valores para actualizar otros campos o realizar otras acciones
+    console.log('Serie:', serie);  // El valor de serie
+    console.log('Referencia:', referencia);  // El valor de referencia
+
+    // Si deseas enviar ambos valores a través de un campo oculto o similar
+    document.getElementById('campo_serie').value = serie;  // Asignar serie a un campo oculto (ejemplo)
+    document.getElementById('campo_referencia').value = referencia;  // Asignar referencia a otro campo
+});
+
 </script>

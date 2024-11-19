@@ -35,6 +35,7 @@ include('../../../../../layout/admin/parte1.php');
                                             <th>Uso</th>
                                             <th>Modelo Modulo</th>
                                             <th>Serie Modulo</th>
+                                            <th>Referencia</th>
                                             <th>Tamaño</th>
                                             <th>Observación</th>
                                             <th>Posición</th>
@@ -51,6 +52,7 @@ include('../../../../../layout/admin/parte1.php');
                                             tp.pitch as nombre_pitch,
                                             ttp.modelo_modulo as nombre_modelo,
                                             pmc.serie as nombre_serie,
+                                            pmc.referencia as nombre_referencia,
                                             ttm.tamanos_modulos as nombre_tamano,
                                             da.posiciones as nombre_posicion
                                         FROM
@@ -80,6 +82,7 @@ include('../../../../../layout/admin/parte1.php');
                                             $pitch = $almacen_pricipal['nombre_pitch'];
                                             $modelo_modulo = $almacen_pricipal['nombre_modelo'];
                                             $serie_modulo = $almacen_pricipal['nombre_serie'];
+                                            $referencia_modulo = $almacen_pricipal['nombre_referencia'];
                                             $tamano = $almacen_pricipal['nombre_tamano'];
                                             $existencia = $almacen_pricipal['cantidad_plena'];
                                             $observacion = $almacen_pricipal['observacion'];
@@ -92,6 +95,7 @@ include('../../../../../layout/admin/parte1.php');
                                                 <td><?php echo $uso; ?></td>
                                                 <td><?php echo $modelo_modulo; ?></td>
                                                 <td><?php echo $serie_modulo; ?></td>
+                                                <td><?php echo $referencia_modulo; ?></td>
                                                 <td><?php echo $tamano; ?></td>
                                                 <td><?php echo $observacion; ?></td>
                                                 <td><?php echo $posicion; ?></td>

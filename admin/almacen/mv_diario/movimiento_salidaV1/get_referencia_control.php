@@ -13,8 +13,12 @@ if (isset($_POST['marca_control'])) {
     $query->execute();
     $referencias = $query->fetchAll(PDO::FETCH_ASSOC);
 
-    foreach ($referencias as $referencia) {
-        echo '<option value="' . $referencia['id_referencia'] . '">' . $referencia['referencia'] . '</option>';
+    if ($referencias) {
+        foreach ($referencias as $referencia) {
+            echo '<option value="' . htmlspecialchars($referencia['id_referencia']) . '">' . htmlspecialchars($referencia['referencia']) . '</option>';
+        }
+    } else {
+        echo '<option value="">No hay series referencias disponibles para esta controladora</option>';
     }
 }
 ?>

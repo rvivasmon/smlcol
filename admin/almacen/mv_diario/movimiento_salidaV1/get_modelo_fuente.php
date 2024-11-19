@@ -12,8 +12,12 @@ if (isset($_POST['marca_fuente'])) {
     $query->execute();
     $modelos = $query->fetchAll(PDO::FETCH_ASSOC);
 
-    foreach ($modelos as $modelo) {
-        echo '<option value="' . $modelo['id_referencias_fuentes'] . '">' . $modelo['modelo_fuente'] . '</option>';
+    if ($modelos) {
+        foreach ($modelos as $modelo) {
+            echo '<option value="' . htmlspecialchars($modelo['id_referencias_fuentes']) . '">' . htmlspecialchars($modelo['modelo_fuente']) . '</option>';
+        }
+    } else {
+        echo '<option value="">No hay referencias para este fuente</option>';
     }
 }
 ?>

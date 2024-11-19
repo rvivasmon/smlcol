@@ -38,6 +38,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                             <th>Cliente</th>
                                             <th>Ciudad</th>
                                             <th>Proyecto</th>
+                                            <th>Lugar de Instalación</th>
                                             <th><center>Acciones</center></th>
                                         </tr>
                                     </thead>
@@ -51,7 +52,8 @@ include('../../layout/admin/datos_sesion_user.php');
                                                                     pop_admin.pop AS pop,
                                                                     clientes.nombre_comercial AS cliente,
                                                                     t_ciudad.ciudad AS ciudad,
-                                                                    oc_admin.nombre_proyecto AS proyecto
+                                                                    oc_admin.nombre_proyecto AS proyecto,
+                                                                    oc_admin.lugar_instalacion AS lugar
                                                                 FROM 
                                                                     id_producto as idp
                                                                 LEFT JOIN 
@@ -76,6 +78,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                             $id_prod = $producto['id_producto'];
                                             $cliente = $producto['cliente'];
                                             $ciudad = $producto['ciudad'];
+                                            $lugar_instalacion = $producto['lugar'];
                                             $contador = $contador + 1;
                                         ?>
                                             <tr>
@@ -86,6 +89,7 @@ include('../../layout/admin/datos_sesion_user.php');
                                                 <td><?php echo $cliente; ?></td>
                                                 <td><?php echo $ciudad; ?></td>
                                                 <td><?php echo $proyecto; ?></td>
+                                                <td><?php echo $lugar_instalacion;?></td>
                                                 <td>
                                                     <center>
                                                         <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
