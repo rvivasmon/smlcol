@@ -52,51 +52,45 @@ foreach ($roles_permisos as $rol_permiso) {
 
 <!DOCTYPE html>
   <html lang="es">
+
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>SMARTLED</title>
-      <!-- Google Font: Source Sans Pro -->
+      
+      <!-- Google Fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-      <!-- Font Awesome Icons -->
+      
+      <!-- Font Awesome -->
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
-      <!-- Theme style -->
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3/dist/css/adminlte.min.css">
-      <!-- Icon Logo -->
-      <link rel="icon" type="image/ico" href="../../public/images/Logo.png">
-      <!-- Ventana de alerta  sweetalert2-->
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      
+      <!-- AdminLTE -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+      
       <!-- DataTables -->
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datatables.net-bs4@1.11.5/css/dataTables.bootstrap4.min.css">
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datatables.net-responsive-bs4@2.2.9/css/responsive.bootstrap4.min.css">
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datatables.net-buttons-bs4@2.2.0/css/buttons.bootstrap4.min.css">
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap4.min.css">
+      <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css">
+      <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap4.min.css">
 
-      <title>Document</title>
-      <!-- <link rel="stylesheet" href="path/to/your/main.css"> --> <!-- Tu archivo CSS principal -->
+      
+      <!-- Icon Logo -->
+      <link rel="icon" type="image/png" href="/favicon.png">
+      
+      <!-- Main CSS -->
+      <link rel="stylesheet" href="css/main.css">
+      <!-- Style QR-->
+      <link rel="stylesheet" href="css/styles.css">
 
-      <style>
-          /* Estilos para los submenús */
-      .nav-treeview .submenu > .nav-treeview {
-      display: none; /* Ocultar los submenús por defecto */
-      position: absolute; /* Posicionar los submenús de manera absoluta */
-      left: 100%; /* Mover los submenús hacia la derecha */
-      top: 0; /* Alinear los submenús en la parte superior */
-      z-index: 1000; /* Asegurarse de que los submenús se muestren por encima de otros elementos */
-      background: #343a40; /* Fondo del submenú */
-      border: 1px solid #495057; /* Borde del submenú */
-      width: 200px; /* Ancho opcional del submenú */
-      }
-
-      /* Mostrar los submenús cuando el elemento padre está en hover */
-      .nav-treeview .submenu:hover > .nav-treeview {
-          display: block; /* Mostrar los submenús cuando se hace hover */
-      }
-
-      </style>
-
+      
     </head>
-    <body class="hold-transition sidebar-mini">
+
+    <body class="hold-transition sidebar-mini layout-fixed" style="height: auto;">
       <div class="wrapper">
+        <div class="preloader flex-column justify-content-center align-items-center" style="height: 0px">
+
+        </div>
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
           <!-- Left navbar links -->
@@ -142,8 +136,7 @@ foreach ($roles_permisos as $rol_permiso) {
             <!-- Sidebar Menu -->
             <nav class="mt-2">
               <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-                    with font-awesome or any other icon font library -->
+                <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
 
                     <?php 
                       if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="14") ){ ?>
@@ -195,9 +188,9 @@ foreach ($roles_permisos as $rol_permiso) {
                     ?>
 
                     <?php
-                      if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="14") ){ ?>
+                      if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="14") || ($id_rol_sesion_usuario=="15") ){ ?>
 
-                      <?php
+                    <?php
                         // Ejemplo de generación dinámica de submenús para Consulta Stock
 
                         // Ejemplo de datos simulados (reemplaza con tu lógica de datos real)
@@ -481,7 +474,7 @@ foreach ($roles_permisos as $rol_permiso) {
                             </p>
                           </a>
                           <ul class="nav nav-treeview">
-                          <li class="nav-item">
+                            <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/crm/contacto/index.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>LIstado de Contactos</p>
@@ -538,7 +531,7 @@ foreach ($roles_permisos as $rol_permiso) {
                     ?>
 
                     <?php
-                      if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Administración") ){ ?>
+                      if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="Administración") || ($id_rol_sesion_usuario=="15") ){ ?>
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
@@ -619,21 +612,15 @@ foreach ($roles_permisos as $rol_permiso) {
                               </a>
                             </li>
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/ti/permisos/create.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Crear Permisos</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/ti/cargos" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Listado de Roles</p>
                               </a>
                             </li>
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/ti/cargos/create.php" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/ti/menu_principal" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Crear Rol</p>
+                                <p>Lista Menú</p>
                               </a>
                             </li>
                           </ul>
@@ -655,52 +642,58 @@ foreach ($roles_permisos as $rol_permiso) {
                             </p>
                           </a>
                           <ul class="nav nav-treeview">
-                            <li class="nav-item">
+                            <li class="nav-item" hidden>
                               <a href="<?php echo $URL;?>admin/techled/tracking_chi/index_tracking.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Requests Tracking</p>
                               </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" hidden>
                               <a href="<?php echo $URL;?>admin/techled/tracking_techled/index_trackin_techled.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List Price Modules</p>
                               </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" hidden>
                               <a href="<?php echo $URL;?>admin/list_price_techled/index_cabinet.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List Price Cabinet</p>
                               </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" hidden>
                               <a href="<?php echo $URL;?>admin/list_price_techled/index_equipment.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List Price Equipment & Accessories</p>
                               </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" hidden>
                               <a href="<?php echo $URL;?>admin/list_price_techled/index_hologram.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List Price Hologram</p>
                               </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" hidden>
                               <a href="<?php echo $URL;?>admin/list_price_techled/index_lcd.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List Price LCD</p>
                               </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" hidden>
                               <a href="<?php echo $URL;?>admin/list_price_techled/index_rental.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List Price Rental & Display</p>
                               </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" hidden>
                               <a href="<?php echo $URL;?>admin/list_price_techled/index_system.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List Price System & Control</p>
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/techled/" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Producto</p>
                               </a>
                             </li>
                           </ul>
@@ -785,7 +778,7 @@ foreach ($roles_permisos as $rol_permiso) {
                       }
                     ?>
 
-<?php
+                    <?php
                       if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="14") ){ ?>
 
                         <li class="nav-item">
@@ -810,28 +803,15 @@ foreach ($roles_permisos as $rol_permiso) {
                       }
                     ?>
 
-                <li class="nav-item">
-                  <a href="<?php echo $URL;?>/login/controller_cerrar_sesion.php" class="nav-link" style="background-color: #ca0a0b">
-                    <i class="nav-icon fas fa-door-closed"></i>
-                    <p>Cerrar Sesión</p>
-                  </a>            
-                </li>
+                        <li class="nav-item">
+                          <a href="<?php echo $URL;?>/login/controller_cerrar_sesion.php" class="nav-link" style="background-color: #ca0a0b">
+                            <i class="nav-icon fas fa-door-closed"></i>
+                            <p>Cerrar Sesión</p>
+                          </a>            
+                        </li>
               </ul>
             </nav>
             <!-- /.sidebar-menu -->
-
-              <script>
-                // JavaScript para evitar el cierre automático del menú al hacer clic en los elementos con la clase 'menu-item'
-                document.addEventListener('DOMContentLoaded', function() {
-                  var menuItems = document.querySelectorAll('.menu-item');
-                  menuItems.forEach(function(item) {
-                    item.addEventListener('click', function(event) {
-                      event.stopPropagation(); // Evita que el evento de clic se propague al elemento padre
-                    });
-                  });
-                });
-              </script>
-
           </div>
           <!-- /.sidebar -->
         </aside>

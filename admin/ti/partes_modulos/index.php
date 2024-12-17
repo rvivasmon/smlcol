@@ -16,7 +16,7 @@ include('../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Nits Disponibles</h1>
+                <h1 class="m-0">Caracteristicas Disponibles</h1>
                     <div class="card card-blue">
                         <div class="card-header">
                             ACTIVOS

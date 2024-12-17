@@ -21,6 +21,13 @@ include('../../../layout/admin/parte1.php');
                         <div class="card-header">
                             ROLES REGISTRADOS                        
                         </div>
+
+                        <hr>
+
+                        <div class="card-tools ml-4">
+                            <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square">Crear Nuevo Rol</i></a>
+                        </div>
+
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="table_roles" class="table table-striped table-hover table-bordered">

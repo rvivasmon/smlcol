@@ -32,19 +32,25 @@ include('../../../../layout/admin/parte1.php');
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="">Date</label>
+                                                <label for="">Origen de Solicitud</label>
+                                                <input type="text" name="origen_solicitud" id="origen_solicitud" class="form-control" value="<?php echo?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="">Fecha</label>
                                                 <input type="date" name="fechaingreso" id="fechaingreso" class="form-control" value= "<?php echo date('Y-m-d'); ?>" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="">Origin</label>
+                                                <label for="">Origen</label>
                                                 <input type="text" name="destinomercancia" class="form-control" placeholder="" required>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="">Type</label>
+                                                <label for="">Tipo</label>
                                                 <select class="form-control"  id="tipoproducto" name="tipoproducto" required>
                                                     <option value="">Seleccionar Tipo Producto</option>
                                                     <option value="Fuentes">Fuentes</option>
@@ -66,11 +72,9 @@ include('../../../../layout/admin/parte1.php');
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Tipo Módulo</label>
-                                                <label for="">Marca Fuentes</label>
-                                                <label for="">Marca Control</label>
+                                                <label for="">Categoría 1</label>
                                                 <select class= "form-control" name="categoria" id="categoria">
-                                                <option value="">Seleccione la categoría</option>
+                                                <option value="">Seleccione la categoría 1</option>
                                                     <?php 
                                                     $query_pitch = $pdo->prepare('SELECT * FROM movimiento_diario');
                                                     $query_pitch->execute();
@@ -97,9 +101,7 @@ include('../../../../layout/admin/parte1.php');
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Pitch</label>
-                                                <label for="">Tipo Modulo</label>
-                                                <label for="">Category 2</label>
+                                                <label for="">Categoría 2</label>
                                                 <select class="form-control" name="categoria" id="categoria">
                                                 <option value="">Seleccione la categoría</option>
                                                     <?php 

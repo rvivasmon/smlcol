@@ -132,8 +132,8 @@ include('../../../../layout/admin/parte1.php');
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entradaV1/create_movimiento_entrada_final.php'">Movimiento de Entrada</button>
-                                                        <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_salidaV1/create_movimiento_salida_final.php'">Movimiento de Salida</button>
+                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entrada/create_movimiento_entrada_final.php'">Movimiento de Entrada</button>
+                                                        <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_salida/create_movimiento_salida_final.php'">Movimiento de Salida</button>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

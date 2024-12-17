@@ -1,0 +1,5 @@
+#qrOverlay {
+    width: 100px; /* Ajusta el tamaño del contenedor QR */
+    height: 100px;
+    pointer-events: none; /* Evita interferencia con clics */
+}

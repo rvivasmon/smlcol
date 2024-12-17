@@ -14,14 +14,14 @@ include('../../../layout/admin/parte1.php');
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col">
-          <h1 class="m-0">POP</h1>
+          <h1 class="m-0">ASIGNACIÓN DE POP</h1>
           <div class="card card-blue">
             <div class="card-header">
-              <a href="#" class="d-block"><?php echo $sesion_usuario['nombre'] ?></a>
+              <a href="#" class="d-block invisible"><?php echo $sesion_usuario['nombre'] ?></a>
             </div>
             <hr>
             
-            <div class="col-md-4">
+            <div class="col-md-4" hidden>
               <a type="button" href="<?php echo $URL; ?>admin/operacion/pop/create_pop.php" class="btn btn-primary">INSERTAR UN NUEVO POP</a>
             </div>
            
@@ -31,17 +31,16 @@ include('../../../layout/admin/parte1.php');
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Fecha Recibido</th>
                                     <th>POP</th>
                                     <th>OC</th>
                                     <th>JPM</th>
                                     <th>Proyecto</th>
-                                    <th>Tipo Pantalla</th>
                                     <th>Ciudad</th>
                                     <th>Estado POP</th>
-                                    <th>Estado OP</th>
-                                    <th>Fecha Inicio</th>
-                                    <th>Fecha Fin</th>
-                                    <th hidden><center>Acciones</center></th>
+                                    <th>Cliente</th>
+                                    <th>Lugar de Instalación</th>
+                                    <th><center>Acciones</center></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,35 +53,31 @@ include('../../../layout/admin/parte1.php');
 
                                     $id = $pop_item['id'];
                                     $pop = $pop_item['pop'];
+                                    $fecha_recibido = $pop_item['fecha_recibido'];
                                     $oc = $pop_item['oc'];
                                     $jpm = $pop_item['jpm'];
-                                    $proyecto = $pop_item['proyecto'];
-                                    $tipo_pantalla = $popc_item['tipo_pantalla'];
-                                    $ciudad = $ocpopoc_item['ciudad'];
-                                    $estdo_pop = $pop_item['estdo_pop'];
-                                    $estado_op = $pop_item['estado_op'];
-                                    $fecha_inicio = $pop_item['fecha_inicio'];
-                                    $fecha_fin = $pop_item['fecha_fin'];
-                                  
+                                    $proyecto = $pop_item['nombre_proyecto'];
+                                    $ciudad = $pop_item['ciudad'];
+                                    $estdo_pop = $pop_item['estado_pop'];
+                                    $fecha_inicio = $pop_item['cliente'];
+                                    $fecha_fin = $pop_item['lugar_instalacion'];
                                     $contador = $contador + 1;
                                 ?>
                                     <tr>
                                         <td><?php echo $contador; ?></td>
+                                        <td><?php echo $fecha_recibido?></td>
                                         <td><?php echo $pop; ?></td>
                                         <td><?php echo $oc; ?></td>
                                         <td><?php echo $jpm; ?></td>
                                         <td><?php echo $proyecto; ?></td>
-                                        <td><?php echo $tipo_pantalla; ?></td>
                                         <td><?php echo $ciudad; ?></td>
                                         <td><?php echo $estdo_pop; ?></td>
-                                        <td><?php echo $estado_op; ?></td>
                                         <td ><?php echo $fecha_inicio; ?></td>                                        
                                         <td><?php echo $fecha_fin; ?></td>
-                                   
-                                        <td hidden>
+                                        <td>
                                             <center>
                                                 <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
+                                                <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Procesar <i class="fas fa-pen"></i></a>
                                                 <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
                                             </center>
                                         </td>
@@ -110,7 +105,7 @@ include('../../../layout/admin/parte1.php');
             "pageLength": 10,
             "language": {
                 "emptyTable": "No hay información",
-                "info": "Mostrando_START_ a _END_ de _TOTAL_ Usuarios",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Usuarios",
                 "infoEmpty": "Mostrando 0 a 0 de 0 Usuarios",
                 "infoFiltered": "(Filtrado de _MAX_ total Usuarios)",
                 "infoPostFix": "",

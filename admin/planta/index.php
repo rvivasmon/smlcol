@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include('../../app/config/config.php');
 include('../../app/config/conexion.php');
@@ -6,9 +6,10 @@ include('../../app/config/conexion.php');
 include('../../layout/admin/sesion.php');
 include('../../layout/admin/datos_sesion_user.php');
 
+include('../../layout/admin/parte1.php');
+
 ?>
 
-<?php include('../../layout/admin/parte1.php');?>
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
@@ -21,13 +22,13 @@ include('../../layout/admin/datos_sesion_user.php');
                         </div>
 
                         <hr>
-                        
+
                         <div class="card-tools ml-4">
                             <a href="create.php" class="btn btn-warning"><i class="bi bi-plus-square">Crear Nuevo ID</i></a>
                         </div>
-                        
+
                         <div class="card-body">
-                        <div class="table-responsive">
+                            <div class="table-responsive">
                                 <table id="table_usuarios" class="table table-striped table-hover table-bordered">
                                     <thead>
                                         <tr>
@@ -54,17 +55,17 @@ include('../../layout/admin/datos_sesion_user.php');
                                                                     t_ciudad.ciudad AS ciudad,
                                                                     oc_admin.nombre_proyecto AS proyecto,
                                                                     oc_admin.lugar_instalacion AS lugar
-                                                                FROM 
+                                                                FROM
                                                                     id_producto as idp
-                                                                LEFT JOIN 
+                                                                LEFT JOIN
                                                                     op ON idp.op = op.id
-                                                                LEFT JOIN 
+                                                                LEFT JOIN
                                                                     pop_admin ON op.pop = pop_admin.id
-                                                                LEFT JOIN 
+                                                                LEFT JOIN
                                                                     oc_admin ON pop_admin.oc = oc_admin.id
-                                                                LEFT JOIN 
+                                                                LEFT JOIN
                                                                     clientes ON oc_admin.cliente = clientes.id
-                                                                LEFT JOIN 
+                                                                LEFT JOIN
                                                                     t_ciudad ON oc_admin.ciudad = t_ciudad.id
                                                             ');
 
@@ -93,13 +94,13 @@ include('../../layout/admin/datos_sesion_user.php');
                                                 <td>
                                                     <center>
                                                         <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                        <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
+                                                        <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a >
                                                         <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
                                                     </center>
                                                 </td>
                                             </tr>
                                         <?php
-                                        }                            
+                                        }
                                         ?>
                                     </tbody>
                                 </table>
@@ -120,7 +121,7 @@ include('../../layout/admin/datos_sesion_user.php');
             "pageLength": 10,
             "language": {
                 "emptyTable": "No hay información",
-                "info": "Mostrando_START_ a _END_ de _TOTAL_ Usuarios",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Usuarios",
                 "infoEmpty": "Mostrando 0 a 0 de 0 Usuarios",
                 "infoFiltered": "(Filtrado de _MAX_ total Usuarios)",
                 "infoPostFix": "",

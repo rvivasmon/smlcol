@@ -11,7 +11,7 @@ $producto = $_POST['producto'];
 $id_usuario = $_POST['idusuario'];
 $almagrupo = $_POST['almacen_grupo'];
 
-$evidencias = $_POST['archivo_adjunto'];
+$evidencias = $_POST['archivo_adjunto'] ?? null;
 
 $nombreDelArchivo = date( "Y-m-d-h-i-s");
 $filename = $nombreDelArchivo."__".$_FILES['archivo_adjunto']['name'];

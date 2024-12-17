@@ -50,6 +50,7 @@ foreach ($almacenes_pricipales as $almacen_pricipal) {
     $existencia = $almacen_pricipal['cantidad_plena'];
     $observacion = $almacen_pricipal['observacion'];
     $posicion = $almacen_pricipal['nombre_posicion'];
+    $id_posicion = $almacen_pricipal['posicion'];
 }
 
 ?>
@@ -123,7 +124,7 @@ foreach ($almacenes_pricipales as $almacen_pricipal) {
                                 <div class="form-group">
                                     <label for="ubicacion">Ubicación</label>
                                     <select name="ubicacion" id="ubicacion" class="form-control" required>
-                                        <option value=""><?php echo $posicion; ?></option>
+                                        <option value="<?php echo $id_posicion; ?>"><?php echo $posicion; ?></option>
                                         <?php
                                         $query_posicion = $pdo->prepare('SELECT * FROM distribucion_almacen');
                                         $query_posicion->execute();

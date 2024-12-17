@@ -169,7 +169,7 @@ foreach ($stcs as $stc){
                                         <div class="form-group">
                                             <label for="">Falla</label>
                                             <textarea name="falla" id="" cols="30" rows="4" class="form-control" readonly><?php echo $falla; ?></textarea>
-                                            <input type="text" name="id_usuario" value="<?php echo $id_get;?>" hidden>
+                                            <input type="text" name="id_usuario" value="<?php echo $id_get; ?>" hidden>
                                         </div>
                                     </div>
                                     <div class="col-md-6">

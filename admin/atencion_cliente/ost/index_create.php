@@ -189,7 +189,7 @@ include('../../../layout/admin/datos_sesion_user.php');
             "pageLength": 5,
             "language": {
                 "emptyTable": "No hay información",
-                "info": "Mostrando_START_ a _END_ de _TOTAL_ Órdenes",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Órdenes",
                 "infoEmpty": "Mostrando 0 a 0 de 0 Órdenes",
                 "infoFiltered": "(Filtrado de _MAX_ total Órdenes)",
                 "infoPostFix": "",
@@ -285,6 +285,6 @@ include('../../../layout/admin/datos_sesion_user.php');
                     collectionLayout: 'fixed three-column'
                 }
             ],
-        }).buttons().container().appendTo('#table_traost_wrapper .col-md-6:eq(0)');
+        }).buttons().container().appendTo('#table_traost1_wrapper .col-md-6:eq(0)');
     });
 </script>
