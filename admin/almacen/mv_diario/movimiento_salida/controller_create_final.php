@@ -6,32 +6,26 @@ include('../../../../app/config/conexion.php');
 include('../../../../layout/admin/sesion.php');
 include('../../../../layout/admin/datos_sesion_user.php');
 
+
 // Obtener datos del formulario
-$fecha = $_POST['fecha'];
-$contador_salida = $_POST['contador_sale'];
-$producto = $_POST['producto'] ?? null;
-$pitch = !empty($_POST['pitch']) ? $_POST['pitch'] : null;
-$serie_modulo = !empty($_POST['serie_modulo']) ? $_POST['serie_modulo'] : null;
-$marca_control = !empty($_POST['marca_control']) ? $_POST['marca_control'] : null;
-$referencia_control = !empty($_POST['referencia_control35']) ? $_POST['referencia_control35'] : null;
-$marca_fuente = !empty($_POST['marca_fuente']) ? $_POST['marca_fuente'] : null;
-$modelo_fuente = !empty($_POST['modelo_fuente35']) ? $_POST['modelo_fuente35'] : null;
-$almacen_salida_md = $_POST['almacen_salida_md'];
-$salida_md = -abs(floatval($_POST['salida_md'])); // Convierte a flotante y asegura valor negativo
-$almacen_entrada_md = $_POST['almacen_entrada_md'];
-$entrada_md = abs(floatval($_POST['entrada_md'])); // Convierte a flotante y asegura valor positivo
-$observacion = $_POST['observacion'];
-$usuario = $_POST['idusuario'];
-$op_destino = $_POST['op_destino'];
+$fecha = $_POST['fecha'] ?? null;
+$contador_salida = $_POST['contador_sale'] ?? null;
+$almacen_entrada_md = $_POST['almacen_entrada_md'] ?? null;
+$op_destino = $_POST['op_destino'] ?? null;
+$usuario = $_POST['idusuario'] ?? null;
+$productos = $_POST['producto_id12'] ?? []; 
+$observaciones = $_POST['observacion2'] ?? [];
+$referencias_21 = $_POST['referencia_id12'] ?? [];
+$almacen_salida_md = $_POST['almacen_salida_md'] ?? null;
+$salidas_md = $_POST['cantidad1'] ?? [];
+$entradas_md = $_POST['cantidad1'] ?? [];
 
-// Asignar referencia_1
-$referencia_1 = !empty($pitch) ? $pitch : (!empty($marca_control) ? $marca_control : $marca_fuente);
-
-// Asignar referencia_2
-$referencia_2 = !empty($serie_modulo) ? $serie_modulo : (!empty($referencia_control) ? $referencia_control : $modelo_fuente);
-
-// Asignar referencia_21 para facilitar la validación
-$referencia_21 = !empty($serie_modulo) ? $serie_modulo : (!empty($referencia_control) ? $referencia_control : $modelo_fuente);
+// Validar que los arrays no estén vacíos y tengan la misma cantidad de elementos
+if (empty($productos) || count($productos) !== count($observaciones) || count($productos) !== count($referencias_21) || count($productos) !== count($salidas_md) || count($productos) !== count($entradas_md)) {
+    $_SESSION['msj'] = 'Error: Los datos enviados no son consistentes.';
+    header("Location: create_movimiento_salida_final.php");
+    exit;
+}
 
 // Función para validar y actualizar/insertar producto en almacenes
 function validarProductoEnAlmacen($pdo, $tabla, $producto, $referencia_21, $cantidad, $almacen_salida_md) {
@@ -80,109 +74,55 @@ $almacenes = [
     11 => 'alma_aliados'
 ];
 
-// Validar almacen de salida
-if (array_key_exists($almacen_salida_md, $almacenes)) {
-    validarProductoEnAlmacen($pdo, $almacenes[$almacen_salida_md], $producto, $referencia_21, $salida_md, $almacen_salida_md);
-}
+// Bucle para procesar los productos
+for ($i = 0; $i < count($productos); $i++) {
+    $producto = $productos[$i];
+    $observacion = $observaciones[$i];
+    $referencia_21 = $referencias_21[$i];
+    $salida_md = -abs(floatval($salidas_md[$i]));  // Asegúrate de que el valor sea negativo para salida
+    $entrada_md = abs(floatval($entradas_md[$i])); // Asegúrate de que el valor sea positivo para entrada
 
-// Validar almacen de entrada
-if (array_key_exists($almacen_entrada_md, $almacenes)) {
-    validarProductoEnAlmacen($pdo, $almacenes[$almacen_entrada_md], $producto, $referencia_21, $entrada_md, $almacen_entrada_md);
-}
-
-// Insertar movimiento diario
-$sql = "INSERT INTO movimiento_diario 
-        (fecha, contador_sale, tipo_producto, pitch_modulo, serie_modulo, marca_control, referencia_control, marc_fuente1, modelo_fuente, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, referencia_1, referencia_2) 
-        VALUES (:fecha, :contador_salida, :producto, :pitch, :serie_modulo, :marca_control, :referencia_control, :marca_fuente, :modelo_fuente, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :referencia_1, :referencia_2)";
-
-$sentencia = $pdo->prepare($sql);
-$sentencia->bindParam(':fecha', $fecha);
-$sentencia->bindParam(':contador_salida', $contador_salida);
-$sentencia->bindParam(':producto', $producto);
-$sentencia->bindParam(':pitch', $pitch);
-$sentencia->bindParam(':serie_modulo', $serie_modulo);
-$sentencia->bindParam(':marca_control', $marca_control);
-$sentencia->bindParam(':referencia_control', $referencia_control);
-$sentencia->bindParam(':marca_fuente', $marca_fuente);
-$sentencia->bindParam(':modelo_fuente', $modelo_fuente);
-$sentencia->bindParam(':almacen_salida_md', $almacen_salida_md);
-$sentencia->bindParam(':salida_md', $salida_md);
-$sentencia->bindParam(':almacen_entrada_md', $almacen_entrada_md);
-$sentencia->bindParam(':entrada_md', $entrada_md);
-$sentencia->bindParam(':observacion', $observacion);
-$sentencia->bindParam(':usuario', $usuario);
-$sentencia->bindParam(':op_destino', $op_destino);
-$sentencia->bindParam(':referencia_1', $referencia_1);
-$sentencia->bindParam(':referencia_2', $referencia_2);
-
-if ($sentencia->execute()) {
-    // Preparar la consulta para alma_total
-    $sql2 = "INSERT INTO alma_total (fecha_movimiento, tipo_producto, producto, salio, entro, ";
-    
-    // Campos para salida
-    switch ($almacen_salida_md) {
-        case 3: $sql2 .= "id_principal"; break;
-        case 4: $sql2 .= "id_techled"; break;
-        case 5: $sql2 .= "importacion"; break;
-        case 6: $sql2 .= "id_tecnica"; break;
-        case 7: $sql2 .= "id_planta"; break;
-        case 8: $sql2 .= "id_pruebas"; break;
-        case 9: $sql2 .= "id_desechados"; break;
-        case 10: $sql2 .= "id_soporte_tecnico"; break;
-        case 11: $sql2 .= "id_aliados"; break;
-        default: $sql2 .= "id_principal"; break;
+    // Validar producto en el almacén de salida
+    if (array_key_exists($almacen_salida_md, $almacenes)) {
+        validarProductoEnAlmacen($pdo, $almacenes[$almacen_salida_md], $producto, $referencia_21, $salida_md, $almacen_salida_md);
     }
 
-    // Campos para entrada
-    switch ($almacen_entrada_md) {
-        case 3: $sql2 .= ", id_principal"; break;
-        case 4: $sql2 .= ", id_techled"; break;
-        case 5: $sql2 .= ", importacion"; break;
-        case 6: $sql2 .= ", id_tecnica"; break;
-        case 7: $sql2 .= ", id_planta"; break;
-        case 8: $sql2 .= ", id_pruebas"; break;
-        case 9: $sql2 .= ", id_desechados"; break;
-        case 10: $sql2 .= ", id_soporte_tecnico"; break;
-        case 11: $sql2 .= ", id_aliados"; break;
-        default: $sql2 .= ", id_principal"; break;
+    // Validar producto en el almacén de entrada
+    if (array_key_exists($almacen_entrada_md, $almacenes)) {
+        validarProductoEnAlmacen($pdo, $almacenes[$almacen_entrada_md], $producto, $referencia_21, $entrada_md, $almacen_entrada_md);
     }
 
-    $sql2 .= ") VALUES (:fecha, :producto, :referencia_21, :salida_md, :entrada_md, :salida_md, :entrada_md)";
+    // Insertar movimiento diario
+    $sql = "INSERT INTO movimiento_diario 
+            (fecha, consecu_sale, tipo_producto, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, referencia_2) 
+            VALUES (:fecha, :contador_salida, :producto, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :referencia_21)";
     
-    $sentencia_almacen = $pdo->prepare($sql2);
-    $sentencia_almacen->bindParam(':fecha', $fecha);
-    $sentencia_almacen->bindParam(':producto', $producto);
-    $sentencia_almacen->bindParam(':referencia_21', $referencia_21);
-    $sentencia_almacen->bindParam(':salida_md', $salida_md);
-    $sentencia_almacen->bindParam(':entrada_md', $entrada_md);
-    $sentencia_almacen->execute();
-    
-    if($sentencia_almacen->execute()){
-        // Actualizar las existencias
-        $sql3 = "UPDATE alma_total SET existen_entra = existen_entra + :entrada_md - :salida_md WHERE tipo_producto = :producto AND producto = :referencia_21";
-        $sentencia_existencia = $pdo->prepare($sql3);
-        $sentencia_existencia->bindParam(':entrada_md', $entrada_md);
-        $sentencia_existencia->bindParam(':salida_md', $salida_md);
-        $sentencia_existencia->bindParam(':producto', $producto);
-        $sentencia_existencia->bindParam(':referencia_21', $referencia_21);
+    $sentencia = $pdo->prepare($sql);
+    $sentencia->bindParam(':fecha', $fecha);
+    $sentencia->bindParam(':contador_salida', $contador_salida);
+    $sentencia->bindParam(':producto', $producto);
+    $sentencia->bindParam(':almacen_salida_md', $almacen_salida_md);
+    $sentencia->bindParam(':salida_md', $salida_md);
+    $sentencia->bindParam(':almacen_entrada_md', $almacen_entrada_md);
+    $sentencia->bindParam(':entrada_md', $entrada_md);
+    $sentencia->bindParam(':observacion', $observacion);
+    $sentencia->bindParam(':usuario', $usuario);
+    $sentencia->bindParam(':op_destino', $op_destino);
+    $sentencia->bindParam(':referencia_21', $referencia_21);
 
-        if ($sentencia_existencia->execute()) {
-            global $URL;
-            header('Location: ' . $URL . 'admin/almacen/mv_diario');
-            $_SESSION['msj'] = "Se ha registrado el movimiento de manera correcta y actualizado las existencias";
-            exit;
-        } else {
-            $_SESSION['msj'] = "Error al actualizar las existencias";
-        }
-    } else {
-        $_SESSION['msj'] = "Error al introducir la información en alma_total";
+    try {
+        $sentencia->execute();
+    } catch (PDOException $e) {
+        error_log("Error al guardar registro (Producto: $producto): " . $e->getMessage(), 3, 'error.log');
+        $_SESSION['msj'] = 'Error al guardar los registros. Por favor, intente nuevamente.';
+        header("Location: create_movimiento_salida_final.php");
+        exit;
     }
-} else {
-    $_SESSION['msj'] = "Error al ejecutar la consulta de movimiento_diario";
 }
 
-// Si llega aquí, algo salió mal en alguna parte
-global $URL;
-header('Location: ' . $URL . 'ruta_de_error'); // Ajusta 'ruta_de_error' a donde quieras redirigir en caso de error
+// Mensaje de éxito
+$_SESSION['msj'] = 'Movimientos registrados con éxito.';
+header("Location: create_movimiento_salida_final.php");
 exit;
+
 ?>

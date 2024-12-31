@@ -60,9 +60,9 @@ include('../../../layout/admin/parte1.php');
                                                                 almacen_origen.nombre_almacen AS almacen_origen,
                                                                 almacen_destino.nombre_almacen AS almacen_destino,
                                                                 CASE
-                                                                    WHEN mvd.tipo_producto = 1 THEN tp.pitch
-                                                                    WHEN mvd.tipo_producto = 2 THEN caraccon.marca_control
-                                                                    WHEN mvd.tipo_producto = 3 THEN caracfuen.marca_fuente
+                                                                    WHEN mvd.tipo_producto = 1 THEN tmc.pitch
+                                                                    WHEN mvd.tipo_producto = 2 THEN caraccontrol.marca
+                                                                    WHEN mvd.tipo_producto = 3 THEN caracfuentes.marca_fuente
                                                                     ELSE NULL
                                                                 END AS nombre_referencia_1,
                                                                 CASE
@@ -80,11 +80,11 @@ include('../../../layout/admin/parte1.php');
                                                             LEFT JOIN
                                                                 t_asignar_todos_almacenes AS almacen_destino ON mvd.almacen_destino1 = almacen_destino.id_asignacion
                                                             LEFT JOIN
-                                                                tabla_pitch AS tp ON mvd.referencia_1 = tp.id AND mvd.tipo_producto = 1
+                                                                tabla_pitch AS tp ON mvd.referencia_2 = tp.id AND mvd.tipo_producto = 1
                                                             LEFT JOIN
-                                                                caracteristicas_control AS caraccon ON mvd.referencia_1 = caraccon.id_car_ctrl AND mvd.tipo_producto = 2
+                                                                caracteristicas_control AS caraccon ON mvd.referencia_2 = caraccon.id_car_ctrl AND mvd.tipo_producto = 2
                                                             LEFT JOIN
-                                                                caracteristicas_fuentes AS caracfuen ON mvd.referencia_1 = caracfuen.id_car_fuen AND mvd.tipo_producto = 3
+                                                                caracteristicas_fuentes AS caracfuen ON mvd.referencia_2 = caracfuen.id_car_fuen AND mvd.tipo_producto = 3
                                                             LEFT JOIN
                                                                 producto_modulo_creado AS tmc ON mvd.referencia_2 = tmc.id AND mvd.tipo_producto = 1
                                                             LEFT JOIN

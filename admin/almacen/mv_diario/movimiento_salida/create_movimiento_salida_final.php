@@ -80,7 +80,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                             <div class="col-md-8">
                                                 <div class="form-group">
                                                     <label for="producto">Categoría</label>
-                                                    <select name="producto" id="producto" class="form-control" required>
+                                                    <select name="producto" id="producto" class="form-control">
                                                         <option value="">Seleccione un Producto</option>
                                                         <?php
                                                         $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos WHERE habilitar = "1" ORDER BY tipo_producto ASC');
@@ -319,7 +319,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                         <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label for="entrada_md">Cantidad de Salida</label>
-                                                                <input type="text" name="entrada_md" id="entrada_md" class="form-control" placeholder="Cantidad Entrada" required>
+                                                                <input type="text" name="entrada_md" id="entrada_md" class="form-control" placeholder="Cantidad Entrada">
                                                                 <small id="errorEntrada" class="text-danger" style="display:none;">La Cantidad de Salida no puede superar la existencia</small>
                                                             </div>
                                                         </div>
@@ -546,15 +546,15 @@ $(document).ready(function() {
     // Función para limpiar todos los campos del formulario, excluyendo el campo 'producto'
     function limpiarCampos() {
     // Limpiar todos los campos de texto, excluyendo los campos de la tabla
-    $('input[type="text"]').not('#producto, #almacen_salida_md, #id_producto_categoria, #cantidad1, #producto1, #referencia2, #contador_sale, .observacion2, #op_destino, .cantidad1, #producto_id, #referencia_id, .producto1, .referencia2').val('');
+    $('input[type="text"]').not('#producto, #almacen_salida_md, #id_producto_categoria, #cantidad1, #producto1, #referencia2, #contador_sale, .observacion2, #op_destino, .cantidad1, #producto_id12, #referencia_id12, .producto1, .referencia2').val('');
     $('input[type="number"]').val('');
     $('input[type="file"]').val('');
     $('select').not('#producto, #almacen_salida_md, #almacen_entrada_md').val('');
     $('textarea').val('');
-    $('input[type="hidden"]').val('');
+
     $('#list').empty(); // Vaciar la lista de imágenes si es necesario
     $('#lista_seriales').empty(); // Vaciar la tabla de seriales
-    seriales = []; // Reiniciar la lista de seriales
+
 }
 
     // Función común para manejar las solicitudes AJAX y actualizar selects
@@ -745,14 +745,14 @@ document.addEventListener('DOMContentLoaded', function () {
             </td>
             <td>
                 <input type="text" class="form-control producto1" name="producto1[]" value="${productoTexto}" readonly>
-                <input type="hidden" name="producto_id[]" id="producto_id" value="${productoID}">
+                <input type="hidden" id="producto_id12" name="producto_id12[]" value="${productoID}">
             </td>
             <td>
                 <input type="text" class="form-control referencia2" name="referencia2[]" value="${referencia}" readonly>
-                <input type="hidden" name="referencia_id[]" id="referencia_id" value="${referenciaID}">
+                <input type="hidden" id="referencia_id12" name="referencia_id12[]" value="${referenciaID}">
             </td>
             <td>
-                <input type="text" class="form-control observacion2" name="observacion2[]" value="${observacion}" readonly>
+                <input type="text" class="form-control observacion2" id="observacion2" name="observacion2[]" value="${observacion}" readonly>
             </td>
             <td>
                 <button type="button" class="btn btn-danger btnEliminarArticulo">Eliminar</button>

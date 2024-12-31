@@ -9,11 +9,8 @@ include('../../../../layout/admin/datos_sesion_user.php');
 // Obtener datos del formulario
 $fecha = $_POST['fecha'];
 $producto = $_POST['producto'] ?? null;
-$pitch = !empty($_POST['pitch']) ? $_POST['pitch'] : null;
 $serie_modulo = !empty($_POST['serie_modulo']) ? $_POST['serie_modulo'] : null;
-$marca_control = !empty($_POST['marca_control']) ? $_POST['marca_control'] : null;
 $referencia_control = !empty($_POST['referencia_control35']) ? $_POST['referencia_control35'] : null;
-$marca_fuente = !empty($_POST['marca_fuente']) ? $_POST['marca_fuente'] : null;
 $modelo_fuente = !empty($_POST['modelo_fuente35']) ? $_POST['modelo_fuente35'] : null;
 $almacen_salida_md = $_POST['almacen_salida_md'];
 $salida_md = -abs(floatval($_POST['salida_md'])); // Convierte a flotante y asegura valor negativo
@@ -24,11 +21,6 @@ $usuario = $_POST['idusuario'];
 $op_destino = $_POST['op_destino'];
 $posicion = $_POST['posicion1'];
 
-// Asignar referencia_1
-$referencia_1 = !empty($pitch) ? $pitch : (!empty($marca_control) ? $marca_control : $marca_fuente);
-
-// Asignar referencia_2
-$referencia_2 = !empty($serie_modulo) ? $serie_modulo : (!empty($referencia_control) ? $referencia_control : $modelo_fuente);
 
 // Asignar referencia_21 para facilitar la validación
 $referencia_21 = !empty($serie_modulo) ? $serie_modulo : (!empty($referencia_control) ? $referencia_control : $modelo_fuente);
@@ -127,18 +119,12 @@ if (array_key_exists($almacen_entrada_md, $almacenes)) {
 
 // Insertar movimiento diario
 $sql = "INSERT INTO movimiento_diario 
-        (fecha, tipo_producto, pitch_modulo, serie_modulo, marca_control, referencia_control, marc_fuente1, modelo_fuente, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, referencia_1, referencia_2, posicion) 
-        VALUES (:fecha, :producto, :pitch, :serie_modulo, :marca_control, :referencia_control, :marca_fuente, :modelo_fuente, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :referencia_1, :referencia_2, :posicion)";
+        (fecha, tipo_producto, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, referencia_2, posicion) 
+        VALUES (:fecha, :producto, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :referencia_21, :posicion)";
 
 $sentencia = $pdo->prepare($sql);
 $sentencia->bindParam(':fecha', $fecha);
 $sentencia->bindParam(':producto', $producto);
-$sentencia->bindParam(':pitch', $pitch);
-$sentencia->bindParam(':serie_modulo', $serie_modulo);
-$sentencia->bindParam(':marca_control', $marca_control);
-$sentencia->bindParam(':referencia_control', $referencia_control);
-$sentencia->bindParam(':marca_fuente', $marca_fuente);
-$sentencia->bindParam(':modelo_fuente', $modelo_fuente);
 $sentencia->bindParam(':almacen_salida_md', $almacen_salida_md);
 $sentencia->bindParam(':salida_md', $salida_md);
 $sentencia->bindParam(':almacen_entrada_md', $almacen_entrada_md);
@@ -146,8 +132,7 @@ $sentencia->bindParam(':entrada_md', $entrada_md);
 $sentencia->bindParam(':observacion', $observacion);
 $sentencia->bindParam(':usuario', $usuario);
 $sentencia->bindParam(':op_destino', $op_destino);
-$sentencia->bindParam(':referencia_1', $referencia_1);
-$sentencia->bindParam(':referencia_2', $referencia_2);
+$sentencia->bindParam(':referencia_21', $referencia_21);
 $sentencia->bindParam(':posicion', $posicion);
 
 if ($sentencia->execute()) {

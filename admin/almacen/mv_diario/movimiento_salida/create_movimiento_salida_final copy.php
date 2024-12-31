@@ -25,299 +25,213 @@ include('../../../../layout/admin/parte1.php');
                 </div>
                 <div class="card-body">
                     <form action="controller_create_final.php" method="POST">
-
-                        <!-- HORA, FECHA, CATEGORÍA ... -->
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-2">
                                 <div class="form-group">
-                                    <!-- FECHA Y HORA -->
+                                    <label for="fecha">Fecha</label>
+                                    <input type="date" id="fecha" name="fecha" class="form-control" placeholder="Fecha" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="hora">Hora</label>
+                                    <input type="time" id="hora" name="hora" class="form-control" placeholder="Hora" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="producto">Categoría</label>
+                                    <select name="producto" id="producto" class="form-control" required>
+                                        <option value="">Seleccione un Producto</option>
+                                        <?php
+                                        $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos WHERE habilitar = "1" ORDER BY tipo_producto ASC');
+                                        $query_producto->execute();
+                                        $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach($productos as $producto) {
+                                            echo '<option value="' . htmlspecialchars($producto['id_producto']) . '">' . htmlspecialchars($producto['tipo_producto']) . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-0">
+                                <div class="form-group"> <!-- Se coloca aquí el id producto -->
+                                    <input  class="form-control" id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']?>" hidden>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h1 class="m-0">Validar Producto</h1>
+                            </div>
+                            <div class="col-md-0">
+                                <div class="form-group"> <!-- Se coloca aquí el usuario que está trabajando el archivo -->
+                                    <input type="hidden" id="id_producto_categoria" name="id_producto_categoria">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                        <!-- MODULO -->
+
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-11 campo Modulo">
                                             <div class="form-group">
-                                                <label for="fecha">Fecha</label>
-                                                <input type="date" id="fecha" name="fecha" class="form-control" placeholder="Fecha" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="hora">Hora</label>
-                                                <input type="time" id="hora" name="hora" class="form-control" placeholder="Hora" readonly>
+                                                <label for="pitch">Pitch</label>
+                                                <select id="pitch" name="pitch" class="form-control">
+                                                    <option value="">Seleccione un pitch</option>
+                                                    <?php 
+                                                    $query_pitch = $pdo->prepare('SELECT DISTINCT pmc.pitch, tp.pitch AS pitch_nombre FROM producto_modulo_creado AS pmc INNER JOIN tabla_pitch AS tp ON pmc.pitch = tp.id ORDER BY tp.pitch ASC');
+                                                    $query_pitch->execute();
+                                                    $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
+                                                    foreach ($pitches as $pitch): ?>
+                                                    <option value="<?php echo $pitch['pitch']; ?>">
+                                                        <?php echo $pitch['pitch_nombre']; ?>
+                                                    </option>
+                                                    <?php endforeach; ?>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- CATEGORÍA -->
-                                    <div class="row" hidden>
-                                        <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-11 campo Modulo">
                                             <div class="form-group">
-                                                <label for="producto">Categoría</label>
-                                                <select name="producto" id="producto" class="form-control" required>
-                                                    <option value="">Seleccione un Producto</option>
-                                                    <?php
-                                                    $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos WHERE habilitar = "1" ORDER BY tipo_producto ASC');
-                                                    $query_producto->execute();
-                                                    $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
-                                                    foreach($productos as $producto) {
-                                                        echo '<option value="' . htmlspecialchars($producto['id_producto']) . '">' . htmlspecialchars($producto['tipo_producto']) . '</option>';
-                                                    }
-                                                    ?>
+                                                <label for="serie_modulo">Serie</label>
+                                                <select id="serie_modulo" name="serie_modulo" class="form-control">
+                                                    <option value="">Seleccione una Serie</option>
+                                                    <!-- Las opciones se llenarán dinámicamente vía AJAX -->
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-md-0">
                                             <div class="form-group"> <!-- Se coloca aquí el id producto -->
-                                                <input  class="form-control" id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']?>" hidden>
+                                                <input type="hidden" id="id_serie_modulo" name="id_serie_modulo">
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <h1 class="m-0">Validar Producto</h1>
+                                        <div class="col-md-11 campo Modulo">
+                                            <div class="form-group">
+                                                <label for="referencia_modulo">Referencia</label>
+                                                    <input type="text" id="campo_referencia" name="referencia" class="form-control" readonly>
+                                                    <!-- Campos ocultos para almacenar los valores de serie y referencia -->
+                                                    <input type="hidden" id="campo_serie" name="serie">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                        <!-- CONTROLADORA -->
+
+                                    <div class="row">
+                                        <div class="col-md-11 campo Control">
+                                            <div class="form-group">
+                                                <label for="marca_control">Marca</label>
+                                                <select id="marca_control" name="marca_control" class="form-control" >
+                                                    <option value="">Seleccione una marca</option>
+                                                    <?php 
+                                                    $query_marca_control = $pdo->prepare('SELECT id_car_ctrl, marca_control FROM caracteristicas_control WHERE marca_control IS NOT NULL AND marca_control != "" ORDER BY marca_control ASC');
+                                                    $query_marca_control->execute();
+                                                    $marcas_controles = $query_marca_control->fetchAll(PDO::FETCH_ASSOC);
+                                                    foreach ($marcas_controles as $marca_control): ?>
+                                                    <option value="<?php echo $marca_control['id_car_ctrl']; ?>">
+                                                        <?php echo $marca_control['marca_control']; ?>
+                                                    </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-11 campo Control">
+                                            <div class="form-group">
+                                                <label for="referencia_control35">Referencia</label>
+                                                <select id="referencia_control35" name="referencia_control35" class="form-control" >
+                                                    <option value="">Seleccione una Referencia</option>
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="col-md-0">
-                                            <div class="form-group"> <!-- Se coloca aquí el usuario que está trabajando el archivo -->
-                                                <input type="hidden" id="id_producto_categoria" name="id_producto_categoria">
+                                            <div class="form-group"> <!-- Se coloca aquí el id producto -->
+                                                <input type="hidden" id="id_referencia_control" name="id_referencia_control">
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- PRODUCTOS -->
+                                        <!-- FUENTE -->
+
                                     <div class="row">
-                                        <div class="col-md-8" hidden>
+                                        <div class="col-md-11 campo Fuente">
                                             <div class="form-group">
-                                                    
-                                                <!-- MODULO -->
-                                                <div class="row">
-                                                    <div class="col-md-11 campo Modulo">
-                                                        <div class="form-group">
-                                                            <label for="pitch">Pitch</label>
-                                                            <select id="pitch" name="pitch" class="form-control">
-                                                                <option value="">Seleccione un pitch</option>
-                                                                <?php 
-                                                                $query_pitch = $pdo->prepare('SELECT DISTINCT pmc.pitch, tp.pitch AS pitch_nombre FROM producto_modulo_creado AS pmc INNER JOIN tabla_pitch AS tp ON pmc.pitch = tp.id ORDER BY tp.pitch ASC');
-                                                                $query_pitch->execute();
-                                                                $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
-                                                                foreach ($pitches as $pitch): ?>
-                                                                <option value="<?php echo $pitch['pitch']; ?>">
-                                                                    <?php echo $pitch['pitch_nombre']; ?>
-                                                                </option>
-                                                                <?php endforeach; ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-11 campo Modulo">
-                                                        <div class="form-group">
-                                                            <label for="serie_modulo">Serie</label>
-                                                            <select id="serie_modulo" name="serie_modulo" class="form-control">
-                                                                <option value="">Seleccione una Serie</option>
-                                                                <!-- Las opciones se llenarán dinámicamente vía AJAX -->
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-0">
-                                                        <div class="form-group"> <!-- Se coloca aquí el id producto -->
-                                                            <input type="hidden" id="id_serie_modulo" name="id_serie_modulo">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-11 campo Modulo">
-                                                        <div class="form-group">
-                                                            <label for="referencia_modulo">Referencia</label>
-                                                            <input type="text" id="campo_referencia" name="referencia" class="form-control" readonly>
-                                                            <!-- Campos ocultos para almacenar los valores de serie y referencia -->
-                                                            <input type="hidden" id="campo_serie" name="serie">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                    <!-- CONTROLADORA -->
-                                                <div class="row">
-                                                    <div class="col-md-11 campo Control">
-                                                        <div class="form-group">
-                                                            <label for="marca_control">Marca</label>
-                                                            <select id="marca_control" name="marca_control" class="form-control" >
-                                                                <option value="">Seleccione una marca</option>
-                                                                <?php 
-                                                                $query_marca_control = $pdo->prepare('SELECT id_car_ctrl, marca_control FROM caracteristicas_control WHERE marca_control IS NOT NULL AND marca_control != "" ORDER BY marca_control ASC');
-                                                                $query_marca_control->execute();
-                                                                $marcas_controles = $query_marca_control->fetchAll(PDO::FETCH_ASSOC);
-                                                                foreach ($marcas_controles as $marca_control): ?>
-                                                                <option value="<?php echo $marca_control['id_car_ctrl']; ?>">
-                                                                    <?php echo $marca_control['marca_control']; ?>
-                                                                </option>
-                                                                <?php endforeach; ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-11 campo Control">
-                                                        <div class="form-group">
-                                                            <label for="referencia_control35">Referencia</label>
-                                                            <select id="referencia_control35" name="referencia_control35" class="form-control" >
-                                                                <option value="">Seleccione una Referencia</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-0">
-                                                        <div class="form-group"> <!-- Se coloca aquí el id producto -->
-                                                            <input type="hidden" id="id_referencia_control" name="id_referencia_control">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                    <!-- FUENTE -->
-                                                <div class="row">
-                                                    <div class="col-md-11 campo Fuente">
-                                                        <div class="form-group">
-                                                            <label for="marca_fuente">Marca</label>
-                                                            <select name="marca_fuente" id="marca_fuente" class="form-control">
-                                                                <option value="">Seleccione una Marca</option>
-                                                                <?php 
-                                                                $query_modelo_fuente = $pdo->prepare('SELECT id_car_fuen, marca_fuente FROM caracteristicas_fuentes WHERE marca_fuente IS NOT NULL AND marca_fuente != ""  ORDER BY marca_fuente ASC');
-                                                                $query_modelo_fuente->execute();
-                                                                $modelos_fuentes = $query_modelo_fuente->fetchAll(PDO::FETCH_ASSOC);
-                                                                foreach ($modelos_fuentes as $modelo_fuente): ?>
-                                                                <option value="<?php echo $modelo_fuente['id_car_fuen']; ?>">
-                                                                    <?php echo $modelo_fuente['marca_fuente']; ?>
-                                                                </option>
-                                                                <?php endforeach; ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-11 campo Fuente">
-                                                        <div class="form-group">
-                                                            <label for="modelo_fuente35">Modelo</label>
-                                                            <select name="modelo_fuente35" id="modelo_fuente35" class="form-control">
-                                                                <option value="">Seleccione un Modelo</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-0">
-                                                        <div class="form-group"> <!-- Se coloca aquí el id producto -->
-                                                            <input type="hidden" id="id_modelo_fuente" name="id_modelo_fuente">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                    <!-- LCD -->
-
-                                                <div class="row">
-                                                    <div class="col-md-11 campo LCD">
-                                                        <div class="form-group">
-                                                            <label for="marca_lcd">Marca</label>
-                                                            <input type="text" id="marca_lcd" name="marca_lcd" class="form-control" placeholder="Marca">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-11 campo LCD">
-                                                        <div class="form-group">
-                                                            <label for="modelo_lcd">Modelo</label>
-                                                            <input type="text" id="modelo_lcd" name="modelo_lcd" class="form-control" placeholder="Modelo">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- UBICACIONES Y EXISTENCIAS -->
-                                        <div class="col-md-4" hidden>
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label for="ubicacion">Ubicación</label>
-                                                            <input type="text" class="form-control" id="ubicacion" name="ubicacion" readonly>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label for="existencia">Existencia</label>
-                                                            <input type="text" class="form-control" id="existencia" name="existencia" readonly>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <label for="marca_fuente">Marca</label>
+                                                <select name="marca_fuente" id="marca_fuente" class="form-control">
+                                                    <option value="">Seleccione una Marca</option>
+                                                    <?php 
+                                                    $query_modelo_fuente = $pdo->prepare('SELECT id_car_fuen, marca_fuente FROM caracteristicas_fuentes WHERE marca_fuente IS NOT NULL AND marca_fuente != ""  ORDER BY marca_fuente ASC');
+                                                    $query_modelo_fuente->execute();
+                                                    $modelos_fuentes = $query_modelo_fuente->fetchAll(PDO::FETCH_ASSOC);
+                                                    foreach ($modelos_fuentes as $modelo_fuente): ?>
+                                                    <option value="<?php echo $modelo_fuente['id_car_fuen']; ?>">
+                                                        <?php echo $modelo_fuente['marca_fuente']; ?>
+                                                    </option>
+                                                    <?php endforeach; ?>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- ALMACEN -->
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-11 campo Fuente">
                                             <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="entrada_md">Almacén Destino</label>
-                                                            <select name="almacen_entrada_md" id="almacen_entrada_md" class="form-control" required>
-                                                                <option value="">Almacén Destino</option>
-                                                                <?php
-                                                                $query_almacen_entra = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 3 AND nombre_almacen != "Principal"');
-                                                                $query_almacen_entra->execute();
-                                                                $almacenes_entras = $query_almacen_entra->fetchAll(PDO::FETCH_ASSOC);
-                                                                foreach($almacenes_entras as $almacen_entra) {
-                                                                    echo '<option value="' . $almacen_entra['id_asignacion'] . '">' . $almacen_entra['nombre_almacen'] . '</option>';
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                            <input class="form-control" name="almacen_entrada_md_id" id="almacen_entrada_md_id" hidden>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3" hidden>
-                                                        <div class="form-group">
-                                                            <label for="entrada_md">Cantidad</label>
-                                                            <input type="text" name="entrada_md" class="form-control" placeholder="Cantidad Entrada" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        <div class="form-group">
-                                                            <label for="op_destino">Asignar a:</label>
-                                                            <input type="text" name="op_destino" class="form-control" placeholder="Asignar" required>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <label for="modelo_fuente35">Modelo</label>
+                                                <select name="modelo_fuente35" id="modelo_fuente35" class="form-control">
+                                                    <option value="">Seleccione un Modelo</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-0">
+                                            <div class="form-group"> <!-- Se coloca aquí el id producto -->
+                                                <input type="hidden" id="id_modelo_fuente" name="id_modelo_fuente">
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                                <div class="row">
-                                                    <div class="col-md-7" hidden>
-                                                        <div class="form-group">
-                                                            <label for="salida_md">Almacén Salida</label>
-                                                            <select name="almacen_salida_md" id="almacen_salida_md" class="form-control" >
-                                                                <option value="">Almacén Origen</option>
-                                                                <?php 
-                                                                $query_almacen  = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes');
-                                                                $query_almacen->execute();
-                                                                $almacenes = $query_almacen->fetchAll(PDO::FETCH_ASSOC);
-                                                                foreach($almacenes as $almacen) {
-                                                                    $selected = ($almacen['id_asignacion'] == 3) ? 'selected' : '';
-                                                                    echo '<option value="' . $almacen['id_asignacion'] . '" ' . $selected . '>' . $almacen['nombre_almacen'] . '</option>';
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                            <input class="form-control" name="almacen_salida_md_id" id="almacen_salida_md_id" hidden>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3" hidden>
-                                                        <div class="form-group">
-                                                            <label for="salida_md">Salida</label>
-                                                            <input type="text" name="salida_md" class="form-control" placeholder="Cantidad Salida">
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        <!-- LCD -->
 
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label for="observacion">Observaciones</label>
-                                                            <textarea name="observacion" id="observacion" cols="30" rows="4" class="form-control" placeholder="Observaciones"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                    <div class="row">
+                                        <div class="col-md-11 campo LCD">
+                                            <div class="form-group">
+                                                <label for="marca_lcd">Marca</label>
+                                                <input type="text" id="marca_lcd" name="marca_lcd" class="form-control" placeholder="Marca">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-11 campo LCD">
+                                            <div class="form-group">
+                                                <label for="modelo_lcd">Modelo</label>
+                                                <input type="text" id="modelo_lcd" name="modelo_lcd" class="form-control" placeholder="Modelo">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="ubicacion">Ubicación</label>
+                                                <input type="text" class="form-control" id="ubicacion" name="ubicacion" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="existencia">Existencia</label>
+                                                <input type="text" class="form-control" id="existencia" name="existencia" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -325,29 +239,83 @@ include('../../../../layout/admin/parte1.php');
                             </div>
                         </div>
 
-                        <!-- TABLA -->
+                            <!-- ALMACEN -->
+
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-7">
                                             <div class="form-group">
-                                                <label for="">Artículos para la Salida</label>
-                                                <table class="table table-bordered" id="tabla-articulos">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Cantidad</th>
-                                                            <th>Producto</th>
-                                                            <th>Referencia</th>
-                                                            <th>Observación</th>
-                                                            <th>Acción</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
+                                                <label for="entrada_md">Almacén Destino</label>
+                                                <select name="almacen_entrada_md" id="almacen_entrada_md" class="form-control" required>
+                                                    <option value="">Almacén Destino</option>
+                                                    <?php
+                                                    $query_almacen_entra = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 3 AND nombre_almacen != "Principal"');
+                                                    $query_almacen_entra->execute();
+                                                    $almacenes_entras = $query_almacen_entra->fetchAll(PDO::FETCH_ASSOC);
+                                                    foreach($almacenes_entras as $almacen_entra) {
+                                                        echo '<option value="' . $almacen_entra['id_asignacion'] . '">' . $almacen_entra['nombre_almacen'] . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                                <input class="form-control" name="almacen_entrada_md_id" id="almacen_entrada_md_id" hidden>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="entrada_md">Cantidad de Salida</label>
+                                                <input type="text" name="entrada_md" id="entrada_md" class="form-control" placeholder="Cantidad Entrada" required>
+                                                <small id="errorEntrada" class="text-danger" style="display:none;">La Cantidad de Salida no puede superar la existencia</small>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                                    </tbody>
-                                                </table>
-                                                <button type="button" class="btn btn-primary" id="btnAgregarArticulo">Agregar Artículo</button>
+                                    <div class="row">
+                                        <div class="col-md-7" hidden>
+                                            <div class="form-group">
+                                                <label for="salida_md">Almacén Salida</label>
+                                                <select name="almacen_salida_md" id="almacen_salida_md" class="form-control" >
+                                                    <option value="">Almacén Origen</option>
+                                                    <?php 
+                                                    $query_almacen  = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes');
+                                                    $query_almacen->execute();
+                                                    $almacenes = $query_almacen->fetchAll(PDO::FETCH_ASSOC);
+                                                    foreach($almacenes as $almacen) {
+                                                        $selected = ($almacen['id_asignacion'] == 3) ? 'selected' : '';
+                                                        echo '<option value="' . $almacen['id_asignacion'] . '" ' . $selected . '>' . $almacen['nombre_almacen'] . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                                <input class="form-control" name="almacen_salida_md_id" id="almacen_salida_md_id" hidden>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" hidden>
+                                            <div class="form-group">
+                                                <label for="salida_md">Salida</label>
+                                                <input type="text" name="salida_md" class="form-control" placeholder="Cantidad Salida">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <div class="form-group">
+                                                <label for="op_destino">Asignar a:</label>
+                                                <input type="text" name="op_destino" class="form-control" placeholder="Asignar" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <div class="form-group">
+                                                <label for="observacion">Observaciones</label>
+                                                <textarea name="observacion" id="observacion" cols="30" rows="4" class="form-control" placeholder="Observaciones"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -566,7 +534,7 @@ $(document).ready(function() {
 </script>
 
 <script>
-$(document).ready(function () {
+   $(document).ready(function () {
     // Escuchar cambios en los selects después de seleccionar el id_producto_categoria
     $('#serie_modulo, #referencia_control35, #modelo_fuente35').change(function () {
         var idProductoCategoria = $('#id_producto_categoria').val(); // Obtener id_producto_categoria
@@ -622,92 +590,17 @@ $(document).ready(function () {
 
 </script>
 
-<style>
-    /* Ajuste del contenedor externo para cada columna */
-    .contenedor-cantidad {
-        width: 80px; /* Ancho del contenedor de 'Cantidad' */
-        height: 40px; /* Altura del contenedor de 'Cantidad' */
-        display: flex; /* Usar flex para alinear contenido */
-        align-items: center; /* Centrar verticalmente */
-    }
-
-    .contenedor-producto {
-        width: 350px; /* Ancho del contenedor de 'Producto' */
-        height: 40px; /* Altura del contenedor de 'Producto' */
-        display: flex;
-        align-items: center;
-    }
-
-    .contenedor-referencia {
-        width: 300px; /* Ancho del contenedor de 'Referencia' */
-        height: 40px;
-        display: flex;
-        align-items: center;
-    }
-
-    .contenedor-observacion {
-        width: 400px; /* Ancho del contenedor de 'Observación' */
-        height: 50px; /* Altura más grande para 'Observación' */
-        display: flex;
-        align-items: center;
-    }
-
-    /* Ajustar los inputs para que ocupen todo el espacio dentro de los contenedores */
-    .contenedor-cantidad input,
-    .contenedor-producto input,
-    .contenedor-referencia input,
-    .contenedor-observacion input {
-        width: 100%; /* Ajustar al ancho del contenedor */
-        height: 100%; /* Ajustar a la altura del contenedor */
-        box-sizing: border-box; /* Incluye padding y border en el tamaño total */
-        margin: auto; /* Centrar el input dentro del contenedor */
-    }
-</style>
-
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Botón para agregar un artículo
-        const btnAgregarArticulo = document.getElementById('btnAgregarArticulo');
-        const tablaArticulos = document.getElementById('tabla-articulos').getElementsByTagName('tbody')[0];
+    const entradaMd = document.getElementById('entrada_md');
+    const existencia = document.getElementById('existencia');
+    const errorEntrada = document.getElementById('errorEntrada');
 
-        btnAgregarArticulo.addEventListener('click', function () {
-            // Crear una nueva fila
-            const nuevaFila = document.createElement('tr');
-
-            // Columnas
-            nuevaFila.innerHTML = `
-                <td>
-                    <div class="contenedor-cantidad">
-                        <input type="number" class="form-control cantidad" name="cantidad[]" placeholder="Cantidad" required>
-                    </div>
-                </td>
-                <td>
-                    <div class="contenedor-producto">
-                        <input type="text" class="form-control producto" name="producto[]" placeholder="Nombre del producto" required>
-                    </div>
-                </td>
-                <td>
-                    <div class="contenedor-referencia">
-                        <input type="text" class="form-control referencia" name="referencia[]" placeholder="Referencia" required>
-                    </div>
-                </td>
-                <td>
-                    <div class="contenedor-observacion">
-                        <input type="text" class="form-control observacion" name="observacion[]" placeholder="Observación" required>
-                    </div>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger btnEliminarArticulo">Eliminar</button>
-                </td>
-            `;
-
-            // Agregar fila a la tabla
-            tablaArticulos.appendChild(nuevaFila);
-
-            // Asignar evento para eliminar la fila
-            nuevaFila.querySelector('.btnEliminarArticulo').addEventListener('click', function () {
-                nuevaFila.remove();
-            });
-        });
+    entradaMd.addEventListener('input', function() {
+        if (parseInt(this.value) > parseInt(existencia.value)) {
+            errorEntrada.style.display = 'block';
+            this.value = ''; // Borra el valor si es inválido
+        } else {
+            errorEntrada.style.display = 'none';
+        }
     });
 </script>
