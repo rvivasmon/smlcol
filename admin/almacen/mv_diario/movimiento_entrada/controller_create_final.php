@@ -8,6 +8,7 @@ include('../../../../layout/admin/datos_sesion_user.php');
 
 // Obtener datos del formulario
 $fecha = $_POST['fecha'];
+$contador_entra = $_POST['contador_entra'] ?? null;
 $producto = $_POST['producto'] ?? null;
 $serie_modulo = !empty($_POST['serie_modulo']) ? $_POST['serie_modulo'] : null;
 $referencia_control = !empty($_POST['referencia_control35']) ? $_POST['referencia_control35'] : null;
@@ -119,11 +120,12 @@ if (array_key_exists($almacen_entrada_md, $almacenes)) {
 
 // Insertar movimiento diario
 $sql = "INSERT INTO movimiento_diario 
-        (fecha, tipo_producto, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, referencia_2, posicion) 
-        VALUES (:fecha, :producto, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :referencia_21, :posicion)";
+        (fecha, consecu_entra, tipo_producto, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, referencia_2, posicion) 
+        VALUES (:fecha, :contador_entra, :producto, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :referencia_21, :posicion)";
 
 $sentencia = $pdo->prepare($sql);
 $sentencia->bindParam(':fecha', $fecha);
+$sentencia->bindParam(':contador_entra', $contador_entra);
 $sentencia->bindParam(':producto', $producto);
 $sentencia->bindParam(':almacen_salida_md', $almacen_salida_md);
 $sentencia->bindParam(':salida_md', $salida_md);

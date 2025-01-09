@@ -28,9 +28,6 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
 
 ?>
 
-
-?>
-
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
@@ -413,11 +410,10 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-primary btn-block">Crear Movimiento</button>
+                                        <button id="generarPdf" class="btn btn-primary">Crear PDF y Movimiento</button>
                                     </div>
                                 </div>
                             </div>
-
                         </form>
                     </div>
                 </div>
@@ -780,7 +776,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('marca_fuente').value = '';        
     });
 });
-
 </script>
 
 <script>
@@ -797,3 +792,76 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 </script>
+
+<script>
+    document.getElementById('generarPdf').addEventListener('click', function () {
+        // Crea una nueva instancia de jsPDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+            orientation: 'landscape', // Establece la orientación horizontal
+            unit: 'mm', // Unidad de medida
+            format: 'a4' // Formato de la hoja
+        });
+
+        // Datos adicionales
+        const fecha = new Date().toLocaleDateString();
+        const contadorSalida = document.getElementById('contador_sale').value || "N/A";
+        const almacenDestino = document.getElementById('almacen_entrada_md').options[document.getElementById('almacen_entrada_md').selectedIndex].text || "N/A";
+        const asignarA = document.getElementById('op_destino').value || "N/A";
+
+        // Encabezado de la empresa
+        doc.setFontSize(16);
+        doc.text('SMARTLED COLOMBIA', 150, 10, { align: 'center' });
+        doc.setFontSize(12);
+        doc.text('Salida de Artículos del Almacén', 150, 20, { align: 'center' });
+
+        // Información adicional
+        doc.setFontSize(10);
+        doc.text(`Fecha: ${fecha}`, 10, 40);
+        doc.text(`# Documento: ${contadorSalida}`, 10, 45);
+        doc.text(`Almacén destino: ${almacenDestino}`, 10, 50);
+        doc.text(`Asignar a: ${asignarA}`, 10, 55);
+
+        // Crear los datos para la tabla
+        const tablaArticulos = document.getElementById('tabla-articulos').getElementsByTagName('tbody')[0];
+        const datosTabla = []; // Aquí almacenaremos las filas de datos
+
+        for (let i = 0; i < tablaArticulos.rows.length; i++) {
+            const fila = tablaArticulos.rows[i];
+
+            // Extraer valores de los inputs en las celdas
+            const cantidad = fila.querySelector('.cantidad1').value || "";
+            const producto = fila.querySelector('.producto1').value || "";
+            const referencia = fila.querySelector('.referencia2').value || "";
+            const observacion = fila.querySelector('.observacion2').value || "";
+
+            // Agregar la fila de datos como un array
+            datosTabla.push([cantidad, producto, referencia, observacion]);
+        }
+
+        // Usar autoTable para crear la tabla
+        doc.autoTable({
+            head: [['Cantidad', 'Producto', 'Referencia', 'Observación']], // Encabezados
+            body: datosTabla, // Datos de la tabla
+            startY: 65, // Posición inicial
+            styles: { fontSize: 8 }, // Tamaño de fuente
+            theme: 'grid', // Tema con bordes para la tabla
+        });
+
+        // Agregar líneas para firma
+        const finalY = doc.lastAutoTable.finalY + 20; // Obtener la posición final de la tabla y dar espacio
+
+        // Dibujar líneas horizontales
+        doc.line(60, finalY, 120, finalY); // Línea para "Entrega"
+        doc.line(180, finalY, 240, finalY); // Línea para "Recibe"
+
+        // Agregar textos debajo de las líneas
+        doc.setFontSize(10);
+        doc.text("Entrega", 80, finalY + 5); // Texto debajo de la línea de "Entrega"
+        doc.text("Recibe", 200, finalY + 5); // Texto debajo de la línea de "Recibe"
+
+        // Guardar el PDF con un nombre específico
+        doc.save('reporte_articulos.pdf');
+    });
+</script>
+

@@ -25,11 +25,11 @@ define('BD_SISTEMA','smartled_bd_sigcp_2024');
 // Servidor
 //$URL = 'http://sigcp2024.smartledcolombia.com/';
 
-// Local
-//$URL = 'http://192.168.88.9/www.smlcol.com/';
-
 // House
-$URL = 'http://192.168.1.7/www.smlcol.com/';
+//$URL = 'http://192.168.1.7/www.smlcol.com/';
+
+// Local
+$URL = 'http://192.168.88.235/www.smlcol.com/';
 
 
 if(isset($_SESSION['mensaje'])){ 

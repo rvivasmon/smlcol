@@ -15,6 +15,23 @@ include('../../../../layout/admin/parte1.php');
     // Obtener los módulos sin referencia
     $modulosSinReferencia = $query_referencia->fetchAll(PDO::FETCH_ASSOC);
 
+    // Obtener el último contador desde la base de datos
+    $query = $pdo->prepare('SELECT consecu_entra FROM movimiento_diario ORDER BY consecu_entra DESC LIMIT 1');
+    $query->execute();
+    $resultado = $query->fetch(PDO::FETCH_ASSOC);
+
+    if ($resultado) {
+        $ultimoContador = $resultado['consecu_entra']; // Obtén el último valor del contador
+    } else {
+        $ultimoContador = 1; // Si no existe, inicialízalo en 0
+    }
+
+    // Incrementar el contador en 1
+    $nuevoContador = $ultimoContador + 1;
+
+    // Formatear el contador con ceros a la izquierda (4 dígitos)
+    $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
+
 ?>
 
 <div class="content-wrapper">
@@ -58,7 +75,7 @@ include('../../../../layout/admin/parte1.php');
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="contador_entra">Contador de Entrada</label>
-                                                <input type="text" id="contador_entra" name="contador_entra" class="form-control" readonly>
+                                                <input type="text" id="contador_entra" name="contador_entra" value="<?php echo $contadorFormateado; ?>" class="form-control" required readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -82,7 +99,7 @@ include('../../../../layout/admin/parte1.php');
                                         </div>
                                         <div class="col-md-0">
                                             <div class="form-group"> <!-- Se coloca aquí el usuario que está trabajando el archivo -->
-                                                <input  class="form-control"  id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']?>" hidden>
+                                                <input  class="form-control"  id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']; ?>" hidden>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -594,7 +611,7 @@ include('../../../../layout/admin/parte1.php');
         // Función para limpiar todos los campos del formulario, excluyendo el campo 'producto'
         function limpiarCampos() {
             // Limpiar todos los inputs de texto, select y textarea, excepto el campo 'producto'
-            $('input[type="text"]').not('#producto, #almacen_entrada_md').val('');  // Limpiar campos de texto excepto 'producto'
+            $('input[type="text"]').not('#producto, #almacen_entrada_md, #contador_entra').val('');  // Limpiar campos de texto excepto 'producto'
             $('input[type="number"]').val(''); // Limpiar campos numéricos
             $('input[type="file"]').val('');   // Limpiar campo de archivo
             $('select').not('#producto, #almacen_entrada_md').val(''); // Limpiar selects excepto 'producto'

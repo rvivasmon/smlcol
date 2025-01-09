@@ -33,7 +33,7 @@ include('../../../../layout/admin/parte1.php');
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="">Origen de Solicitud</label>
-                                                <input type="text" name="origen_solicitud" id="origen_solicitud" class="form-control" value="<?php echo?>">
+                                                <input type="text" name="origen_solicitud" id="origen_solicitud" class="form-control" value=""> <!-- FALTA COLOCAR AQUÍ DE DÓNDE PROVIENE LA SOLICITUD OJO -->
                                             </div>
                                         </div>
                                         <div class="col-md-3">
