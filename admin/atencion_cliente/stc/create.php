@@ -116,7 +116,9 @@ include('../../../layout/admin/parte1.php');
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="">ID Producto</label>
-                                                <input type="text" name="idproducto" id="idproducto" class="form-control" placeholder="ID Producto" required readonly>
+                                                <select name="idproducto" id="idproducto" class="form-control" required readonly>
+                                                    <option value="" disabled selected>Seleccionar Producto</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -153,7 +155,7 @@ include('../../../layout/admin/parte1.php');
                                             <div class="form-group">
                                                 <label for="">Lugar de instalación</label>
                                                 <select name="proyecto" id="proyecto" class="form-control" required>
-                                                    <option value="">Seleccione un Lugar</option>
+                                                    <option value="">Seleccione un Proyecto</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -332,15 +334,20 @@ function prevImage() {
 <script>
 document.getElementById('idcliente').addEventListener('change', function() {
     var clienteId = this.value;
+
+    // Limpiar el <select> de ciudades
     var ciudadSelect = document.getElementById('idciudad');
     ciudadSelect.innerHTML = '<option value="">Seleccionar Ciudad</option>'; // Opción predeterminada
+
+    // Limpiar el <select> de proyectos
     var proyectoSelect = document.getElementById('proyecto');
-    proyectoSelect.innerHTML = '<option value="">Seleccionar Ciudad</option>'; // Opción predeterminada
+    proyectoSelect.innerHTML = '<option value="">Seleccione un Proyecto</option>'; // Opción predeterminada
 
-    var idproductoInput = document.getElementById('idproducto');
-    idproductoInput.value = ''; //Limpia el valor
-    
+    // Limpiar el <select> de productos
+    var idproductoSelect = document.getElementById('idproducto');
+    idproductoSelect.innerHTML = '<option value="">Seleccione un Producto</option>'; // Opción predeterminada
 
+    // Realizar acciones si hay un cliente seleccionado
     if (clienteId) {
         // Realizar la solicitud AJAX para obtener las ciudades
         fetch(`obtener_ciudades.php?cliente_id=${clienteId}`)
@@ -352,9 +359,11 @@ document.getElementById('idcliente').addEventListener('change', function() {
                     option.textContent = ciudad.nombre_ciudad; // Mostrar el nombre de la ciudad
                     ciudadSelect.appendChild(option);
                 });
-            });
+            })
+            .catch(error => console.error('Error al obtener las ciudades:', error));
     }
 });
+
 
 document.getElementById('idciudad').addEventListener('change', function() {
     var clienteId = document.getElementById('idcliente').value;
@@ -362,7 +371,7 @@ document.getElementById('idciudad').addEventListener('change', function() {
 
     // Limpiar el select de proyectos
     var proyectoSelect = document.getElementById('proyecto');
-    proyectoSelect.innerHTML = '<option value="">Seleccione un proyecto</option>';
+    proyectoSelect.innerHTML = '<option value="">Seleccione un Proyecto</option>';
 
     if (clienteId && ciudadId) {
         // Cargar los proyectos asociados al cliente y la ciudad seleccionada
@@ -379,26 +388,37 @@ document.getElementById('idciudad').addEventListener('change', function() {
     }
 });
 
-document.getElementById('proyecto').addEventListener('change', function() {
+document.getElementById('proyecto').addEventListener('change', function () {
     var proyectoId = this.value;
 
+    // Referencia al <select> de productos
+    var selectProducto = document.querySelector('select[name="idproducto"]');
+
+    // Limpia completamente el contenido del <select> de productos
+    selectProducto.innerHTML = '<option value="">Seleccione un Producto</option>'; // Opción predeterminada
+
     if (proyectoId) {
-        // Llamada AJAX para obtener el id_producto basado en el proyecto seleccionado
+        // Realizar la solicitud AJAX para obtener los id_productos basados en el proyecto seleccionado
         fetch(`obtener_id_producto.php?proyecto_id=${proyectoId}`)
             .then(response => response.json())
             .then(data => {
-                // Verifica que el producto exista antes de colocarlo en el campo
-                if (data.id_producto) {
-                    document.querySelector('input[name="idproducto"]').value = data.id_producto;
+                if (data.id_productos && data.id_productos.length > 0) {
+                    // Itera sobre los productos y los agrega al <select>
+                    data.id_productos.forEach(function (producto) {
+                        var newOption = document.createElement('option');
+                        newOption.value = producto.id_producto;
+                        newOption.textContent = `${producto.id_producto}`; // Cambia esto según lo que necesites mostrar
+                        selectProducto.appendChild(newOption);
+                    });
                 } else {
-                    document.querySelector('input[name="idproducto"]').value = ''; // Limpia el campo si no se encuentra el producto
-                    alert("No se encontró un producto correspondiente para este proyecto.");
+                    // Si no se encuentran productos, muestra una alerta
+                    alert("No se encontraron productos correspondientes para este proyecto.");
                 }
             })
-            .catch(error => console.error('Error al obtener el ID del producto:', error));
-    } else {
-        document.querySelector('input[name="idproducto"]').value = ''; // Limpia el campo si no se selecciona un proyecto
+            .catch(error => console.error('Error al obtener los productos:', error));
     }
 });
+
+
 
 </script>

@@ -19,18 +19,17 @@ if (isset($_GET['proyecto_id'])) {
                                         oc_admin AS oc ON pop.oc = oc.id
                                     WHERE
                                         oc.id = :proyecto_id
-                                    LIMIT 1
                             ');
     
     $query->bindParam(':proyecto_id', $proyecto_id, PDO::PARAM_INT);
     $query->execute();
     
-    $result = $query->fetch(PDO::FETCH_ASSOC);
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
     
     if ($result) {
-        echo json_encode(['id_producto' => $result['id_producto']]);
+        echo json_encode(['id_productos' => $result]);
     } else {
-        echo json_encode(['id_producto' => null]);
+        echo json_encode(['id_productos' => []]);
     }
 }
 ?>

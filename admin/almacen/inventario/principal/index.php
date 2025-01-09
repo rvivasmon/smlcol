@@ -274,7 +274,8 @@ $(document).ready(function() {
     });
 </script>
 
-<script>async function filtrarColumna() {
+<script>
+    async function filtrarColumna() {
     const contextMenu = document.getElementById('contextMenu');
     const columnIndex = contextMenu.getAttribute('data-column-index'); // Obtener índice de la columna seleccionada
     const table = $('#table_stcs').DataTable(); // Instancia de DataTables
