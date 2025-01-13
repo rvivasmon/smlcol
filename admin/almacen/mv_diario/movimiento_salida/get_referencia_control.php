@@ -8,7 +8,7 @@ if (isset($_POST['marca_control'])) {
     $marca_control = $_POST['marca_control'];
 
     // Consulta para obtener las referencias filtradas
-    $query = $pdo->prepare('SELECT id_referencia , referencia FROM referencias_control WHERE marca = :marca_control');
+    $query = $pdo->prepare('SELECT id_referencia , referencia FROM referencias_control WHERE marca = :marca_control ORDER BY referencia ASC');
     $query->bindParam(':marca_control', $marca_control);
     $query->execute();
     $referencias = $query->fetchAll(PDO::FETCH_ASSOC);

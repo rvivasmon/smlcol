@@ -60,9 +60,9 @@ include('../../../layout/admin/parte1.php');
                                                                 almacen_origen.nombre_almacen AS almacen_origen,
                                                                 almacen_destino.nombre_almacen AS almacen_destino,
                                                                 CASE
-                                                                    WHEN mvd.tipo_producto = 1 THEN tmc.pitch
-                                                                    WHEN mvd.tipo_producto = 2 THEN caraccontrol.marca
-                                                                    WHEN mvd.tipo_producto = 3 THEN caracfuentes.marca_fuente
+                                                                    WHEN mvd.tipo_producto = 1 THEN tp.pitch
+                                                                    WHEN mvd.tipo_producto = 2 THEN caraccon.marca_control
+                                                                    WHEN mvd.tipo_producto = 3 THEN caracfuen.marca_fuente
                                                                     ELSE NULL
                                                                 END AS nombre_referencia_1,
                                                                 CASE
@@ -191,12 +191,12 @@ include('../../../layout/admin/parte1.php');
             "pageLength": 10,
             "language": {
                 "emptyTable": "No hay información",
-                "info": "Mostrando _START_ a _END_ de _TOTAL_ Técnicos",
-                "infoEmpty": "Mostrando 0 a 0 de 0 Técnicos",
-                "infoFiltered": "(Filtrado de _MAX_ total Técnicos)",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Movimientos",
+                "infoEmpty": "Mostrando 0 a 0 de 0 Movimientos",
+                "infoFiltered": "(Filtrado de _MAX_ total Movimientos)",
                 "infoPostFix": "",
                 "thousands": ",",
-                "lengthMenu": "Mostrar _MENU_ Técnicos",
+                "lengthMenu": "Mostrar _MENU_ Movimientos",
                 "loadingRecords": "Cargando...",
                 "processing": "Procesando...",
                 "search": "Buscador:",

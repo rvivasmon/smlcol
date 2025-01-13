@@ -42,7 +42,28 @@ include('../../../layout/admin/parte1.php');
                                     <tbody>
                                         <?php
                                         $contador = 0;
-                                        $query = $pdo->prepare('SELECT stc.*, t_tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_cliente, t_ciudad.ciudad AS nombre_ciudad, t_estado.estadostc AS nombre_estado FROM stc JOIN t_tipo_servicio ON stc.tipo_servicio = t_tipo_servicio.id JOIN clientes ON stc.cliente = clientes.id JOIN t_ciudad ON stc.ciudad = t_ciudad.id JOIN t_estado ON stc.estado = t_estado.id WHERE stc.estado_ticket IN (1)');  // Esto se quitó de esta misma línea, del final:    (AND stc.tipo_servicio NOT IN (3, 4) AND stc.estado <> 5)
+                                        $query = $pdo->prepare('SELECT 
+                                                                        stc.*,
+                                                                        t_tipo_servicio.servicio_stc AS nombre_servicio,
+                                                                        clientes.nombre_comercial AS nombre_cliente,
+                                                                        t_ciudad.ciudad AS nombre_ciudad,
+                                                                        t_estado.estadostc AS nombre_estado,
+                                                                        oc_admin.lugar_instalacion AS nombre_proyecto
+                                                                    FROM
+                                                                        stc
+                                                                    JOIN
+                                                                        t_tipo_servicio ON stc.tipo_servicio = t_tipo_servicio.id 
+                                                                    JOIN
+                                                                        clientes ON stc.cliente = clientes.id
+                                                                    JOIN
+                                                                        t_ciudad ON stc.ciudad = t_ciudad.id
+                                                                    JOIN
+                                                                        t_estado ON stc.estado = t_estado.id
+                                                                    JOIN
+                                                                        oc_admin ON stc.proyecto = oc_admin.id
+                                                                    WHERE
+                                                                        stc.estado_ticket IN (1)
+                                                                    ');  // Esto se quitó de esta misma línea, del final:    (AND stc.tipo_servicio NOT IN (3, 4) AND stc.estado <> 5)
 
                                         $query->execute();
                                         $stcs = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -57,7 +78,7 @@ include('../../../layout/admin/parte1.php');
                                             $observacion = $stc['observacion'];
                                             $cliente = $stc['nombre_cliente'];
                                             $ciudad = $stc['nombre_ciudad'];
-                                            $proyecto = $stc['proyecto'];
+                                            $proyecto = $stc['nombre_proyecto'];
                                             $estado = $stc['nombre_estado'];
                                             $persona_contacto = $stc['persona_contacto'];
                                             $medio_contacto = $stc['email_contacto'];
@@ -127,7 +148,7 @@ include('../../../layout/admin/parte1.php');
                                     <tbody>
                                         <?php
                                         $contador = 0;
-                                        $query = $pdo->prepare('SELECT stc.*, t_tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_cliente, t_ciudad.ciudad AS nombre_ciudad, t_estado.estadostc AS nombre_estado FROM stc JOIN t_tipo_servicio ON stc.tipo_servicio = t_tipo_servicio.id JOIN clientes ON stc.cliente = clientes.id JOIN t_ciudad ON stc.ciudad = t_ciudad.id JOIN t_estado ON stc.estado = t_estado.id WHERE stc.estado_ticket IN (1) AND stc.tipo_servicio IN (1, 2, 7) AND stc.estado IN(2,4)');  // Esto se quitó de esta misma línea, del final:    (AND stc.tipo_servicio NOT IN (3, 4) AND stc.estado <> 5)
+                                        $query = $pdo->prepare('SELECT stc.*, t_tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_cliente, t_ciudad.ciudad AS nombre_ciudad, t_estado.estadostc AS nombre_estado, oc_admin.lugar_instalacion AS nombre_proyecto FROM stc JOIN t_tipo_servicio ON stc.tipo_servicio = t_tipo_servicio.id JOIN clientes ON stc.cliente = clientes.id JOIN t_ciudad ON stc.ciudad = t_ciudad.id JOIN t_estado ON stc.estado = t_estado.id JOIN oc_admin ON stc.proyecto = oc_admin.id WHERE stc.estado_ticket IN (1) AND stc.tipo_servicio IN (1, 2, 7) AND stc.estado IN(2,4)');  // Esto se quitó de esta misma línea, del final:    (AND stc.tipo_servicio NOT IN (3, 4) AND stc.estado <> 5)
 
                                         $query->execute();
                                         $stcs = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -142,7 +163,7 @@ include('../../../layout/admin/parte1.php');
                                             $observacion = $stc['observacion'];
                                             $cliente = $stc['nombre_cliente'];
                                             $ciudad = $stc['nombre_ciudad'];
-                                            $proyecto = $stc['proyecto'];
+                                            $proyecto = $stc['nombre_proyecto'];
                                             $estado = $stc['nombre_estado'];
                                             $persona_contacto = $stc['persona_contacto'];
                                             $medio_contacto = $stc['email_contacto'];
@@ -212,7 +233,28 @@ include('../../../layout/admin/parte1.php');
                                     <tbody>
                                         <?php
                                         $contador = 0;
-                                        $query = $pdo->prepare('SELECT stc.*, t_tipo_servicio.servicio_stc AS nombre_servicio, clientes.nombre_comercial AS nombre_cliente, t_ciudad.ciudad AS nombre_ciudad, t_estado.estadostc AS nombre_estado FROM stc JOIN t_tipo_servicio ON stc.tipo_servicio = t_tipo_servicio.id JOIN clientes ON stc.cliente = clientes.id JOIN t_ciudad ON stc.ciudad = t_ciudad.id JOIN t_estado ON stc.estado = t_estado.id WHERE stc.estado_ticket IN (2)');  // Esto se quitó de esta misma línea, del final:    (AND stc.tipo_servicio NOT IN (3, 4) AND stc.estado <> 5)
+                                        $query = $pdo->prepare('SELECT
+                                                                        stc.*,
+                                                                        t_tipo_servicio.servicio_stc AS nombre_servicio,
+                                                                        clientes.nombre_comercial AS nombre_cliente,
+                                                                        t_ciudad.ciudad AS nombre_ciudad,
+                                                                        t_estado.estadostc AS nombre_estado,
+                                                                        oc_admin.lugar_instalacion AS nombre_proyecto
+                                                                    FROM
+                                                                        stc
+                                                                    JOIN
+                                                                        t_tipo_servicio ON stc.tipo_servicio = t_tipo_servicio.id
+                                                                    JOIN
+                                                                        clientes ON stc.cliente = clientes.id
+                                                                    JOIN
+                                                                        t_ciudad ON stc.ciudad = t_ciudad.id
+                                                                    JOIN
+                                                                        t_estado ON stc.estado = t_estado.id
+                                                                    JOIN
+                                                                        oc_admin ON stc.proyecto = oc_admin.id
+                                                                    WHERE
+                                                                        stc.estado_ticket IN (2)
+                                                                ');
 
                                         $query->execute();
                                         $stcs = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -227,7 +269,7 @@ include('../../../layout/admin/parte1.php');
                                             $observacion = $stc['observacion'];
                                             $cliente = $stc['nombre_cliente'];
                                             $ciudad = $stc['nombre_ciudad'];
-                                            $proyecto = $stc['proyecto'];
+                                            $proyecto = $stc['nombre_proyecto'];
                                             $estado = $stc['nombre_estado'];
                                             $persona_contacto = $stc['persona_contacto'];
                                             $medio_contacto = $stc['email_contacto'];

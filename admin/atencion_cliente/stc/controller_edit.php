@@ -23,9 +23,23 @@ $persona_contacto = $_POST['personacontacto'];
 $medio_contacto = $_POST['medio_contacto'];
 $evidencia = $_POST['archivo_adjunto'];
 
-
-
-$sql = "UPDATE stc SET id_stc = :id_stc, fecha_ingreso = :fecha_ingreso, medio_ingreso = :medio_ingreso, ticket_externo = :ticket_externo, tipo_servicio = :servicio, id_producto = :id_producto, falla = :falla, observacion = :observacion, cliente = :cliente, ciudad = :ciudad, proyecto = :proyecto, estado = :estado, persona_contacto = :persona_contacto, email_contacto = :medio_contacto, evidencias = :evidencia WHERE id = :id_usuario";
+$sql = "UPDATE stc 
+        SET id_stc = :id_stc, 
+            fecha_ingreso = :fecha_ingreso, 
+            medio_ingreso = :medio_ingreso, 
+            ticket_externo = :ticket_externo, 
+            tipo_servicio = :servicio, 
+            id_producto = :id_producto, 
+            falla = :falla, 
+            observacion = :observacion, 
+            cliente = :cliente, 
+            ciudad = :ciudad, 
+            proyecto = :proyecto, 
+            estado = :estado, 
+            persona_contacto = :persona_contacto, 
+            email_contacto = :medio_contacto, 
+            evidencias = :evidencia 
+        WHERE id = :id_usuario";
 
 $sentencia = $pdo->prepare($sql);
 
@@ -47,13 +61,26 @@ $sentencia->bindParam(':medio_contacto', $medio_contacto);
 $sentencia->bindParam(':evidencia', $evidencia);
 
 if ($sentencia->execute()) {
-  echo "Usuario actualizado exitosamente"; // Mensaje de éxito
-  header('Location:' .$URL.'admin/atencion_cliente/stc');
+    // Si el estado es igual a "5", actualiza el campo "estado_ticket" a "2"
+    if ($estado == "5") {
+        $sql_estado_ticket = "UPDATE stc SET estado_ticket = 2 WHERE id = :id_usuario";
+        $sentencia_estado_ticket = $pdo->prepare($sql_estado_ticket);
+        $sentencia_estado_ticket->bindParam(':id_usuario', $id_usuario);
+        
+        if (!$sentencia_estado_ticket->execute()) {
+            // Manejo de errores si no se puede actualizar el estado_ticket
+            $errorInfo = $sentencia_estado_ticket->errorInfo();
+            echo "Error al actualizar estado_ticket: " . $errorInfo[2];
+            exit; // Detén la ejecución en caso de error
+        }
+    }
+
+    echo "Usuario actualizado exitosamente"; // Mensaje de éxito
+    header('Location:' .$URL.'admin/atencion_cliente/stc');
 } else {
-  // Maneja los posibles errores durante la ejecución
+    // Maneja los posibles errores durante la ejecución
     $errorInfo = $sentencia->errorInfo();
-        echo "Error al actualizar el usuario: " . $errorInfo[2]; // Mensaje de error con detalles
+    echo "Error al actualizar el usuario: " . $errorInfo[2]; // Mensaje de error con detalles
 }
 
-
-
+?>

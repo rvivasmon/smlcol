@@ -143,7 +143,7 @@ foreach ($roles_permisos as $rol_permiso) {
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
 
                     <?php 
-                      if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="14") ){ ?>
+                      if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="14") || ($id_rol_sesion_usuario=="15")){ ?>
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
