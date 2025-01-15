@@ -1,7 +1,7 @@
 <?php 
 
-include('../../../../app/config/config.php');
-include('../../../../app/config/conexion.php');
+include('../../../../../app/config/config.php');
+include('../../../../../app/config/conexion.php');
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if (isset($_FILES['archivo_adjunto']) && $_FILES['archivo_adjunto']['error'] === UPLOAD_ERR_OK) {
     // Si se subió el archivo, generar un nombre único y guardarlo
     $nombreDelArchivo = date("Y-m-d-H-i-s") . "__" . basename($_FILES['archivo_adjunto']['name']);
-    $rutaImagen = "../../../../img_uploads/" . $nombreDelArchivo;
+    $rutaImagen = "../../../../../img_uploads/" . $nombreDelArchivo;
 
     // Mover el archivo a la carpeta de destino
     if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $rutaImagen)) {

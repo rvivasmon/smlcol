@@ -1,12 +1,12 @@
 <?php 
 
-include('../../../../app/config/config.php');
-include('../../../../app/config/conexion.php');
+include('../../../../../app/config/config.php');
+include('../../../../../app/config/conexion.php');
 
-include('../../../../layout/admin/sesion.php');
-include('../../../../layout/admin/datos_sesion_user.php');
+include('../../../../../layout/admin/sesion.php');
+include('../../../../../layout/admin/datos_sesion_user.php');
 
-include('../../../../layout/admin/parte1.php');
+include('../../../../../layout/admin/parte1.php');
 
 
 // Obtener el último contador desde la base de datos
@@ -17,7 +17,7 @@ $resultado = $query->fetch(PDO::FETCH_ASSOC);
 if ($resultado) {
     $ultimoContador = $resultado['consecu_sale']; // Obtén el último valor del contador
 } else {
-    $ultimoContador = 1; // Si no existe, inicialízalo en 0
+    $ultimoContador = 0; // Si no existe, inicialízalo en 0
 }
 
 // Incrementar el contador en 1
@@ -302,7 +302,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                                 <select name="almacen_entrada_md" id="almacen_entrada_md" class="form-control" required>
                                                                     <option value="">Almacén Destino</option>
                                                                     <?php
-                                                                    $query_almacen_entra = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 3 AND nombre_almacen != "Principal"');
+                                                                    $query_almacen_entra = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 3 AND nombre_almacen != "Principal" ORDER BY nombre_almacen ASC');
                                                                     $query_almacen_entra->execute();
                                                                     $almacenes_entras = $query_almacen_entra->fetchAll(PDO::FETCH_ASSOC);
                                                                     foreach($almacenes_entras as $almacen_entra) {
@@ -405,7 +405,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <a href="<?php echo $URL."admin/almacen/mv_diario/";?>" class="btn btn-default btn-block">Cancelar</a>
+                                        <a href="<?php echo $URL."admin/almacen/mv_diario/smartled";?>" class="btn btn-default btn-block">Cancelar</a>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -422,7 +422,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
     </div>
 </div>
 
-<?php include('../../../../layout/admin/parte2.php');?>
+<?php include('../../../../../layout/admin/parte2.php');?>
 
 <script>
     // Obtener la fecha actual en el formato yyyy-mm-dd

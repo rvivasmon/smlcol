@@ -1,7 +1,7 @@
 <?php
 
-include('../../../../app/config/config.php');
-include('../../../../app/config/conexion.php');
+include('../../../../../app/config/config.php');
+include('../../../../../app/config/conexion.php');
 
 if (isset($_POST['pitch_id'])) {  // Cambiar a pitch_id
     $pitchId = $_POST['pitch_id'];  // Cambiar a pitchId

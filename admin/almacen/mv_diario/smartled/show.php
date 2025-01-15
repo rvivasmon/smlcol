@@ -1,12 +1,12 @@
 <?php 
 
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
 
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
+include('../../../../layout/admin/sesion.php');
+include('../../../../layout/admin/datos_sesion_user.php');
 
-include('../../../layout/admin/parte1.php');
+include('../../../../layout/admin/parte1.php');
 
 $id_get = $_GET['id'];
 
@@ -91,16 +91,16 @@ $id_get = $_GET['id'];
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Movimientos Diario General</h1>
+                    <h1 class="m-0">Visor de Movimientos Diario</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
-            <div class="card card-success">
+            <div class="card card-info">
                 <div class="card-header">
-                    Introduzca la información correspondiente
+                    Visor Detalles
                 </div>
                 <div class="card-body">
-                    <form action="controller_edit.php" method="POST">
+                    <form action="controller_create_final.php" method="POST">
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
@@ -152,7 +152,6 @@ $id_get = $_GET['id'];
                             <div class="col-md-0">
                                 <div class="form-group"> <!-- Se coloca aquí el usuario que está trabajando el archivo -->
                                     <input  class="form-control"  id="idusuario" name="idusuario" value="<?php echo $sesion_usuario['nombre']?>" hidden>
-                                    <input type="text" name="id_movimiento1" id="id_movimiento1" value="<?php echo $id_get; ?>" hidden>
                                 </div>
                             </div>
                             <div class="col-md-1">
@@ -379,7 +378,7 @@ $id_get = $_GET['id'];
                                         <div class="col-md-3" hidden>
                                             <div class="form-group">
                                                 <label for="entrada_md">Entrada</label>
-                                                <input type="text" name="entrada_md" id="entrada_md" class="form-control" placeholder="Cantidad Entrada" >
+                                                <input type="text" name="entrada_md" class="form-control" placeholder="Cantidad Entrada" >
                                             </div>
                                         </div>
                                     </div>
@@ -388,7 +387,7 @@ $id_get = $_GET['id'];
                                         <div class="col-md-10">
                                             <div class="form-group">
                                                 <label for="op_destino">Asignar a:</label>
-                                                <input type="text" name="op_destino" id="op_destino" class="form-control" value="<?php echo $op; ?>" required>
+                                                <input type="text" name="op_destino" class="form-control" value="<?php echo $op; ?>" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -401,7 +400,7 @@ $id_get = $_GET['id'];
                                         <div class="col-md-10">
                                             <div class="form-group">
                                                 <label for="observacion">Observaciones</label>
-                                                <textarea name="observacion" id="observacion" cols="30" rows="4" class="form-control"><?php echo $observaciones; ?></textarea>
+                                                <textarea name="observacion" id="observacion" cols="30" rows="4" class="form-control" readonly><?php echo $observaciones; ?></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -414,12 +413,7 @@ $id_get = $_GET['id'];
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <a href="<?php echo $URL."admin/almacen/mv_diario/";?>" class="btn btn-default btn-block">Cancelar</a>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <button type="submit" onclick="return confirm('Seguro de haber diligenciado correctamente los datos?')" class="btn btn-success btn-block">Editar Movimiento</button>
+                                    <a href="<?php echo $URL."admin/almacen/mv_diario/smartled";?>" class="btn btn-default btn-block">Volver</a>
                                 </div>
                             </div>
                         </div>
@@ -431,7 +425,7 @@ $id_get = $_GET['id'];
 </div>
 
 
-    <?php include('../../../layout/admin/parte2.php');?>
+    <?php include('../../../../layout/admin/parte2.php');?>
 
     <script>
         // Obtener la fecha actual en el formato yyyy-mm-dd
@@ -494,187 +488,4 @@ $id_get = $_GET['id'];
                 });
             }
         });
-    </script>
-
-    <script>
-
-    //visualizar los id de almacen
-    document.addEventListener('DOMContentLoaded', function() {
-        const selectSalida = document.getElementById('almacen_salida_md');
-        const salidaID = document.getElementById('almacen_salida_md_id');
-        const selectEntrada = document.getElementById('almacen_entrada_md');
-        const entradaID = document.getElementById('almacen_entrada_md_id');
-
-        selectSalida.addEventListener('change', function() {
-            salidaID.value = selectSalida.value;
-        });
-
-        selectEntrada.addEventListener('change', function() {
-            entradaID.value = selectEntrada.value;
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-
-        // Agregar funcionalidad para verificar si Almacén Origen y Almacén Destino son iguales
-        const selectSalida = document.getElementById('almacen_salida_md');
-        const selectEntrada = document.getElementById('almacen_entrada_md');
-
-        function verificarAlmacenes() {
-            if (selectSalida.value && selectEntrada.value && selectSalida.value === selectEntrada.value) {
-                alert("El Almacén Origen y el Almacén Destino no pueden ser iguales. Por favor, seleccione almacenes diferentes.");
-                selectEntrada.value = ''; // Vaciar el campo de Almacén Destino para obligar a seleccionar uno diferente
-            }
-        }
-
-        selectSalida.addEventListener('change', verificarAlmacenes);
-        selectEntrada.addEventListener('change', verificarAlmacenes);
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // Obtener referencias a los campos de entrada y salida
-        const salidaMdInput = document.getElementsByName('salida_md')[0];
-        const entradaMdInput = document.getElementsByName('entrada_md')[0];
-
-        // Función para actualizar el campo entrada_md
-        function actualizarEntradaMd() {
-            entradaMdInput.value = salidaMdInput.value; // Establecer el mismo valor que salida_md
-        }
-
-        // Escuchar cambios en el campo salida_md y llamar a la función actualizarEntradaMd
-        salidaMdInput.addEventListener('input', actualizarEntradaMd);
-    });
-    </script>
-
-    <script>
-    $(document).ready(function() {
-        // Detectar cuando cambie el valor del campo 'producto'
-        $('#id_producto_tipo').change(function() {
-            limpiarCampos(); // Llama a la función que limpia los campos
-        });
-
-        // Función para limpiar todos los campos del formulario, excluyendo el campo 'producto'
-        function limpiarCampos() {
-            // Limpiar todos los inputs de texto, select y textarea, excepto el campo 'producto'
-            $('input[type="text"]').not('#producto, #almacen_entrada_md, #id_producto_tipo').val('');  // Limpiar campos de texto excepto 'producto'
-            $('input[type="number"]').val(''); // Limpiar campos numéricos
-            $('input[type="file"]').val('');   // Limpiar campo de archivo
-            $('select').not('#producto, #almacen_entrada_md').val(''); // Limpiar selects excepto 'producto'
-            $('textarea').val('');             // Limpiar textareas
-
-            // También puedes vaciar los campos ocultos, si es necesario
-            $('input[type="hidden"]').val('');
-
-            // Si tienes algún campo específico que necesitas manejar aparte, puedes hacerlo aquí.
-            $('#list').empty(); // Vaciar la lista de imágenes si es necesario
-            $('#lista_seriales').empty(); // Vaciar la tabla de seriales
-            seriales = []; // Reiniciar la lista de seriales (si usas esa variable)
-        }
-    });
-
-    document.getElementById('pitch').addEventListener('change', function() {
-    var pitchId = this.value;
-
-        // Limpiar el campo "campo_referencia" cuando cambie el pitch
-        document.getElementById('campo_referencia').value = '';
-
-    // Hacer una solicitud AJAX para obtener los registros filtrados
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'get_serie_modulo.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            // Actualizar el contenido del campo serie_modulo
-            document.getElementById('serie_modulo').innerHTML = xhr.responseText;
-
-            // Agregar un evento para detectar cuando cambie la selección
-            document.getElementById('serie_modulo').addEventListener('change', function() {
-                var selectedOption = this.options[this.selectedIndex];
-                var selectedId = selectedOption.value; // Obtiene el "id" de la serie seleccionada
-
-                // Asignar el valor del "id" al campo id_serie_modulo
-                document.getElementById('id_serie_modulo').value = selectedId;
-            });
-        }
-    };
-    xhr.send('pitch_id=' + pitchId);
-    });
-
-
-    document.getElementById('marca_control').addEventListener('change', function() {
-        var marcaControlValue = this.value;
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'get_referencia_control.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                document.getElementById('referencia_control35').innerHTML = xhr.responseText;
-            }
-        };
-        xhr.send('marca_control=' + marcaControlValue);
-    });
-
-    document.getElementById('marca_fuente').addEventListener('change', function() {
-        var marcaFuenteValue = this.value;
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'get_modelo_fuente.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                document.getElementById('modelo_fuente35').innerHTML = xhr.responseText;
-            }
-        };
-        xhr.send('marca_fuente=' + marcaFuenteValue);
-    });
-    </script>
-
-    <script>
-        document.getElementById('serie_modulo').addEventListener('change', function() {
-            var selectedOption = this.options[this.selectedIndex];
-
-            // Obtener el valor de referencia desde el atributo 'data-referencia' del option seleccionado
-            var referencia = selectedOption.getAttribute('data-referencia');
-            var serie = selectedOption.textContent.split(' / ')[0]; // Extraer solo la parte de la serie, antes del "/"
-
-            // Puedes usar estos valores para actualizar otros campos o realizar otras acciones
-            console.log('Serie:', serie);  // El valor de serie
-            console.log('Referencia:', referencia);  // El valor de referencia
-
-            // Si deseas enviar ambos valores a través de un campo oculto o similar
-            document.getElementById('campo_serie').value = serie;  // Asignar serie a un campo oculto (ejemplo)
-            document.getElementById('campo_referencia').value = referencia;  // Asignar referencia a otro campo
-        });
-
-    </script>
-
-    <script>
-        // Actualiza dinámicamente el campo ID cuando cambia el estado
-        function updateIdProducto(){
-            const estadoTipoProductoSelect = document.getElementById('producto');
-            const idTipoProductoInput = document.getElementById('id_producto_tipo');
-            idTipoProductoInput.value =estadoTipoProductoSelect.value;
-        }
-
-        // Actualiza dinámicamente el campo Id cuando cambia el select
-        function updateIdUbicacion(){
-            const ubicacionSelect = document.getElementById('posicion2');
-            const idUbicacionInput = document.getElementById('posicion_id');
-            idUbicacionInput.value = ubicacionSelect.value;
-        }
-
-        // Actualiza dinámicamente el campo ID cuando cambie el estado
-        function updatedIdPitch(){
-            const pitchSelect = document.getElementById('pitch');
-            const idPitchInput = document.getElementById('id_serie12');
-            idPitchInput.value = pitchSelect.value;
-        }
-
-        //Actualizar dinámicamente el campo ID cuando cambie el estado
-        function updatedIdSerie(){
-            const serieSelect = document.getElementById('serie_modulo11');
-            const idSerieInput = document.getElementById('id_serie12');
-            idSerieInput.value = serieSelect.value;
-        }
     </script>

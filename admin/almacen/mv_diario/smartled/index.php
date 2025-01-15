@@ -1,12 +1,12 @@
 <?php
 
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
 
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
+include('../../../../layout/admin/sesion.php');
+include('../../../../layout/admin/datos_sesion_user.php');
 
-include('../../../layout/admin/parte1.php');
+include('../../../../layout/admin/parte1.php');
 
 ?>
 
@@ -15,7 +15,7 @@ include('../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Movimiento Diario General</h1>
+                <h1 class="m-0">Movimiento Diario General SmartLed</h1>
                     <div class="card card-blue">
                         <div class="card-header">
                             Movimientos
@@ -140,8 +140,8 @@ include('../../../layout/admin/parte1.php');
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_entrada/create_movimiento_entrada_final.php'">Movimiento de Entrada</button>
-                                                        <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/movimiento_salida/create_movimiento_salida_final.php'">Movimiento de Salida</button>
+                                                        <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/smartled/movimiento_entrada/create_movimiento_entrada_final.php'">Movimiento de Entrada</button>
+                                                        <button type="button" class="btn btn-secondary btn-block" onclick="location.href='<?php echo $URL;?>admin/almacen/mv_diario/smartled/movimiento_salida/create_movimiento_salida_final.php'">Movimiento de Salida</button>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -169,7 +169,7 @@ include('../../../layout/admin/parte1.php');
     </div>
 </div>
 
-<?php include('../../../layout/admin/parte2.php'); ?>
+<?php include('../../../../layout/admin/parte2.php'); ?>
 
 <style>
     #contextMenu {

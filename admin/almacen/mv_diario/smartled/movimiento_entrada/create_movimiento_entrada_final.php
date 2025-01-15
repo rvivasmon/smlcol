@@ -1,12 +1,12 @@
 <?php 
 
-include('../../../../app/config/config.php');
-include('../../../../app/config/conexion.php');
+include('../../../../../app/config/config.php');
+include('../../../../../app/config/conexion.php');
 
-include('../../../../layout/admin/sesion.php');
-include('../../../../layout/admin/datos_sesion_user.php');
+include('../../../../../layout/admin/sesion.php');
+include('../../../../../layout/admin/datos_sesion_user.php');
 
-include('../../../../layout/admin/parte1.php');
+include('../../../../../layout/admin/parte1.php');
 
     // Consulta para obtener módulos sin referencia
     $query_referencia = $pdo->prepare('SELECT pmc.*, pmc.id, pmc.serie, ttm.tamanos_modulos as nombre_tamano FROM producto_modulo_creado as pmc LEFT JOIN tabla_tamanos_modulos AS ttm ON pmc.tamano = ttm.id WHERE referencia IS NULL');
@@ -19,18 +19,21 @@ include('../../../../layout/admin/parte1.php');
     $query = $pdo->prepare('SELECT consecu_entra FROM movimiento_diario ORDER BY consecu_entra DESC LIMIT 1');
     $query->execute();
     $resultado = $query->fetch(PDO::FETCH_ASSOC);
-
+    
     if ($resultado) {
-        $ultimoContador = $resultado['consecu_entra']; // Obtén el último valor del contador
+        // Si existe un registro, obtener el último valor del contador e incrementarlo
+        $ultimoContador = $resultado['consecu_entra']; 
+        $nuevoContador = $ultimoContador + 1;
     } else {
-        $ultimoContador = 1; // Si no existe, inicialízalo en 0
+        // Si no existe un registro, iniciar el contador en 1
+        $nuevoContador = 1;
     }
-
-    // Incrementar el contador en 1
-    $nuevoContador = $ultimoContador + 1;
-
+    
     // Formatear el contador con ceros a la izquierda (4 dígitos)
     $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
+    
+    // Aquí puedes usar $contadorFormateado para insertarlo o procesarlo según sea necesario
+    
 
 ?>
 
@@ -42,7 +45,7 @@ include('../../../../layout/admin/parte1.php');
             <table id="table_usuarios" class="table table-striped table-hover table-bordered">
                 <!-- Tabla con datos del movimiento general -->
 
-                <div class="row mb-2">
+            <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">Movimientos de Entrada Almacén Principal</h1>
                 </div><!-- /.col -->
@@ -261,7 +264,7 @@ include('../../../../layout/admin/parte1.php');
                                                             <select name="almacen_salida_md" id="almacen_salida_md" class="form-control" required>
                                                                 <option value="">Almacén Origen</option>
                                                                 <?php 
-                                                                $query_almacen  = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 3 AND nombre_almacen != "Principal"');
+                                                                $query_almacen  = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 3 AND id_asignacion != 4 AND nombre_almacen != "Principal" AND nombre_almacen != "TechLed" ORDER BY nombre_almacen ASC');
                                                                     $query_almacen->execute();
                                                                     $almacenes = $query_almacen->fetchAll(PDO::FETCH_ASSOC);
                                                                     foreach($almacenes as $almacen) {
@@ -347,7 +350,7 @@ include('../../../../layout/admin/parte1.php');
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <a href="<?php echo $URL."admin/almacen/mv_diario/";?>" class="btn btn-default btn-block">Cancelar</a>
+                                    <a href="<?php echo $URL."admin/almacen/mv_diario/smartled";?>" class="btn btn-default btn-block">Cancelar</a>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -362,25 +365,6 @@ include('../../../../layout/admin/parte1.php');
 
             </table>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -491,7 +475,7 @@ include('../../../../layout/admin/parte1.php');
 
     
 
-    <?php include('../../../../layout/admin/parte2.php');?>
+    <?php include('../../../../../layout/admin/parte2.php');?>
 
     <script>
         // Obtener la fecha actual en el formato yyyy-mm-dd

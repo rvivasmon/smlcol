@@ -1,10 +1,10 @@
 <?php
 
-include('../../../../app/config/config.php');
-include('../../../../app/config/conexion.php');
+include('../../../../../app/config/config.php');
+include('../../../../../app/config/conexion.php');
 
-include('../../../../layout/admin/sesion.php');
-include('../../../../layout/admin/datos_sesion_user.php');
+include('../../../../../layout/admin/sesion.php');
+include('../../../../../layout/admin/datos_sesion_user.php');
 
 // Obtener datos del formulario
 $fecha = $_POST['fecha'];
@@ -229,7 +229,7 @@ if ($sentencia->execute()) {
 
         if ($sentencia_existencia->execute()) {
             global $URL;
-            header('Location: ' . $URL . 'admin/almacen/mv_diario');
+            header('Location: ' . $URL . 'admin/almacen/mv_diario/smartled');
             $_SESSION['msj'] = "Se ha registrado el movimiento de manera correcta y actualizado las existencias";
             exit;
         } else {

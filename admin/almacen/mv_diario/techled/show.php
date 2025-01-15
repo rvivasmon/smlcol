@@ -1,12 +1,12 @@
 <?php 
 
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
 
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
+include('../../../../layout/admin/sesion.php');
+include('../../../../layout/admin/datos_sesion_user.php');
 
-include('../../../layout/admin/parte1.php');
+include('../../../../layout/admin/parte1.php');
 
 $id_get = $_GET['id'];
 
@@ -24,7 +24,7 @@ $id_get = $_GET['id'];
                                                 refecon.referencia AS nombre_refe_control,
                                                 caracon.marca_control AS nombre_marc_control
                                             FROM
-                                                movimiento_diario AS mvd
+                                                movimiento_techled AS mvd
                                             LEFT JOIN
                                                 t_productos AS tp ON mvd.tipo_producto = tp.id_producto
                                             LEFT JOIN
@@ -55,7 +55,7 @@ $id_get = $_GET['id'];
     $movimientoDiario = $query_movimiento->fetchAll(PDO::FETCH_ASSOC);
     
     foreach ($movimientoDiario as $movimiento){
-        $id_movimiento = $movimiento['id_movimiento_diario'];
+        $id_movimiento = $movimiento['id_movimiento_techled'];
         $fecha = $movimiento['fecha'];
         $nombre_producto = $movimiento['nombre_producto'];
         $tipo_producto = $movimiento['tipo_producto'];
@@ -337,7 +337,7 @@ $id_get = $_GET['id'];
                                                 >
                                                     <option value="<?php echo $id_alma_origen; ?>" selected><?php echo $almacen_origen; ?></option>
                                                     <?php 
-                                                    $query_almacen  = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 3 AND nombre_almacen != "Principal"');
+                                                    $query_almacen  = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 4 AND nombre_almacen != "Techled"');
                                                         $query_almacen->execute();
                                                         $almacenes = $query_almacen->fetchAll(PDO::FETCH_ASSOC);
                                                         foreach($almacenes as $almacen) {
@@ -367,7 +367,7 @@ $id_get = $_GET['id'];
                                                 $query_almacen_entra->execute();
                                                 $almacenes_entras = $query_almacen_entra->fetchAll(PDO::FETCH_ASSOC);
                                                 foreach($almacenes_entras as $almacen_entra) {
-                                                    $selected = ($almacen_entra['id_asignacion'] == 3) ? 'selected' : '';
+                                                    $selected = ($almacen_entra['id_asignacion'] == 4) ? 'selected' : '';
                                                     echo '<option value="' . $almacen_entra['id_asignacion'] . '" ' . $selected . '>' . $almacen_entra['nombre_almacen'] . '</option>';
                                                 }
                                                 ?>
@@ -413,7 +413,7 @@ $id_get = $_GET['id'];
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <a href="<?php echo $URL."admin/almacen/mv_diario/";?>" class="btn btn-default btn-block">Volver</a>
+                                    <a href="<?php echo $URL."admin/almacen/mv_diario/techled";?>" class="btn btn-default btn-block">Volver</a>
                                 </div>
                             </div>
                         </div>
@@ -425,7 +425,7 @@ $id_get = $_GET['id'];
 </div>
 
 
-    <?php include('../../../layout/admin/parte2.php');?>
+    <?php include('../../../../layout/admin/parte2.php');?>
 
     <script>
         // Obtener la fecha actual en el formato yyyy-mm-dd

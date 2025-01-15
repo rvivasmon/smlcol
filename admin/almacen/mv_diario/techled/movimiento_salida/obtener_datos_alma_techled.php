@@ -1,7 +1,7 @@
 <?php
 
-include('../../../../app/config/config.php');
-include('../../../../app/config/conexion.php');
+include('../../../../../app/config/config.php');
+include('../../../../../app/config/conexion.php');
 
 if (isset($_POST['id_producto_categoria'], $_POST['valor_campo'], $_POST['select_id'])) {
     $id_producto_categoria = $_POST['id_producto_categoria'];
@@ -31,7 +31,7 @@ if (isset($_POST['id_producto_categoria'], $_POST['valor_campo'], $_POST['select
                                     distri_al.posiciones as nombre_posicion,
                                     alp.cantidad_plena as cantidad_plena
                                 FROM
-                                    alma_principal as alp
+                                    alma_techled as alp
                                 LEFT JOIN
                                     distribucion_almacen as distri_al ON alp.posicion = distri_al.id
                                 WHERE

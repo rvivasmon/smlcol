@@ -361,10 +361,27 @@ foreach ($roles_permisos as $rol_permiso) {
                               </ul>
                             </li>
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/almacen/mv_diario" class="nav-link">
+                              <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Movimiento Diario</p>
+                                <p>
+                                  Movimiento Diario
+                                  <i class="right fas fa-angle-left"></i> <!-- Icono de flecha -->
+                                </p>
                               </a>
+                              <ul class="nav nav-treeview"> <!-- Submenú -->
+                                <li class="nav-item">
+                                  <a href="<?php echo $URL;?>admin/almacen/mv_diario/smartled" class="nav-link">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Almacén Smartled</p>
+                                  </a>
+                                </li>
+                                <li class="nav-item">
+                                  <a href="<?php echo $URL; ?>admin/almacen/mv_diario/techled" class="nav-link">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Almacén TechLed</p>
+                                  </a>
+                                </li>
+                              </ul>
                             </li>
                           </ul>
                         </li>
