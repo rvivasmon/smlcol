@@ -381,6 +381,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                     <table class="table table-bordered" id="tabla-articulos">
                                                         <thead>
                                                             <tr>
+                                                                <th>Seleccionar</th>
                                                                 <th>Cantidad</th>
                                                                 <th>Producto</th>
                                                                 <th>Referencia</th>
@@ -400,6 +401,29 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                 </div>
                             </div>
 
+                            <!-- Modal -->
+                            <div class="modal fade" id="modalValidarMaterial" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header bg-info text-white">
+                                        <h5 class="modal-title" id="modalLabel">Material Separado</h5>
+                                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="contenidoTablaMaterial">
+                                        <!-- Aquí se cargará dinámicamente la tabla con los registros -->
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <button type="button" id="btnGenerarPdfModal" class="btn btn-info">Generar PDF</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <hr>
 
                             <div class="row">
@@ -411,6 +435,11 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <button id="generarPdf" class="btn btn-primary">Crear PDF y Movimiento</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <button type="button" id="btnValidarMaterial" class="btn btn-info" data-toggle="modal" data-target="#modalValidarMaterial">Material Separado</button>
                                     </div>
                                 </div>
                             </div>
@@ -669,31 +698,45 @@ $(document).ready(function () {
 </script>
 
 <style>
-    .cantidad {
+    
+    /* Estilo para el checkbox */
+    .checkbox {
+        width: 20px;
+        height: 20px;
+        margin-left: auto; /* Centra el checkbox horizontalmente */
+        margin-right: auto; /* Centra el checkbox horizontalmente */
+        display: block; /* Asegura que el checkbox ocupe su propio espacio */
+        position: relative;
+        top: 10%; /* Centra el checkbox verticalmente */
+        transform: translateY(-5%); /* Ajusta el desplazamiento vertical para un centrado perfecto */
+    }
+
+    .articuloSeleccionado {
         width: 80px; /* Ajustar el ancho */
         height: 30px; /* Ajustar la altura */
-        padding: 5px; /* Controlar el espacio interno */
+        padding: 10px; /* Controlar el espacio interno */
     }
-    .producto {
-        width: 350px;
+    .producto1 {
+        width: 240px;
         height: 30px;
     }
-    .referencia {
-        width: 350px;
+    .referencia2 {
+        width: 240px;
         height: 30px;
     }
-    .observacion {
-        width: 250px;
-        height: 40px; /* Diferente altura para este campo */
+    .observacion2 {
+        width: 360px;
+        height: 30px; /* Diferente altura para este campo */
         padding: 10px; /* Espacio interno más amplio */
     }
-    
+
     /* Ajustar el input dentro del contenedor */
     .contenedor input {
         width: 100%; /* Ajustar el ancho al del contenedor */
         height: 100%; /* Ajustar la altura al del contenedor */
         box-sizing: border-box; /* Incluir padding y border en el tamaño total */
     }
+
 </style>
 
 <script>
@@ -737,14 +780,21 @@ document.addEventListener('DOMContentLoaded', function () {
         const nuevaFila = document.createElement('tr');
         nuevaFila.innerHTML = `
             <td>
-                <input type="text" class="form-control cantidad1" name="cantidad1[]" value="${cantidad}" readonly>
+                <!-- Campo oculto con valor "1", solo se enviará si el checkbox no está marcado -->
+                <input type="hidden" name="articuloSeleccionado[]" id="articuloSeleccionado" value="0">
+
+                <!-- Checkbox para marcar -->
+                <input type="checkbox" class="checkbox form-check-input" id="articuloSeleccionado" name="articuloSeleccionado[]" value="1">
             </td>
             <td>
-                <input type="text" class="form-control producto1" name="producto1[]" value="${productoTexto}" readonly>
+                <input type="text" class="form-control cantidad1" id="cantidad1" name="cantidad1[]" value="${cantidad}" readonly>
+            </td>
+            <td>
+                <input type="text" class="form-control producto1" id="producto1" name="producto1[]" value="${productoTexto}" readonly>
                 <input type="hidden" id="producto_id12" name="producto_id12[]" value="${productoID}">
             </td>
             <td>
-                <input type="text" class="form-control referencia2" name="referencia2[]" value="${referencia}" readonly>
+                <input type="text" class="form-control referencia2" id="referencia2" name="referencia2[]" value="${referencia}" readonly>
                 <input type="hidden" id="referencia_id12" name="referencia_id12[]" value="${referenciaID}">
             </td>
             <td>
@@ -795,6 +845,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <script>
     document.getElementById('generarPdf').addEventListener('click', function () {
+        
+        
+        
+        // Obtener el valor del checkbox (asegúrate de que el id de tu checkbox sea correcto)
+        const checkbox = document.getElementById('articuloSeleccionado'); // Cambia 'checkbox_id' por el id de tu checkbox
+        const isChecked = checkbox.checked ? "1" : "0"; // Si está marcado, es "1", si no, es "0"
+
+        // Validar si el checkbox está marcado (si es "1", no generamos el PDF)
+        if (isChecked === "1") {
+            alert("No se puede generar el PDF porque el checkbox está marcado.");
+            return; // Detener el proceso de generación del PDF
+        }
+
+
+
+
+
         // Crea una nueva instancia de jsPDF
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({
@@ -865,3 +932,166 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 </script>
 
+<script>
+    document.getElementById('btnValidarMaterial').addEventListener('click', function () {
+        fetch('validar_registros.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'validar_material' })
+})
+    .then(response => response.json())
+    .then(data => {
+        console.log('Respuesta del servidor:', data);  // Verifica la respuesta completa
+        if (data.success) {
+            console.log('Registros obtenidos:', data.registros);  // Verifica los registros obtenidos
+            let contenidoTabla = `<table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Seleccionar</th>
+                                <th>Producto</th>
+                                <th>Referencia</th>
+                                <th>Cantidad</th>
+                                <th>Observaciones</th>
+                                <th>Asignado a:</th>
+                                <th>N° Movimiento</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+data.registros.forEach(registro => {
+    contenidoTabla += `<tr>
+                        <td>
+                            <input type="checkbox" class="checkbox-material" data-id="${registro.id_movimiento_diario}">
+                        </td>
+                        <td>${registro.tipo_producto}</td>
+                        <td>${registro.referencia_2}</td>
+                        <td>${registro.cantidad_entrada}</td>
+                        <td>${registro.observaciones}</td>
+                        <td>${registro.op}</td>
+                        <td>${registro.consecu_sale}</td>
+                       </tr>`;
+});
+
+contenidoTabla += `</tbody></table>`;
+document.getElementById('contenidoTablaMaterial').innerHTML = contenidoTabla;
+
+        } else {
+            alert('No se encontraron registros.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+
+    });
+
+
+    document.getElementById('btnGenerarPdfModal').addEventListener('click', function () {
+    const checkboxes = document.querySelectorAll('.checkbox-material:checked');
+    const registrosSeleccionados = [];
+    const idsActualizar = [];
+
+    // Inicializa variables para los datos adicionales
+    let fecha = new Date().toLocaleDateString();
+    let contadorSalida = "N/A";
+    let almacenDestino = "N/A";
+    let asignarA = "N/A";
+
+    checkboxes.forEach(checkbox => {
+        const fila = checkbox.closest('tr');
+        const columnas = Array.from(fila.querySelectorAll('td'));
+
+        // Asignar manualmente los valores que deseas extraer
+        const cantidad = columnas[3]?.textContent || "N/A"; // Cantidad
+        const producto = columnas[1]?.textContent || "N/A"; // Producto
+        const referencia = columnas[2]?.textContent || "N/A"; // Referencia
+        const observacion = columnas[4]?.textContent || "N/A"; // Observación
+
+         // Solo toma los datos adicionales del primer registro (si son comunes a todos)
+        if (!contadorSalida || contadorSalida === "N/A") contadorSalida = columnas[6]?.textContent || "N/A";
+        if (!almacenDestino || almacenDestino === "N/A") almacenDestino = columnas[7]?.textContent || "N/A";
+        if (!asignarA || asignarA === "N/A") asignarA = columnas[5]?.textContent || "N/A";
+
+        registrosSeleccionados.push([cantidad, producto, referencia, observacion]);
+
+        // También puedes asignar columnas específicas directamente a variables globales, si es necesario
+        idsActualizar.push(checkbox.dataset.id); // Almacenar el ID seleccionado
+    });
+
+    if (registrosSeleccionados.length === 0) {
+        alert('Por favor, selecciona al menos un registro.');
+        return;
+    }
+
+    // Generar el PDF con los datos seleccionados
+    generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA);
+
+    // Llamar a la función para actualizar registros en la base de datos
+    actualizarRegistros(idsActualizar);
+});
+
+// Función para generar el PDF con los datos
+function generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+        orientation: 'landscape', // Orientación horizontal
+        unit: 'mm', // Unidad de medida
+        format: 'a4' // Formato de la hoja
+    });
+
+    // Encabezado de la empresa
+    doc.setFontSize(16);
+    doc.text('SMARTLED COLOMBIA', 150, 10, { align: 'center' });
+    doc.setFontSize(12);
+    doc.text('Salida de Artículos del Almacén', 150, 20, { align: 'center' });
+
+    // Información adicional
+    doc.setFontSize(10);
+    doc.text(`Fecha: ${fecha}`, 10, 40);
+    doc.text(`# Documento: ${contadorSalida}`, 10, 45);
+    doc.text(`Almacén destino: ${almacenDestino}`, 10, 50);
+    doc.text(`Asignar a: ${asignarA}`, 10, 55);
+
+    // Crear la tabla con autoTable
+    doc.autoTable({
+        head: [['Cantidad', 'Producto', 'Referencia', 'Observación']], // Encabezados
+        body: registrosSeleccionados, // Datos de la tabla
+        startY: 65, // Posición inicial
+        styles: { fontSize: 8 }, // Tamaño de fuente
+        theme: 'grid', // Tema con bordes para la tabla
+    });
+
+    // Agregar líneas para firmas
+    const finalY = doc.lastAutoTable.finalY + 20; // Posición después de la tabla
+
+    doc.line(60, finalY, 120, finalY); // Línea para "Entrega"
+    doc.line(180, finalY, 240, finalY); // Línea para "Recibe"
+
+    // Agregar textos para firmas
+    doc.setFontSize(10);
+    doc.text("Entrega", 80, finalY + 5); // Texto debajo de la línea de "Entrega"
+    doc.text("Recibe", 200, finalY + 5); // Texto debajo de la línea de "Recibe"
+
+    // Guardar el PDF
+    doc.save('material_validado.pdf');
+}
+
+
+
+function actualizarRegistros(ids) {
+    console.log('IDs enviados al servidor:', ids); // Verifica los IDs enviados
+    fetch('actualizar_registros.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: ids })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta del servidor:', data); // Verifica la respuesta del servidor
+            if (data.success) {
+                alert('Los registros se han actualizado correctamente.');
+            } else {
+                alert('Hubo un problema al actualizar los registros: ' + (data.message || 'Error desconocido.'));
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+</script>

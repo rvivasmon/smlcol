@@ -17,6 +17,10 @@ $referencias_21 = $_POST['referencia_id12'] ?? [];
 $almacen_salida_md = $_POST['almacen_salida_md'] ?? null;
 $salidas_md = $_POST['cantidad1'] ?? [];
 $entradas_md = $_POST['cantidad1'] ?? [];
+// Verificar si $_POST['articuloSeleccionado'] está vacío o es nulo, y asignar '0' en ese caso
+$separar_material = !empty($_POST['articuloSeleccionado']) ? $_POST['articuloSeleccionado'] : [0];
+
+
 
 // Validar que los arrays no estén vacíos y tengan la misma cantidad de elementos
 if (empty($productos) || count($productos) !== count($observaciones) || count($productos) !== count($referencias_21) || count($productos) !== count($salidas_md) || count($productos) !== count($entradas_md)) {
@@ -81,6 +85,9 @@ for ($i = 0; $i < count($productos); $i++) {
     $salida_md = -abs(floatval($salidas_md[$i]));  // Asegúrate de que el valor sea negativo para salida
     $entrada_md = abs(floatval($entradas_md[$i])); // Asegúrate de que el valor sea positivo para entrada
 
+        // Determinar si se debe asignar "2" al campo separar_material
+        $valor_separar_material = in_array("1", $separar_material) ? "1" : 0;
+
     // Si el almacén de salida es 3 o "alma_principal", insertamos en movimiento_diario
     if ($almacen_salida_md == 3 || $almacen_salida_md == 'alma_principal') {
         // Preparar datos de movimiento para la inserción
@@ -96,12 +103,13 @@ for ($i = 0; $i < count($productos); $i++) {
             ':op_destino' => $op_destino,
             ':referencia_21' => $referencia_21,
             ':contador_salida' => $contador_salida, // Agregar contador_salida
+            ':separar_material' => $valor_separar_material, // Agregar separar_material
         ];
 
         // Insertar en movimiento_diario
         $sql_movimiento_diario = "INSERT INTO movimiento_diario 
-            (fecha, tipo_producto, referencia_2, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, consecu_sale) 
-            VALUES (:fecha, :producto, :referencia_21, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :contador_salida)";
+            (fecha, tipo_producto, referencia_2, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, consecu_sale, separar_material) 
+            VALUES (:fecha, :producto, :referencia_21, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :contador_salida, :separar_material)";
         
         $stmt_diario = $pdo->prepare($sql_movimiento_diario);
         if (!$stmt_diario->execute($datos_movimiento)) {
@@ -135,6 +143,7 @@ for ($i = 0; $i < count($productos); $i++) {
             ':op_destino' => $op_destino,
             ':referencia_21' => $referencia_21,
             ':consecu_entra' => $consecu_entra, // Usamos el valor incrementado
+
         ];
 
         // Insertar en movimiento_techled

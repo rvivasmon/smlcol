@@ -71,7 +71,7 @@ include('controller_show_tracking.php');
 
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/techled/tracking_chi/index_tracking.php"; ?>" class="btn btn-default btn-block">Volver</a>
+                                <a href="<?php echo $URL."admin/techled1/tracking_chi/index_tracking.php"; ?>" class="btn btn-default btn-block">Volver</a>
                             </div>
                         </div>
                 </div>

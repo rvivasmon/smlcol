@@ -92,7 +92,7 @@ include('../../../layout/admin/parte1.php');
                                 ?>
                                     <tr>
                                         <td><input type="checkbox" class="record-checkbox" value="<?php echo $id; ?>"></td> <!-- Checkbox por registro -->
-                                        <td><a href="<?php echo $URL; ?>admin/administracion/tracking/tracking_chi/show_tracking.php?id=<?php echo $id; ?>"><?php echo $contador; ?></a></td>
+                                        <td><a href="<?php echo $URL; ?>admin/techled1/tracking_chi/show_tracking.php?id=<?php echo $id; ?>"><?php echo $contador; ?></a></td>
                                         <td><?php echo $date; ?></td>
                                         <td><?php echo $type; ?></td>
                                         <td><?php echo $category; ?></td>
