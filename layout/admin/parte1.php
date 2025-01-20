@@ -825,6 +825,24 @@ foreach ($roles_permisos as $rol_permiso) {
                     ?>
 
                         <li class="nav-item">
+                          <a href="#" class="nav-link active">
+                            <i class="nav-icon fas fa-user-plus"></i>
+                            <p>
+                              CHAT
+                              <i class="right fas fa-angle-left"></i>
+                            </p>
+                          </a>
+                          <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Chat de Ayuda</p>
+                              </a>
+                            </li>
+                          </ul>
+                        </li>
+
+                        <li class="nav-item">
                           <a href="<?php echo $URL;?>/login/controller_cerrar_sesion.php" class="nav-link" style="background-color: #ca0a0b">
                             <i class="nav-icon fas fa-door-closed"></i>
                             <p>Cerrar Sesión</p>
