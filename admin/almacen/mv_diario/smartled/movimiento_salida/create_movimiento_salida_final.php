@@ -80,7 +80,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                     <select name="producto" id="producto" class="form-control">
                                                         <option value="">Seleccione un Producto</option>
                                                         <?php
-                                                        $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos WHERE habilitar = "1" ORDER BY tipo_producto ASC');
+                                                        $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos WHERE tipo_producto IS NOT NULL AND tipo_producto != "" AND habilitar = "1" ORDER BY tipo_producto ASC');
                                                         $query_producto->execute();
                                                         $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
                                                         foreach($productos as $producto) {
@@ -845,9 +845,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <script>
     document.getElementById('generarPdf').addEventListener('click', function () {
-        
-        
-        
+
+
         // Obtener el valor del checkbox (asegúrate de que el id de tu checkbox sea correcto)
         const checkbox = document.getElementById('articuloSeleccionado'); // Cambia 'checkbox_id' por el id de tu checkbox
         const isChecked = checkbox.checked ? "1" : "0"; // Si está marcado, es "1", si no, es "0"
@@ -857,10 +856,6 @@ document.addEventListener('DOMContentLoaded', function () {
             alert("No se puede generar el PDF porque el checkbox está marcado.");
             return; // Detener el proceso de generación del PDF
         }
-
-
-
-
 
         // Crea una nueva instancia de jsPDF
         const { jsPDF } = window.jspdf;
@@ -969,7 +964,7 @@ data.registros.forEach(registro => {
                         <td>${registro.observaciones}</td>
                         <td>${registro.op}</td>
                         <td>${registro.consecu_sale}</td>
-                       </tr>`;
+                        </tr>`;
 });
 
 contenidoTabla += `</tbody></table>`;
@@ -1073,8 +1068,6 @@ function generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestin
     // Guardar el PDF
     doc.save('material_validado.pdf');
 }
-
-
 
 function actualizarRegistros(ids) {
     console.log('IDs enviados al servidor:', ids); // Verifica los IDs enviados

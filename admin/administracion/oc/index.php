@@ -44,7 +44,7 @@ $fecha_creacion = date('Y-m-d'); //Obtiene la fecha actual
                                             <th hidden>Tipo PC</th>
                                             <th hidden>OC Cliente</th>
                                             <th hidden>Fecha Aprobacion</th>
-                                            <th hidden>Estado Admon</th>
+                                            <th>Estado Admon</th>
                                             <th hidden>Vendedor</th>
                                             <th hidden>Estado Factura</th>
                                             <th hidden>Num Factura Fecha</th>
@@ -66,14 +66,14 @@ $fecha_creacion = date('Y-m-d'); //Obtiene la fecha actual
                                     <tbody>
                                         <?php
                                         $contador = 0;
-                                        $query_oc = $pdo->prepare('SELECT oc.*, cl.nombre_comercial AS nombre_cliente, tes.estado_admon AS nombre_admon, usu.nombre AS nombre_vendedor, tes1.estado_factura AS nombre_factura, ocp.acuerdo_pago AS nombre_acuerdo, tci.ciudad AS nombre_ciudad FROM oc LEFT JOIN clientes AS cl ON oc.nom_cliente = cl.id LEFT JOIN t_estado AS tes ON oc.estado_admon = tes.id LEFT JOIN usuarios AS usu ON oc.vendedor = usu.id LEFT JOIN t_estado AS tes1 ON oc.estado_factura = tes1.id LEFT JOIN oc_prefijos AS ocp ON oc.acuerdo_pago = ocp.id LEFT JOIN t_ciudad AS tci ON oc.ciudad = tci.id');
+                                        $query_oc = $pdo->prepare('SELECT oc.*, ocp1.consecutivo_primero_oc AS nombre_oc, cl.nombre_comercial AS nombre_cliente, tes.estado_admon AS nombre_admon, usu.nombre AS nombre_vendedor, tes1.estado_factura AS nombre_factura, ocp.acuerdo_pago AS nombre_acuerdo, tci.ciudad AS nombre_ciudad FROM oc LEFT JOIN oc_prefijos AS ocp1 ON oc.oc = ocp1.id LEFT JOIN clientes AS cl ON oc.nom_cliente = cl.id LEFT JOIN t_estado AS tes ON oc.estado_admon = tes.id LEFT JOIN usuarios AS usu ON oc.vendedor = usu.id LEFT JOIN t_estado AS tes1 ON oc.estado_factura = tes1.id LEFT JOIN oc_prefijos AS ocp ON oc.acuerdo_pago = ocp.id LEFT JOIN t_ciudad AS tci ON oc.ciudad = tci.id');
                                         $query_oc->execute();
                                         $oces = $query_oc->fetchAll(PDO::FETCH_ASSOC);
                                         foreach ($oces as $oc_item){
 
                                             $id = $oc_item['id'];
-                                            $oc = $oc_item['oc'];
-                                            $pc = $oc_item['pc'];
+                                            $oc = $oc_item['oc_resultante'];
+                                            $pc = $oc_item['id_pc'];
                                             $tipo_oc = $oc_item['tipo_oc'];
                                             $tipo_pc = $oc_item['tipo_pc'];
                                             $oc_cliente = $oc_item['oc_cliente'];
@@ -112,9 +112,9 @@ $fecha_creacion = date('Y-m-d'); //Obtiene la fecha actual
                                                 <td hidden><?php echo $tipo_pc; ?></td>
                                                 <td hidden><?php echo $oc_cliente; ?></td>                          
                                                 <td hidden><?php echo $fecha_aprobacion; ?></td>
-                                                <td hidden><?php echo $estado_admon; ?></td>
+                                                <td><?php echo $estado_admon; ?></td>
                                                 <td hidden><?php echo $vendedor; ?></td>
-                                                <td hidden><?php echo $estado_factura; ?></td>
+                                                <td hidden><?php echo $id_estado_admon; ?></td>
                                                 <td hidden><?php echo $factura_fecha; ?></td>
                                                 <td hidden><?php echo $acuerdo_pago; ?></td>
                                                 <td hidden><?php echo $nom_contacto_admin; ?></td>

@@ -1,11 +1,11 @@
 <?php
 
 // Incluir archivos necesarios
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
-include('../../../layout/admin/parte1.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
+include('../../../../layout/admin/sesion.php');
+include('../../../../layout/admin/datos_sesion_user.php');
+include('../../../../layout/admin/parte1.php');
 
 ?>
 
@@ -14,7 +14,7 @@ include('../../../layout/admin/parte1.php');
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col">
-          <h1 class="m-0">ASIGNACIÓN DE POP</h1>
+          <h1 class="m-0">OP's por procesar</h1>
           <div class="card card-blue">
             <div class="card-header">
               <a href="#" class="d-block invisible"><?php echo $sesion_usuario['nombre'] ?></a>
@@ -33,52 +33,56 @@ include('../../../layout/admin/parte1.php');
                                     <th>ID</th>
                                     <th>Fecha Recibido</th>
                                     <th>POP</th>
+                                    <th>Item POP</th>
                                     <th>OC</th>
-                                    <th>Proyecto</th>
-                                    <th>Ciudad</th>
-                                    <th>Estado POP</th>
-                                    <th>Cliente</th>
-                                    <th>Lugar de Instalación</th>
+                                    <th>Cantidad</th>
                                     <th><center>Acciones</center></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 $contador = 0;
-                                $query_pop = $pdo->prepare('SELECT pop.*, cl.nombre_comercial AS nombre_cliente, tci.ciudad AS nombre_ciudad, tes.estadopop AS nombre_estado_pop, oc.oc_resultante AS nombre_oc FROM pop INNER JOIN clientes AS cl ON pop.cliente = cl.id INNER JOIN t_ciudad AS tci ON pop.ciudad = tci.id INNER JOIN t_estado AS tes ON pop.estado_pop = tes.id INNER JOIN oc ON pop.id_oc = oc.id');
+                                // Ajustada la consulta para contar las repeticiones de id_pop
+                                $query_pop = $pdo->prepare('
+                                    SELECT 
+                                        op.*, 
+                                        pop.pop AS nombre_pop, 
+                                        ipp.contador AS nombre_item_pop, 
+                                        (SELECT COUNT(*) FROM items_op WHERE id_pop = op.id_pop) AS numero_items 
+                                    FROM
+                                        items_op AS op 
+                                    INNER JOIN
+                                        pop ON op.id_pop = pop.id 
+                                    INNER JOIN
+                                        items_pop AS ipp ON op.id_item = ipp.id
+                                    ');
+
                                 $query_pop->execute();
                                 $popes = $query_pop->fetchAll(PDO::FETCH_ASSOC);
-                                foreach ($popes as $pop_item){
+                                foreach ($popes as $pop_item) {
 
                                     $id = $pop_item['id'];
-                                    $pop = $pop_item['pop'];
+                                    $id_pop = $pop_item['nombre_pop'];
+                                    $item_pop = $pop_item['nombre_item_pop'];
                                     $fecha_recibido = $pop_item['fecha_recibido'];
-                                    $oc = $pop_item['nombre_oc'];
-                                    $proyecto = $pop_item['nombre_proyecto'];
-                                    $ciudad = $pop_item['nombre_ciudad'];
-                                    $estdo_pop = $pop_item['nombre_estado_pop'];
-                                    $nombre_cliente = $pop_item['nombre_cliente'];
-                                    $lugar_instalacion = $pop_item['lugar_instalacion'];
+                                    $oc = $pop_item['descripcion'];
+                                    $cantidad = $pop_item['cantidad'];
+                                    $numero_items = $pop_item['numero_items']; // Número de veces que se repite id_pop
                                     $contador = $contador + 1;
                                 ?>
                                     <tr>
-                                        <td><?php echo $contador; ?></td>
+                                        <td><?php echo $contador; ?></td>                                      
                                         <td><?php echo $fecha_recibido?></td>
-                                        <td><?php echo $pop; ?></td>
+                                        <td><?php echo $id_pop?></td>
+                                        <td><?php echo $item_pop . ' / ' . $numero_items; // Visualización de item_pop y número de repeticiones ?></td>
                                         <td><?php echo $oc; ?></td>
-                                        <td><?php echo $proyecto; ?></td>
-                                        <td><?php echo $ciudad; ?></td>
-                                        <td><?php echo $estdo_pop; ?></td>
-                                        <td ><?php echo $nombre_cliente; ?></td>                                        
-                                        <td><?php echo $lugar_instalacion; ?></td>
+                                        <td><?php echo $cantidad; ?></td>
                                         <td>
-                                        <center>
-                                            <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                            <?php if ($pop_item['estado_pop'] != 2): // Mostrar los botones solo si estado_pop no es 1 ?>
+                                            <center>
+                                                <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
                                                 <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Procesar <i class="fas fa-pen"></i></a>
                                                 <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
-                                            <?php endif; ?>
-                                        </center>
+                                            </center>
                                         </td>
                                     </tr>
                                 <?php
@@ -96,7 +100,8 @@ include('../../../layout/admin/parte1.php');
 </div>
 
 
-<?php include('../../../layout/admin/parte2.php');?>
+<?php include('../../../../layout/admin/parte2.php');?>
+
 
 <script>
     $(function () {

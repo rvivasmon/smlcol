@@ -201,15 +201,16 @@ foreach ($roles_permisos as $rol_permiso) {
                         $almacenes = array(
                           array('id' => 3, 'nombre' => 'Almacén Principal'),
                           array('id' => 4, 'nombre' => 'Almacén Techled'),
-                          array('id' => 5, 'nombre' => 'Almacén Importación'),
+                          /*array('id' => 5, 'nombre' => 'Almacén Importación'),
                           array('id' => 6, 'nombre' => 'Almacén Técnica'),
                           array('id' => 7, 'nombre' => 'Almacén Planta'),
                           array('id' => 8, 'nombre' => 'Almacén Pruebas'),
                           array('id' => 9, 'nombre' => 'Almacén Desechados'),
                           array('id' => 10, 'nombre' => 'Almacén Soporte Técnico'),
                           array('id' => 11, 'nombre' => 'Almacén Aliados'),
-                          array('id' => 12, 'nombre' => 'Almacén General'),
+                          array('id' => 12, 'nombre' => 'Almacén General'),*/
                           // Agregar más almacenes según necesites
+                          array('id' => 13, 'nombre' => 'Almacén MMP'),
                         );
 
                         $productos = array(
@@ -220,9 +221,9 @@ foreach ($roles_permisos as $rol_permiso) {
 
                         <li class="nav-item">
                           <a href="#" class="nav-link active">
-                            <i class="fa-solid fa-warehouse"></i>
+                            <i class="nav-icon fas fa-warehouse"></i>
                             <p>
-                              ALMACÉN
+                              STOCK E INVENTARIO
                               <i class="right fas fa-angle-left"></i>
                             </p>
                           </a>
@@ -346,6 +347,16 @@ foreach ($roles_permisos as $rol_permiso) {
                                                   } elseif ($producto['id'] == 6) {
                                                     $url_producto = $URL . "admin/almacen/inventario/almacenes/index.php";
                                                 }
+                                                  } elseif ($almacen['id'] == 13) {
+                                                    if ($producto['id'] == 1) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
+                                                  } elseif ($producto['id'] == 2) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
+                                                  } elseif ($producto['id'] == 3) {
+                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
+                                                  } elseif ($producto['id'] == 6) {
+                                                    $url_producto = $URL . "admin/almacen/inventario/mmp/index.php";
+                                                }
                                                   }
                                                   ?>
                                                   <li class="nav-item">
@@ -364,7 +375,7 @@ foreach ($roles_permisos as $rol_permiso) {
                               <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>
-                                  Movimiento Diario
+                                  Consulta de Inventario
                                   <i class="right fas fa-angle-left"></i> <!-- Icono de flecha -->
                                 </p>
                               </a>
@@ -372,13 +383,19 @@ foreach ($roles_permisos as $rol_permiso) {
                                 <li class="nav-item">
                                   <a href="<?php echo $URL;?>admin/almacen/mv_diario/smartled" class="nav-link">
                                     <i class="far fa-dot-circle nav-icon"></i>
-                                    <p>Almacén Smartled</p>
+                                    <p>Inventario Smartled</p>
                                   </a>
                                 </li>
                                 <li class="nav-item">
                                   <a href="<?php echo $URL; ?>admin/almacen/mv_diario/techled" class="nav-link">
                                     <i class="far fa-dot-circle nav-icon"></i>
-                                    <p>Almacén TechLed</p>
+                                    <p>Inventario TechLed</p>
+                                  </a>
+                                </li>
+                                <li class="nav-item">
+                                  <a href="<?php echo $URL;?>admin/almacen/mv_diario/mmp" class="nav-link">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Inventario MMP</p>
                                   </a>
                                 </li>
                               </ul>
@@ -409,7 +426,7 @@ foreach ($roles_permisos as $rol_permiso) {
                               </a>
                             </li>
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/usuarios/create.php" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/operacion/pop/op" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Status OP</p>
                               </a>
@@ -834,7 +851,7 @@ foreach ($roles_permisos as $rol_permiso) {
                           </a>
                           <ul class="nav nav-treeview">
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/help" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Chat de Ayuda</p>
                               </a>

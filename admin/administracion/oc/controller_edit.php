@@ -29,10 +29,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fecha_creacion = $_POST['fecha_creacion'] ?? $fecha_tratada_oc;
     $items_oc = $_POST['num_items'];
     $fecha_factura = $_POST['factura_fecha'];
+    $fecha_aprobacion = $_POST['fecha_aprobacion'];    
 
     try {
         // Inicia la transacción
         $pdo->beginTransaction();
+
+        // Inicializa el valor de "procesar"
+    $procesar = 0;
+
+    // Si el estado_admon es igual a 1, procesar será 1
+    if ($estado_admon == 1) {
+        $procesar = 1;
+    }
 
         // Actualizar tabla 'oc'
         $query_update = $pdo->prepare('
@@ -52,7 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 lugar_instalacion = :lugar_instalacion,
                 estado_logistico = :estado_logistico,
                 dias_pactados = :dias_pactados,
-                observacion = :observacion
+                observacion = :observacion,
+                procesar = :procesar,
+                fecha_aprobacion = :fecha_aprobacion,
+                factura_fecha = :fecha_factura
             WHERE id = :id
         ');
 
@@ -74,13 +86,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':estado_logistico' => $estado_logistico,
             ':dias_pactados' => $dias_pactados,
             ':observacion' => $observacion,
+            ':procesar' => $procesar,
+            ':fecha_aprobacion' => $fecha_aprobacion,
+            ':fecha_factura' => $fecha_factura,
         ]);
 
        // Si estado_admon es 1, inserta en la tabla 'pop'
         if ($estado_admon == 1) {
             try {
                 // Obtener el último valor del contador
-                $query_last_counter = $pdo->prepare('SELECT MAX(item_pop) AS last_counter FROM pop');
+                $query_last_counter = $pdo->prepare('SELECT MAX(contador) AS last_counter FROM pop');
                 $query_last_counter->execute();
                 $result = $query_last_counter->fetch(PDO::FETCH_ASSOC);
                 
@@ -91,10 +106,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $query_insert_pop = $pdo->prepare('
                     INSERT INTO pop (
                         id_oc, oc, fecha_recibido, estado_admon, cliente, contacto, telefono,
-                        nombre_proyecto, ciudad, lugar_instalacion, observaciones, items_oc, item_pop
+                        nombre_proyecto, ciudad, lugar_instalacion, observaciones, items_oc, contador
                     ) VALUES (
                         :id_oc, :oc, :fecha_creacion, :estado_admon, :cliente, :contacto,
-                        :telefono, :proyecto, :ciudad, :lugar_instalacion, :observacion, :items_oc, :item_pop
+                        :telefono, :proyecto, :ciudad, :lugar_instalacion, :observacion, :items_oc, :contador
                     )
                 ');
 
@@ -111,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':lugar_instalacion' => $lugar_instalacion,
                     ':observacion' => $observacion,
                     ':items_oc' => $items_oc,
-                    ':item_pop' => $new_counter, // Aquí se usa el nuevo valor del contador
+                    ':contador' => $new_counter, // Aquí se usa el nuevo valor del contador
                 ]);
 
                 // Mensaje opcional para depuración

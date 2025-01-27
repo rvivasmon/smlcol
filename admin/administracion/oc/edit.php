@@ -85,21 +85,21 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
 
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="id_pc">ID PC</label>
+                                    <label for="id_pc">PC</label>
                                     <input type="text" name="id_pc" id="id_pc" value="<?php echo $oc_item9['id_pc']; ?>" class="form-control">
                                 </div>
                             </div>
 
-                            <div class="col-md-1">
+                            <div class="col-md-1" hidden>
                                 <div class="form-group">
-                                    <label for="pc">PC</label>
+                                    <label for="pc">ID PC</label>
                                     <input type="text" name="pc" id="pc" value="<?php echo $pc_combinado; ?>"class="form-control">
                                 </div>
                             </div>
 
                             <div class="col-md-1">
                                 <div class="form-group">
-                                    <label for="id_oc">ID OC</label>
+                                    <label for="id_oc">OC Interna</label>
                                     <input type="text" name="id_oc" id="id_oc" value="<?php echo $oc_final; ?>" class="form-control">
                                 </div>
                             </div>

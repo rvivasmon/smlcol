@@ -90,7 +90,7 @@ include('../../../../../layout/admin/parte1.php');
                                                 <select name="producto" id="producto" class="form-control" required>
                                                     <option value="">Seleccione un Producto</option>
                                                     <?php
-                                                    $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos WHERE habilitar = "1" ORDER BY tipo_producto ASC');
+                                                    $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos WHERE tipo_producto IS NOT NULL AND tipo_producto != "" AND habilitar = "1" ORDER BY tipo_producto ASC');
                                                     $query_producto->execute();
                                                     $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($productos as $producto) {
@@ -133,7 +133,8 @@ include('../../../../../layout/admin/parte1.php');
                                                     <option value="">Seleccione un pitch</option>
                                                     <?php 
                                                     $query_pitch = $pdo->prepare('SELECT DISTINCT
-                                                                                            pmc.pitch, tp.pitch AS pitch_nombre
+                                                                                            pmc.pitch, 
+                                                                                            tp.pitch AS pitch_nombre
                                                                                         FROM
                                                                                             producto_modulo_creado AS pmc
                                                                                         INNER JOIN

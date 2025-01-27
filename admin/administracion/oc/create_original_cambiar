@@ -17,13 +17,9 @@ $query_co->execute();
 $last_oc = $query_co->fetch(PDO::FETCH_ASSOC);
 
 // Obtener opciones dinámicas
-$query_taunion = $pdo->prepare('SELECT id, consecutivo_primero_oc, consecutivo_segundo_oc FROM oc_prefijos LIMIT 2');
+$query_taunion = $pdo->prepare('SELECT id, consecutivo_primero_oc FROM oc_prefijos LIMIT 2');
 $query_taunion->execute();
 $unionesa = $query_taunion->fetchAll(PDO::FETCH_ASSOC);
-
-$query_para_union = $pdo->prepare('SELECT id, consecutivo_primero_oc, consecutivo_segundo_oc FROM oc_prefijos LIMIT 3');
-$query_para_union->execute();
-$unionesaoc = $query_para_union->fetchAll(PDO::FETCH_ASSOC);
 
 // Obtener el valor de 'tipo_proyecto_visor' de la tabla 'proyecto'
 $query_proyecto = $pdo->prepare('SELECT * FROM oc_proyecto WHERE id_proyec = :id_proyec');
@@ -81,9 +77,8 @@ $oci_oc = $_POST['oci_oc'] ?? '';
 
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="pc">ID PC</label>
-                                    <input type="text" class="form-control" name="pc" id="pc" value="">
-                                    <!--<select name="pc" id="pc" class="form-control" required onchange="updateTipoPC()">
+                                    <label for="">ID PC</label>
+                                    <select name="pc" id="pc" class="form-control" required onchange="updateTipoPC()">
                                         <option value="">Seleccione el PC</option>
                                         <?php 
                                             $query_proyecto = $pdo->prepare('SELECT id_proyecto_visor, tipo_proyecto_visor FROM oc_proyecto');
@@ -95,17 +90,31 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                                                 echo "<option value='$id_proyecto_visor' data-tipo='$tipo_proyecto_visor'>$id_proyecto_visor</option>";
                                             }
                                         ?>
-                                    </select>-->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label for="">PC</label>
+                                    <input type="text" class="form-control" name="pc21" id="pc21" value="" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label for="">Tipo PC</label>
+                                    <input type="text" class="form-control" name="tipo_pc" id="tipo_pc" value="" readonly>
                                 </div>
                             </div>
 
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="oci_oc">Orden de Compra</label>
-                                    <select name="oci_oc" id="oci_oc" class="form-control" required>
+                                    <select name="oci_oc" id="oci_oc" class="form-control" required onchange="validateAndUpdateCounter()">
                                         <option value="">Seleccione Orden</option>
                                         <?php foreach ($unionesa as $prefijos): ?>
-                                            <option value="<?php echo $prefijos['id']; ?>"><?php echo $prefijos['consecutivo_primero_oc']; ?></option>
+                                            <option value="<?php echo $prefijos['consecutivo_primero_oc']; ?>"><?php echo $prefijos['consecutivo_primero_oc']; ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -114,12 +123,7 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Tipo OC</label>
-                                    <select name="sml_psi_tl" id="sml_psi_tl" class="form-control" required>
-                                        <option value="">Tipo Orden</option>
-                                        <?php foreach ($unionesaoc as $tipo): ?>
-                                            <option value="<?php echo $tipo['id']; ?>"><?php echo $tipo['consecutivo_segundo_oc']; ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                    <input type="text" class="form-control" name="sml_psi_tl" id="sml_psi_tl" value="" readonly>
                                 </div>
                             </div>
 
@@ -526,35 +530,61 @@ document.getElementById('registerOcButton').addEventListener('click', function(e
 </script>
 
 <script>
+function updateTipoPC() {
+    // Obtén el valor seleccionado del campo "pc"
+    const pcSelect = document.getElementById('pc');
+    const selectedPC = pcSelect.options[pcSelect.selectedIndex].value;
+
+    // Verifica si se ha seleccionado un valor
+    if (selectedPC) {
+        // Realiza una solicitud AJAX para obtener los valores de "tipo_proyecto_visor" y "proyecto_visor"
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'get_tipo_pc.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // El resultado debe ser en formato JSON
+                const response = JSON.parse(xhr.responseText);
+
+                // Actualiza los campos del formulario con los valores recibidos
+                document.getElementById('tipo_pc').value = response.tipo_proyecto_visor || '';
+                document.getElementById('pc21').value = response.proyecto_visor || '';
+                document.getElementById('sml_psi_tl').value = response.tipo_proyecto_visor || '';
+            }
+        };
+        xhr.send('id_proyecto_visor=' + selectedPC);
+    } else {
+        // Si no se ha seleccionado un valor, limpia los campos
+        document.getElementById('tipo_pc').value = '';
+        document.getElementById('pc21').value = '';
+        document.getElementById('sml_psi_tl').value = '';
+    }
+}
+</script>
+
+<script>
 // Función para obtener el nuevo contador y actualizar el campo "oc_resultante"
 function updateOcResultante() {
-    // Obtener el valor de las opciones seleccionadas (para operaciones internas)
-    const ociOcValue = document.getElementById('oci_oc').value;
-    const smlPsiTlValue = document.getElementById('sml_psi_tl').value;
+    const ociOc = document.getElementById('oci_oc').value;
+    const smlPsiTl = document.getElementById('sml_psi_tl').value;
 
-    // Obtener el texto visible de las opciones seleccionadas (para mostrar al usuario)
-    const ociOcText = document.getElementById('oci_oc').options[document.getElementById('oci_oc').selectedIndex].text;
-    const smlPsiTlText = document.getElementById('sml_psi_tl').options[document.getElementById('sml_psi_tl').selectedIndex].text;
-
-    if (ociOcValue && smlPsiTlValue) {
-        // Hacer una solicitud para obtener el nuevo contador basado en los valores seleccionados
+    if (ociOc && smlPsiTl) {
+        // Hacer una solicitud para obtener el nuevo contador basado en la combinación
         const xhr = new XMLHttpRequest();
         xhr.open('POST', 'get_new_counter.php', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function() {
             if (xhr.status === 200) {
                 const newCounter = xhr.responseText.trim(); // Obtén el nuevo contador del servidor
-                const ocResultante = `${ociOcText}-${smlPsiTlText}-${newCounter}`; // Usar los textos visibles para mostrar al usuario
+                const ocResultante = `${ociOc}-${smlPsiTl}-${newCounter}`;
                 document.getElementById('oc_resultante').value = ocResultante;
             }
         };
-        // Enviar los valores internos al servidor
-        xhr.send(`oci_oc=${ociOcValue}&sml_psi_tl=${smlPsiTlValue}`);
+        xhr.send(`oci_oc=${ociOc}&sml_psi_tl=${smlPsiTl}`);
     }
 }
 
 // Agregar eventos para actualizar el campo "oc_resultante" cuando cambien "oci_oc" o "sml_psi_tl"
 document.getElementById('oci_oc').addEventListener('change', updateOcResultante);
 document.getElementById('sml_psi_tl').addEventListener('change', updateOcResultante);
-
 </script>

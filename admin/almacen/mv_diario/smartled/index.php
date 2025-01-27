@@ -15,7 +15,7 @@ include('../../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Movimiento Diario General SmartLed</h1>
+                <h1 class="m-0">Inventario SmartLed</h1>
                     <div class="card card-blue">
                         <div class="card-header">
                             Movimientos
@@ -27,7 +27,7 @@ include('../../../../layout/admin/parte1.php');
                             <div class="card-tools ml-4">
                                 <div class="form-group">
                                     <button type="button" class="btn" style="background-color: #FFCC00; color: black; border-color: #FFCC00;" data-toggle="modal" data-target="#movimientoModal">
-                                        <i class="bi bi-plus-square"></i> Crear Nuevo Movimiento
+                                        <i class="bi bi-plus-square"></i> Nuevo Movimiento
                                     </button>
                                 </div>
                             </div>
@@ -55,43 +55,46 @@ include('../../../../layout/admin/parte1.php');
                                         <?php
                                         $contador = 0;
                                         $query = $pdo->prepare('SELECT
-                                                                mvd.*,
-                                                                productomovido.tipo_producto AS nombre_producto,
-                                                                almacen_origen.nombre_almacen AS almacen_origen,
-                                                                almacen_destino.nombre_almacen AS almacen_destino,
-                                                                CASE
-                                                                    WHEN mvd.tipo_producto = 1 THEN tp.pitch
-                                                                    WHEN mvd.tipo_producto = 2 THEN caraccon.marca_control
-                                                                    WHEN mvd.tipo_producto = 3 THEN caracfuen.marca_fuente
-                                                                    ELSE NULL
-                                                                END AS nombre_referencia_1,
-                                                                CASE
-                                                                    WHEN mvd.tipo_producto = 1 THEN tmc.serie
-                                                                    WHEN mvd.tipo_producto = 2 THEN caraccontrol.referencia
-                                                                    WHEN mvd.tipo_producto = 3 THEN caracfuentes.modelo_fuente
-                                                                    ELSE NULL
-                                                                END AS nombre_referencia_2
-                                                            FROM
-                                                                movimiento_diario AS mvd
-                                                            INNER JOIN
-                                                                t_productos AS productomovido ON mvd.tipo_producto = productomovido.id_producto
-                                                            LEFT JOIN
-                                                                t_asignar_todos_almacenes AS almacen_origen ON mvd.almacen_origen1 = almacen_origen.id_asignacion
-                                                            LEFT JOIN
-                                                                t_asignar_todos_almacenes AS almacen_destino ON mvd.almacen_destino1 = almacen_destino.id_asignacion
-                                                            LEFT JOIN
-                                                                tabla_pitch AS tp ON mvd.referencia_2 = tp.id AND mvd.tipo_producto = 1
-                                                            LEFT JOIN
-                                                                caracteristicas_control AS caraccon ON mvd.referencia_2 = caraccon.id_car_ctrl AND mvd.tipo_producto = 2
-                                                            LEFT JOIN
-                                                                caracteristicas_fuentes AS caracfuen ON mvd.referencia_2 = caracfuen.id_car_fuen AND mvd.tipo_producto = 3
-                                                            LEFT JOIN
-                                                                producto_modulo_creado AS tmc ON mvd.referencia_2 = tmc.id AND mvd.tipo_producto = 1
-                                                            LEFT JOIN
-                                                                referencias_control AS caraccontrol ON mvd.referencia_2 = caraccontrol.id_referencia AND mvd.tipo_producto = 2
-                                                            LEFT JOIN
-                                                                referencias_fuente AS caracfuentes ON mvd.referencia_2 = caracfuentes.id_referencias_fuentes AND mvd.tipo_producto = 3;
-                                                            ');
+                                                                        mvd.*,
+                                                                        productomovido.tipo_producto AS nombre_producto,
+                                                                        almacen_origen.nombre_almacen AS almacen_origen,
+                                                                        almacen_destino.nombre_almacen AS almacen_destino,
+                                                                        CASE
+                                                                            WHEN mvd.tipo_producto = 1 THEN pitch_table.pitch -- Aquí se une la tabla tabla_pitch
+                                                                            WHEN mvd.tipo_producto = 2 THEN caraccon.marca_control
+                                                                            WHEN mvd.tipo_producto = 3 THEN caracfuen.marca_fuente
+                                                                            ELSE NULL
+                                                                        END AS nombre_referencia_1,
+                                                                        CASE
+                                                                            WHEN mvd.tipo_producto = 1 THEN tmc.serie
+                                                                            WHEN mvd.tipo_producto = 2 THEN caraccontrol.referencia
+                                                                            WHEN mvd.tipo_producto = 3 THEN caracfuentes.modelo_fuente
+                                                                            ELSE NULL
+                                                                        END AS nombre_referencia_2
+                                                                    FROM
+                                                                        movimiento_diario AS mvd
+                                                                    INNER JOIN
+                                                                        t_productos AS productomovido ON mvd.tipo_producto = productomovido.id_producto
+                                                                    LEFT JOIN
+                                                                        t_asignar_todos_almacenes AS almacen_origen ON mvd.almacen_origen1 = almacen_origen.id_asignacion
+                                                                    LEFT JOIN
+                                                                        t_asignar_todos_almacenes AS almacen_destino ON mvd.almacen_destino1 = almacen_destino.id_asignacion
+                                                                    LEFT JOIN
+                                                                        tabla_pitch AS tp ON mvd.referencia_2 = tp.id AND mvd.tipo_producto = 1
+                                                                    LEFT JOIN
+                                                                        caracteristicas_control AS caraccon ON mvd.referencia_2 = caraccon.id_car_ctrl AND mvd.tipo_producto = 2
+                                                                    LEFT JOIN
+                                                                        caracteristicas_fuentes AS caracfuen ON mvd.referencia_2 = caracfuen.id_car_fuen AND mvd.tipo_producto = 3
+                                                                    LEFT JOIN
+                                                                        producto_modulo_creado AS tmc ON mvd.referencia_2 = tmc.id AND mvd.tipo_producto = 1
+                                                                    LEFT JOIN
+                                                                        referencias_control AS caraccontrol ON mvd.referencia_2 = caraccontrol.id_referencia AND mvd.tipo_producto = 2
+                                                                    LEFT JOIN
+                                                                        referencias_fuente AS caracfuentes ON mvd.referencia_2 = caracfuentes.id_referencias_fuentes AND mvd.tipo_producto = 3
+                                                                    LEFT JOIN
+                                                                        tabla_pitch AS pitch_table ON tmc.pitch = pitch_table.id -- Nueva unión con tabla_pitch
+                                                                        ;
+                                                                    ');
                                         $query->execute();
                                         $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);
                                         foreach ($movidiarios as $movidiario){

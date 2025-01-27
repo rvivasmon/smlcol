@@ -15,7 +15,7 @@ include('../../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Movimiento Diario General TechLed</h1>
+                <h1 class="m-0">Inventario TechLed</h1>
                     <div class="card card-blue">
                         <div class="card-header">
                             Movimientos
@@ -27,7 +27,7 @@ include('../../../../layout/admin/parte1.php');
                             <div class="card-tools ml-4">
                                 <div class="form-group">
                                     <button type="button" class="btn" style="background-color: #FFCC00; color: black; border-color: #FFCC00;" data-toggle="modal" data-target="#movimientoModal">
-                                        <i class="bi bi-plus-square"></i> Crear Nuevo Movimiento
+                                        <i class="bi bi-plus-square"></i> Nuevo Movimiento
                                     </button>
                                 </div>
                             </div>

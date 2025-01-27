@@ -102,7 +102,7 @@ include('../../../../layout/admin/parte1.php');
                                             $ubicacion = $almacen_pricipal['nombre_ubicacion'];
                                             $tipo_producto = $almacen_pricipal['nombre_tipo'];
                                             $producto = $almacen_pricipal['nombre_producto'];
-                                            $existencia = $almacen_pricipal['existencias'];
+                                            $existencia = $almacen_pricipal['cantidad_plena'];
                                             $contador = $contador + 1;
                                         ?>
                                             <tr>

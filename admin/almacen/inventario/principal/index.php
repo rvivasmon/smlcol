@@ -16,7 +16,7 @@ include('../../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                    <h1 class="m-0">Inventario General del Almacén Principal</h1>                
+                    <h1 class="m-0">Inventario Almacén Smartled</h1>                
                     <div class="card card-blue">
                         <div class="card-header">
                             PRODUCTOS ACTIVOS

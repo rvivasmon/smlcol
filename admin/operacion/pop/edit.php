@@ -8,69 +8,97 @@ include('../../../layout/admin/datos_sesion_user.php');
 include('../../../layout/admin/parte1.php');
 
 
-$fecha_tratada_oc =  date('Y-m-d'); //Obtiene la fecha actual
+$fecha_tratada_oc = date('Y-m-d'); // Obtiene la fecha actual
 
 $id_get = $_GET['id'];
-$query_oc = $pdo->prepare("SELECT pop.*, te.estado_admon FROM pop LEFT JOIN t_estado AS te ON pop.estado_admon = te.id WHERE pop.id = :id");
+$query_oc = $pdo->prepare("SELECT pop.*, te.estado_admon, cl.nombre_comercial AS nombre_cliente, tci.ciudad AS nombre_ciudad, oc.oc_resultante AS nombre_id_oc FROM pop LEFT JOIN t_estado AS te ON pop.estado_admon = te.id LEFT JOIN clientes AS cl ON pop.cliente = cl.id LEFT JOIN t_ciudad AS tci ON pop.ciudad = tci.id LEFT JOIN oc ON pop.id_oc = oc.id WHERE pop.id = :id");
+
 $query_oc->bindParam(':id', $id_get, PDO::PARAM_INT);
 $query_oc->execute();
 $oces = $query_oc->fetchAll(PDO::FETCH_ASSOC);
-foreach ($oces as $oc_item){
+foreach ($oces as $oc_item) {
     $id_pop = $oc_item['id'];
     $fecha_recepcion = $oc_item['fecha_recibido'];
     $oc = $oc_item['oc'];
     $id_oc = $oc_item['id_oc'];
+    $nombre_id_oc = $oc_item['nombre_id_oc'];
     $fecha_inicio = $oc_item['fecha_inicio'];
     $fecha_fin = $oc_item['fecha_fin'];
     $estado_admon = $oc_item['estado_admon'];
     $proyecto = $oc_item['nombre_proyecto'];
     $nom_contacto = $oc_item['contacto'];
     $lugar_instalacion = $oc_item['lugar_instalacion'];
-    $descripcion = $oc_item['descripcion'];
     $items_oc = $oc_item['items_oc'];
-    $cliente = $oc_item['cliente'];
+    $cliente = $oc_item['nombre_cliente'];
     $num_telefono = $oc_item['telefono'];
-    $nom_ciudad = $oc_item['ciudad'];
+    $nom_ciudad = $oc_item['nombre_ciudad'];
     $observacion = $oc_item['observaciones'];
-    $contador = 1;
-
 }
 
-// Obtener el último registro de la tabla 'pop' ordenado por contador de forma descendente
-$query_ultimo_registro = $pdo->prepare('SELECT contador FROM pop ORDER BY contador DESC LIMIT 1');
-$query_ultimo_registro->execute();
-$ultimo_registro_pop = $query_ultimo_registro->fetch(PDO::FETCH_ASSOC);
-
-// Inicializar el contador
-if ($ultimo_registro_pop) {
-    // Si existe un último registro, tomar su valor y sumar 1
-    $contador_pop = $ultimo_registro_pop['contador'] + 1;
-} else {
-    // Si no hay registros en la tabla, inicializar el contador en 1
-    $contador_pop = 1;
-}
-
-// Consultar ítems asociados
+// Consultar ítems asociados desde la tabla 'items_oc'
 $query_items = $pdo->prepare("SELECT * FROM items_oc WHERE id_oc = :id_oc");
 $query_items->bindParam(':id_oc', $id_oc, PDO::PARAM_INT);
 $query_items->execute();
 $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
 
+// Variable para manejar el contador dinámico
+$current_id_pop = null; // Para rastrear cambios en id_pop
+$contador_pop = 1;      // Inicializar el contador
+
 // Insertar los ítems en la tabla 'items_pop'
 foreach ($items as $item) {
-    $query_insert = $pdo->prepare("
-        INSERT INTO items_pop (id_oc, id_pop, instalacion, descripcion, cantidad, contador) 
-        VALUES (:id_oc, :id_pop, :instalacion, :descripcion_item, :cantidad, :contador)
+    $id_item = isset($item['id_item']) ? $item['id_item'] : null;
+
+    if ($id_item === null) {
+        echo "Error: El campo 'id_item' no puede ser nulo.";
+        continue; // Saltar al siguiente ítem si falta 'id_item'
+    }
+
+    // Si el id_pop cambia, reiniciar el contador
+    if ($current_id_pop !== $id_pop) {
+        $contador_pop = 1; // Reiniciar el contador
+        $current_id_pop = $id_pop; // Actualizar el id_pop actual
+    }
+
+    // Verificar si el registro ya existe en la tabla 'items_pop'
+    $query_check = $pdo->prepare("
+        SELECT * FROM items_pop 
+        WHERE id_oc = :id_oc 
+        AND item_oc = :id_item
     ");
-    $query_insert->bindParam(':id_oc', $item['id_oc'], PDO::PARAM_INT);
-    $query_insert->bindParam(':id_pop', $id_pop, PDO::PARAM_INT);
-    $query_insert->bindParam(':instalacion', $item['instalacion'], PDO::PARAM_STR);
-    $query_insert->bindParam(':descripcion_item', $item['descripcion'], PDO::PARAM_STR);
-    $query_insert->bindParam(':cantidad', $item['cantidad'], PDO::PARAM_INT);
-    $query_insert->bindParam(':contador', $contador, PDO::PARAM_STR);
-    $query_insert->execute();
+    $query_check->bindParam(':id_oc', $item['id_oc'], PDO::PARAM_INT);
+    $query_check->bindParam(':id_item', $id_item, PDO::PARAM_INT);
+    $query_check->execute();
+    $exists = $query_check->fetch(PDO::FETCH_ASSOC);
+
+    // Si el registro no existe, insertar en la tabla 'items_pop'
+    if (!$exists) {
+        $query_insert = $pdo->prepare("
+            INSERT INTO items_pop (id_oc, item_oc, id_pop, instalacion, descripcion, cantidad, contador) 
+            VALUES (:id_oc, :id_item, :id_pop, :instalacion, :descripcion_item, :cantidad, :contador)
+        ");
+        $query_insert->bindParam(':id_oc', $item['id_oc'], PDO::PARAM_INT);
+        $query_insert->bindParam(':id_item', $id_item, PDO::PARAM_INT);
+        $query_insert->bindParam(':id_pop', $id_pop, PDO::PARAM_INT);
+        $query_insert->bindParam(':instalacion', $item['instalacion'], PDO::PARAM_STR);
+        $query_insert->bindParam(':descripcion_item', $item['descripcion'], PDO::PARAM_STR);
+        $query_insert->bindParam(':cantidad', $item['cantidad'], PDO::PARAM_INT);
+        $query_insert->bindParam(':contador', $contador_pop, PDO::PARAM_INT);
+        $query_insert->execute();
+
+        $contador_pop++; // Incrementar el contador
+    }
 }
+
+$query_contador = $pdo->prepare("SELECT MAX(contador) AS ultimo_contador FROM pop");
+$query_contador->execute();
+$resultado = $query_contador->fetch(PDO::FETCH_ASSOC);
+
+// Verificar si se obtuvo un valor y sumarle 1
+$contador_ppal = isset($resultado['ultimo_contador']) ? $resultado['ultimo_contador'] : 0;
+
 ?>
+
 
 <div class="content-wrapper">
     <div class="content-header">
@@ -99,19 +127,19 @@ foreach ($items as $item) {
                             <div class="colo-md-1">
                                 <div class="form-group">
                                     <label for="pop">POP</label>
-                                    <input type="text" name="pop" id="pop" value= "<?php echo "POP".$contador_pop; ?>" class="form-control" readonly>
+                                    <input type="text" name="pop" id="pop" value= "<?php echo "POP".$contador_ppal; ?>" class="form-control" readonly>
                                 </div>
                             </div>
 
-                            <div class="col-md-0" hidden>
-                                <label for="id_pc">ID OC</label>
-                                <input type="text" name="id_pc" id="id_oc" value="<?php echo $id_oc; ?>" class="form-control" readonly>
+                            <div class="col-md-1">
+                                <label for="oc">OC</label>
+                                <input type="text" name="oc" id="oc" value="<?php echo $nombre_id_oc; ?>" class="form-control" readonly>
                             </div>
 
-                            <div class="col-md-1">
+                            <div class="col-md-0" hidden>
                                 <div class="form-group">
-                                    <label for="oc">OC</label>
-                                    <input type="text" name="oc" id="oc" value="<?php echo $oc; ?>" class="form-control" readonly>
+                                    <label for="id_oc">ID OC</label>
+                                    <input type="text" name="id_oc" id="id_oc" value="<?php echo $id_oc; ?>" class="form-control" readonly>
                                 </div>
                             </div>
 
@@ -214,7 +242,7 @@ foreach ($items as $item) {
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="id">ID Principal</label>
-                                    <input type="text" name="id" id="id" value="<?php echo $id; ?>" class="form-control" readonly>
+                                    <input type="text" name="id" id="id" value="<?php echo $id_get; ?>" class="form-control" readonly>
                                 </div>
                             </div>
                         </div>
@@ -229,7 +257,7 @@ foreach ($items as $item) {
 
                         <hr>
 
-                        <div class="row mb-4">  <!-- Agrega margen inferior al botón -->
+                        <div class="row mb-4" hidden>  <!-- Agrega margen inferior al botón -->
                             <div class="col-md-4">
                                 <a type="button" href="<?php echo $URL; ?>admin/administracion/pop/create_items.php?id=<?php echo $oc_item['id']; ?>" class="btn btn-success">INSERTAR UN NUEVO ITEMS</a>
                             </div>
@@ -242,7 +270,7 @@ foreach ($items as $item) {
                                         <th>ID Item</th>
                                         <th>Descripción</th>
                                         <th>Cantidad</th>
-                                        <th>Instalacion</th>
+                                        <th>Instalación</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -250,26 +278,33 @@ foreach ($items as $item) {
                                     <?php if (!empty($items)) : ?>
                                         <?php foreach ($items as $item) { ?>
                                             <tr>
-                                                <td><?php echo $contador++."/".$items_oc; ?></td>
-                                                <td><?php echo $item['descripcion']; ?></td>
-                                                <td><?php echo $item['cantidad']; ?></td>
-                                                <td><?php echo $item['instalacion']; ?></td>
                                                 <td>
-                                                    <center>  
-                                                        <a href="edit_items.php?id=<?php echo $item['id_item']; ?>" class="btn btn-success btn-sm">EDITAR<i class="fas fa-pen"></i></a>
+                                                    <?php echo $contador_pop++."/".$items_oc; ?>
+                                                    <input type="hidden" name="id_item[]" id="id_item" value="<?php echo $contador_pop . "/" . $items_oc; ?>">
+                                                <td>
+                                                    <?php echo $item['descripcion']; ?>
+                                                    <input type="hidden" name="descripcion[]" id="descripcion" value="<?php echo $item['descripcion']; ?>" class="form-control">
+                                                </td>
+                                                <td>
+                                                    <?php echo $item['cantidad']; ?>
+                                                    <input type="hidden" name="cantidad[]" id="cantidad" value="<?php echo $item['cantidad']; ?>" class="form-control">
+                                                </td>
+                                                <td>
+                                                    <?php echo $item['instalacion']; ?>
+                                                    <input type="hidden" name="instalacion[]" id="instalacion" value="<?php echo $item['instalacion']; ?>">
+                                                </td>
+                                                <td>
+                                                    <center>
+                                                        <a href="edit_items.php?id_item=<?php echo $item['id_item']; ?>&id=<?php echo $id_get; ?>" class="btn btn-success btn-sm">EDITAR <i class="fas fa-pen"></i></a>
                                                         <a href="controller_delete_items.php?id_item=<?php echo $item['id_item']; ?>&id=<?php echo $id_get; ?>" onclick="return confirm('¿Seguro de querer eliminar el item?')" class="btn btn-danger btn-sm">ELIMINAR <i class="fas fa-trash"></i></a>
                                                     </center>
                                                 </td>
                                             </tr>
                                         <?php } ?>
                                     <?php else : ?>
-                                        <div class="card card-warning">
-                                            <div class="card-header">
-                                                <center>
-                                                    <label>NO HAY ITEMS ASOCIADOS A ESTE OC</label>
-                                                </center>
-                                            </div>
-                                        </div>
+                                        <tr>
+                                            <td colspan="5" class="text-center">No hay ítems asociados a este OC</td>
+                                        </tr>
                                     <?php endif; ?>
                                 </tbody>
                             </table>

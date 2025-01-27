@@ -5,7 +5,8 @@ include('../../../layout/admin/sesion.php');
 include('../../../layout/admin/datos_sesion_user.php');
 include('../../../layout/admin/parte1.php');
 
-$id_get = $_GET['id'];
+$id_pop = $_GET['id'];           // Obtén el segundo ID
+$id_get = $_GET['id_item']; // Obtén el ID del ítem
 
 // Obtener el id_oc basado en el id_get
 $query_get_oc = $pdo->prepare("SELECT id_oc FROM items_oc WHERE id_item = :id_get");
@@ -89,7 +90,7 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="row">
                             <div class="col-md-4">
-                                <a href="<?php echo $URL."admin/operacion/pop/edit.php?id=".$id_oc; ?>" class="btn btn-default btn-block">Cancelar</a>
+                                <a href="<?php echo $URL."admin/operacion/pop/edit.php?id=".$id_pop; ?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" onclick="return confirm('¿Seguro de haber diligenciado correctamente los datos?')" class="btn btn-success btn-block">Guardar Cambios</button>
