@@ -757,22 +757,22 @@ function obtenerConsumoWatts(idUso, resultadoMultiplicacion) {
         .catch(error => console.log('Error en la solicitud:', error));
 }
 
-                                                                                                                function obtenerConsumoPromedio(idUso, resultadoMultiplicacion) {
-                                                                                                                    fetch(`consumo_wats.php?id_uso=${idUso}`)
-                                                                                                                        .then(response => response.json())
-                                                                                                                        .then(data => {
-                                                                                                                            if (data && data.consumo_promedio) {
-                                                                                                                                const consumoWats = Number(data.consumo_promedio);
-                                                                                                                                const resultadoConsumo = Math.round((consumoWats * resultadoMultiplicacion) / 1000);
+    function obtenerConsumoPromedio(idUso, resultadoMultiplicacion) {
+        fetch(`consumo_wats.php?id_uso=${idUso}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.consumo_promedio) {
+                    const consumoWats = Number(data.consumo_promedio);
+                    const resultadoConsumo = Math.round((consumoWats * resultadoMultiplicacion) / 1000);
 
-                                                                                                                                document.getElementById('inputWattsConsumoPromedio').value = resultadoConsumo;
-                                                                                                                                document.getElementById('labelWattsConsumoPromedio').textContent = `Cons. Promedio: ${resultadoConsumo.toLocaleString('es')} Watts`;
-                                                                                                                            } else {
-                                                                                                                                console.log('Error: No se encontró consumo_wats.');
-                                                                                                                            }
-                                                                                                                        })
-                                                                                                                        .catch(error => console.log('Error en la solicitud:', error));
-                                                                                                                }
+                    document.getElementById('inputWattsConsumoPromedio').value = resultadoConsumo;
+                    document.getElementById('labelWattsConsumoPromedio').textContent = `Cons. Promedio: ${resultadoConsumo.toLocaleString('es')} Watts`;
+                } else {
+                    console.log('Error: No se encontró consumo_wats.');
+                }
+            })
+            .catch(error => console.log('Error en la solicitud:', error));
+    }
 
 document.addEventListener('DOMContentLoaded', function() {
     const checkbox = document.getElementById('intercambiar');

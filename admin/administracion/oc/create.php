@@ -209,8 +209,11 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                                         foreach ($admon as $admones) {
                                             $acuerdo_admon = $admones['estado_admon'];
                                             $id_admon = $admones['id'];
-                                            echo "<option value='$id_admon'>$acuerdo_admon</option>";
-                                        }
+
+                                            // Verifica si el id_admon es 5 y selecciona esa opción por defecto
+                                            $selected = ($id_admon == 5) ? 'selected' : '';
+                                            
+                                            echo "<option value='$id_admon' $selected>$acuerdo_admon</option>";                                        }
                                     ?>
                                 </select>
                                 </div>
@@ -328,7 +331,7 @@ $oci_oc = $_POST['oci_oc'] ?? '';
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="dias_pactados">Días Pactados</label>
-                                    <input type="number" name="dias_pactados" id="dias_pactados" placeholder="Días Pactados" class="form-control" required>
+                                    <input type="number" name="dias_pactados" id="dias_pactados" placeholder="Días Pactados" class="form-control" disabled>
                                 </div>
                             </div>
 

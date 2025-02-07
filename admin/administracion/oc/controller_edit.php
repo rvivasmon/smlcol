@@ -29,7 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fecha_creacion = $_POST['fecha_creacion'] ?? $fecha_tratada_oc;
     $items_oc = $_POST['num_items'];
     $fecha_factura = $_POST['factura_fecha'];
-    $fecha_aprobacion = $_POST['fecha_aprobacion'];    
+    $fecha_aprobacion = $_POST['fecha_aprobacion'];
+    $fecha_fin = $_POST['fecha_fin'];
+    $num_factura = $_POST['num_factura'];
+
 
     try {
         // Inicia la transacción
@@ -64,7 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 observacion = :observacion,
                 procesar = :procesar,
                 fecha_aprobacion = :fecha_aprobacion,
-                factura_fecha = :fecha_factura
+                factura_fecha = :fecha_factura,
+                num_factura = :num_factura
             WHERE id = :id
         ');
 
@@ -89,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':procesar' => $procesar,
             ':fecha_aprobacion' => $fecha_aprobacion,
             ':fecha_factura' => $fecha_factura,
+            ':num_factura' => $num_factura,
         ]);
 
        // Si estado_admon es 1, inserta en la tabla 'pop'
@@ -105,11 +110,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Insertar el nuevo registro en la tabla 'pop'
                 $query_insert_pop = $pdo->prepare('
                     INSERT INTO pop (
-                        id_oc, oc, fecha_recibido, estado_admon, cliente, contacto, telefono,
-                        nombre_proyecto, ciudad, lugar_instalacion, observaciones, items_oc, contador
+                        id_oc, oc, fecha_recibido, fecha_inicio, fecha_fin, estado_admon, cliente, contacto, telefono,
+                        nombre_proyecto, ciudad, lugar_instalacion, cantidad, observaciones, items_oc, contador
                     ) VALUES (
-                        :id_oc, :oc, :fecha_creacion, :estado_admon, :cliente, :contacto,
-                        :telefono, :proyecto, :ciudad, :lugar_instalacion, :observacion, :items_oc, :contador
+                        :id_oc, :oc, :fecha_creacion, :fecha_aprobacion, :fecha_fin, :estado_admon, :cliente, :contacto,
+                        :telefono, :proyecto, :ciudad, :lugar_instalacion, :items_oc, :observacion, :items_oc, :contador
                     )
                 ');
 
@@ -117,6 +122,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':id_oc' => $id,
                     ':oc' => $oc_cliente,
                     ':fecha_creacion' => $fecha_creacion,
+                    ':fecha_fin' => $fecha_fin,
+                    ':fecha_aprobacion' => $fecha_aprobacion,
                     ':estado_admon' => $estado_admon,
                     ':cliente' => $nom_cliente,
                     ':contacto' => $nom_contacto_cliente,

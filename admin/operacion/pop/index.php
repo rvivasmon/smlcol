@@ -32,8 +32,8 @@ include('../../../layout/admin/parte1.php');
                                 <tr>
                                     <th>ID</th>
                                     <th>Fecha Recibido</th>
-                                    <th>POP</th>
                                     <th>OC</th>
+                                    <th>POP</th>
                                     <th>Proyecto</th>
                                     <th>Ciudad</th>
                                     <th>Estado POP</th>
@@ -64,8 +64,8 @@ include('../../../layout/admin/parte1.php');
                                     <tr>
                                         <td><?php echo $contador; ?></td>
                                         <td><?php echo $fecha_recibido?></td>
-                                        <td><?php echo $pop; ?></td>
                                         <td><?php echo $oc; ?></td>
+                                        <td><?php echo $pop; ?></td>
                                         <td><?php echo $proyecto; ?></td>
                                         <td><?php echo $ciudad; ?></td>
                                         <td><?php echo $estdo_pop; ?></td>

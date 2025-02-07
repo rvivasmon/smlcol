@@ -57,6 +57,9 @@ $query_items = $pdo->prepare("SELECT * FROM items_oc WHERE id_oc = :id_oc");
 $query_items->bindParam(':id_oc', $id_get, PDO::PARAM_INT);
 $query_items->execute();
 $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
+
+$fecha_fin = isset($fecha_fin) ? $fecha_fin : ''; 
+
 ?>
 
 <div class="content-wrapper">
@@ -114,7 +117,7 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="fecha_aprobacion">Fecha Aprobación</label>
-                                    <input type="date" name="fecha_aprobacion" id="fecha_aprobacion" value="<?php echo $oc_item9['fecha_aprobacion']; ?>" class="form-control">
+                                    <input type="date" name="fecha_aprobacion" id="fecha_aprobacion" value="<?php echo $oc_item9['fecha_aprobacion']; ?>" class="form-control" readonly>
                                 </div>
                             </div>
 
@@ -262,7 +265,7 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="dias_pactados">Días Pactados de Entrega</label>
-                                    <input type="text" name="dias_pactados" id="dias_pactados" value="<?php echo $oc_item9['dias_pactados']; ?>" class="form-control">
+                                    <input type="text" name="dias_pactados" id="dias_pactados" value="<?php echo $oc_item9['dias_pactados']; ?>" class="form-control" disabled required>
                                 </div>
                             </div>
                         </div>
@@ -271,7 +274,7 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                             <div class="col-md-1">
                                 <div class="form-group">
                                     <label for="num_items">Num Ítems</label>
-                                    <input type="text" name="num_items" id="num_items" value="<?php echo $oc_item9['num_items']; ?>" class="form-control">
+                                    <input type="text" name="num_items" id="num_items" value="<?php echo $num_items; ?>" class="form-control">
                                 </div>
                             </div>
 
@@ -319,6 +322,7 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="form-group">
                                     <label for="observacion">Observación</label>
                                     <textarea name="observacion" id="observacion" cols="30" rows="1" class="form-control"><?php echo $oc_item9['observacion']; ?></textarea>
+                                    <input type="hidden" name="fecha_fin" id="fecha_fin" value="<?php echo isset($fecha_fin) ? $fecha_fin : ''; ?>" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -339,7 +343,7 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="id">ID Principal</label>
-                                    <input type="text" name="id" id="id" value="<?php echo $id; ?>" class="form-control">
+                                    <input type="text" name="id" id="id" value="<?php echo $id; ?>" class="form-control">                                    
                                 </div>
                             </div>
                         </div>
@@ -409,7 +413,7 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                         <a href="<?php echo $URL."admin/administracion/oc/"; ?>" class="btn btn-default btn-block">Cancelar</a>
                                     </div>
                                     <div class="col-md-4">
-                                        <button type="submit" onclick="return confirm('¿Está seguro de haber diligenciado correctamente los datos?')" class="btn btn-success btn-block">Generar POP</button>
+                                        <button type="submit" onclick="return confirm('¿Está seguro de haber diligenciado correctamente los datos?')" class="btn btn-success btn-block">Actualizar y/o Generar POP</button>
                                     </div>
                                     <div class="col-md-2"></div>
                                 </div>
@@ -445,4 +449,82 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
         const idAcuerdoInput = document.getElementById('id_acuerdo1');
         idAcuerdoInput.value = estadoAcuerdoSelect.value;
     };
+</script>
+
+<script>
+    // Función que se ejecuta cuando cambia el valor de "estado_admon"
+    document.getElementById('estado_admon').addEventListener('change', function() {
+        var estadoAdmon = this.value;  // Obtiene el valor seleccionado en el select
+        var fechaAprobacion = document.getElementById('fecha_aprobacion'); // El campo de la fecha de aprobación
+
+        // Si el valor seleccionado es "1", asigna la fecha actual al campo "fecha_aprobacion"
+        if (estadoAdmon == '1') {
+            var today = new Date();
+            var day = ("0" + today.getDate()).slice(-2);
+            var month = ("0" + (today.getMonth() + 1)).slice(-2); // Los meses van de 0 a 11
+            var year = today.getFullYear();
+            var formattedDate = year + '-' + month + '-' + day;
+
+            fechaAprobacion.value = formattedDate; // Asigna la fecha al campo "fecha_aprobacion"
+        }
+    });
+</script>
+
+<script>
+    function calcularFechaFin() {
+        var fechaAprobacion = document.getElementById("fecha_aprobacion").value;
+        var diasPactados = parseInt(document.getElementById("dias_pactados").value, 10);
+        var fechaFinInput = document.getElementById("fecha_fin");
+
+        if (!fechaAprobacion || isNaN(diasPactados) || diasPactados <= 0) {
+            fechaFinInput.value = "";
+            return;
+        }
+
+        // Convertir la fecha de aprobación en un objeto Date
+        var fecha = new Date(fechaAprobacion);
+
+        // Sumar días sin contar sábados ni domingos
+        var diasAgregados = 0;
+        while (diasAgregados < diasPactados) {
+            fecha.setDate(fecha.getDate() + 1); // Avanza un día
+            var diaSemana = fecha.getDay(); // 0 = Domingo, 6 = Sábado
+            if (diaSemana !== 0 && diaSemana !== 6) {
+                diasAgregados++;
+            }
+        }
+
+        // Formatear fecha a YYYY-MM-DD
+        var year = fecha.getFullYear();
+        var month = ("0" + (fecha.getMonth() + 1)).slice(-2);
+        var day = ("0" + fecha.getDate()).slice(-2);
+        var fechaFin = `${year}-${month}-${day}`;
+
+        // Asignar la fecha calculada al campo fecha_fin
+        fechaFinInput.value = fechaFin;
+    }
+
+    // Ejecutar cuando cambian los valores
+    document.getElementById("fecha_aprobacion").addEventListener("change", calcularFechaFin);
+    document.getElementById("dias_pactados").addEventListener("input", calcularFechaFin);
+
+    // Función que habilita o deshabilita el campo "dias_pactados" según el valor de "estado_admon"
+function toggleDiasPactados() {
+    var estadoAdmon = document.getElementById("estado_admon").value;
+    var diasPactados = document.getElementById("dias_pactados");
+
+    // Si estado_admon es igual a 1, habilitar "dias_pactados", si no, deshabilitarlo
+    if (estadoAdmon == "1") {
+        diasPactados.disabled = false;  // Habilitar campo
+    } else {
+        diasPactados.disabled = true;   // Deshabilitar campo
+    }
+}
+
+// Ejecutar la función cuando cambie el valor de "estado_admon"
+document.getElementById("estado_admon").addEventListener("change", toggleDiasPactados);
+
+// Ejecutar la función también al cargar la página para verificar el estado inicial del campo
+window.addEventListener("load", toggleDiasPactados);
+
 </script>

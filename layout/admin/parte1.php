@@ -78,16 +78,18 @@ foreach ($roles_permisos as $rol_permiso) {
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
-      
+      <!-- Ventana de alerta  sweetalert2-->
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
       <!-- Icon Logo -->
       <link rel="icon" type="image/png" href="/favicon.png">
-      
+
       <!-- Main CSS -->
       <link rel="stylesheet" href="css/main.css">
+
       <!-- Style QR-->
       <link rel="stylesheet" href="css/styles.css">
 
-      
     </head>
 
     <body class="hold-transition sidebar-mini layout-fixed" style="height: auto;">
@@ -112,6 +114,27 @@ foreach ($roles_permisos as $rol_permiso) {
               <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                 <i class="fas fa-expand-arrows-alt"></i>
               </a>
+            </li>
+          </ul>
+          <!-- Campana de Notificaciones chat -->
+          <ul class="navbar-nav ml-auto">
+            <!-- Icono de notificaciones -->
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-toggle="dropdown" href="#">
+                <i class="fas fa-bell"></i>
+                <span id="contadorNotificaciones" class="badge badge-danger navbar-badge">0</span>
+              </a>
+
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <span class="dropdown-header">Notificaciones</span>
+
+                <div class="dropdown-divider">
+                </div>
+
+                <div id="listaNotificaciones" class="dropdown-item">
+                  <p class="text-muted text-center" >No hay nuevas notificaciones</p>
+                </div>
+              </div>
             </li>
           </ul>
         </nav>

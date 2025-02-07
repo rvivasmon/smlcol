@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $query_insert_item->bindParam(':descripcion', $descripcion);
                 $query_insert_item->bindParam(':cantidad', $cantidad);
                 $query_insert_item->bindParam(':instalacion', $instalacion);
-                $query_insert_item->bindParam(':contador', $contador_item, PDO::PARAM_INT);
+                $query_insert_item->bindParam(':contador', $contador_item);
                 $query_insert_item->bindParam(':id_oc', $id_oc);
                 $query_insert_item->execute();
 

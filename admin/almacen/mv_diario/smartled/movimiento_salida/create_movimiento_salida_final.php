@@ -381,7 +381,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                     <table class="table table-bordered" id="tabla-articulos">
                                                         <thead>
                                                             <tr>
-                                                                <th>Seleccionar</th>
+                                                                <th>Separar</th>
                                                                 <th>Cantidad</th>
                                                                 <th>Producto</th>
                                                                 <th>Referencia</th>
@@ -401,7 +401,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                 </div>
                             </div>
 
-                            <!-- Modal -->
+                            <!-- Modal Material Separado-->
                             <div class="modal fade" id="modalValidarMaterial" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-xl" role="document">
                                     <div class="modal-content">
@@ -434,7 +434,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <button id="generarPdf" class="btn btn-primary">Crear PDF y Movimiento</button>
+                                        <button id="generarPdf" class="btn btn-primary">Separar o Procesar Salida</button>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -843,7 +843,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 </script>
 
-<script>
+<script> //GENERAR PDF DE SALIDA DE ARTICULOS
     document.getElementById('generarPdf').addEventListener('click', function () {
 
 
@@ -860,9 +860,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // Crea una nueva instancia de jsPDF
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({
-            orientation: 'landscape', // Establece la orientación horizontal
+            orientation: 'portrait', // Establece la orientación horizontal
             unit: 'mm', // Unidad de medida
-            format: 'a4' // Formato de la hoja
+            format: [210, 297] // Formato de la hoja
         });
 
         // Datos adicionales
@@ -872,17 +872,20 @@ document.addEventListener('DOMContentLoaded', function () {
         const asignarA = document.getElementById('op_destino').value || "N/A";
 
         // Encabezado de la empresa
-        doc.setFontSize(16);
-        doc.text('SMARTLED COLOMBIA', 150, 10, { align: 'center' });
+        const pageWidth = 210; // Ancho total de la hoja en mm
+
+        doc.setFontSize(14);
+        doc.text('SMARTLED COLOMBIA', pageWidth / 2, 10, { align: 'center' });
+
         doc.setFontSize(12);
-        doc.text('Salida de Artículos del Almacén', 150, 20, { align: 'center' });
+        doc.text('Salida de Artículos del Almacén', pageWidth / 2, 18, { align: 'center' });
 
         // Información adicional
         doc.setFontSize(10);
-        doc.text(`Fecha: ${fecha}`, 10, 40);
-        doc.text(`# Documento: ${contadorSalida}`, 10, 45);
-        doc.text(`Almacén destino: ${almacenDestino}`, 10, 50);
-        doc.text(`Asignar a: ${asignarA}`, 10, 55);
+        doc.text(`Fecha: ${fecha}`, 10, 30);
+        doc.text(`# Documento: ${contadorSalida}`, 10, 35);
+        doc.text(`Almacén destino: ${almacenDestino}`, 10, 40);
+        doc.text(`Asignar a: ${asignarA}`, 10, 45);
 
         // Crear los datos para la tabla
         const tablaArticulos = document.getElementById('tabla-articulos').getElementsByTagName('tbody')[0];
@@ -905,29 +908,36 @@ document.addEventListener('DOMContentLoaded', function () {
         doc.autoTable({
             head: [['Cantidad', 'Producto', 'Referencia', 'Observación']], // Encabezados
             body: datosTabla, // Datos de la tabla
-            startY: 65, // Posición inicial
+            startY: 55, // Posición inicial
             styles: { fontSize: 8 }, // Tamaño de fuente
+            columnStyles: {
+            0: { cellWidth: 20 },  // Cantidad
+            1: { cellWidth: 50 },  // Producto
+            2: { cellWidth: 50 },  // Referencia
+            3: { cellWidth: 60 }   // Observación
+        },
             theme: 'grid', // Tema con bordes para la tabla
+            margin: { left: 10, right: 10 } // Márgenes laterales
         });
 
         // Agregar líneas para firma
-        const finalY = doc.lastAutoTable.finalY + 20; // Obtener la posición final de la tabla y dar espacio
+        const finalY = doc.lastAutoTable.finalY + 15; // Obtener la posición final de la tabla y dar espacio
 
         // Dibujar líneas horizontales
-        doc.line(60, finalY, 120, finalY); // Línea para "Entrega"
-        doc.line(180, finalY, 240, finalY); // Línea para "Recibe"
+        doc.line(20, finalY, 70, finalY); // Línea para "Entrega"
+        doc.line(100, finalY, 150, finalY); // Línea para "Recibe"
 
         // Agregar textos debajo de las líneas
         doc.setFontSize(10);
-        doc.text("Entrega", 80, finalY + 5); // Texto debajo de la línea de "Entrega"
-        doc.text("Recibe", 200, finalY + 5); // Texto debajo de la línea de "Recibe"
+        doc.text("Entrega", 35, finalY + 5); // Texto debajo de la línea de "Entrega"
+        doc.text("Recibe", 115, finalY + 5); // Texto debajo de la línea de "Recibe"
 
         // Guardar el PDF con un nombre específico
         doc.save('reporte_articulos.pdf');
     });
 </script>
 
-<script>
+<script> // GENERAR EL PDF DE MATERIAL SEPARADO DEL ALMACEN
     document.getElementById('btnValidarMaterial').addEventListener('click', function () {
         fetch('validar_registros.php', {
     method: 'POST',
@@ -942,13 +952,14 @@ document.addEventListener('DOMContentLoaded', function () {
             let contenidoTabla = `<table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Seleccionar</th>
+                                <th>Separar</th>
                                 <th>Producto</th>
                                 <th>Referencia</th>
                                 <th>Cantidad</th>
                                 <th>Observaciones</th>
                                 <th>Asignado a:</th>
                                 <th>N° Movimiento</th>
+                                <th>Almacen Destino</th>
                             </tr>
                         </thead>
                         <tbody>`;
@@ -958,12 +969,13 @@ data.registros.forEach(registro => {
                         <td>
                             <input type="checkbox" class="checkbox-material" data-id="${registro.id_movimiento_diario}">
                         </td>
-                        <td>${registro.tipo_producto}</td>
-                        <td>${registro.referencia_2}</td>
+                        <td>${registro.nombre_producto}</td>
+                        <td>${registro.nombre_referencia_2}</td>
                         <td>${registro.cantidad_entrada}</td>
                         <td>${registro.observaciones}</td>
                         <td>${registro.op}</td>
                         <td>${registro.consecu_sale}</td>
+                        <td>${registro.almacen_destino}</td>
                         </tr>`;
 });
 
@@ -977,7 +989,6 @@ document.getElementById('contenidoTablaMaterial').innerHTML = contenidoTabla;
     .catch(error => console.error('Error:', error));
 
     });
-
 
     document.getElementById('btnGenerarPdfModal').addEventListener('click', function () {
     const checkboxes = document.querySelectorAll('.checkbox-material:checked');
@@ -1027,43 +1038,53 @@ document.getElementById('contenidoTablaMaterial').innerHTML = contenidoTabla;
 function generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({
-        orientation: 'landscape', // Orientación horizontal
+        orientation: 'portrait', // Orientación horizontal
         unit: 'mm', // Unidad de medida
-        format: 'a4' // Formato de la hoja
+        format: [210, 297] // Media carta (ancho x alto)
     });
 
     // Encabezado de la empresa
-    doc.setFontSize(16);
-    doc.text('SMARTLED COLOMBIA', 150, 10, { align: 'center' });
+    const pageWidth = 210; // Ancho total de la hoja en mm
+
+    doc.setFontSize(14);
+    doc.text('SMARTLED COLOMBIA', pageWidth / 2, 10, { align: 'center' });
+
     doc.setFontSize(12);
-    doc.text('Salida de Artículos del Almacén', 150, 20, { align: 'center' });
+    doc.text('Salida de Artículos del Almacén', pageWidth / 2, 18, { align: 'center' });
 
     // Información adicional
     doc.setFontSize(10);
-    doc.text(`Fecha: ${fecha}`, 10, 40);
-    doc.text(`# Documento: ${contadorSalida}`, 10, 45);
-    doc.text(`Almacén destino: ${almacenDestino}`, 10, 50);
-    doc.text(`Asignar a: ${asignarA}`, 10, 55);
+    doc.text(`Fecha: ${fecha}`, 10, 30);
+    doc.text(`# Documento: ${contadorSalida}`, 10, 35);
+    doc.text(`Almacén destino: ${almacenDestino}`, 10, 40);
+    doc.text(`Asignar a: ${asignarA}`, 10, 45);
 
     // Crear la tabla con autoTable
     doc.autoTable({
         head: [['Cantidad', 'Producto', 'Referencia', 'Observación']], // Encabezados
         body: registrosSeleccionados, // Datos de la tabla
-        startY: 65, // Posición inicial
+        startY: 55, // Posición inicial
         styles: { fontSize: 8 }, // Tamaño de fuente
-        theme: 'grid', // Tema con bordes para la tabla
+        columnStyles: {
+            0: { cellWidth: 20 },  // Cantidad
+            1: { cellWidth: 50 },  // Producto
+            2: { cellWidth: 50 },  // Referencia
+            3: { cellWidth: 60 }   // Observación
+        },
+        theme: 'grid',
+        margin: { left: 10, right: 10 } // Márgenes laterales
     });
 
     // Agregar líneas para firmas
-    const finalY = doc.lastAutoTable.finalY + 20; // Posición después de la tabla
+    const finalY = doc.lastAutoTable.finalY + 15; // Posición después de la tabla
 
-    doc.line(60, finalY, 120, finalY); // Línea para "Entrega"
-    doc.line(180, finalY, 240, finalY); // Línea para "Recibe"
+    doc.line(20, finalY, 70, finalY); // Línea para "Entrega"
+    doc.line(100, finalY, 150, finalY); // Línea para "Recibe"
 
     // Agregar textos para firmas
     doc.setFontSize(10);
-    doc.text("Entrega", 80, finalY + 5); // Texto debajo de la línea de "Entrega"
-    doc.text("Recibe", 200, finalY + 5); // Texto debajo de la línea de "Recibe"
+    doc.text("Entrega", 35, finalY + 5); // Texto debajo de la línea de "Entrega"
+    doc.text("Recibe", 115, finalY + 5); // Texto debajo de la línea de "Recibe"
 
     // Guardar el PDF
     doc.save('material_validado.pdf');

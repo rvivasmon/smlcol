@@ -92,8 +92,7 @@ include('../../../../layout/admin/parte1.php');
                                                                     LEFT JOIN
                                                                         referencias_fuente AS caracfuentes ON mvd.referencia_2 = caracfuentes.id_referencias_fuentes AND mvd.tipo_producto = 3
                                                                     LEFT JOIN
-                                                                        tabla_pitch AS pitch_table ON tmc.pitch = pitch_table.id -- Nueva unión con tabla_pitch
-                                                                        ;
+                                                                        tabla_pitch AS pitch_table ON tmc.pitch = pitch_table.id; -- Nueva unión con tabla_pitch
                                                                     ');
                                         $query->execute();
                                         $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);

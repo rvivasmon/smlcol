@@ -13,10 +13,10 @@ $instalacion = $_POST['instalacion'];
 $query_insert_item = $pdo->prepare("INSERT INTO items_oc (id_oc, descripcion, cantidad, instalacion) VALUES (:id_oc, :descripcion, :cantidad, :instalacion)");
 
 // Vincular los parámetros
-$query_insert_item->bindParam(':id_oc', $id_oc, PDO::PARAM_INT);
-$query_insert_item->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
-$query_insert_item->bindParam(':cantidad', $cantidad, PDO::PARAM_INT);
-$query_insert_item->bindParam(':instalacion', $instalacion, PDO::PARAM_STR);
+$query_insert_item->bindParam(':id_oc', $id_oc);
+$query_insert_item->bindParam(':descripcion', $descripcion);
+$query_insert_item->bindParam(':cantidad', $cantidad);
+$query_insert_item->bindParam(':instalacion', $instalacion);
 
 // Ejecutar la inserción y comprobar si fue exitosa
 if ($query_insert_item->execute()) {
