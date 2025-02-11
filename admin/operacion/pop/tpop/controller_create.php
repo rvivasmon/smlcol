@@ -50,13 +50,14 @@ try {
     // Actualizar la tabla 'item_pop' en el campo 'tpop' a 1
     $query_update_item_pop = $pdo->prepare("
         UPDATE items_pop 
-        SET tpop = 1,
+        SET tpop = :estado_tpop,
             ddi = :ddi_checkbox, 
             proyecto = :proyecto_checkbox
         WHERE id = :id_item_pop AND item_oc = :id_oc
     ");
 
     // Vincular los parámetros
+    $query_update_item_pop->bindParam(':estado_tpop', $estado_tpop);
     $query_update_item_pop->bindParam(':id_item_pop', $id_item_pop);
     $query_update_item_pop->bindParam(':id_oc', $id_oc);
     $query_update_item_pop->bindParam(':ddi_checkbox', $ddi_checkbox);

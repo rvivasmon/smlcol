@@ -1,8 +1,10 @@
 <?php
 include "../../app/config/conexion.php"; // Ajusta la ruta según tu estructura
+include "../../app/config/config.php";
+
 
 // Incluir el archivo backend.php que maneja la lógica de consultas
-include "./chat/get_notifications.php";
+include "../chat/get_notifications.php";
 
 
 // Consulta para contar los mensajes no leídos

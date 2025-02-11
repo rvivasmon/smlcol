@@ -140,9 +140,9 @@ if ($actualizar_pop) {
         WHERE id = :id_pop
     ");
 
-    $query_update_pop->bindParam(':contador_ppal', $contador_ppal, PDO::PARAM_INT);
-    $query_update_pop->bindParam(':nuevo_valor_pop', $nuevo_valor_pop, PDO::PARAM_STR);
-    $query_update_pop->bindParam(':id_pop', $id_pop, PDO::PARAM_INT);
+    $query_update_pop->bindParam(':contador_ppal', $contador_ppal);
+    $query_update_pop->bindParam(':nuevo_valor_pop', $nuevo_valor_pop);
+    $query_update_pop->bindParam(':id_pop', $id_pop);
     $query_update_pop->execute();
 }
 
@@ -345,7 +345,7 @@ if ($actualizar_pop) {
                                             $id_items_oc = $tpop_status['item_oc'] ?? null; // Guarda el ID en una variable
 
                                             // Verificamos si tpop está a 1
-                                            $tpop_active = $tpop_status && $tpop_status['tpop'] == 1;
+                                            $tpop_active = $tpop_status && $tpop_status['tpop'] == 3;
                                         ?>
                                             <tr>
                                                 <td>
@@ -365,7 +365,7 @@ if ($actualizar_pop) {
                                                 </td>
                                                 <td>
                                                     <center>
-                                                        <!-- Mostrar el botón solo si tpop no está activo (es decir, tpop != 1) -->
+                                                        <!-- Mostrar el botón solo si tpop no está activo (es decir, tpop != 3) -->
                                                         <?php if (!$tpop_active): ?>
                                                             <a href="#" onclick="enviarPop(<?php echo $id_items_pop; ?>, <?php echo $id_items_oc; ?>)" class="btn btn-success btn-sm">GENERAR TPOP <i class="fas fa-pen"></i></a>
                                                         <?php else: ?>

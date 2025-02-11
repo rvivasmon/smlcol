@@ -7,8 +7,81 @@ include('../../../../layout/admin/datos_sesion_user.php');
 
 include('../../../../layout/admin/parte1.php');
 
-$id_gral_pop = $_GET['id_pop'];           // Obtén el segundo ID
-$id_get = $_GET['id_oc'];      // Obtén el ID del ítem
+$id_pop = isset($_GET['id_pop']) ? $_GET['id_pop'] : null; // Obtener ID desde GET
+
+// Inicializar variables vacías para los campos del formulario
+$medida_y = $medida_x = $num_control = $num_tarjetas = $num_fuentes = "";
+$pixel_x = $pixel_y = $pixel_total = $tipo_estructura = $controladora = "";
+$modulo_complemento = $fuente_complemento = $reciving_complemento = "";
+$conexion = $configuracion = $m_cuadrado = $f_control = $control_reciving = "";
+$voltaje = $watts = $amperios = $num_circuitos = $consumo = "";
+$estado_tpop = $total_modulos = $t_modulo = $s_modulo = $nombre_tipo_pan = "";
+$uso = $tipo_pan = $pitch = $medidas_modulo = $t_fuente = $nombres_uso = "";
+
+if ($id_pop) {
+    // Consultar la tabla 'tpop' para verificar si existe el ID
+    $query_tpop = $pdo->prepare("SELECT tp.*,
+                                        tup.producto_uso AS nombre_uso,
+                                        ttp.tipo_producto21 AS nombre_tipo_pan,
+                                        tapi.pitch AS nombre_tipo_pitch,
+                                        ttm.tamanos_modulos AS nombre_tamano_modulo
+                                    FROM tpop AS tp
+                                    INNER JOIN t_uso_productos AS tup ON tp.uso = tup.id_uso
+                                    INNER JOIN t_tipo_producto AS ttp ON tp.tipo_pan = ttp.id
+                                    INNER JOIN tabla_pitch AS tapi ON tp.pitch = tapi.id
+                                    INNER JOIN tabla_tamanos_modulos AS ttm ON tp.medida_modulo = ttm.id
+                                    WHERE pop_item = ?
+                                ");
+    $query_tpop->execute([$id_pop]);
+    $tpops = $query_tpop->fetch(PDO::FETCH_ASSOC);
+
+    if ($tpops) {
+        // Si se encuentra el registro, asignar los valores a las variables
+        $id = $tpops['id'];
+            $tpop_item = $tpops['tpop_item'];
+            $pop_item = $tpops['pop_item'];
+            $uso = $tpops['uso'];
+            $nombres_uso = $tpops['nombre_uso'];
+            $nombre_tipo_pitch = $tpops['nombre_tipo_pitch'];
+            $pitch = $tpops['pitch'];
+            $tipo_pan = $tpops['tipo_pan'];
+            $nombre_tipo_pan = $tpops['nombre_tipo_pan'];
+            $medida_x = $tpops['x'];
+            $medida_y = $tpops['y'];
+            $nombre_tamano_modulo = $tpops['nombre_tamano_modulo'];
+            $medidas_modulo = $tpops['medida_modulo'];
+            $total_modulos = $tpops['total_modulos'];
+            $control_reciving = $tpops['receiving'];
+            $num_tarjetas = $tpops['cantidad_receiving'];
+            $t_fuente = $tpops['fuente'];
+            $num_fuentes = $tpops['cantidad_fuente'];
+            $pixel_x = $tpops['pixel_x'];
+            $pixel_y = $tpops['pixel_y'];
+            $pixel_total = $tpops['total_pixel'];
+            $t_modulo = $tpops['tipo_modulo'];
+            $s_modulo = $tpops['serial_modulo'];
+            $f_control = $tpops['funcion_control'];
+            $controladora = $tpops['control'];
+            $num_control = $tpops['cantidad_control'];
+            $modulo_complemento = $tpops['modulo_adic'];
+            $fuente_complemento = $tpops['fuente_adic'];
+            $reciving_complemento = $tpops['control_adic'];
+            $tipo_estructura = $tpops['tipo_estructura'];
+            $conexion = $tpops['conexion'];
+            $configuracion = $tpops['configuracion'];
+            $estado_tpop = $tpops['estado_tpop'];
+            $m_cuadrado = $tpops['m2'];
+            $voltaje = $tpops['voltaje'];
+            $watts = $tpops['watts'];
+            $amperios = $tpops['amperios'];
+            $num_circuitos = $tpops['cantidad_circuito'];
+            $consumo = $tpops['consumo'];
+            $usuario = $tpops['usuario'];
+    }
+}
+
+$id_gral_pop = $_GET['id_pop']; // Obtén el segundo ID
+$id_get = $_GET['id_oc'];   // Obtén el ID del ítem
 
 // Capturar el valor de 'pop' desde la URL (si existe)
 $pop_value = isset($_GET['pop']) ? $_GET['pop'] : '';
@@ -38,6 +111,7 @@ $query_items = $pdo->prepare("SELECT * FROM items_oc WHERE id_item = :id_get");
 $query_items->bindParam(':id_get', $id_get);
 $query_items->execute();
 $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
+
 
 ?>
 
@@ -99,7 +173,9 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="form-group">
                                         <label for="uso_pan">USO PANTALLA</label>
                                         <select name="uso_pan" id="uso_pan" class="form-control" required>
-                                            <option value="">Seleccione un Tipo de Uso</option>
+                                            <option value="<?php echo $uso; ?>" selected>
+                                                <?php echo $nombres_uso; ?>
+                                            </option>
                                             <?php
                                                 // Consulta los estados de la base de datos
                                                 $query_admones = $pdo->prepare('SELECT id_uso, producto_uso FROM t_uso_productos WHERE categoria_productos = 1');
@@ -110,8 +186,13 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                                     $acuerdo_admon = $admones['producto_uso'];
                                                     $id_admon_loop = $admones['id_uso'];
 
+                                                    // Excluir la opción que ya está seleccionada
+                                                    if ($id_admon_loop == $uso) {
+                                                        continue; // Salta esta iteración y sigue con la siguiente
+                                                    }
+
                                             ?>
-                                                <option value="<?php echo $id_admon_loop;?>"><?php echo $acuerdo_admon;?></option>
+                                                <option value="<?php echo $id_admon_loop; ?>"><?php echo $acuerdo_admon;?></option>
                                             <?php
                                                 }
                                             ?>
@@ -123,7 +204,9 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="form-group">
                                         <label for="tipo_pan">TIPO PANTALLA</label>
                                         <select name="tipo_pan" id="tipo_pan" class="form-control" required>
-                                            <option value="">Seleccione un Tipo</option>                                            
+                                            <option value="<?php echo $tipo_pan; ?>" selected>
+                                                <?php echo $nombre_tipo_pan; ?>
+                                            </option>                                            
                                         </select>
                                     </div>
                                 </div>
@@ -132,7 +215,9 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="form-group">
                                         <label for="pitch_tpop">PITCH</label>
                                         <select name="pitch_tpop" id="pitch_tpop" class="form-control" required>
-                                            <option value="">Seleccione un Tipo de Pitch</option>
+                                            <option value="<?php echo $pitch; ?>" selected>
+                                                <?php echo $nombre_tipo_pitch; ?>
+                                            </option>
                                             <?php
                                                 // Consulta los estados de la base de datos
                                                 $query_pitches = $pdo->prepare('SELECT DISTINCT tp.pitch AS nombre_pitch,
@@ -141,6 +226,7 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                                                                         INNER JOIN producto_modulo_creado AS pmc ON ap.producto = pmc.id
                                                                                         INNER JOIN tabla_pitch AS tp ON pmc.pitch = tp.id
                                                                                         WHERE ap.tipo_producto = 1
+                                                                                        ORDER BY tp.pitch ASC
                                                                                         ');
                                                 $query_pitches->execute();
                                                 $pitch = $query_pitches->fetchAll(PDO::FETCH_ASSOC);
@@ -148,6 +234,11 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                                 foreach ($pitch as $pitches) {
                                                     $acuerdo_pitch = $pitches['nombre_pitch'];
                                                     $id_pitch = $pitches['nombre_id_pitch'];
+
+                                                    // Excluir la opción que ya está seleccionada
+                                                    if ($pitch == $id_pitch) {
+                                                        continue; // Salta esta iteración y sigue con la siguiente
+                                                    }
 
                                             ?>
                                                 <option value="<?php echo $id_pitch;?>"><?php echo $acuerdo_pitch;?></option>
@@ -161,22 +252,24 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="col-md-1">
                                     <div class="form-group">
                                         <label for="medida_x">MEDIDA X</label>
-                                        <input type="text" name="medida_x" id="medida_x" class="form-control">
+                                        <input type="text" name="medida_x" id="medida_x" value="<?php echo $medida_x; ?>" class="form-control">
                                     </div>
                                 </div>
 
                                 <div class="col-md-1">
                                     <div class="form-group">
                                         <label for="medida_y">MEDIDA Y</label>
-                                        <input type="text" name="medida_y" id="medida_y" class="form-control">
+                                        <input type="text" name="medida_y" id="medida_y" value="<?php echo $medida_y; ?>" class="form-control">
                                     </div>
                                 </div>
 
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="medidas_modulo">MEDIDA MÓDULO</label>
-                                        <select name="medidas_modulo" id="medidas_modulo" class="form-control" required>
-                                            <option value="">Seleccione una Medida</option>
+                                        <select name="medidas_modulo" id="medidas_modulo" value="<?php echo $medidas_modulo; ?>" class="form-control" required>
+                                            <option value="<?php echo $medidas_modulo; ?>" selected>
+                                                <?php echo $nombre_tamano_modulo; ?>
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
@@ -184,7 +277,7 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="total_modulos">TOTAL MODULOS</label>
-                                        <input type="text" name="total_modulos" id="total_modulos" class="form-control">
+                                        <input type="text" name="total_modulos" id="total_modulos" value="<?php echo $total_modulos; ?>" class="form-control" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -194,7 +287,9 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="form-group">
                                         <label for="t_modulo">TIPO MÓDULO</label>
                                         <select name="t_modulo" id="t_modulo" class="form-control" required>
-                                            <option value="">Seleccione un Tipo de Módulo</option>
+                                            <option value="<?php echo $t_modulo; ?>" selected>
+                                                <?php echo $t_modulo; ?>
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
@@ -203,8 +298,17 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="form-group">
                                         <label for="s_modulo">SERIAL MÓDULO</label>
                                         <select name="s_modulo" id="s_modulo" class="form-control" required>
-                                            <option value="">Seleccione un Serial</option>
+                                            <option value="<?php echo $s_modulo; ?>" selected>
+                                                <?php echo $s_modulo; ?>
+                                            </option>
                                         </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <label for="cant_dispo">DISPONIBLE</label>
+                                        <input type="text" name="cant_dispo" id="cant_dispo" value="<?php echo $medida_x; ?>" class="form-control" readonly>
                                     </div>
                                 </div>
 
@@ -212,7 +316,9 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="form-group">
                                         <label for="f_control">FUNCIÓN CONTROL</label>
                                         <select name="f_control" id="f_control" class="form-control" required>
-                                            <option value="">Seleccione una Función</option>
+                                            <option value="<?php echo $f_control; ?>" selected>
+                                                <?php echo $f_control; ?>
+                                            </option>
                                             <?php
                                                 // Consulta los estados de la base de datos
                                                 $query_seriales = $pdo->prepare('SELECT id_car_ctrl, funcion_control FROM caracteristicas_control ORDER BY funcion_control ASC');
@@ -236,15 +342,17 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="form-group">
                                         <label for="controladora">CONTROLADORA</label>
                                         <select name="controladora" id="controladora" class="form-control" required>
-                                            <option value="">Seleccione una Controladora</option>
+                                            <option value="<?php echo $controladora; ?>" selected>
+                                                <?php echo $controladora; ?>
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     <div class="form-group">
-                                        <label for="num_control"># CONTROLADORAS</label>
-                                        <input type="text" name="num_control" id="num_control" class="form-control">
+                                        <label for="num_control">CANTIDAD</label>
+                                        <input type="text" name="num_control" id="num_control" value="<?php echo $num_control; ?>" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -254,7 +362,9 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="form-group">
                                         <label for="control_reciving">RECEIVING CARD</label>
                                         <select name="control_reciving" id="control_reciving" class="form-control" required>
-                                            <option value="">Seleccione un Tipo de Pitch</option>
+                                            <option value="<?php echo $control_reciving; ?>" selected>
+                                                <?php echo $control_reciving; ?>
+                                            </option>
                                             <?php
                                                 // Consulta los estados de la base de datos
                                                 $query_recibidores = $pdo->prepare('SELECT id_referencia, referencia FROM referencias_control WHERE funcion = 1 ORDER BY referencia ASC');
@@ -277,7 +387,7 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="col-md-1">
                                     <div class="form-group">
                                         <label for="num_tarjetas"># TARJETAS</label>
-                                        <input type="text" name="num_tarjetas" id="num_tarjetas" class="form-control">
+                                        <input type="text" name="num_tarjetas" id="num_tarjetas" value="<?php echo $num_tarjetas; ?>" class="form-control">
                                     </div>
                                 </div>
 
@@ -285,7 +395,9 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="form-group">
                                         <label for="t_fuente">TIPO FUENTE</label>
                                         <select name="t_fuente" id="t_fuente" class="form-control" required>
-                                            <option value="">Seleccione un Tipo de Pitch</option>
+                                            <option value="<?php echo $t_fuente; ?>" selected>
+                                                <?php echo $t_fuente; ?>
+                                            </option>
                                             <?php
                                                 // Consulta los estados de la base de datos
                                                 $query_fuentes = $pdo->prepare('SELECT id_referencias_fuentes, modelo_fuente FROM referencias_fuente ORDER BY modelo_fuente ASC');
@@ -308,37 +420,57 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="col-md-1">
                                     <div class="form-group">
                                         <label for="num_fuentes"># FUENTES</label>
-                                        <input type="text" name="num_fuentes" id="num_fuentes" class="form-control">
+                                        <input type="text" name="num_fuentes" id="num_fuentes" value="<?php echo $num_fuentes; ?>" class="form-control">
                                     </div>
                                 </div>
 
                                 <div class="col-md-1">
                                     <div class="form-group">
                                         <label for="pixel_x">PIXEL X</label>
-                                        <input type="text" name="pixel_x" id="pixel_x" class="form-control">
+                                        <input type="number" name="pixel_x" id="pixel_x" value="<?php echo $pixel_x; ?>" class="form-control">
                                     </div>
                                 </div>
 
                                 <div class="col-md-1">
                                     <div class="form-group">
                                         <label for="pixel_y">PIXEL Y</label>
-                                        <input type="text" name="pixel_y" id="pixel_y" class="form-control">
+                                        <input type="number" name="pixel_y" id="pixel_y" value="<?php echo $pixel_y; ?>" class="form-control">
                                     </div>
                                 </div>
 
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="pixel_total">PIXEL TOTAL</label>
-                                        <input type="text" name="pixel_total" id="pixel_total" class="form-control">
+                                        <input type="number" name="pixel_total" id="pixel_total" value="<?php echo $pixel_total; ?>" class="form-control" readonly>
                                     </div>
                                 </div>
+
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function () {
+                                        // Obtener referencias a los campos
+                                        let pixelX = document.getElementById("pixel_x");
+                                        let pixelY = document.getElementById("pixel_y");
+                                        let pixelTotal = document.getElementById("pixel_total");
+
+                                        function calcularTotal() {
+                                            let x = parseFloat(pixelX.value) || 0; // Si está vacío, toma 0
+                                            let y = parseFloat(pixelY.value) || 0; // Si está vacío, toma 0
+                                            pixelTotal.value = x * y; // Multiplica y asigna el resultado
+                                        }
+
+                                        // Escuchar eventos de entrada en ambos campos
+                                        pixelX.addEventListener("input", calcularTotal);
+                                        pixelY.addEventListener("input", calcularTotal);
+                                    });
+                                </script>
+
                             </div>
 
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="form-group">
                                         <label for="tipo_estructura">TIPO ESTRUCTURA</label>
-                                        <input type="text" name="tipo_estructura" id="tipo_estructura" class="form-control">
+                                        <input type="text" name="tipo_estructura" id="tipo_estructura" value="<?php echo $tipo_estructura; ?>" class="form-control" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -347,21 +479,21 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="modulo_complemento">MÓDULO 1%</label>
-                                        <input type="text" name="modulo_complemento" id="modulo_complemento" class="form-control">
+                                        <input type="text" name="modulo_complemento" id="modulo_complemento" value="<?php echo $modulo_complemento; ?>" class="form-control">
                                     </div>
                                 </div>
 
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="fuente_complemento">FUENTE 1%</label>
-                                        <input type="text" name="fuente_complemento" id="fuente_complemento" class="form-control">
+                                        <input type="text" name="fuente_complemento" id="fuente_complemento" value="<?php echo $fuente_complemento; ?>" class="form-control">
                                     </div>
                                 </div>
 
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="reciving_complemento">RECEIVING 1%</label>
-                                        <input type="text" name="reciving_complemento" id="reciving_complemento" class="form-control">
+                                        <input type="text" name="reciving_complemento" id="reciving_complemento" value="<?php echo $reciving_complemento; ?>" class="form-control">
                                     </div>
                                 </div>
 
@@ -386,14 +518,14 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="col-md-5">
                                     <div class="form-group">
                                         <label for="conexion">CONEXION</label>
-                                        <input type="text" name="conexion" id="conexion" class="form-control">
+                                        <input type="text" name="conexion" id="conexion" value="<?php echo $conexion; ?>" class="form-control">
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="configuracion">CONFIGURACIÓN</label>
-                                        <input type="text" name="configuracion" id="configuracion" class="form-control">
+                                        <input type="text" name="configuracion" id="configuracion" value="<?php echo $configuracion; ?>" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -402,49 +534,73 @@ $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="estado_tpop">ESTADO TPOP</label>
-                                        <input type="text" name="estado_tpop" id="estado_tpop" class="form-control">
+                                        <select name="estado_tpop" id="estado_tpop" class="form-control" required>
+                                            <option value="<?php echo $estado_tpop; ?>" selected>
+                                                <?php echo $estado_tpop; ?>
+                                            </option>
+                                            <?php
+                                                // Consulta los estados de la base de datos
+                                                $query_estados = $pdo->prepare("SELECT id, estado_tpop FROM t_estado WHERE estado_tpop IS NOT NULL AND estado_tpop <> ''");
+                                                $query_estados->execute();
+                                                $estado = $query_estados->fetchAll(PDO::FETCH_ASSOC);
+
+                                                foreach ($estado as $estados) {
+                                                    $nombre_estados_tpop = $estados['estado_tpop'];
+                                                    $id_estados_tpop = $estados['id'];
+                                                    
+                                                    // Si el ID es 1, marcarlo como seleccionado
+                                                    $selected = ($id_estados_tpop == 1) ? 'selected' : '';
+                                            ?>
+                                                <option value="<?php echo $id_estados_tpop; ?>" <?php echo $selected; ?>>
+                                                    <?php echo $nombre_estados_tpop; ?>
+                                                </option>
+                                            <?php
+                                                }
+                                            ?>
+                                        </select>
+                                        <input type="hidden" name="id_estado_tpop" id="id_estado_tpop" value="1" class="form-control">
                                     </div>
                                 </div>
 
                                 <div class="col-md-1">
                                     <div class="form-group">
                                         <label for="m_cuadrado">M²</label>
-                                        <input type="text" name="m_cuadrado" id="m_cuadrado" class="form-control">
+                                        <input type="text" name="m_cuadrado" id="m_cuadrado" value="<?php echo $m_cuadrado; ?>" class="form-control" readonly>
                                     </div>
                                 </div>
 
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="voltaje">VOLTAJE</label>
-                                        <input type="text" name="voltaje" id="voltaje" class="form-control">
+                                        <input type="text" name="voltaje" id="voltaje" value="<?php echo $voltaje; ?>" class="form-control">
                                     </div>
                                 </div>
 
                                 <div class="col-md-1">
                                     <div class="form-group">
                                         <label for="watts">WATTS</label>
-                                        <input type="text" name="watts" id="watts" class="form-control">
+                                        <input type="text" name="watts" id="watts" value="<?php echo $watts; ?>" class="form-control" readonly>
                                     </div>
                                 </div>
 
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="amperios">AMPERIOS</label>
-                                        <input type="text" name="amperios" id="amperios" class="form-control">
+                                        <input type="text" name="amperios" id="amperios" value="<?php echo $amperios; ?>" class="form-control" readonly>
                                     </div>
                                 </div>
 
                                 <div class="col-md-1">
                                     <div class="form-group">
                                         <label for="num_circuitos">CIRCUITOS</label>
-                                        <input type="text" name="num_circuitos" id="num_circuitos" class="form-control">
+                                        <input type="text" name="num_circuitos" id="num_circuitos" value="<?php echo $num_circuitos; ?>" class="form-control" readonly>
                                     </div>
                                 </div>
 
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="consumo">CONSUMO</label>
-                                        <input type="text" name="consumo" id="consumo" class="form-control">
+                                        <input type="text" name="consumo" id="consumo" value="<?php echo $consumo; ?>" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -569,7 +725,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
 document.getElementById('f_control').addEventListener('change', function() {
     var f_control_value = this.value;
     console.log('Valor de f_control:', f_control_value);  // Verifica el valor
@@ -661,6 +816,99 @@ document.getElementById('medidas_modulo').addEventListener('change', function() 
         xhr.send();
     }
 });
+</script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function actualizarTipoEstructura() {
+        // Obtener valores VISIBLES en lugar de IDs
+        var tipo_pan = document.getElementById('tipo_pan');
+        var tipo_pan_text = tipo_pan.options[tipo_pan.selectedIndex].text;
+
+        var pitch_tpop = document.getElementById('pitch_tpop');
+        var pitch_tpop_text = pitch_tpop.options[pitch_tpop.selectedIndex].text;
+
+        var medida_x = document.getElementById('medida_x').value; // Valor numérico
+        var medida_y = document.getElementById('medida_y').value; // Valor numérico
+
+        var medidas_modulo = document.getElementById('medidas_modulo');
+        var medidas_modulo_text = medidas_modulo.options[medidas_modulo.selectedIndex].text;
+
+        // Crear la cadena concatenada con "/"
+        var tipo_estructura = [tipo_pan_text, pitch_tpop_text, medida_x, medida_y, medidas_modulo_text]
+            .filter(val => val.trim() !== '') // Filtra valores vacíos
+            .join('/');
+
+        // Asignar el valor al campo tipo_estructura
+        document.getElementById('tipo_estructura').value = tipo_estructura;
+    }
+
+    // Agregar eventos a los campos para que llamen a la función cuando cambien
+    document.getElementById('tipo_pan').addEventListener('change', actualizarTipoEstructura);
+    document.getElementById('pitch_tpop').addEventListener('change', actualizarTipoEstructura);
+    document.getElementById('medida_x').addEventListener('input', actualizarTipoEstructura);
+    document.getElementById('medida_y').addEventListener('input', actualizarTipoEstructura);
+    document.getElementById('medidas_modulo').addEventListener('change', actualizarTipoEstructura);
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function actualizarCalculos() {
+        var medida_x = parseFloat(document.getElementById('medida_x').value) || 0;
+        var medida_y = parseFloat(document.getElementById('medida_y').value) || 0;
+        var consumo = parseFloat(document.getElementById('consumo').value) || 0;
+        var voltaje = parseFloat(document.getElementById('voltaje').value) || 1; // Evitar división por 0
+
+        // Calcular metros cuadrados (medida_x * medida_y) / 1000
+        var m_cuadrado = ((medida_x * medida_y) / 1000000).toFixed(2);
+        document.getElementById('m_cuadrado').value = m_cuadrado;
+
+        // Calcular watts (consumo / m_cuadrado)
+        var watts = (m_cuadrado > 0) ? (consumo / m_cuadrado).toFixed(2) : 0;
+        document.getElementById('watts').value = watts;
+
+        // Calcular amperios (watts / voltaje)
+        var amperios = (voltaje > 0) ? (watts / voltaje).toFixed(2) : 0;
+        document.getElementById('amperios').value = amperios;
+
+        // Calcular número de circuitos (amperios / 20)
+        var num_circuitos = (amperios / 20).toFixed(2);
+        document.getElementById('num_circuitos').value = num_circuitos;
+    }
+
+    // Agregar eventos a los campos para que llamen a la función cuando cambien
+    document.getElementById('medida_x').addEventListener('input', actualizarCalculos);
+    document.getElementById('medida_y').addEventListener('input', actualizarCalculos);
+    document.getElementById('consumo').addEventListener('input', actualizarCalculos);
+    document.getElementById('voltaje').addEventListener('input', actualizarCalculos);
+});
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('s_modulo').addEventListener('change', function() {
+        var idSerial = this.value;
+
+        if (idSerial !== '') {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'obtener_cantidad.php?id_serial=' + idSerial, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var respuesta = JSON.parse(xhr.responseText);
+
+                    if (respuesta && respuesta.cantidad_plena) {
+                        document.getElementById('cant_dispo').value = respuesta.cantidad_plena;
+                    } else {
+                        document.getElementById('cant_dispo').value = ''; // Si no hay datos, dejar vacío
+                    }
+                }
+            };
+            xhr.send();
+        } else {
+            document.getElementById('cant_dispo').value = ''; // Si no hay selección, dejar vacío
+        }
+    });
+});
 
 </script>

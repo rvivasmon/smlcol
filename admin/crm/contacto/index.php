@@ -9,16 +9,14 @@ include('../../../layout/admin/datos_sesion_user.php');
 
 include('../../../layout/admin/parte1.php');
 
-
 ?>
-
 
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Clientes SML</h1>
+                <h1 class="m-0">Contactos SML</h1>
                     <div class="card card-blue">
                         <div class="card-header">
                             ACTIVOS
