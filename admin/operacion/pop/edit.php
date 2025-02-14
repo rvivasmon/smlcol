@@ -91,8 +91,8 @@ foreach ($items as $item) {
     // Si el registro no existe, insertar en la tabla 'items_pop'
     if (!$exists) {
         $query_insert = $pdo->prepare("
-            INSERT INTO items_pop (id_oc, item_oc, id_pop, instalacion, descripcion, cantidad, contador, item1) 
-            VALUES (:id_oc, :id_item, :id_pop, :instalacion, :descripcion_item, :cantidad, :contador_item_oc, :item1)
+            INSERT INTO items_pop (id_oc, item_oc, id_pop, instalacion, descripcion, cantidad, contador, item1, fecha_recibido) 
+            VALUES (:id_oc, :id_item, :id_pop, :instalacion, :descripcion_item, :cantidad, :contador_item_oc, :item1, :fecha_recepcion)
         ");
         $query_insert->bindParam(':id_oc', $item['id_oc']);
         $query_insert->bindParam(':id_item', $id_item);
@@ -102,6 +102,7 @@ foreach ($items as $item) {
         $query_insert->bindParam(':cantidad', $item['cantidad']);
         $query_insert->bindParam(':contador_item_oc', $contador_item_oc);  // Usar el valor de 'contador' de items_oc
         $query_insert->bindParam(':item1', $cantidad);
+        $query_insert->bindParam(':fecha_recepcion', $fecha_recepcion);
         $query_insert->execute();
 
         $contador_pop++; // Incrementar el contador
@@ -190,6 +191,8 @@ if ($actualizar_pop) {
                                 <div class="form-group">
                                     <label for="id_oc">ID OC</label>
                                     <input type="text" name="id_oc" id="id_oc" value="<?php echo $id_oc; ?>" class="form-control" readonly>
+                                    <input type="text" name="cantidad_item_pop" id="cantidad_item_pop" value="<?php echo $cantidad; ?>" class="form-control" readonly>
+
                                 </div>
                             </div>
 

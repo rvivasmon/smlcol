@@ -45,9 +45,23 @@ include('../../../layout/admin/parte1.php');
                             <tbody>
                                 <?php
                                 $contador = 0;
-                                $query_pop = $pdo->prepare('SELECT pop.*, cl.nombre_comercial AS nombre_cliente, tci.ciudad AS nombre_ciudad, tes.estadopop AS nombre_estado_pop, oc.oc_resultante AS nombre_oc FROM pop INNER JOIN clientes AS cl ON pop.cliente = cl.id INNER JOIN t_ciudad AS tci ON pop.ciudad = tci.id INNER JOIN t_estado AS tes ON pop.estado_pop = tes.id INNER JOIN oc ON pop.id_oc = oc.id');
-                                $query_pop->execute();
-                                $popes = $query_pop->fetchAll(PDO::FETCH_ASSOC);
+                                $query_pop = $pdo->prepare('
+                                SELECT pop.*, cl.nombre_comercial AS nombre_cliente, 
+                                    tci.ciudad AS nombre_ciudad, 
+                                    tes.estadopop AS nombre_estado_pop, 
+                                    oc.oc_resultante AS nombre_oc,
+                                    (SELECT COUNT(*) = SUM(tpop = 3) 
+                                        FROM items_pop 
+                                        WHERE items_pop.id_pop = pop.id) AS grupo_procesado
+                                FROM pop 
+                                INNER JOIN clientes AS cl ON pop.cliente = cl.id 
+                                INNER JOIN t_ciudad AS tci ON pop.ciudad = tci.id 
+                                INNER JOIN t_estado AS tes ON pop.estado_pop = tes.id 
+                                INNER JOIN oc ON pop.id_oc = oc.id
+                            ');
+                            $query_pop->execute();
+                            $popes = $query_pop->fetchAll(PDO::FETCH_ASSOC);
+                            
                                 foreach ($popes as $pop_item){
 
                                     $id = $pop_item['id'];
@@ -59,6 +73,7 @@ include('../../../layout/admin/parte1.php');
                                     $estdo_pop = $pop_item['nombre_estado_pop'];
                                     $nombre_cliente = $pop_item['nombre_cliente'];
                                     $lugar_instalacion = $pop_item['lugar_instalacion'];
+                                    $procesar = $pop_item['procesar'];
                                     $contador = $contador + 1;
                                 ?>
                                     <tr>
@@ -72,14 +87,19 @@ include('../../../layout/admin/parte1.php');
                                         <td ><?php echo $nombre_cliente; ?></td>                                        
                                         <td><?php echo $lugar_instalacion; ?></td>
                                         <td>
-                                        <center>
-                                            <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                            <?php if ($pop_item['estado_pop'] != 2): // Mostrar los botones solo si estado_pop no es 1 ?>
-                                                <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Procesar <i class="fas fa-pen"></i></a>
-                                                <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
-                                            <?php endif; ?>
-                                        </center>
-                                        </td>
+    <center>
+        <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
+        
+        <?php if ($pop_item['estado_pop'] != 2 && $pop_item['procesar'] == 0): ?>
+            <a href="edit.php?id=<?php echo $id; ?>" 
+                class="btn btn-success btn-sm">Procesar <i class="fas fa-pen"></i>
+            </a>
+            <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
+        <?php endif; ?>
+    </center>
+</td>
+
+
                                     </tr>
                                 <?php
                                     }                            

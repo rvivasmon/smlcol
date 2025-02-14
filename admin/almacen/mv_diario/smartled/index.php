@@ -94,20 +94,20 @@ include('../../../../layout/admin/parte1.php');
                                                                     LEFT JOIN
                                                                         tabla_pitch AS pitch_table ON tmc.pitch = pitch_table.id; -- Nueva unión con tabla_pitch
                                                                     ');
-                                        $query->execute();
-                                        $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach ($movidiarios as $movidiario){
-                                            $id = $movidiario['id_movimiento_diario'];
-                                            $fecha = $movidiario['fecha'];
-                                            $producto = $movidiario['nombre_producto'];
-                                            $referencia1 = $movidiario['nombre_referencia_1'];
-                                            $referencia2 = $movidiario['nombre_referencia_2'];
-                                            $almacen_origen1 = $movidiario['almacen_origen'];
-                                            $almacen_destino1 = $movidiario['almacen_destino'];
-                                            $destino = $movidiario['op'];
-                                            $cantidades = $movidiario['cantidad_entrada'];
-                                            $observaciones = $movidiario['observaciones'];
-                                            $contador = $contador + 1;
+                                                                    $query->execute();
+                                                                    $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);
+                                                                    foreach ($movidiarios as $movidiario){
+                                                                        $id = $movidiario['id_movimiento_diario'];
+                                                                        $fecha = $movidiario['fecha'];
+                                                                        $producto = $movidiario['nombre_producto'];
+                                                                        $referencia1 = $movidiario['nombre_referencia_1'];
+                                                                        $referencia2 = $movidiario['nombre_referencia_2'];
+                                                                        $almacen_origen1 = $movidiario['almacen_origen'];
+                                                                        $almacen_destino1 = $movidiario['almacen_destino'];
+                                                                        $destino = $movidiario['op'];
+                                                                        $cantidades = $movidiario['cantidad_entrada'];
+                                                                        $observaciones = $movidiario['observaciones'];
+                                                                        $contador = $contador + 1;
                                         ?>
                                             <tr>
                                                 <td><?php echo htmlspecialchars($contador); ?></td>

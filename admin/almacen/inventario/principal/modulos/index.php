@@ -79,7 +79,7 @@ include('../../../../../layout/admin/parte1.php');
                                         LEFT JOIN
                                             distribucion_almacen AS da ON ap.posicion = da.id
                                         WHERE
-                                            ap.tipo_producto = 1
+                                            ap.tipo_producto = 1 AND ap.habilitar = 1
                                         ');
 
                                         $query->execute();

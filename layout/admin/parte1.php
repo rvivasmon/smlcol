@@ -207,6 +207,12 @@ foreach ($roles_permisos as $rol_permiso) {
                                 <p>VEHÍCULOS</p>
                               </a>
                             </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/almacen/almacenes/create.php" class="nav-link">
+                                <i class="fas fa-cog nav-icon"></i>
+                                <p>CREAR ALMACÉNES</p>
+                              </a>
+                            </li>
                           </ul>
                         </li>
 
@@ -397,10 +403,7 @@ foreach ($roles_permisos as $rol_permiso) {
                             <li class="nav-item">
                               <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                  Consulta de Inventario
-                                  <i class="right fas fa-angle-left"></i> <!-- Icono de flecha -->
-                                </p>
+                                <p>Consulta de Inventario</p>
                               </a>
                               <ul class="nav nav-treeview"> <!-- Submenú -->
                                 <li class="nav-item">
