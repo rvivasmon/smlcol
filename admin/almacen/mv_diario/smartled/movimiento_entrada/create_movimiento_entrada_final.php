@@ -63,22 +63,38 @@ include('../../../../../layout/admin/parte1.php');
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="fecha">Fecha</label>
                                                 <input type="date" id="fecha" name="fecha" class="form-control" placeholder="Fecha" readonly>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="hora">Hora</label>
                                                 <input type="time" id="hora" name="hora" class="form-control" placeholder="Hora" readonly>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="contador_entra">Contador de Entrada</label>
                                                 <input type="text" id="contador_entra" name="contador_entra" value="<?php echo $contadorFormateado; ?>" class="form-control" required readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="almacen_estra">Almacén destino</label>
+                                                <select name="almacen_estra" id="almacen_estra" class="form-control" required>
+                                                    <option value="">Seleccione un Almacen</option>
+                                                    <?php
+                                                    $query_producto = $pdo->prepare('SELECT id, almacenes FROM almacenes_grupo WHERE almacenes IS NOT NULL AND almacenes != "" AND habilitar = "1" ORDER BY almacenes ASC');
+                                                    $query_producto->execute();
+                                                    $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
+                                                    foreach($productos as $producto) {
+                                                        echo '<option value="' . $producto['id'] . '">' . $producto['almacenes'] . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>

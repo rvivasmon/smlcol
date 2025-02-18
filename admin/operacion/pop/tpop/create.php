@@ -119,12 +119,13 @@ $query_get_oc->execute();
 $id_oc = $query_get_oc->fetchColumn(); // Obtener directamente el id_oc
 
 // Obtener los valores de 'contador' y 'items1' desde la tabla items_pop
-$query_get_items_pop = $pdo->prepare("SELECT contador, item1 FROM items_pop WHERE item_oc = :id_get");
+$query_get_items_pop = $pdo->prepare("SELECT id_oc, contador, item1 FROM items_pop WHERE item_oc = :id_get");
 $query_get_items_pop->bindParam(':id_get', $id_get);
 $query_get_items_pop->execute();
 $items_pop_data = $query_get_items_pop->fetch(PDO::FETCH_ASSOC);
 
-// Extraer valores de 'contador' y 'items1' (asegurando que existan)
+// Extraer valores de 'id_oc', 'contador' e 'items1' (asegurando que existan)
+$oc_value = $items_pop_data['id_oc'] ?? '';
 $contador_value = $items_pop_data['contador'] ?? '';
 $item1_value = $items_pop_data['item1'] ?? '';
 
@@ -137,6 +138,17 @@ $query_items->bindParam(':id_get', $id_get);
 $query_items->execute();
 $items = $query_items->fetchAll(PDO::FETCH_ASSOC);
 
+// Para cada ítem, obtener su observación desde la tabla 'oc'
+foreach ($items as &$oc_item) {
+    $query_observacion = $pdo->prepare("SELECT observacion FROM oc WHERE id = :id_oc");
+    $query_observacion->bindParam(':id_oc', $oc_item['id_oc']);
+    $query_observacion->execute();
+    $observacion_data = $query_observacion->fetch(PDO::FETCH_ASSOC);
+    
+    // Agregar observación al array del ítem (si existe)
+    $oc_item['observacion'] = $observacion_data['observacion'] ?? '';
+}
+unset($oc_item); // Evita problemas con la referencia en foreach
 
 // Consultar fecha de recepción
 $query_fecha = $pdo->prepare("SELECT fecha_recibido, cantidad FROM items_pop WHERE id = :id_gral_pop");
@@ -144,10 +156,9 @@ $query_fecha->bindParam(':id_gral_pop', $id_gral_pop);
 $query_fecha->execute();
 $fecha_recibido_data = $query_fecha->fetch(PDO::FETCH_ASSOC);
 
-// Extraer el valor de fecha_recibido
+// Extraer el valor de fecha_recibido y cantidad
 $fecha_recib = $fecha_recibido_data['fecha_recibido'] ?? '';
 $cantidad = $fecha_recibido_data['cantidad'] ?? '';
-
 
 ?>
 
@@ -187,7 +198,13 @@ $cantidad = $fecha_recibido_data['cantidad'] ?? '';
                                             <input type="text" name="instalacion" id="instalacion_<?php echo $oc_item['id_item']; ?>" value="<?php echo $oc_item['instalacion']; ?>" class="form-control" readonly>
                                         </div>
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="observacion_<?php echo $oc_item['id_item']; ?>">Observaciones</label>
+                                            <textarea name="observacion" id="observacion_<?php echo $oc_item['id_item']; ?>" cols="30" rows="1" class="form-control" readonly><?php echo htmlspecialchars($oc_item['observacion']); ?></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="descripcion_<?php echo $oc_item['id_item']; ?>">Descripcion</label>
                                             <textarea name="descripcion" id="descripcion_<?php echo $oc_item['id_item']; ?>" cols="30" rows="1" class="form-control" readonly><?php echo $oc_item['descripcion']; ?></textarea>
@@ -195,6 +212,7 @@ $cantidad = $fecha_recibido_data['cantidad'] ?? '';
                                     </div>
                                     <!-- Campo oculto para el ID del ítem de POP-->
                                     <input type="hidden" name="id_item_oc" id="id_item_pc" value="<?php echo $oc_item['id_item']; ?>">
+                                    <input type="hidden" name="id_oc" id="id_oc" value="<?php echo $oc_value; ?>">
 
                                     <!-- Campo oculto para el ID item de la pop -->
                                     <input type="hidden" name="id_gral_pop" id="id_gral_pop" value="<?php echo $id_gral_pop; ?>">
@@ -407,7 +425,8 @@ $cantidad = $fecha_recibido_data['cantidad'] ?? '';
                                     <div class="col-md-1">
                                         <div class="form-group">
                                             <label for="cant_dispo">DISPONIBLE</label>
-                                            <input type="text" name="cant_dispo" id="cant_dispo" value="<?php echo $medida_x; ?>" class="form-control" readonly>
+                                            <input type="text" name="cant_dispo" id="cant_dispo" class="form-control" readonly>
+                                            <!--<input type="text" name="cant_dispo" id="cant_dispo" value="<?php echo $medida_x; ?>" class="form-control" readonly>-->
                                         </div>
                                     </div>
 
@@ -969,6 +988,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script>
+    // Cantidad Módulos
     document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('s_modulo').addEventListener('change', function() {
         var idSerial = this.value;
@@ -994,6 +1014,83 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+    // Cantidad controladoras
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('controladora').addEventListener('change', function() {
+        var idSerialControl = this.value;
+
+        if (idSerialControl !== '') {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'obtener_cantidad_control.php?id_serial_control=' + idSerialControl, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var respuesta_control = JSON.parse(xhr.responseText);
+
+                    if (respuesta_control && respuesta_control.cantidad_plena) {
+                        document.getElementById('dispo_control').value = respuesta_control.cantidad_plena;
+                    } else {
+                        document.getElementById('dispo_control').value = ''; // Si no hay datos, dejar vacío
+                    }
+                }
+            };
+            xhr.send();
+        } else {
+            document.getElementById('dispo_control').value = ''; // Si no hay selección, dejar vacío
+        }
+    });
+});
+
+    // Cantidad fuentes
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('t_fuente').addEventListener('change', function() {
+        var idSerial_fuente = this.value;
+
+        if (idSerial_fuente !== '') {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'obtener_cantidad_fuentes.php?id_serial_fuente=' + idSerial_fuente, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var respuesta_fuente = JSON.parse(xhr.responseText);
+
+                    if (respuesta_fuente && respuesta_fuente.cantidad_plena) {
+                        document.getElementById('dispo_fuente').value = respuesta_fuente.cantidad_plena;
+                    } else {
+                        document.getElementById('dispo_fuente').value = ''; // Si no hay datos, dejar vacío
+                    }
+                }
+            };
+            xhr.send();
+        } else {
+            document.getElementById('dispo_fuente').value = ''; // Si no hay selección, dejar vacío
+        }
+    });
+});
+
+    // Cantidad receiving
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('control_reciving').addEventListener('change', function() {
+        var idSerial_reciving = this.value;
+
+        if (idSerial_reciving !== '') {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'obtener_cantidad_reciving.php?id_serial_reciving=' + idSerial_reciving, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var respuesta_reciving = JSON.parse(xhr.responseText);
+
+                    if (respuesta_reciving && respuesta_reciving.cantidad_plena) {
+                        document.getElementById('dispo_tarjetas').value = respuesta_reciving.cantidad_plena;
+                    } else {
+                        document.getElementById('dispo_tarjetas').value = ''; // Si no hay datos, dejar vacío
+                    }
+                }
+            };
+            xhr.send();
+        } else {
+            document.getElementById('dispo_tarjetas').value = ''; // Si no hay selección, dejar vacío
+        }
+    });
+});
 </script>
 
 <script>

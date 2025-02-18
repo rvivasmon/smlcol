@@ -208,7 +208,7 @@ foreach ($roles_permisos as $rol_permiso) {
                               </a>
                             </li>
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/almacen/almacenes/create.php" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/almacen/almacenes" class="nav-link">
                                 <i class="fas fa-cog nav-icon"></i>
                                 <p>CREAR ALMACÉNES</p>
                               </a>
@@ -228,7 +228,7 @@ foreach ($roles_permisos as $rol_permiso) {
 
                         // Ejemplo de datos simulados (reemplaza con tu lógica de datos real)
                         $almacenes = array(
-                          array('id' => 3, 'nombre' => 'Almacén Principal'),
+                          array('id' => 3, 'nombre' => 'Almacén SmartLed'),
                           array('id' => 4, 'nombre' => 'Almacén Techled'),
                           /*array('id' => 5, 'nombre' => 'Almacén Importación'),
                           array('id' => 6, 'nombre' => 'Almacén Técnica'),
@@ -425,6 +425,12 @@ foreach ($roles_permisos as $rol_permiso) {
                                   </a>
                                 </li>
                               </ul>
+                            </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/operacion/pop/rop/" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>ROP </p>
+                              </a>
                             </li>
                           </ul>
                         </li>

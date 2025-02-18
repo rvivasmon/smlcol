@@ -190,7 +190,7 @@ $(document).ready(function () {
     var permiso_id = $(`#permiso_id${id}`).val();
 
         if (rol_id && permiso_id) {
-            $.get("controller_index_roles_permisos.php", { rol_id, permiso_id }, function (datos) {
+            $.get("controller_index_roles_permisos.php", {rol_id, permiso_id }, function (datos) {
                 $(`#respuesta${id}`).html(datos);
                 $(`#tabla1${id}`).hide();
             }).fail(function () {
@@ -220,7 +220,7 @@ $(document).ready(function () {
             // Realizar solicitud AJAX
             $.ajax({
                 url: "controller_index_roles_permisos.php", // Ruta del controlador
-                method: "POST", // Método para enviar los datos
+                method: "GET", // Método para enviar los datos
                 data: { rol_id: rol_id, permiso_id: permiso_id }, // Datos a enviar
                 success: function (response) {
                     // Mostrar notificación de éxito

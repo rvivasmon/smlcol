@@ -24,7 +24,7 @@ if($sentencia->execute()){
             'text' => '¡Usuario creado exitosamente!',
             'icon' => 'success'
         );
-        header('Location: '.$URL.'admin/ti/cargos/index.php');
+        header('Location: '.$URL.'admin/almacen/almacenes/index.php');
         exit;
 }else{
     session_start();
@@ -33,7 +33,7 @@ if($sentencia->execute()){
             'text' => 'Error al introducir la información',
             'icon' => 'error'
         );
-        header('Location: '.$URL.'admin/ti/cargos/create.php');
+        header('Location: '.$URL.'admin/almacen/almacenes/create.php');
     exit;
 }
 

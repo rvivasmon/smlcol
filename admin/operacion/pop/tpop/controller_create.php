@@ -11,7 +11,8 @@ try {
     // Recibir datos del formulario con validación
     $id_pop = $_POST['id_pop'] ?? null;
     $id_item_pop = $_POST['id_gral_pop'] ?? null;
-    $id_oc = $_POST['id_item_oc'] ?? null;
+    $id_oc = $_POST['id_oc'] ?? null;
+    $id_items_oc = $_POST['id_item_oc'] ?? null;
     $uso_pan = $_POST['uso_pan'] ?? null;
     $pitch_tpop = $_POST['pitch_tpop'] ?? null;
     $tipo_pan = $_POST['tipo_pan'] ?? null;
@@ -52,6 +53,8 @@ try {
     $ppal_pop_value = $_POST['ppal_pop_value'] ?? null;
     $fecha_recibe = $_POST['fecha_recibe'] ?? null;
     $cantidad = $_POST['cantidad'] ?? null;
+    $descripcion = $_POST['descripcion'] ?? null;
+    $observacion = $_POST['observacion'] ?? null;
 
     // Actualizar la tabla 'item_pop' en el campo 'tpop' a 1
     $query_update_item_pop = $pdo->prepare("
@@ -61,13 +64,13 @@ try {
             proyecto = :proyecto_checkbox,
             rop = :rop_checkbox,
             fecha_procesado = :fecha_actual
-        WHERE id = :id_item_pop AND item_oc = :id_oc
+        WHERE id = :id_item_pop AND item_oc = :id_items_oc
     ");
 
     // Vincular los parámetros
     $query_update_item_pop->bindParam(':estado_tpop', $estado_tpop);
     $query_update_item_pop->bindParam(':id_item_pop', $id_item_pop);
-    $query_update_item_pop->bindParam(':id_oc', $id_oc);
+    $query_update_item_pop->bindParam(':id_items_oc', $id_items_oc);
     $query_update_item_pop->bindParam(':ddi_checkbox', $ddi_checkbox);
     $query_update_item_pop->bindParam(':proyecto_checkbox', $proyecto_checkbox);
     $query_update_item_pop->bindParam(':rop_checkbox', $rop_checkbox);
@@ -89,7 +92,9 @@ try {
     if ($exists) {
         // Si el registro existe, actualiza los datos
         $query_update = $pdo->prepare("
-            UPDATE tpop SET 
+            UPDATE tpop SET
+                descripcion = :descripcion,
+                observacion = :observacion,
                 uso = :uso_pan, 
                 pitch = :pitch_tpop, 
                 tipo_pan = :tipo_pan, 
@@ -131,6 +136,8 @@ try {
         ");
 
         // Vincular los parámetros
+        $query_update->bindParam(':descripcion', $_POST['descripcion']);
+        $query_update->bindParam(':observacion', $_POST['observacion']);
         $query_update->bindParam(':uso_pan', $_POST['uso_pan']);
         $query_update->bindParam(':pitch_tpop', $_POST['pitch_tpop']);
         $query_update->bindParam(':tipo_pan', $_POST['tipo_pan']);
@@ -171,21 +178,20 @@ try {
         $query_update->bindParam(':id_item_pop', $id_item_pop);
         $query_update->bindParam(':fecha_actual', $fecha_actual);
 
-
         // Ejecutar la actualización
         $query_update->execute();
     } else {
         // Preparar la consulta de inserción
     $query_insert_item = $pdo->prepare("
     INSERT INTO tpop (
-        tpop_item, pop_item, uso, pitch, tipo_pan, x, y, medida_modulo, 
+        tpop_item, pop_item, observacion, descripcion, uso, pitch, tipo_pan, x, y, medida_modulo, 
         total_modulos, receiving, cantidad_receiving, fuente, cantidad_fuente, pixel_x, 
         pixel_y, total_pixel, tipo_modulo, serial_modulo, funcion_control, control, 
         cantidad_control, tipo_estructura, modulo_adic, fuente_adic, control_adic, ddi, proyecto, rop, 
         estado_tpop, m2, voltaje, watts, amperios, cantidad_circuito, consumo, 
         conexion, configuracion, usuario, fecha_recepcion, fecha_procesado
     ) VALUES (
-        :id_pop, :id_item_pop, :uso_pan, :pitch_tpop, :tipo_pan, :medida_x, 
+        :id_pop, :id_item_pop, :observacion, :descripcion, :uso_pan, :pitch_tpop, :tipo_pan, :medida_x, 
         :medida_y, :medidas_modulo, :total_modulos, :control_reciving, :num_tarjetas, 
         :t_fuente, :num_fuentes, :pixel_x, :pixel_y, :pixel_total, :t_modulo, 
         :s_modulo, :f_control, :controladora, :num_control, :tipo_estructura, :modulo_complemento, 
@@ -197,6 +203,8 @@ try {
     // Vincular los parámetros correctamente
     $query_insert_item->bindParam(':id_pop', $id_pop);
     $query_insert_item->bindParam(':id_item_pop', $id_item_pop);
+    $query_insert_item->bindParam(':observacion', $observacion);
+    $query_insert_item->bindParam(':descripcion', $descripcion);
     $query_insert_item->bindParam(':uso_pan', $uso_pan);
     $query_insert_item->bindParam(':pitch_tpop', $pitch_tpop);
     $query_insert_item->bindParam(':tipo_pan', $tipo_pan);
@@ -253,16 +261,17 @@ if ($estado_tpop == 3) {
 
     // Insertar en la tabla items_op con el nuevo contador
     $query_insert_items_op = $pdo->prepare("
-        INSERT INTO items_op (id_oc, id_op, id_pop, id_item_pop, fecha_recibido, tipo_estructura, proyecto, cantidad, observaciones, conexion, configuracion, usuario, contador) 
-        VALUES (:id_oc, :op_id, :ppal_pop_value, :id_item_pop, :fecha_actual, :tipo_estructura, :id_oc, :cantidad, :ppal_pop_value, :conexion, :configuracion, :usuario, :contador)
+        INSERT INTO items_op (id_oc, id_items_oc, id_op, id_pop, id_item_pop, fecha_recibido, tipo_estructura, proyecto, cantidad, observaciones, conexion, configuracion, usuario, contador) 
+        VALUES (:id_oc, :id_items_oc, :op_id, :ppal_pop_value, :id_item_pop, :fecha_actual, :tipo_estructura, :id_items_oc, :cantidad, :ppal_pop_value, :conexion, :configuracion, :usuario, :contador)
     ");
     $query_insert_items_op->bindParam(':id_oc', $id_oc);
+    $query_insert_items_op->bindParam(':id_items_oc', $id_items_oc);
     $query_insert_items_op->bindParam(':op_id', $op_id);
     $query_insert_items_op->bindParam(':ppal_pop_value', $ppal_pop_value);
     $query_insert_items_op->bindParam(':id_item_pop', $id_item_pop);
     $query_insert_items_op->bindParam(':fecha_actual', $fecha_actual);
     $query_insert_items_op->bindParam(':tipo_estructura', $tipo_estructura);
-    $query_insert_items_op->bindParam(':id_oc', $id_oc);
+    $query_insert_items_op->bindParam(':id_items_oc', $id_items_oc);
     $query_insert_items_op->bindParam(':cantidad', $cantidad);
     $query_insert_items_op->bindParam(':ppal_pop_value', $ppal_pop_value);
     $query_insert_items_op->bindParam(':conexion', $conexion);
@@ -280,10 +289,10 @@ if ($estado_tpop == 3 && $rop_checkbox == 1) {
     // Consultar el campo 'id' en items_op con los filtros dados
     $query_select_items_op = $pdo->prepare("
         SELECT id FROM items_op 
-        WHERE id_item_pop = :id_item_pop AND id_oc = :id_oc
+        WHERE id_item_pop = :id_item_pop AND id_items_oc = :id_items_oc
     ");
     $query_select_items_op->bindParam(':id_item_pop', $id_item_pop);
-    $query_select_items_op->bindParam(':id_oc', $id_oc);
+    $query_select_items_op->bindParam(':id_items_oc', $id_items_oc);
     $query_select_items_op->execute();
     $result = $query_select_items_op->fetch(PDO::FETCH_ASSOC);
 
@@ -299,7 +308,7 @@ if ($estado_tpop == 3 && $rop_checkbox == 1) {
                 controladora, cantidad_control, modulo_adic, cantidad_adic_modulo, 
                 fuente_adic, cantidad_adic_fuente, receiving_adic, cantidad_adic_receiving, op
             ) VALUES (
-                :fecha_actual, :id_item_pop, :id_oc, :modulo_value_rop, :total_modulos, 
+                :fecha_actual, :id_item_pop, :id_items_oc, :modulo_value_rop, :total_modulos, 
                 :t_fuente, :num_fuentes, :control_reciving, :num_tarjetas, 
                 :controladora, :num_control, :modulo_complemento, :modulo_complemento, 
                 :fuente_complemento, :fuente_complemento, :reciving_complemento, :reciving_complemento, :id_items_op
@@ -309,7 +318,7 @@ if ($estado_tpop == 3 && $rop_checkbox == 1) {
         // Enlazar parámetros
         $query_insert_rop->bindParam(':fecha_actual', $fecha_actual);
         $query_insert_rop->bindParam(':id_item_pop', $id_item_pop);
-        $query_insert_rop->bindParam(':id_oc', $id_oc);
+        $query_insert_rop->bindParam(':id_items_oc', $id_items_oc);
         $query_insert_rop->bindParam(':modulo_value_rop', $modulo_value_rop);
         $query_insert_rop->bindParam(':total_modulos', $total_modulos);
         $query_insert_rop->bindParam(':t_fuente', $t_fuente);
