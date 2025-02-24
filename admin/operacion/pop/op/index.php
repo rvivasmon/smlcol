@@ -32,8 +32,9 @@ include('../../../../layout/admin/parte1.php');
                                             <th>ID</th>
                                             <th>Fecha Recibido</th>
                                             <th>OP</th>
+                                            <th>OC</th>
                                             <th>POP</th>
-                                            <th>Item POP</th>
+                                            <th>Proyecto</th>
                                             <th>Tipo Estructura</th>
                                             <th>Cantidad</th>
                                             <th><center>Acciones</center></th>
@@ -46,54 +47,37 @@ include('../../../../layout/admin/parte1.php');
 
                                         $query_pop = $pdo->prepare('
                                             SELECT
-                                                op.*,
-                                                pop.pop AS nombre_pop,
-                                                ipp.contador AS nombre_item_pop,
-                                                ipp.item1 AS numero_items
+                                                iop.*,
+                                                oc.oc_resultante AS nombre_oc,
+                                                oc1.proyecto AS nombre_proyecto
                                             FROM
-                                                items_op AS op
-                                            INNER JOIN
-                                                pop ON op.id_pop = pop.id
-                                            INNER JOIN
-                                                items_pop AS ipp ON op.id_item_pop = ipp.id
+                                                items_op AS iop
+                                            INNER JOIN oc ON iop.id_oc = oc.id
+                                            INNER JOIN oc AS oc1 ON iop.proyecto = oc1.id
+                                            WHERE iop.habilitar = 0 AND iop.contador_item_op = 1
                                         ');
-
-                                        /*
-                                        ($query_pop = $pdo->prepare('
-                                            SELECT 
-                                                op.*,
-                                                pop.pop AS nombre_pop,
-                                                ipp.contador AS nombre_item_pop,
-                                                (SELECT COUNT(*) FROM items_op WHERE id_pop = op.id_pop) AS numero_items
-                                            FROM
-                                                items_op AS op
-                                            INNER JOIN
-                                                pop ON op.id_pop = pop.id
-                                            INNER JOIN
-                                                items_pop AS ipp ON op.id_item_pop = ipp.id
-                                            ');)
-                                        */
 
                                         $query_pop->execute();
                                         $popes = $query_pop->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach ($popes as $pop_item) {
+                                        foreach ($popes as $op_items) {
 
-                                            $id = $pop_item['id'];
-                                            $id_pop = $pop_item['nombre_pop'];
-                                            $op = $pop_item['id_op'];
-                                            $item_pop = $pop_item['nombre_item_pop'];
-                                            $fecha_recibido = $pop_item['fecha_recibido'];
-                                            $tipo_estructura = $pop_item['tipo_estructura'];
-                                            $cantidad = $pop_item['cantidad'];
-                                            $numero_items = $pop_item['numero_items']; // Número de veces que se repite id_pop
+                                            $id = $op_items['id'];
+                                            $id_pop = $op_items['id_pop'];
+                                            $oc = $op_items['nombre_oc'];
+                                            $op = $op_items['id_op'];
+                                            $fecha_recibido = $op_items['fecha_recibido'];
+                                            $tipo_estructura = $op_items['tipo_estructura'];
+                                            $cantidad = $op_items['cantidad'];
+                                            $proyecto = $op_items['nombre_proyecto'];
                                             $contador = $contador + 1;
                                         ?>
                                             <tr>
                                                 <td><?php echo $contador; ?></td>
                                                 <td><?php echo $fecha_recibido; ?></td>
                                                 <td><?php echo $op; ?></td>
+                                                <td><?php echo $oc; ?></td>
                                                 <td><?php echo $id_pop; ?></td>
-                                                <td><?php echo $item_pop . ' / ' . $numero_items; // Visualización de item_pop y número de repeticiones ?></td>
+                                                <td><?php echo $proyecto; // Visualización de item_pop y número de repeticiones ?></td>
                                                 <td><?php echo $tipo_estructura; ?></td>
                                                 <td><?php echo $cantidad; ?></td>
                                                 <td>

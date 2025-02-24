@@ -52,7 +52,7 @@ include('../../../../layout_techled/admin/parte1_techled.php');
                                         cm.pitch as nombre_pitch,
                                         cms.modelo_modulo as modul_model
                                     FROM
-                                        alma_principal AS ap
+                                        alma_smartled AS ap
                                     LEFT JOIN t_productos ON ap.tipo_producto = t_productos.id_producto
                                     LEFT JOIN caracteristicas_modulos AS cm ON ap.pitch = cm.id_car_mod
                                     LEFT JOIN caracteristicas_modulos AS cms ON ap.modelo_modulo = cms.id_car_mod

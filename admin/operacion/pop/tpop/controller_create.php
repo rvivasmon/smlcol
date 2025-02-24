@@ -257,29 +257,43 @@ if ($estado_tpop == 3) {
     // Si no hay registros o es NULL, asignamos 1, sino incrementamos en 1
     $nuevo_contador = ($result['max_contador'] !== null) ? $result['max_contador'] + 1 : 1;
 
-    $op_id = 'OP'.$nuevo_contador;
+    $op_id = 'OP' . ($nuevo_contador + $i); // Incrementar ID por iteración
 
-    // Insertar en la tabla items_op con el nuevo contador
-    $query_insert_items_op = $pdo->prepare("
-        INSERT INTO items_op (id_oc, id_items_oc, id_op, id_pop, id_item_pop, fecha_recibido, tipo_estructura, proyecto, cantidad, observaciones, conexion, configuracion, usuario, contador) 
-        VALUES (:id_oc, :id_items_oc, :op_id, :ppal_pop_value, :id_item_pop, :fecha_actual, :tipo_estructura, :id_items_oc, :cantidad, :ppal_pop_value, :conexion, :configuracion, :usuario, :contador)
-    ");
-    $query_insert_items_op->bindParam(':id_oc', $id_oc);
-    $query_insert_items_op->bindParam(':id_items_oc', $id_items_oc);
-    $query_insert_items_op->bindParam(':op_id', $op_id);
-    $query_insert_items_op->bindParam(':ppal_pop_value', $ppal_pop_value);
-    $query_insert_items_op->bindParam(':id_item_pop', $id_item_pop);
-    $query_insert_items_op->bindParam(':fecha_actual', $fecha_actual);
-    $query_insert_items_op->bindParam(':tipo_estructura', $tipo_estructura);
-    $query_insert_items_op->bindParam(':id_items_oc', $id_items_oc);
-    $query_insert_items_op->bindParam(':cantidad', $cantidad);
-    $query_insert_items_op->bindParam(':ppal_pop_value', $ppal_pop_value);
-    $query_insert_items_op->bindParam(':conexion', $conexion);
-    $query_insert_items_op->bindParam(':configuracion', $configuracion);
-    $query_insert_items_op->bindParam(':usuario', $usuario);
-    $query_insert_items_op->bindParam(':contador', $nuevo_contador);
-    $query_insert_items_op->execute();
+    // Verificar que $cantidad sea un número entero válido y mayor a 0
+    $cantidad = intval($cantidad);
+    if ($cantidad <= 0) {
+        die("Error: La cantidad debe ser un número mayor que 0.");
+    }
+
+    // Insertar registros tantas veces como indique la cantidad
+    for ($i = 1; $i <= $cantidad; $i++) { // Empezamos desde 1 para el contador personalizado
+
+        $contador_item_op = $i; // Formato 1/cantidad, 2/cantidad, ...
+
+        $query_insert_items_op = $pdo->prepare("
+            INSERT INTO items_op (id_oc, id_items_oc, id_op, id_pop, id_item_pop, fecha_recibido, tipo_estructura, proyecto, cantidad, observaciones, conexion, configuracion, usuario, contador, contador_item_op) 
+            VALUES (:id_oc, :id_items_oc, :op_id, :id_pop, :id_item_pop, :fecha_actual, :tipo_estructura, :id_oc, :cantidad, :ppal_pop_value, :conexion, :configuracion, :usuario, :contador, :contador_item_op)
+        ");
+
+        $query_insert_items_op->bindParam(':id_oc', $id_oc);
+        $query_insert_items_op->bindParam(':id_items_oc', $id_items_oc);
+        $query_insert_items_op->bindParam(':op_id', $op_id);
+        $query_insert_items_op->bindParam(':id_pop', $id_pop);
+        $query_insert_items_op->bindParam(':id_item_pop', $id_item_pop);
+        $query_insert_items_op->bindParam(':fecha_actual', $fecha_actual);
+        $query_insert_items_op->bindParam(':tipo_estructura', $tipo_estructura);
+        $query_insert_items_op->bindParam(':id_oc', $id_oc);
+        $query_insert_items_op->bindParam(':cantidad', $cantidad);
+        $query_insert_items_op->bindParam(':ppal_pop_value', $ppal_pop_value);
+        $query_insert_items_op->bindParam(':conexion', $conexion);
+        $query_insert_items_op->bindParam(':configuracion', $configuracion);
+        $query_insert_items_op->bindParam(':usuario', $usuario);
+        $query_insert_items_op->bindParam(':contador', $nuevo_contador);
+        $query_insert_items_op->bindParam(':contador_item_op', $contador_item_op);
+        $query_insert_items_op->execute();
+    }
 }
+
 
 
 if ($estado_tpop == 3 && $rop_checkbox == 1) {

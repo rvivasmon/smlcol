@@ -71,7 +71,7 @@ include('../../../../layout_techled/admin/parte1_techled.php');
                                                                 else null
                                                             end as nombre_producto
                                                             FROM
-                                                                alma_principal AS ap
+                                                                alma_smartled AS ap
                                                             INNER JOIN
                                                                 t_productos AS productomovido ON ap.tipo_producto = productomovido.id_producto
                                                             LEFT JOIN

@@ -51,7 +51,7 @@ include('../../../../layout_techled/admin/parte1_techled.php');
                                         cf.marca_fuente as fuen_marc,
                                         cft.tipo_fuente as fuen_tipo
                                     FROM
-                                        alma_principal AS ap
+                                        alma_smartled AS ap
                                     LEFT JOIN t_productos ON ap.tipo_producto = t_productos.id_producto
 
                                     LEFT JOIN caracteristicas_fuentes AS cf ON ap.marca_fuente = cf.id_car_fuen

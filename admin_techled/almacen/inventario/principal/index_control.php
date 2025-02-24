@@ -49,7 +49,7 @@ include('../../../../layout_techled/admin/parte1_techled.php');
                                         cctr.marca_control as cont_marc,
                                         cctrs.funcion_control as cont_fun
                                     FROM
-                                        alma_principal AS ap
+                                        alma_smartled AS ap
                                     LEFT JOIN t_productos ON ap.tipo_producto = t_productos.id_producto
                                     LEFT JOIN caracteristicas_control AS cctr ON ap.marca_control = cctr.id_car_ctrl
                                     LEFT JOIN caracteristicas_control AS cctrs ON ap.funcion_control = cctrs.id_car_ctrl

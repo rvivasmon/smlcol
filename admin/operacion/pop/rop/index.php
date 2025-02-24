@@ -46,9 +46,10 @@ include('../../../../layout/admin/parte1.php');
 
                                         $query_pop = $pdo->prepare('
                                             SELECT
-                                                *
+                                                rop.*
                                             FROM
                                                 rop
+                                            
                                         ');
 
                                         $query_pop->execute();

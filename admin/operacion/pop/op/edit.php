@@ -13,9 +13,14 @@ $fecha_tratada_oc = date('Y-m-d'); // Obtiene la fecha actual
 $id_get = $_GET['id'];
 $query_oc = $pdo->prepare("SELECT 
                                     itop.*,
-                                    
+                                    oc.oc_resultante AS nombre_oc,
+                                    oc1.proyecto AS nombre_proyecto,
+                                    pop.observaciones AS nombre_observaciones
                                 FROM items_op AS itop
-                                WHERE id = :id_get
+                                INNER JOIN oc ON itop.id_oc = oc.id
+                                INNER JOIN oc AS oc1 ON itop.proyecto = oc1.id
+                                INNER JOIN pop ON itop.observaciones = pop.id
+                                WHERE itop.id = :id_get
                                 ");
 
 $query_oc->bindParam(':id_get', $id_get);
@@ -23,7 +28,7 @@ $query_oc->execute();
 $oces = $query_oc->fetchAll(PDO::FETCH_ASSOC);
 foreach ($oces as $oc_item) {
     $id = $oc_item['id'];
-    $id_oc = $oc_item['id_oc'];
+    $id_oc = $oc_item['nombre_oc'];
     $id_op = $oc_item['id_op'];
     $id_pop = $oc_item['id_pop'];
     $id_item_pop = $oc_item['id_item_pop'];
@@ -31,8 +36,8 @@ foreach ($oces as $oc_item) {
     $estado = $oc_item['estado'];
     $tipo_estructura = $oc_item['tipo_estructura'];
     $cantidad = $oc_item['cantidad'];
-    $proyecto = $oc_item['proyecto'];
-    $observaciones = $oc_item['observaciones'];
+    $proyecto = $oc_item['nombre_proyecto'];
+    $observaciones = $oc_item['nombre_observaciones'];
     $material = $oc_item['material'];
     $suministro = $oc_item['suministro'];
     $mci = $oc_item['mci'];
@@ -68,14 +73,14 @@ foreach ($oces as $oc_item) {
                     <form action="controller_edit.php" method="post" enctype="multipart/form-data">
 
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group">
                                     <label for="fecha_creacion">Recepción</label>
                                     <input type="text" name="fecha_creacion" id="fecha_creacion" value="<?php echo $fecha_recibido; ?>" class="form-control" readonly>
                                 </div>
                             </div>
 
-                            <div class="colo-md-1">
+                            <div class="col-md-1">
                                 <div class="form-group">
                                     <label for="pop">OP</label>
                                     <input type="text" name="pop" id="pop" value= "<?php echo $id_op; ?>" class="form-control" readonly>
@@ -83,112 +88,306 @@ foreach ($oces as $oc_item) {
                             </div>
 
                             <div class="col-md-1">
-                                <label for="oc">OC</label>
-                                <input type="text" name="oc" id="oc" value="<?php echo $id_oc; ?>" class="form-control" readonly>
+                                <div class="form-group">
+                                    <label for="oc">OC</label>
+                                    <input type="text" name="oc" id="oc" value="<?php echo $id_oc; ?>" class="form-control" readonly>
+                                </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group">
                                     <label for="fecha_inicio">POP</label>
                                     <input type="text" name="fecha_inicio" id="fecha_inicio" value="<?php echo $id_pop; ?>" class="form-control" readonly>
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group">
-                                    <label for="fecha_fin">Item POP</label>
-                                    <input type="text" name="fecha_fin" id="fecha_fin" value="<?php echo $id_item_pop; ?>" class="form-control" readonly>                                </div>
-                            </div>
+                                    <label for="estado_admon">Estado OP</label>
+                                    <select name="uso_pan" id="uso_pan" class="form-control" required>
+                                                <option value="">Seleccione un Estado</option>
+                                                <?php
+                                                    // Consulta los estados de la base de datos
+                                                    $query_admones = $pdo->prepare('SELECT id, estado_tpop FROM t_estado WHERE estado_tpop IS NOT NULL AND estado_tpop != ""');
+                                                    $query_admones->execute();
+                                                    $admon = $query_admones->fetchAll(PDO::FETCH_ASSOC);
 
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="estado_admon">Estado Admon</label>
-                                    <input type="text" name="estado_admon" id="estado_admon" value="<?php echo $estado; ?>" class="form-control" readonly>
+                                                    foreach ($admon as $admones) {
+                                                        $acuerdo_admon = $admones['estado_tpop'];
+                                                        $id_admon_loop = $admones['id'];
+
+                                                        // Excluir la opción que ya está seleccionada
+                                                        if ($id_admon_loop == $uso) {
+                                                            continue; // Salta esta iteración y sigue con la siguiente
+                                                        }
+
+                                                ?>
+                                                    <option value="<?php echo $id_admon_loop; ?>"><?php echo $acuerdo_admon;?></option>
+                                                <?php
+                                                    }
+                                                ?>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="col-md-1">
                                 <div class="form-group">
-                                    <label for="items_oc">ITEMS</label>
-                                    <input type="text" name="items_oc" id="items_oc" value="<?php echo $items_oc; ?>" class="form-control" readonly>
+                                    <label for="items_oc">Cantidad</label>
+                                    <input type="text" name="items_oc" id="items_oc" value="<?php echo $cantidad; ?>" class="form-control" readonly>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="proyecto">Proyecto</label>
                                     <input type="text" name="proyecto" id="proyecto" value="<?php echo $proyecto; ?>" class="form-control" readonly>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-5">
                                 <div class="form-group">
-                                    <label for="nom_cliente">Nom Cliente</label>
-                                    <input type="text" name="nom_cliente" id="nom_cliente" value="<?php echo $cliente; ?>" class="form-control" readonly>
+                                    <label for="nom_cliente">Tipo Estructura</label>
+                                    <input type="text" name="nom_cliente" id="nom_cliente" value="<?php echo $tipo_estructura; ?>" class="form-control" readonly>
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-1">
                                 <div class="form-group">
-                                    <label for="nom_contacto">Nombre Contacto</label>
-                                    <input type="text" name="nom_contacto" id="nom_contacto" value="<?php echo $nom_contacto; ?>" class="form-control" readonly>
+                                    <label for="lugar_instalacion">MCI</label>
+                                    <select name="uso_pan" id="uso_pan" class="form-control" required>
+                                                <option value="">Seleccione un Estado</option>
+                                                <?php
+                                                    // Consulta los estados de la base de datos
+                                                    $query_admones = $pdo->prepare('SELECT id, estado_tpop FROM t_estado WHERE estado_tpop IS NOT NULL AND estado_tpop != ""');
+                                                    $query_admones->execute();
+                                                    $admon = $query_admones->fetchAll(PDO::FETCH_ASSOC);
+
+                                                    foreach ($admon as $admones) {
+                                                        $acuerdo_admon = $admones['estado_tpop'];
+                                                        $id_admon_loop = $admones['id'];
+
+                                                        // Excluir la opción que ya está seleccionada
+                                                        if ($id_admon_loop == $uso) {
+                                                            continue; // Salta esta iteración y sigue con la siguiente
+                                                        }
+
+                                                ?>
+                                                    <option value="<?php echo $id_admon_loop; ?>"><?php echo $acuerdo_admon;?></option>
+                                                <?php
+                                                    }
+                                                ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label for="observacion">Ensamble</label>
+                                    <select name="uso_pan" id="uso_pan" class="form-control" required>
+                                                <option value="">Seleccione un Estado</option>
+                                                <?php
+                                                    // Consulta los estados de la base de datos
+                                                    $query_admones = $pdo->prepare('SELECT id, estado_tpop FROM t_estado WHERE estado_tpop IS NOT NULL AND estado_tpop != ""');
+                                                    $query_admones->execute();
+                                                    $admon = $query_admones->fetchAll(PDO::FETCH_ASSOC);
+
+                                                    foreach ($admon as $admones) {
+                                                        $acuerdo_admon = $admones['estado_tpop'];
+                                                        $id_admon_loop = $admones['id'];
+
+                                                        // Excluir la opción que ya está seleccionada
+                                                        if ($id_admon_loop == $uso) {
+                                                            continue; // Salta esta iteración y sigue con la siguiente
+                                                        }
+
+                                                ?>
+                                                    <option value="<?php echo $id_admon_loop; ?>"><?php echo $acuerdo_admon;?></option>
+                                                <?php
+                                                    }
+                                                ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label for="observacion">Pruebas</label>
+                                    <select name="uso_pan" id="uso_pan" class="form-control" required>
+                                                <option value="">Seleccione un Estado</option>
+                                                <?php
+                                                    // Consulta los estados de la base de datos
+                                                    $query_admones = $pdo->prepare('SELECT id, estado_tpop FROM t_estado WHERE estado_tpop IS NOT NULL AND estado_tpop != ""');
+                                                    $query_admones->execute();
+                                                    $admon = $query_admones->fetchAll(PDO::FETCH_ASSOC);
+
+                                                    foreach ($admon as $admones) {
+                                                        $acuerdo_admon = $admones['estado_tpop'];
+                                                        $id_admon_loop = $admones['id'];
+
+                                                        // Excluir la opción que ya está seleccionada
+                                                        if ($id_admon_loop == $uso) {
+                                                            continue; // Salta esta iteración y sigue con la siguiente
+                                                        }
+
+                                                ?>
+                                                    <option value="<?php echo $id_admon_loop; ?>"><?php echo $acuerdo_admon;?></option>
+                                                <?php
+                                                    }
+                                                ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label for="observacion">Embalaje</label>
+                                    <select name="uso_pan" id="uso_pan" class="form-control" required>
+                                                <option value="">Seleccione un Estado</option>
+                                                <?php
+                                                    // Consulta los estados de la base de datos
+                                                    $query_admones = $pdo->prepare('SELECT id, estado_tpop FROM t_estado WHERE estado_tpop IS NOT NULL AND estado_tpop != ""');
+                                                    $query_admones->execute();
+                                                    $admon = $query_admones->fetchAll(PDO::FETCH_ASSOC);
+
+                                                    foreach ($admon as $admones) {
+                                                        $acuerdo_admon = $admones['estado_tpop'];
+                                                        $id_admon_loop = $admones['id'];
+
+                                                        // Excluir la opción que ya está seleccionada
+                                                        if ($id_admon_loop == $uso) {
+                                                            continue; // Salta esta iteración y sigue con la siguiente
+                                                        }
+
+                                                ?>
+                                                    <option value="<?php echo $id_admon_loop; ?>"><?php echo $acuerdo_admon;?></option>
+                                                <?php
+                                                    }
+                                                ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label for="observacion">Entregado</label>
+                                    <select name="uso_pan" id="uso_pan" class="form-control" required>
+                                                <option value="">Seleccione un Estado</option>
+                                                <?php
+                                                    // Consulta los estados de la base de datos
+                                                    $query_admones = $pdo->prepare('SELECT id, estado_tpop FROM t_estado WHERE estado_tpop IS NOT NULL AND estado_tpop != ""');
+                                                    $query_admones->execute();
+                                                    $admon = $query_admones->fetchAll(PDO::FETCH_ASSOC);
+
+                                                    foreach ($admon as $admones) {
+                                                        $acuerdo_admon = $admones['estado_tpop'];
+                                                        $id_admon_loop = $admones['id'];
+
+                                                        // Excluir la opción que ya está seleccionada
+                                                        if ($id_admon_loop == $uso) {
+                                                            continue; // Salta esta iteración y sigue con la siguiente
+                                                        }
+
+                                                ?>
+                                                    <option value="<?php echo $id_admon_loop; ?>"><?php echo $acuerdo_admon;?></option>
+                                                <?php
+                                                    }
+                                                ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label for="telefono_contacto">Material</label>
+                                    <select name="uso_pan" id="uso_pan" class="form-control" required>
+                                                <option value="">Seleccione un Estado</option>
+                                                <?php
+                                                    // Consulta los estados de la base de datos
+                                                    $query_admones = $pdo->prepare('SELECT id, estado_tpop FROM t_estado WHERE estado_tpop IS NOT NULL AND estado_tpop != ""');
+                                                    $query_admones->execute();
+                                                    $admon = $query_admones->fetchAll(PDO::FETCH_ASSOC);
+
+                                                    foreach ($admon as $admones) {
+                                                        $acuerdo_admon = $admones['estado_tpop'];
+                                                        $id_admon_loop = $admones['id'];
+
+                                                        // Excluir la opción que ya está seleccionada
+                                                        if ($id_admon_loop == $uso) {
+                                                            continue; // Salta esta iteración y sigue con la siguiente
+                                                        }
+
+                                                ?>
+                                                    <option value="<?php echo $id_admon_loop; ?>"><?php echo $acuerdo_admon;?></option>
+                                                <?php
+                                                    }
+                                                ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label for="ciudad">Suministros</label>
+                                    <select name="uso_pan" id="uso_pan" class="form-control" required>
+                                                <option value="">Seleccione un Estado</option>
+                                                <?php
+                                                    // Consulta los estados de la base de datos
+                                                    $query_admones = $pdo->prepare('SELECT id, estado_tpop FROM t_estado WHERE estado_tpop IS NOT NULL AND estado_tpop != ""');
+                                                    $query_admones->execute();
+                                                    $admon = $query_admones->fetchAll(PDO::FETCH_ASSOC);
+
+                                                    foreach ($admon as $admones) {
+                                                        $acuerdo_admon = $admones['estado_tpop'];
+                                                        $id_admon_loop = $admones['id'];
+
+                                                        // Excluir la opción que ya está seleccionada
+                                                        if ($id_admon_loop == $uso) {
+                                                            continue; // Salta esta iteración y sigue con la siguiente
+                                                        }
+
+                                                ?>
+                                                    <option value="<?php echo $id_admon_loop; ?>"><?php echo $acuerdo_admon;?></option>
+                                                <?php
+                                                    }
+                                                ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="nom_contacto">Observaciones</label>
+                                    <textarea name="observacion" id="observacion" cols="30" rows="4" class="form-control" readonly><?php echo $observaciones; ?></textarea>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-5">
                                 <div class="form-group">
-                                    <label for="telefono_contacto">Teléfono Contacto</label>
-                                    <input type="text" name="telefono_contacto" id="telefono_contacto" value="<?php echo $num_telefono; ?>" class="form-control" readonly>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="ciudad">Ciudad</label>
-                                    <input type="text" name="ciudad" id="ciudad" value="<?php echo $nom_ciudad; ?>" class="form-control" readonly>
+                                    <label for="lugar_instalacion">CONEXIÓN</label>
+                                    <input type="text" name="lugar_instalacion" id="lugar_instalacion" value="<?php echo $conexion; ?>" class="form-control" readonly>
                                 </div>
                             </div>
 
                             <div class="col-md-5">
                                 <div class="form-group">
-                                    <label for="lugar_instalacion">Lugar de Instalación</label>
-                                    <input type="text" name="lugar_instalacion" id="lugar_instalacion" value="<?php echo $lugar_instalacion; ?>" class="form-control" readonly>
+                                    <label for="lugar_instalacion">CONFIGURACIÓN</label>
+                                    <input type="text" name="lugar_instalacion" id="lugar_instalacion" value="<?php echo $configuracion; ?>" class="form-control" readonly>
                                 </div>
                             </div>
-                        </div>
 
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="observacion">Observaciones</label>
-                                    <textarea name="observacion" id="observacion" cols="30" rows="4" class="form-control" readonly><?php echo $observacion; ?></textarea>
-                                    <input type="hidden" name="id1" id="id1" value="<?php echo $id_get; ?>" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row" hidden>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="usuario_crea_oc">Usuario</label>
-                                    <input type="text" name="usuario_crea_oc" id="usuario_crea_oc" value="<?php echo $sesion_usuario['nombre']?>" class="form-control" readonly>
-                                </div>
-                            </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="fecha_tratada">Fecha Tratamiento</label>
                                     <input type="text" name="fecha_tratada" id="fecha_tratada" value="<?php echo $fecha_tratada_oc; ?>" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="id">ID Principal</label>
-                                    <input type="text" name="id" id="id" value="<?php echo $id_get; ?>" class="form-control" readonly>
+                                    <input type="hidden" name="usuario_crea_oc" id="usuario_crea_oc" value="<?php echo $sesion_usuario['nombre']?>" class="form-control" readonly>
+                                    <input type="hidden" name="id" id="id" value="<?php echo $id_get; ?>" class="form-control" readonly>
                                 </div>
                             </div>
                         </div>
@@ -200,77 +399,52 @@ foreach ($oces as $oc_item) {
                             <div class="col-sm-6">
                                 <h1 class="m-0">Visor de Items</h1>
                             </div>
-                        </div> 
+                        </div>
 
                         <hr>
 
-                        <div class="row mb-4" hidden>  <!-- Agrega margen inferior al botón -->
-                            <div class="col-md-4">
-                                <a type="button" href="<?php echo $URL; ?>admin/administracion/pop/create_items.php?id=<?php echo $oc_item['id']; ?>" class="btn btn-success">INSERTAR UN NUEVO ITEMS</a>
-                            </div>
-                        </div>
-                        
                         <div class="row">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>ID Item</th>
-                                        <th>Descripción</th>
-                                        <th>Cantidad</th>
-                                        <th>Instalación</th>
-                                        <th>Acciones</th>
+                                        <th>Proyecto</th>
+                                        <th>Observaciones</th>
+                                        <th>Tipo Estructura</th>
+                                        <th><center>Procesado</center></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php if (!empty($items)) : ?>
-                                        <?php foreach ($items as $item) { 
-                                            // Consultamos si ya existe un registro en items_pop con tpop = 1
-                                            $query_tpop = $pdo->prepare("SELECT id, tpop, item_oc FROM items_pop WHERE item_oc = :id_item AND id_pop = :id_pop");
-                                            $query_tpop->bindParam(':id_item', $item['id_item']);
-                                            $query_tpop->bindParam(':id_pop', $id_pop);
-                                            $query_tpop->execute();
-                                            $tpop_status = $query_tpop->fetch(PDO::FETCH_ASSOC);
-                                            
-                                            // Si hay un resultado, extraemos el id y verificamos tpop
-                                            $id_items_pop = $tpop_status['id'] ?? null; // Guarda el ID en una variable
-                                            $id_items_oc = $tpop_status['item_oc'] ?? null; // Guarda el ID en una variable
+                                    <?php 
+                                    $query_tpop = $pdo->prepare("SELECT ito.*, pop.observaciones AS nombre_observaciones, oc.proyecto AS nombre_proyecto 
+                                                                FROM items_op AS ito 
+                                                                INNER JOIN pop ON ito.observaciones = pop.id 
+                                                                INNER JOIN oc ON ito.proyecto = oc.id 
+                                                                WHERE id_item_pop = :id_item_pop");
+                                    $query_tpop->bindParam(':id_item_pop', $id_item_pop);
+                                    $query_tpop->execute();
+                                    $items = $query_tpop->fetchAll(PDO::FETCH_ASSOC);
 
-                                            // Verificamos si tpop está a 1
-                                            $tpop_active = $tpop_status && $tpop_status['tpop'] == 3;
-                                        ?>
-                                            <tr>
-                                                <td>
-                                                    <?php echo $contador_pop++."/".$items_oc; ?>
-                                                    <input type="hidden" name="id_item[]" id="id_item" value="<?php echo $contador_pop . "/" . $items_oc; ?>">
-                                                <td>
-                                                    <?php echo $item['descripcion']; ?>
-                                                    <input type="hidden" name="descripcion[]" id="descripcion" value="<?php echo $item['descripcion']; ?>" class="form-control">
-                                                </td>
-                                                <td>
-                                                    <?php echo $item['cantidad']; ?>
-                                                    <input type="hidden" name="cantidad[]" id="cantidad" value="<?php echo $item['cantidad']; ?>" class="form-control">
-                                                </td>
-                                                <td>
-                                                    <?php echo $item['instalacion']; ?>
-                                                    <input type="hidden" name="instalacion[]" id="instalacion" value="<?php echo $item['instalacion']; ?>">
-                                                </td>
-                                                <td>
-                                                    <center>
-                                                        <!-- Mostrar el botón solo si tpop no está activo (es decir, tpop != 3) -->
-                                                        <?php if (!$tpop_active): ?>
-                                                            <a href="#" onclick="enviarPop(<?php echo $id_items_pop; ?>, <?php echo $id_items_oc; ?>)" class="btn btn-success btn-sm">GENERAR TPOP <i class="fas fa-pen"></i></a>
-                                                        <?php else: ?>
-                                                            <!-- Si tpop ya está activo, ocultar el botón -->
-                                                            <span class="btn btn-success btn-sm" style="pointer-events: none; opacity: 0.5;">GENERAR TPOP <i class="fas fa-pen"></i></span>
-                                                        <?php endif; ?>
-                                                        <a href="controller_delete_items.php?id_pop=<?php echo $id_items_pop; ?>&id_oc=<?php echo $id_items_oc; ?>" onclick="return confirm('¿Seguro de querer eliminar el item?')" class="btn btn-danger btn-sm">ELIMINAR <i class="fas fa-trash"></i></a>
-                                                    </center>
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
-                                    <?php else : ?>
+                                    if (!empty($items)) :
+                                        foreach ($items as $item) { 
+                                    ?>
                                         <tr>
-                                            <td colspan="5" class="text-center">No hay ítems asociados a este OC</td>
+                                            <td><?php echo $item['contador_item_op'] . "/" . $item['cantidad']; ?></td>
+                                            <td><?php echo $item['nombre_proyecto']; ?></td>
+                                            <td><?php echo $item['nombre_observaciones']; ?></td>
+                                            <td><?php echo $item['tipo_estructura']; ?></td>
+                                            <td>
+                                                <center>
+                                                    <!-- Checkbox para habilitar -->
+                                                    <input type="checkbox" class="procesar-checkbox" 
+                                                        data-id="<?php echo $item['id']; ?>"
+                                                        <?php echo ($item['procesar'] == 1) ? 'checked' : ''; ?>>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                    <?php } else : ?>
+                                        <tr>
+                                            <td colspan="5" class="text-center">No hay ítems asociados con este id_item_pop</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
@@ -283,7 +457,7 @@ foreach ($oces as $oc_item) {
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <a href="<?php echo $URL."admin/operacion/pop/"; ?>" class="btn btn-default btn-block">Cancelar</a>
+                                        <a href="<?php echo $URL."admin/operacion/pop/op"; ?>" class="btn btn-default btn-block">Cancelar</a>
                                     </div>
                                     <div class="col-md-4">
                                         <button type="submit" onclick="return confirm('¿Está seguro de haber diligenciado correctamente los datos?')" class="btn btn-success btn-block">Generar OP</button>
@@ -302,17 +476,28 @@ foreach ($oces as $oc_item) {
 <?php include('../../../../layout/admin/parte2.php'); ?>
 
 <script>
-function enviarPop(id_items_pop, id_items_oc) {
-    // Captura el valor del campo 'pop'
-    const popValue = document.getElementById('pop').value;
+document.addEventListener("DOMContentLoaded", function () {
+    const checkboxes = document.querySelectorAll(".procesar-checkbox");
 
-    // Captura el valor de pop_ppal desde el input oculto
-    const popPpal = document.getElementById('id1').value;
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", function () {
+            const itemId = this.getAttribute("data-id");
+            const procesarValor = this.checked ? 1 : 0; // 1 si está marcado, 0 si se desmarca
 
-    // Construye la URL con los parámetros necesarios
-    const url = `tpop/create.php?id_pop=${id_items_pop}&id_oc=${id_items_oc}&pop=${encodeURIComponent(popValue)}&pop_ppal=${encodeURIComponent(popPpal)}`;
-
-    // Redirige al usuario a la nueva URL
-    window.location.href = url;
-}
+            // Petición AJAX para actualizar el campo en la BD
+            fetch("update_procesar.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `id=${itemId}&procesar=${procesarValor}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data); // Para depuración
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
+});
 </script>

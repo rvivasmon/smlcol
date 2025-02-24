@@ -650,7 +650,7 @@ $(document).ready(function () {
 
         // Enviar la solicitud AJAX con los datos
         $.ajax({
-            url: 'obtener_datos_alma_principal.php', // Archivo PHP para procesar la solicitud
+            url: 'obtener_datos_alma_smartled.php', // Archivo PHP para procesar la solicitud
             method: 'POST',
             data: {
                 id_producto_categoria: idProductoCategoria,

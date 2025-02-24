@@ -47,7 +47,7 @@ include('../../../../../layout/admin/parte1.php');
 
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Movimientos de Entrada Almacén Principal</h1>
+                    <h1 class="m-0">Entrada Stock Almacén Smartled</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
 

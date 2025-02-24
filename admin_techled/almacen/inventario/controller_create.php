@@ -22,7 +22,7 @@ $tipo_fuente = !empty($_POST['tipo_fuente']) ? $_POST['tipo_fuente'] : NULL;
 $voltaje_salida = !empty($_POST['voltaje_salida']) ? $_POST['voltaje_salida'] : NULL;
 $usuario = $_POST['idusuario'];
 
-$sql = "INSERT INTO alma_principal 
+$sql = "INSERT INTO alma_smartled 
         (fecha_ingreso, tipo_producto, pitch, serie_modulo, referencia, modelo_modulo, medida_x, medida_y, marca_control, serie_control, funcion_control, marca_fuente, modelo_fuente, tipo_fuente, voltaje_salida, id_usuario) 
         VALUES (:fecha, :producto, :pitch, :serie_modulo, :referencia_modulo, :modelo_modulo1, :medida_x, :medida_y, :marca_control1, :serie_control, :funcion_control, :marca_fuente, :modelo_fuente, :tipo_fuente, :voltaje_salida, :usuario)";
 

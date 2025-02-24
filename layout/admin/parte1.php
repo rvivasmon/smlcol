@@ -105,7 +105,7 @@ foreach ($roles_permisos as $rol_permiso) {
               <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-              <a class="nav-link">SMARTLED COLOMBIA</a>
+              <a class="nav-link">TECHLED GROUP</a>
             </li>
           </ul>
           <!-- Right navbar links -->
@@ -178,21 +178,27 @@ foreach ($roles_permisos as $rol_permiso) {
                           </a>
                           <ul class="nav nav-treeview">
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/administracion/oc/" class="nav-link">
-                                <i class="fas fa-cog nav-icon"></i>
-                                <p>ORDEN DE COMPRA INTERNA</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
                               <a href="<?php echo $URL;?>admin/administracion/tracking/tracking_col/index_tracking.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>COMPRA TECHLED</p>
                               </a>
                             </li>
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/administracion/tecnicos/index_tecnicos.php" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/administracion/admon/ingreso_mercancia/" class="nav-link">
                                 <i class="fas fa-cog nav-icon"></i>
-                                <p>TÉCNICOS</p>
+                                <p>INGRESO MERCANCIA</p>
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/almacen/almacenes" class="nav-link">
+                                <i class="fas fa-cog nav-icon"></i>
+                                <p>LISTA ALMACÉNES</p>
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/administracion/admon/bodegas" class="nav-link">
+                                <i class="fas fa-cog nav-icon"></i>
+                                <p>LISTA BODEGAS</p>
                               </a>
                             </li>
                             <li class="nav-item">
@@ -202,15 +208,27 @@ foreach ($roles_permisos as $rol_permiso) {
                               </a>
                             </li>
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/administracion/vehiculos" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>VEHÍCULOS</p>
+                              <a href="<?php echo $URL;?>admin/administracion/admon/almacenes/sub_almacenes" class="nav-link">
+                                <i class="fas fa-cog nav-icon"></i>
+                                <p>LISTA SUB-ALMACÉNES</p>
                               </a>
                             </li>
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/almacen/almacenes" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/administracion/oc/" class="nav-link">
                                 <i class="fas fa-cog nav-icon"></i>
-                                <p>CREAR ALMACÉNES</p>
+                                <p>ORDEN DE COMPRA</p>
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/administracion/tecnicos/index_tecnicos.php" class="nav-link">
+                                <i class="fas fa-cog nav-icon"></i>
+                                <p>TÉCNICOS</p>
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a href="<?php echo $URL;?>admin/administracion/vehiculos" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>VEHÍCULOS</p>
                               </a>
                             </li>
                           </ul>
@@ -226,6 +244,13 @@ foreach ($roles_permisos as $rol_permiso) {
                     <?php
                         // Ejemplo de generación dinámica de submenús para Consulta Stock
 
+                        // Conectar a la base de datos (asegúrate de tener la conexión establecida en $pdo)
+$sql = "SELECT almacen_destino1 FROM movimiento_admon WHERE habilitar_almacen_entra = 0";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$almacenes_alerta = $stmt->fetchAll(PDO::FETCH_COLUMN); // Obtiene solo los valores de la columna almacen_destino1
+
+
                         // Ejemplo de datos simulados (reemplaza con tu lógica de datos real)
                         $almacenes = array(
                           array('id' => 3, 'nombre' => 'Almacén SmartLed'),
@@ -239,8 +264,16 @@ foreach ($roles_permisos as $rol_permiso) {
                           array('id' => 11, 'nombre' => 'Almacén Aliados'),
                           array('id' => 12, 'nombre' => 'Almacén General'),*/
                           // Agregar más almacenes según necesites
-                          array('id' => 13, 'nombre' => 'Almacén MMP'),
+                          //array('id' => 13, 'nombre' => 'Almacén MMP'),
                         );
+
+                        // Modificar los nombres de los almacenes con alerta
+foreach ($almacenes as &$almacen) {
+  if (in_array($almacen['id'], $almacenes_alerta)) {
+      $almacen['nombre'] .= ' <span style="color: red;">⚠</span>'; // Agregar un icono de alerta
+  }
+}
+unset($almacen); // Romper la referencia
 
                         $productos = array(
                           array('id' => 6, 'nombre' => 'General'),
@@ -277,24 +310,24 @@ foreach ($roles_permisos as $rol_permiso) {
                                                   // Condiciones para las direcciones específicas
                                                   if ($almacen['id'] == 3) {
                                                       if ($producto['id'] == 1) {
-                                                          $url_producto = $URL . "admin/almacen/inventario/principal/index_modulos.php";
+                                                          $url_producto = $URL . "admin/almacen/stock/smartled/index_modulos.php";
                                                       } elseif ($producto['id'] == 2) {
-                                                          $url_producto = $URL . "admin/almacen/inventario/principal/index_control.php";
+                                                          $url_producto = $URL . "admin/almacen/stock/smartled/index_control.php";
                                                       } elseif ($producto['id'] == 3) {
-                                                          $url_producto = $URL . "admin/almacen/inventario/principal/index_fuentes.php";
+                                                          $url_producto = $URL . "admin/almacen/stock/smartled/index_fuentes.php";
                                                       } elseif ($producto['id'] == 6) {
-                                                        $url_producto = $URL . "admin/almacen/inventario/principal/index.php";
+                                                        $url_producto = $URL . "admin/almacen/stock/smartled/index.php";
                                                     }
                                                       // Agregar más condiciones según sea necesario
                                                   } elseif ($almacen['id'] == 4) {
                                                     if ($producto['id'] == 1) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
+                                                      $url_producto = $URL . "admin/almacen/stock/techled/index_modulos.php";
                                                   } elseif ($producto['id'] == 2) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
+                                                      $url_producto = $URL . "admin/almacen/stock/techled/index_control.php";
                                                   } elseif ($producto['id'] == 3) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
+                                                      $url_producto = $URL . "admin/almacen/stock/techled/index_fuentes.php";
                                                   } elseif ($producto['id'] == 6) {
-                                                    $url_producto = $URL . "admin/almacen/inventario/techled/index.php";
+                                                    $url_producto = $URL . "admin/almacen/stock/techled/index.php";
                                                 }
                                                   } elseif ($almacen['id'] == 5) {
                                                     if ($producto['id'] == 1) {
@@ -400,7 +433,7 @@ foreach ($roles_permisos as $rol_permiso) {
                                   <?php endforeach; ?>
                               </ul>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" hidden>
                               <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Consulta de Inventario</p>

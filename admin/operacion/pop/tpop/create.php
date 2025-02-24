@@ -339,7 +339,7 @@ $cantidad = $fecha_recibido_data['cantidad'] ?? '';
                                                     // Consulta los estados de la base de datos
                                                     $query_pitches = $pdo->prepare('SELECT DISTINCT tp.pitch AS nombre_pitch,
                                                                                                 tp.id AS nombre_id_pitch
-                                                                                            FROM alma_principal AS ap
+                                                                                            FROM alma_smartled AS ap
                                                                                             INNER JOIN producto_modulo_creado AS pmc ON ap.producto = pmc.id
                                                                                             INNER JOIN tabla_pitch AS tp ON pmc.pitch = tp.id
                                                                                             WHERE ap.tipo_producto = 1

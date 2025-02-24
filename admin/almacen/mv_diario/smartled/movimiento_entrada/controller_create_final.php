@@ -77,7 +77,7 @@ function validarProductoEnAlmacen($pdo, $tabla,  $producto, $referencia_21, $sal
 
 // Almacenes con sus respectivas tablas
 $almacenes = [
-    3 => 'alma_principal',
+    3 => 'alma_smartled',
     4 => 'alma_techled',
     5 => 'alma_importacion',
     6 => 'alma_tecnica',
@@ -94,9 +94,9 @@ if (array_key_exists($almacen_salida_md, $almacenes)) {
 }
 
 try {
-    // Guardar la ubicación en alma_principal si el almacén de entrada es el principal (id 3)
+    // Guardar la ubicación en alma_smartled si el almacén de entrada es el principal (id 3)
     if ($almacen_entrada_md == 3) {
-        $sql_update_posicion = "UPDATE alma_principal SET posicion = :posicion WHERE tipo_producto = :producto AND producto = :referencia_21";
+        $sql_update_posicion = "UPDATE alma_smartled SET posicion = :posicion WHERE tipo_producto = :producto AND producto = :referencia_21";
         $stmt_update_posicion = $pdo->prepare($sql_update_posicion);
         $stmt_update_posicion->bindParam(':posicion', $posicion);
         $stmt_update_posicion->bindParam(':producto', $producto);

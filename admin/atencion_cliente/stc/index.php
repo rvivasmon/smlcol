@@ -353,7 +353,7 @@ include('../../../layout/admin/parte1.php');
 <script>
     $(function () {
         $("#table_stcs").DataTable({
-            "pageLength": 5,
+            "pageLength": 25,
             "language": {
                 "emptyTable": "No hay información",
                 "info": "Mostrando _START_ a _END_ de _TOTAL_ Órdenes",
@@ -406,7 +406,7 @@ include('../../../layout/admin/parte1.php');
 <script>
     $(function () {
         $("#table_stcs21").DataTable({
-            "pageLength": 5,
+            "pageLength": 25,
             "language": {
                 "emptyTable": "No hay información",
                 "info": "Mostrando _START_ a _END_ de _TOTAL_ Órdenes",
@@ -459,7 +459,7 @@ include('../../../layout/admin/parte1.php');
 <script>
     $(function () {
         $("#table_stcs61").DataTable({
-            "pageLength": 5,
+            "pageLength": 25,
             "language": {
                 "emptyTable": "No hay información",
                 "info": "Mostrando _START_ a _END_ de _TOTAL_ Órdenes",

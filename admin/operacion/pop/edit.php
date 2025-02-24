@@ -330,7 +330,7 @@ if ($actualizar_pop) {
                                         <th>Descripción</th>
                                         <th>Cantidad</th>
                                         <th>Instalación</th>
-                                        <th>Acciones</th>
+                                        <th><center>Acciones</center></th>
                                     </tr>
                                 </thead>
                                 <tbody>

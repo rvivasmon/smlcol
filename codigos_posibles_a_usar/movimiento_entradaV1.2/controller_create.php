@@ -101,7 +101,7 @@ function validarProductoEnAlmacen($pdo, $tabla,  $producto, $referencia_21, $sal
 
 // Validaciones para almacen_salida_md
 $almacenes = [
-    3 => 'alma_principal',
+    3 => 'alma_smartled',
     4 => 'alma_techled',
     5 => 'alma_importacion',
     6 => 'alma_tecnica',

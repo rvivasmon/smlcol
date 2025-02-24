@@ -28,7 +28,7 @@ if (empty($productos) || count($productos) !== count($observaciones) || count($p
 
 // Función para validar y actualizar/insertar producto en almacenes
 function validarProductoEnAlmacen($pdo, $tabla, $producto, $referencia_21, $cantidad, $almacen_salida_md) {
-    $campo_cantidad = ($tabla === 'alma_principal' || $tabla === 'alma_techled') ? 'cantidad_plena' : 'existencias';
+    $campo_cantidad = ($tabla === 'alma_smartled' || $tabla === 'alma_techled') ? 'cantidad_plena' : 'existencias';
     $sql_check = "SELECT * FROM $tabla WHERE tipo_producto = :producto AND producto = :referencia_21";
     $stmt_check = $pdo->prepare($sql_check);
     $stmt_check->bindParam(':producto', $producto);
@@ -62,7 +62,7 @@ function validarProductoEnAlmacen($pdo, $tabla, $producto, $referencia_21, $cant
 
 // Almacenes con sus respectivas tablas
 $almacenes = [
-    3 => 'alma_principal',
+    3 => 'alma_smartled',
     4 => 'alma_techled',
     5 => 'alma_importacion',
     6 => 'alma_tecnica',
@@ -81,7 +81,7 @@ for ($i = 0; $i < count($productos); $i++) {
     $salida_md = -abs(floatval($salidas_md[$i]));  // Asegúrate de que el valor sea negativo para salida
     $entrada_md = abs(floatval($entradas_md[$i])); // Asegúrate de que el valor sea positivo para entrada
 
-    // Si el almacén de salida es 3 o "alma_principal", insertamos en movimiento_diario
+    // Si el almacén de salida es 3 o "alma_smartled", insertamos en movimiento_diario
     if ($almacen_salida_md == 4 || $almacen_salida_md == 'alma_techled') {
         // Preparar datos de movimiento para la inserción
         $datos_movimiento = [
@@ -113,7 +113,7 @@ for ($i = 0; $i < count($productos); $i++) {
     }
 
     // Solo insertar en movimiento_techled si el almacén de entrada es 4 o "alma_techled"
-    if ($almacen_entrada_md == 3 || $almacen_entrada_md == 'alma_principal') {
+    if ($almacen_entrada_md == 3 || $almacen_entrada_md == 'alma_smartled') {
         // Obtener el último valor de 'consecu_entra' de la tabla 'movimiento_techled' y aumentarlo en 1
         $sql_last_consecu = "SELECT MAX(consecu_entra) AS last_consecu FROM movimiento_diario";
         $stmt_consecu = $pdo->prepare($sql_last_consecu);

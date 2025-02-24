@@ -85,7 +85,7 @@ include('../../layout/admin/parte1.php');
                                             <td style="text-align: center; vertical-align: middle;"><input type="checkbox" class="toggle-status" data-id="<?php echo $id; ?>" <?php echo $existencia == '1' ? 'checked' : ''; ?>></td>
                                             <td>
                                                 <center>
-                                                    <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
+                                                    <a href="show_modulos.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
                                                     <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
                                                     <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
                                                 </center>
