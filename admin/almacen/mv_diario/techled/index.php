@@ -15,7 +15,7 @@ include('../../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Inventario TechLed</h1>
+                <h1 class="m-0">Inventario SmartLed</h1>
                     <div class="card card-blue">
                         <div class="card-header">
                             Movimientos

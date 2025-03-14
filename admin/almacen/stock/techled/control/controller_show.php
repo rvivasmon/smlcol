@@ -9,7 +9,7 @@ $query = $pdo->prepare('SELECT
                                     rfc.referencia as nombre_referencia,
                                     da.posiciones as nombre_posicion
                                 FROM
-                                    alma_smartled AS ap
+                                    alma_techled AS ap
                                 INNER JOIN 
                                     referencias_control AS rfc ON ap.producto = rfc.id_referencia
                                 LEFT JOIN
@@ -19,13 +19,13 @@ $query = $pdo->prepare('SELECT
                                 LEFT JOIN
                                     distribucion_almacen AS da ON ap.posicion = da.id
                                 WHERE
-                                    ap.id_almacen_principal = :id_control
+                                    ap.id_techled = :id_control
                                 ');
 
 $query->execute(['id_control' => $id_control]);
 $almacenes_pricipales = $query->fetchAll(PDO::FETCH_ASSOC);
 foreach ($almacenes_pricipales as $almacen_pricipal){
-    $id = $almacen_pricipal['id_almacen_principal'];
+    $id = $almacen_pricipal['id_techled'];
     $marca = $almacen_pricipal['nombre_marca'];
     $funcion = $almacen_pricipal['nombre_funcion'];
     $referencia = $almacen_pricipal['nombre_referencia'];

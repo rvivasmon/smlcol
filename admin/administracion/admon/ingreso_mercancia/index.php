@@ -15,7 +15,7 @@ include('../../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Inventario</h1>
+                <h1 class="m-0">Ingreso de Inventario</h1>
                     <div class="card card-blue">
                         <div class="card-header">
                             Movimientos
@@ -26,9 +26,9 @@ include('../../../../layout/admin/parte1.php');
                         <div class="row">
                             <div class="card-tools ml-4">
                                 <div class="form-group">
-                                    <button type="button" class="btn" style="background-color: #FFCC00; color: black; border-color: #FFCC00;" data-toggle="modal" data-target="#movimientoModal">
+                                    <a href="create_entrada.php" class="btn" style="background-color: #FFCC00; color: black; border-color: #FFCC00;">
                                         <i class="bi bi-plus-square"></i> Nuevo Ingreso
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -40,102 +40,78 @@ include('../../../../layout/admin/parte1.php');
                                         <tr>
                                             <th>ID</th>
                                             <th>Fecha</th>
-                                            <th>Producto</th>
-                                            <th>Referencia 1</th>
-                                            <th>Referencia 2</th>
-                                            <th>Almacén Origen</th>
+                                            <th># Movimiento</th>
+                                            <th>Origen</th>
                                             <th>Almacén Destino</th>
-                                            <th>Destino</th>
-                                            <th>Cantidad</th>
-                                            <th>Observación</th>
+                                            <th>Usuario</th>
                                             <th><center>Acciones</center></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php
-                                        $contador = 0;
-                                        $query = $pdo->prepare('SELECT
-                                                                        mvd.*,
-                                                                        productomovido.tipo_producto AS nombre_producto,
-                                                                        almacen_origen.nombre_almacen AS almacen_origen,
-                                                                        almacen_destino.almacenes AS almacen_destino,
-                                                                        CASE
-                                                                            WHEN mvd.tipo_producto = 1 THEN pitch_table.pitch -- Aquí se une la tabla tabla_pitch
-                                                                            WHEN mvd.tipo_producto = 2 THEN carcontrol.marca_control
-                                                                            WHEN mvd.tipo_producto = 3 THEN carafuen.marca_fuente
-                                                                            ELSE NULL
-                                                                        END AS nombre_referencia_1,
-                                                                        CASE
-                                                                            WHEN mvd.tipo_producto = 1 THEN tmc.serie
-                                                                            WHEN mvd.tipo_producto = 2 THEN caraccontrol.referencia
-                                                                            WHEN mvd.tipo_producto = 3 THEN caracfuentes.modelo_fuente
-                                                                            ELSE NULL
-                                                                        END AS nombre_referencia_2
-                                                                    FROM
-                                                                        movimiento_admon AS mvd
-                                                                    INNER JOIN
-                                                                        t_productos AS productomovido ON mvd.tipo_producto = productomovido.id_producto
-                                                                    LEFT JOIN
-                                                                        t_asignar_todos_almacenes AS almacen_origen ON mvd.almacen_origen1 = almacen_origen.id_asignacion
-                                                                    LEFT JOIN
-                                                                        almacenes_grupo AS almacen_destino ON mvd.almacen_destino1 = almacen_destino.id
-                                                                    LEFT JOIN
-                                                                        tabla_pitch AS tp ON mvd.referencia_2 = tp.id AND mvd.tipo_producto = 1
-                                                                    LEFT JOIN
-                                                                        referencias_control AS ref_control ON mvd.referencia_2 = ref_control.id_referencia AND mvd.tipo_producto = 2
-                                                                    LEFT JOIN
-                                                                        referencias_fuente AS ref_fuente ON mvd.referencia_2 = ref_fuente.id_referencias_fuentes  AND mvd.tipo_producto = 3
-                                                                    LEFT JOIN
-                                                                        producto_modulo_creado AS tmc ON mvd.referencia_2 = tmc.id AND mvd.tipo_producto = 1
-                                                                    LEFT JOIN
-                                                                        referencias_control AS caraccontrol ON mvd.referencia_2 = caraccontrol.id_referencia AND mvd.tipo_producto = 2
-                                                                    LEFT JOIN
-                                                                        referencias_fuente AS caracfuentes ON mvd.referencia_2 = caracfuentes.id_referencias_fuentes AND mvd.tipo_producto = 3
-                                                                    LEFT JOIN
-                                                                        tabla_pitch AS pitch_table ON tmc.pitch = pitch_table.id
-                                                                    LEFT JOIN
-                                                                        caracteristicas_control AS carcontrol ON ref_control.marca = carcontrol.id_car_ctrl
-                                                                    LEFT JOIN
-                                                                        caracteristicas_fuentes AS carafuen ON ref_fuente.marca_fuente = carafuen.id_car_fuen; -- Nueva unión con tabla_pitch
-                                                                    ');
-                                                                    $query->execute();
-                                                                    $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);
-                                                                    foreach ($movidiarios as $movidiario){
-                                                                        $id = $movidiario['id_movimiento_diario'];
-                                                                        $fecha = $movidiario['fecha'];
-                                                                        $producto = $movidiario['nombre_producto'];
-                                                                        $referencia1 = $movidiario['nombre_referencia_1'];
-                                                                        $referencia2 = $movidiario['nombre_referencia_2'];
-                                                                        $almacen_origen1 = $movidiario['almacen_origen'];
-                                                                        $almacen_destino1 = $movidiario['almacen_destino'];
-                                                                        $destino = $movidiario['op'];
-                                                                        $cantidades = $movidiario['cantidad_entrada'];
-                                                                        $observaciones = $movidiario['observaciones'];
-                                                                        $contador = $contador + 1;
-                                        ?>
-                                            <tr>
-                                                <td><?php echo htmlspecialchars($contador); ?></td>
-                                                <td><?php echo htmlspecialchars($fecha); ?></td>
-                                                <td><?php echo htmlspecialchars($producto); ?></td>
-                                                <td><?php echo htmlspecialchars($referencia1); ?></td>
-                                                <td><?php echo htmlspecialchars($referencia2); ?></td>
-                                                <td><?php echo htmlspecialchars($almacen_origen1); ?></td>
-                                                <td><?php echo htmlspecialchars($almacen_destino1); ?></td>
-                                                <td><?php echo htmlspecialchars($destino); ?></td>
-                                                <td><?php echo htmlspecialchars($cantidades); ?></td>
-                                                <td><?php echo htmlspecialchars($observaciones); ?></td>
-                                                <td>
-                                                    <center>
-                                                        <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                        <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
-                                                    </center>
-                                                </td>
-                                            </tr>
-                                        <?php
-                                            }
-                                        ?>
+                                    <?php
+$contador = 1;
 
-                                        <!-- Modal -->
+$query = $pdo->prepare('
+    SELECT 
+        mvd.almacen_destino1,
+        mvd.consecu_entra,
+        MAX(mvd.id_entrada) AS id_entrada, -- Se obtiene el ID de entrada más reciente del grupo
+        COUNT(*) AS total_registros,
+        GROUP_CONCAT(mvd.id_movimiento_admon ORDER BY mvd.id_movimiento_admon ASC) AS ids_movimientos,
+        MAX(mvd.fecha) AS fecha,
+        MAX(mvd.id_usuario) AS id_usuario,
+        MAX(almacen_origen.nombre_almacen) AS almacen_origen, 
+        MAX(almacen_destino.siglas) AS nombre_almacen_destino
+    FROM movimiento_admon AS mvd
+    LEFT JOIN t_asignar_todos_almacenes AS almacen_origen 
+        ON mvd.almacen_origen1 = almacen_origen.id_asignacion
+    LEFT JOIN almacenes_grupo AS almacen_destino 
+        ON mvd.almacen_destino1 = almacen_destino.id
+    LEFT JOIN t_bodegas AS bg 
+        ON mvd.bodega = bg.id
+    LEFT JOIN t_sub_almacen AS sua 
+        ON mvd.sub_almacen = sua.id
+    GROUP BY mvd.almacen_destino1, mvd.consecu_entra
+    ORDER BY mvd.almacen_destino1, mvd.consecu_entra;
+');
+
+
+$query->execute();
+$movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($movidiarios as $movidiario) {
+    $ids = explode(',', $movidiario['ids_movimientos']); // Convertir los IDs en un array
+    $fecha = $movidiario['fecha'];
+    $movimiento = $movidiario['id_entrada'];
+    $almacen_origen1 = $movidiario['almacen_origen'];
+    $almacen_destino1 = $movidiario['nombre_almacen_destino'];
+    $id_usuario = $movidiario['id_usuario'];
+
+    // Si solo necesitas un ID para los enlaces (ejemplo: el primero)
+    $id_unico = $ids[0];
+
+    echo "<tr>";
+    echo "<td>" . $contador . "</td>";
+    echo "<td>" . htmlspecialchars($fecha) . "</td>";
+    echo "<td>" . htmlspecialchars($movimiento) . "</td>";
+    echo "<td>" . htmlspecialchars($almacen_origen1) . "</td>";
+    echo "<td>" . htmlspecialchars($almacen_destino1) . "</td>";
+    //echo "<td>" . implode(', ', $ids) . "</td>"; // Muestra todos los IDs en una celda
+    echo "<td>" . htmlspecialchars($id_usuario) . "</td>";
+    echo "<td>
+            <center>
+                <a href='show.php?id=" . $id_unico . "' class='btn btn-info btn-sm'>Mostrar <i class='fas fa-eye'></i></a>
+                <a href='edit.php?id=" . $id_unico . "' class='btn btn-success btn-sm'>Editar <i class='fas fa-pen'></i></a>
+            </center>
+          </td>";
+    echo "</tr>";
+
+    $contador++;
+}
+?>
+
+
+                                        <!-- Modal
                                         <div class="modal fade" id="movimientoModal" tabindex="-1" aria-labelledby="movimientoModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -153,7 +129,8 @@ include('../../../../layout/admin/parte1.php');
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>-->
+
                                     </tbody>
                                 </table>
                             </div>

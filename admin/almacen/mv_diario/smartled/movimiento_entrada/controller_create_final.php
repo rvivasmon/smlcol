@@ -21,35 +21,37 @@ $observacion = $_POST['observacion'];
 $usuario = $_POST['idusuario'];
 $op_destino = $_POST['op_destino'];
 $posicion = $_POST['posicion1'];
+$sub_almacen = $_POST['sub_almacen'];
 
 
 // Asignar referencia_21 para facilitar la validación
 $referencia_21 = !empty($serie_modulo) ? $serie_modulo : (!empty($referencia_control) ? $referencia_control : $modelo_fuente);
 
 // Función para realizar las consultas de validación y actualización
-function validarProductoEnAlmacen($pdo, $tabla,  $producto, $referencia_21, $salida_md, $almacen_salida_md, $posicion) {
-    if ($almacen_salida_md == 3) {
+function validarProductoEnAlmacen($pdo, $tabla,  $producto, $referencia_21, $entrada_md, $almacen_entrada_md, $posicion, $sub_almacen) {
+    if ($almacen_entrada_md == 3) {
         // Si el almacén es el principal, comparar con id_almacen_principal
-        $sql_check = "SELECT * FROM $tabla WHERE tipo_producto = :producto AND producto = :referencia_21";
+        $sql_check = "SELECT * FROM $tabla WHERE tipo_producto = :producto AND producto = :referencia_21 AND sub_almacen = :sub_almacen";
     } else {
         // Comparar con tipo_producto para los demás almacenes
-        $sql_check = "SELECT * FROM $tabla WHERE tipo_producto = :producto AND producto = :referencia_21";
+        $sql_check = "SELECT * FROM $tabla WHERE tipo_producto = :producto AND producto = :referencia_21 AND sub_almacen = :sub_almacen";
     }
     $stmt_check = $pdo->prepare($sql_check);
     $stmt_check->bindParam(':producto', $producto);
     $stmt_check->bindParam(':referencia_21', $referencia_21);
+    $stmt_check->bindParam(':sub_almacen', $sub_almacen);
     $stmt_check->execute();
 
     if ($stmt_check->rowCount() > 0) {
         // Producto encontrado, actualizar existencias
-        if ($almacen_salida_md == 3) {
-            $sql_update = "UPDATE $tabla SET cantidad_plena = cantidad_plena + :salida_md WHERE tipo_producto = :producto AND producto = :referencia_21";
+        if ($almacen_entrada_md == 3) {
+            $sql_update = "UPDATE $tabla SET cantidad_plena = cantidad_plena + :entrada_md WHERE tipo_producto = :producto AND producto = :referencia_21";
         } else {
-            $sql_update = "UPDATE $tabla SET existencias = existencias + :salida_md WHERE tipo_producto = :producto AND producto = :referencia_21";
+            $sql_update = "UPDATE $tabla SET existencias = existencias + :entrada_md WHERE tipo_producto = :producto AND producto = :referencia_21";
         }
 
         $stmt_update = $pdo->prepare($sql_update);
-        $stmt_update->bindParam(':salida_md', $salida_md);
+        $stmt_update->bindParam(':entrada_md', $entrada_md);
         $stmt_update->bindParam(':producto', $producto);
         $stmt_update->bindParam(':referencia_21', $referencia_21);
         $stmt_update->execute();
@@ -58,16 +60,17 @@ function validarProductoEnAlmacen($pdo, $tabla,  $producto, $referencia_21, $sal
         return true; // Indica que se encontró y actualizó el producto
     } else {
         // Producto no encontrado, insertar nueva entrada
-        if ($almacen_salida_md == 3) {
-            $sql_insert = "INSERT INTO $tabla (tipo_producto, producto, cantidad_plena, posicion) VALUES (:producto, :referencia_21, :salida_md, :posicion)";
+        if ($almacen_entrada_md == 3) {
+            $sql_insert = "INSERT INTO $tabla (tipo_producto, producto, cantidad_plena, posicion, sub_almacen) VALUES (:producto, :referencia_21, :entrada_md, :posicion, :sub_almacen)";
         } else {
-            $sql_insert = "INSERT INTO $tabla (tipo_producto, producto, existencias, posicion) VALUES (:producto, :referencia_21, :salida_md, :posicion)";
+            $sql_insert = "INSERT INTO $tabla (tipo_producto, producto, existencias, posicion, sub_almacen) VALUES (:producto, :referencia_21, :entrada_md, :posicion, :sub_almacen)";
         }
         $stmt_insert = $pdo->prepare($sql_insert);
         $stmt_insert->bindParam(':producto', $producto);
         $stmt_insert->bindParam(':referencia_21', $referencia_21);
-        $stmt_insert->bindParam(':salida_md', $salida_md);
+        $stmt_insert->bindParam(':entrada_md', $entrada_md);
         $stmt_insert->bindParam(':posicion', $posicion);
+        $stmt_insert->bindParam(':sub_almacen', $sub_almacen);
         $stmt_insert->execute();
 
         $_SESSION['msj'] = "Producto no encontrado en $producto ($tabla), pero se ha creado una nueva entrada y actualizado correctamente.";
@@ -85,18 +88,19 @@ $almacenes = [
     8 => 'alma_pruebas',
     9 => 'alma_desechados',
     10 => 'alma_soporte_tecnico',
-    11 => 'alma_aliados'
+    11 => 'alma_aliados',
+    12 => 'alma_china'
 ];
 
 // Validar almacen de salida
 if (array_key_exists($almacen_salida_md, $almacenes)) {
-    validarProductoEnAlmacen($pdo, $almacenes[$almacen_salida_md], $producto, $referencia_21, $salida_md, $almacen_salida_md, $posicion);
+    validarProductoEnAlmacen($pdo, $almacenes[$almacen_salida_md], $producto, $referencia_21, $salida_md, $almacen_salida_md, $posicion, $sub_almacen);
 }
 
 try {
     // Guardar la ubicación en alma_smartled si el almacén de entrada es el principal (id 3)
     if ($almacen_entrada_md == 3) {
-        $sql_update_posicion = "UPDATE alma_smartled SET posicion = :posicion WHERE tipo_producto = :producto AND producto = :referencia_21";
+        $sql_update_posicion = "UPDATE alma_smartled SET posicion = :posicion WHERE tipo_producto = :producto AND producto = :referencia_21 AND sub_almacen = :sub_almacen";
         $stmt_update_posicion = $pdo->prepare($sql_update_posicion);
         $stmt_update_posicion->bindParam(':posicion', $posicion);
         $stmt_update_posicion->bindParam(':producto', $producto);
@@ -115,13 +119,13 @@ try {
 
 // Validar almacen de entrada
 if (array_key_exists($almacen_entrada_md, $almacenes)) {
-    validarProductoEnAlmacen($pdo, $almacenes[$almacen_entrada_md], $producto, $referencia_21, $entrada_md, $almacen_entrada_md, $posicion);
+    validarProductoEnAlmacen($pdo, $almacenes[$almacen_entrada_md], $producto, $referencia_21, $entrada_md, $almacen_entrada_md, $posicion, $sub_almacen);
 }
 
 // Insertar movimiento diario
 $sql = "INSERT INTO movimiento_diario 
-        (fecha, consecu_entra, tipo_producto, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, referencia_2, posicion) 
-        VALUES (:fecha, :contador_entra, :producto, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :referencia_21, :posicion)";
+        (fecha, consecu_entra, tipo_producto, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, referencia_2, posicion, sub_almacen) 
+        VALUES (:fecha, :contador_entra, :producto, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :referencia_21, :posicion, :sub_almacen)";
 
 $sentencia = $pdo->prepare($sql);
 $sentencia->bindParam(':fecha', $fecha);
@@ -136,6 +140,7 @@ $sentencia->bindParam(':usuario', $usuario);
 $sentencia->bindParam(':op_destino', $op_destino);
 $sentencia->bindParam(':referencia_21', $referencia_21);
 $sentencia->bindParam(':posicion', $posicion);
+$sentencia->bindParam(':sub_almacen', $sub_almacen);
 
 if ($sentencia->execute()) {
     // Preparar la consulta para alma_total
@@ -229,7 +234,7 @@ if ($sentencia->execute()) {
 
         if ($sentencia_existencia->execute()) {
             global $URL;
-            header('Location: ' . $URL . 'admin/almacen/mv_diario/smartled');
+            header('Location: ' . $URL . 'admin/almacen/stock/smartled');
             $_SESSION['msj'] = "Se ha registrado el movimiento de manera correcta y actualizado las existencias";
             exit;
         } else {

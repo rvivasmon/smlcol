@@ -25,7 +25,7 @@ include('../../../../layout/admin/parte1.php');
                         <hr>
 
                     <div class="card-tools ml-4">
-                        <a href="create_tracking.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear nueva solicitud</a>
+                        <a href="create/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear nueva solicitud</a>
                     </div>
                     
                     <div class="card-body">
@@ -59,7 +59,7 @@ include('../../../../layout/admin/parte1.php');
                                 foreach ($trackings as $tracking){
                                     $id = $tracking['id'];
                                     $date = $tracking['date'];
-                                    $origin = $tracking['origin'];
+                                    $origin = $tracking['contador_colombia'];
                                     $type = $tracking['type'];
                                     $category = $tracking['category'];
                                     $quantitly = $tracking['quantitly'];

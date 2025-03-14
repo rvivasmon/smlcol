@@ -13,7 +13,7 @@ if (isset($_POST['marca_fuente'])) {
     $modelos = $query->fetchAll(PDO::FETCH_ASSOC);
 
         // Mostrar la opción por defecto
-        echo '<option value="">Selecciona un modelo</option>';
+        echo '<option value=""></option>';
 
     foreach ($modelos as $modelo) {
         echo '<option value="' . $modelo['id_referencias_fuentes'] . '">' . $modelo['modelo_fuente'] . '</option>';

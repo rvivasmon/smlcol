@@ -24,7 +24,7 @@ include('../../../layout/admin/parte1.php');
                             ACTIVAS
                         </div>
 
-                        <button id="edit-selected" class="btn btn-warning btn-sm" disabled>Editar Seleccionados</button>
+                        <button id="edit-selected" class="btn btn-warning btn-sm" disabled>Enviar Seleccionados</button>
 
 
                         <hr>

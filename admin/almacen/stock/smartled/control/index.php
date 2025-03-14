@@ -40,6 +40,7 @@ include('../../../../../layout/admin/parte1.php');
                                             <th>Posición</th>
                                             <th>Existencia</th>
                                             <th>Observación</th>
+                                            <th>Sub Almacén</th>
                                             <th><center>Acciones</center></th>
                                         </tr>
                                     </thead>
@@ -51,6 +52,7 @@ include('../../../../../layout/admin/parte1.php');
                                             cc.marca_control as nombre_marca,
                                             cc1.funcion_control as nombre_funcion,
                                             rfc.referencia as nombre_referencia,
+                                            sa.sub_almacen as nombre_sub_almacen,
                                             da.posiciones as nombre_posicion
                                         FROM
                                             alma_smartled AS ap
@@ -62,6 +64,8 @@ include('../../../../../layout/admin/parte1.php');
                                             caracteristicas_control AS cc1 ON rfc.funcion = cc1.id_car_ctrl
                                         LEFT JOIN
                                             distribucion_almacen AS da ON ap.posicion = da.id
+                                        LEFT JOIN
+                                            t_sub_almacen AS sa ON ap.sub_almacen = sa.id
                                         WHERE
                                             ap.tipo_producto = 2
                                         ');
@@ -76,6 +80,7 @@ include('../../../../../layout/admin/parte1.php');
                                             $posicion = $almacen_pricipal['nombre_posicion'];
                                             $existencia = $almacen_pricipal['cantidad_plena'];
                                             $observacion = $almacen_pricipal['observacion'];
+                                            $sub_almacen = $almacen_pricipal['nombre_sub_almacen'];
                                             $contador = $contador + 1;
 
                                         ?>
@@ -87,6 +92,7 @@ include('../../../../../layout/admin/parte1.php');
                                                 <td><?php echo htmlspecialchars($posicion); ?></td>
                                                 <td><?php echo htmlspecialchars($existencia); ?></td>
                                                 <td><?php echo htmlspecialchars($observacion); ?></td>
+                                                <td><?php echo htmlspecialchars($sub_almacen); ?></td>
                                                 <td>
                                                     <center>
                                                         <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>

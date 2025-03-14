@@ -25,6 +25,10 @@ include('../../../../layout/admin/parte1.php');
                         <hr>
                         <div class="row">
                             <div class="card-tools ml-4">
+                                <a href="../modelos_usos/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo Modelo Módulo</strong></a>
+                            </div>
+
+                            <div class="card-tools ml-4">
                                 <a href="../nits/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i><strong>Crear Nuevo NITS</strong></a>
                             </div>
 

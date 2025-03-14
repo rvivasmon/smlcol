@@ -46,7 +46,7 @@ $id_get = $_GET['id'];
                                             LEFT JOIN
                                                 referencias_control AS refecon ON mvd.referencia_control = refecon.id_referencia
                                             WHERE
-                                                mvd.id_movimiento_diario = :id_get
+                                                mvd.id_movimiento_techled = :id_get
                                             ');
     $query_movimiento->bindParam(':id_get', $id_get, PDO::PARAM_INT);
     $query_movimiento->execute();
@@ -337,7 +337,7 @@ $id_get = $_GET['id'];
                                                 >
                                                     <option value="<?php echo $id_alma_origen; ?>" selected><?php echo $almacen_origen; ?></option>
                                                     <?php 
-                                                    $query_almacen  = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 4 AND nombre_almacen != "Techled"');
+                                                    $query_almacen  = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 3 AND nombre_almacen != "Principal"');
                                                         $query_almacen->execute();
                                                         $almacenes = $query_almacen->fetchAll(PDO::FETCH_ASSOC);
                                                         foreach($almacenes as $almacen) {
@@ -367,7 +367,7 @@ $id_get = $_GET['id'];
                                                 $query_almacen_entra->execute();
                                                 $almacenes_entras = $query_almacen_entra->fetchAll(PDO::FETCH_ASSOC);
                                                 foreach($almacenes_entras as $almacen_entra) {
-                                                    $selected = ($almacen_entra['id_asignacion'] == 4) ? 'selected' : '';
+                                                    $selected = ($almacen_entra['id_asignacion'] == 3) ? 'selected' : '';
                                                     echo '<option value="' . $almacen_entra['id_asignacion'] . '" ' . $selected . '>' . $almacen_entra['nombre_almacen'] . '</option>';
                                                 }
                                                 ?>

@@ -13,7 +13,7 @@ if (isset($_POST['pitch_id'])) {  // Cambiar a pitch_id
     $series = $query->fetchAll(PDO::FETCH_ASSOC);
 
     // Mostrar la opción por defecto
-    echo '<option value="">Selecciona una serie</option>';
+    echo '<option value=""></option>';
 
     // Generar las opciones del select
     foreach ($series as $serie) {

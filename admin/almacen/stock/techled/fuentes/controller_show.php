@@ -10,7 +10,7 @@ $id_fuente = $_GET['id'];
     rf.modelo_fuente as nombre_modelo,
     da.posiciones as nombre_posicion
 FROM
-    alma_smartled AS ap
+    alma_techled AS ap
 INNER JOIN 
     referencias_fuente AS rf ON ap.producto = rf.id_referencias_fuentes
 LEFT JOIN
@@ -20,13 +20,13 @@ LEFT JOIN
 LEFT JOIN
     distribucion_almacen AS da ON ap.posicion = da.id
 WHERE
-    ap.id_almacen_principal = :id_fuente
+    ap.id_techled = :id_fuente
 ');
 
 $query->execute(['id_fuente' => $id_fuente]);
 $almacenes_pricipales = $query->fetchAll(PDO::FETCH_ASSOC);
 foreach ($almacenes_pricipales as $almacen_pricipal){
-    $id = $almacen_pricipal['id_almacen_principal'];
+    $id = $almacen_pricipal['id_techled'];
     $marca_fuente = $almacen_pricipal['nombre_marca'];
     $tipo_fuente = $almacen_pricipal['nombre_tipo'];
     $voltaje_salida = $almacen_pricipal['nombre_voltaje'];

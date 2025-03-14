@@ -21,7 +21,7 @@ $query = $pdo->prepare("SELECT
                                 ap.CREATED_AT as nombre_fecha,
                                 da.posiciones as nombre_posicion
                             FROM
-                                alma_smartled AS ap
+                                alma_techled AS ap
                             INNER JOIN 
                                 producto_modulo_creado AS pmc ON ap.producto = pmc.id
                             LEFT JOIN
@@ -35,12 +35,12 @@ $query = $pdo->prepare("SELECT
                             LEFT JOIN
                                 distribucion_almacen AS da ON ap.posicion = da.id
                             WHERE
-                                ap.id_almacen_principal = :id_get");
+                                ap.id_techled = :id_get");
 
 $query->execute(['id_get' => $id_get]);
 $almacenes_pricipales = $query->fetchAll(PDO::FETCH_ASSOC);
 foreach ($almacenes_pricipales as $almacen_pricipal) {
-    $id = $almacen_pricipal['id_almacen_principal'];
+    $id = $almacen_pricipal['id_techled'];
     $fecha_ingreso = $almacen_pricipal['nombre_fecha'];
     $uso = $almacen_pricipal['nombre_uso'];
     $pitch = $almacen_pricipal['nombre_pitch'];
@@ -50,6 +50,7 @@ foreach ($almacenes_pricipales as $almacen_pricipal) {
     $existencia = $almacen_pricipal['cantidad_plena'];
     $observacion = $almacen_pricipal['observacion'];
     $posicion = $almacen_pricipal['nombre_posicion'];
+    $id_posicion = $almacen_pricipal['posicion'];
 }
 
 ?>
@@ -123,7 +124,7 @@ foreach ($almacenes_pricipales as $almacen_pricipal) {
                                 <div class="form-group">
                                     <label for="ubicacion">Ubicación</label>
                                     <select name="ubicacion" id="ubicacion" class="form-control" required>
-                                        <option value=""><?php echo $posicion; ?></option>
+                                        <option value="<?php echo $id_posicion; ?>"><?php echo $posicion; ?></option>
                                         <?php
                                         $query_posicion = $pdo->prepare('SELECT * FROM distribucion_almacen');
                                         $query_posicion->execute();
@@ -149,7 +150,7 @@ foreach ($almacenes_pricipales as $almacen_pricipal) {
 
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/almacen/inventario/principal/modulos";?>" class="btn btn-default btn-block">Cancelar</a>
+                                <a href="<?php echo $URL."admin/almacen/stock/techled/modulos";?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" onclick="return confirm('Asegúrese de diligenciar correctamente los datos')" class="btn btn-success btn-block">Actualizar Módulo</button>

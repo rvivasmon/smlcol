@@ -16,10 +16,10 @@ if (!$id) {
 var_dump($id, $observacion, $ubicacion);
 
 // Consulta SQL para actualizar la observación y la posición (ubicación)
-$sql = "UPDATE alma_smartled 
+$sql = "UPDATE alma_techled 
         SET observacion = :observacion, 
             posicion = :ubicacion 
-        WHERE id_almacen_principal = :id";
+        WHERE id_techled = :id";
 
 // Preparar la consulta
 $sentencia = $pdo->prepare($sql);

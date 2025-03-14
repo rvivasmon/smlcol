@@ -21,10 +21,13 @@ include('../../../../../layout/admin/parte1.php');
                         <div class="card-header">
                             FUENTES ACTIVAS
                         </div>
+
                         <hr>
+
                         <div class="card-tools ml-4">
                             <a href="../index.php" class="btn btn-warning"><i class="bi bi-plus-square"></i>Regresar</a>
                         </div>
+
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="table_stcs" class="table table-striped table-hover table-bordered">
@@ -38,6 +41,7 @@ include('../../../../../layout/admin/parte1.php');
                                             <th>Posición</th>
                                             <th>Observación</th>
                                             <th>Existencia</th>
+                                            <th>Sub Almacén</th>
                                             <th><center>Acciones</center></th>
                                         </tr>
                                     </thead>
@@ -50,6 +54,7 @@ include('../../../../../layout/admin/parte1.php');
                                             cf1.tipo_fuente as nombre_tipo,
                                             rf.voltaje_salida as nombre_voltaje,
                                             rf.modelo_fuente as nombre_modelo,
+                                            sa.sub_almacen as nombre_sub_almacen,
                                             da.posiciones as nombre_posicion
                                         FROM
                                             alma_smartled AS ap
@@ -61,6 +66,8 @@ include('../../../../../layout/admin/parte1.php');
                                             caracteristicas_fuentes AS cf1 ON rf.tipo_fuente = cf1.id_car_fuen
                                         LEFT JOIN
                                             distribucion_almacen AS da ON ap.posicion = da.id
+                                        LEFT JOIN
+                                            t_sub_almacen AS sa ON ap.sub_almacen = sa.id
                                         WHERE
                                             ap.tipo_producto = 3
                                         ');
@@ -76,6 +83,7 @@ include('../../../../../layout/admin/parte1.php');
                                             $posicion = $almacen_pricipal['nombre_posicion'];
                                             $observacion = $almacen_pricipal['observacion'];
                                             $existencia = $almacen_pricipal['cantidad_plena'];
+                                            $sub_almacen = $almacen_pricipal['nombre_sub_almacen'];
                                             $contador = $contador + 1;
 
                                         ?>
@@ -88,6 +96,7 @@ include('../../../../../layout/admin/parte1.php');
                                                 <td><?php echo htmlspecialchars($posicion); ?></td>
                                                 <td><?php echo htmlspecialchars($observacion); ?></td>
                                                 <td><?php echo htmlspecialchars($existencia); ?></td>
+                                                <td><?php echo htmlspecialchars($sub_almacen); ?></td>
                                                 <td>
                                                     <center>
                                                         <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>

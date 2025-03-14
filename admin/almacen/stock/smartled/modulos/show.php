@@ -93,7 +93,7 @@ include('controller_show.php');
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <a href="<?php echo $URL."admin/almacen/inventario/principal/modulos";?>" class="btn btn-default btn-block">Regresar</a>
+                                    <a href="<?php echo $URL."admin/almacen/stock/smartled/modulos";?>" class="btn btn-default btn-block">Regresar</a>
                                 </div>
                             </div>
                         </div>

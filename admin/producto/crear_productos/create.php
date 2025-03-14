@@ -39,7 +39,7 @@ $usuario = $sesion_usuario['nombre'];
                                                 <select name="producto" id="producto" class="form-control">
                                                     <option value="">Seleccione un Producto</option>
                                                     <?php
-                                                    $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos WHERE habilitar = "1" ORDER BY tipo_producto ASC');
+                                                    $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos WHERE tipo_producto IS NOT NULL AND tipo_producto != "" AND habilitar = "1" ORDER BY tipo_producto ASC');
                                                     $query_producto->execute();
                                                     $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
                                                     foreach($productos as $producto) {
@@ -376,7 +376,7 @@ $usuario = $sesion_usuario['nombre'];
                                                 <input type="file" name="archivo_adjunto" id="file" class="form-control-file" multiple >
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4" hidden>
                                             <div class="form-group">
                                                 <label for="almacen_grupo">ALMACEN</label>
                                                 <select id="almacen_grupo" name="almacen_grupo" class="form-control" required>

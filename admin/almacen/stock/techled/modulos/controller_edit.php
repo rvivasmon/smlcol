@@ -16,10 +16,10 @@ if (!$id) {
 var_dump($id, $observacion, $ubicacion);
 
 // Consulta SQL para actualizar la observación y la posición (ubicación)
-$sql = "UPDATE alma_smartled 
+$sql = "UPDATE alma_techled 
         SET observacion = :observacion, 
             posicion = :ubicacion 
-        WHERE id_almacen_principal = :id";
+        WHERE id_techled = :id";
 
 // Preparar la consulta
 $sentencia = $pdo->prepare($sql);
@@ -32,7 +32,7 @@ $sentencia->bindParam(':id', $id);
 // Ejecutar la consulta
 if ($sentencia->execute()) {
     echo "Usuario actualizado exitosamente"; // Mensaje de éxito
-    header('Location: ' . $URL . 'admin/almacen/inventario/principal/modulos/');
+    header('Location: ' . $URL . 'admin/almacen/stock/techled/modulos/');
     exit; // Asegurar la redirección
 } else {
     // Manejar los posibles errores durante la ejecución

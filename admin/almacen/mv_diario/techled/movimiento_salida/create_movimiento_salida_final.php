@@ -33,7 +33,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Movimientos de Salida Almacén Principal TECHLED</h1>
+                    <h1 class="m-0">Movimientos de Salida Almacén TechLed</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
@@ -73,101 +73,42 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
 
                                         <!-- CATEGORÍA Y UBICACIONES -->
                                         <div class="row">                                    
-                                        <!-- CATEGORÍAS -->
-                                            <div class="col-md-8">
-                                                <div class="form-group">
-                                                    <label for="producto">Categoría</label>
-                                                    <select name="producto" id="producto" class="form-control">
-                                                        <option value="">Seleccione un Producto</option>
-                                                        <?php
-                                                        $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos WHERE tipo_producto IS NOT NULL AND tipo_producto != "" AND habilitar = "1" ORDER BY tipo_producto ASC');
-                                                        $query_producto->execute();
-                                                        $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
-                                                        foreach($productos as $producto) {
-                                                            $id_producto = $producto['id_producto'];
-                                                            $nombre_producto = $producto['tipo_producto'];
-                                                            ?>
-                                                            <option value="<?php echo $id_producto; ?>" data_nombre="<?php echo $nombre_producto; ?>">
-                                                                <?php echo $nombre_producto; ?>
-                                                            </option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
+                                            <!-- CATEGORÍAS -->
+                                            <div class="col-md-4">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="producto">Categoría</label>
+                                                            <select name="producto" id="producto" class="form-control">
+                                                                <option value="">Seleccione un Producto</option>
+                                                                <?php
+                                                                $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos WHERE tipo_producto IS NOT NULL AND tipo_producto != "" AND habilitar = "1" ORDER BY tipo_producto ASC');
+                                                                $query_producto->execute();
+                                                                $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
+                                                                foreach($productos as $producto) {
+                                                                    $id_producto = $producto['id_producto'];
+                                                                    $nombre_producto = $producto['tipo_producto'];
+                                                                    ?>
+                                                                    <option value="<?php echo $id_producto; ?>" data_nombre="<?php echo $nombre_producto; ?>">
+                                                                        <?php echo $nombre_producto; ?>
+                                                                    </option>
+                                                                <?php
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <!-- MODULO -->
                                                 <div class="row">
                                                     <div class="col-md-12 campo Modulo">
                                                         <div class="form-group">
-                                                            <label for="pitch">Pitch</label>
-                                                            <select id="pitch" name="pitch" class="form-control">
-                                                                <option value="">Seleccione un pitch</option>
-                                                                <?php 
-                                                                $query_pitch = $pdo->prepare('SELECT DISTINCT pmc.pitch, tp.pitch AS pitch_nombre FROM producto_modulo_creado AS pmc INNER JOIN tabla_pitch AS tp ON pmc.pitch = tp.id ORDER BY tp.pitch ASC');
-                                                                $query_pitch->execute();
-                                                                $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
-                                                                foreach ($pitches as $pitch) {
-                                                                    $id_pitch = $pitch['pitch'];
-                                                                    $nombre_pitch = $pitch['pitch_nombre'];
-                                                                    ?>
-                                                                    <option value="<?php echo $id_pitch;?>" data-pitch="<?php echo $nombre_pitch?>">
-                                                                        <?php echo $nombre_pitch;?>
-                                                                    </option>
-                                                                <?php
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- CONTROLADORA -->
-                                                <div class="row">
-                                                    <div class="col-md-12 campo Control">
-                                                        <div class="form-group">
-                                                            <label for="marca_control">Marca</label>
-                                                            <select id="marca_control" name="marca_control" class="form-control" >
-                                                                <option value="">Seleccione una marca</option>
-                                                                <?php 
-                                                                $query_marca_control = $pdo->prepare('SELECT id_car_ctrl, marca_control FROM caracteristicas_control WHERE marca_control IS NOT NULL AND marca_control != "" ORDER BY marca_control ASC');
-                                                                $query_marca_control->execute();
-                                                                $marcas_controles = $query_marca_control->fetchAll(PDO::FETCH_ASSOC);
-                                                                foreach ($marcas_controles as $marca_control) {
-                                                                    $id_marca_control = $marca_control['id_car_ctrl'];
-                                                                    $nombre_marca_control = $marca_control['marca_control'];
-                                                                    ?>
-                                                                    <option value="<?php echo $id_marca_control;?>" data-control="<?php echo $nombre_marca_control?>">
-                                                                        <?php echo $nombre_marca_control;?>
-                                                                    </option>
-                                                                <?php
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- FUENTE -->
-                                                <div class="row">
-                                                    <div class="col-md-12 campo Fuente">
-                                                        <div class="form-group">
-                                                            <label for="marca_fuente">Marca</label>
-                                                            <select name="marca_fuente" id="marca_fuente" class="form-control">
-                                                                <option value="">Seleccione una Marca</option>
-                                                                <?php 
-                                                                $query_modelo_fuente = $pdo->prepare('SELECT id_car_fuen, marca_fuente FROM caracteristicas_fuentes WHERE marca_fuente IS NOT NULL AND marca_fuente != ""  ORDER BY marca_fuente ASC');
-                                                                $query_modelo_fuente->execute();
-                                                                $modelos_fuentes = $query_modelo_fuente->fetchAll(PDO::FETCH_ASSOC);
-                                                                foreach ($modelos_fuentes as $modelo_fuente){
-                                                                    $id_modelo_fuente = $modelo_fuente['id_car_fuen'];
-                                                                    $nombre_modelo_fuente = $modelo_fuente['marca_fuente'];
-                                                                    ?>
-                                                                    <option value="<?php echo $id_modelo_fuente;?>" data-modeloFuente="<?php echo $nombre_modelo_fuente?>">
-                                                                        <?php echo $nombre_modelo_fuente;?>
-                                                                    </option>
-                                                                <?php
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
+                                                                <label for="serie_modulo">Serie</label>
+                                                                <select id="serie_modulo" name="serie_modulo" class="form-control">
+                                                                    <option value="">Seleccione una Serie</option>
+                                                                    <!-- Las opciones se llenarán dinámicamente vía AJAX -->
+                                                                </select>
+                                                            </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -181,43 +122,30 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                     <input type="hidden" id="id_producto_categoria" name="id_producto_categoria">
                                                 </div>
                                             </div>
-                                            <!-- UBICACIONES Y EXISTENCIAS -->
+                                            <!-- PRODUCTOS -->
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="ubicacion">Ubicación</label>
-                                                                <input type="text" class="form-control" id="ubicacion" name="ubicacion" readonly>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="existencia">Existencia</label>
-                                                                <input type="text" class="form-control" id="existencia" name="existencia" readonly>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- PRODUCTOS -->
-                                        <div class="row">
-                                            <div class="col-md-8">
-                                                <div class="form-group">
-                                                        
                                                     <!-- MODULO -->
                                                     <div class="row">
                                                         <div class="col-md-12 campo Modulo">
                                                             <div class="form-group">
-                                                                <label for="serie_modulo">Serie</label>
-                                                                <select id="serie_modulo" name="serie_modulo" class="form-control">
-                                                                    <option value="">Seleccione una Serie</option>
-                                                                    <!-- Las opciones se llenarán dinámicamente vía AJAX -->
+                                                                <label for="pitch">Pitch</label>
+                                                                <select id="pitch" name="pitch" class="form-control">
+                                                                    <option value="">Seleccione un pitch</option>
+                                                                    <?php 
+                                                                    $query_pitch = $pdo->prepare('SELECT DISTINCT pmc.pitch, tp.pitch AS pitch_nombre FROM producto_modulo_creado AS pmc INNER JOIN tabla_pitch AS tp ON pmc.pitch = tp.id ORDER BY tp.pitch ASC');
+                                                                    $query_pitch->execute();
+                                                                    $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
+                                                                    foreach ($pitches as $pitch) {
+                                                                        $id_pitch = $pitch['pitch'];
+                                                                        $nombre_pitch = $pitch['pitch_nombre'];
+                                                                        ?>
+                                                                        <option value="<?php echo $id_pitch;?>" data-pitch="<?php echo $nombre_pitch?>">
+                                                                            <?php echo $nombre_pitch;?>
+                                                                        </option>
+                                                                    <?php
+                                                                    }
+                                                                    ?>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -240,6 +168,31 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                     <div class="row">
                                                         <div class="col-md-12 campo Control">
                                                             <div class="form-group">
+                                                                <label for="marca_control">Marca</label>
+                                                                <select id="marca_control" name="marca_control" class="form-control" >
+                                                                    <option value="">Seleccione una marca</option>
+                                                                    <?php 
+                                                                    $query_marca_control = $pdo->prepare('SELECT id_car_ctrl, marca_control FROM caracteristicas_control WHERE marca_control IS NOT NULL AND marca_control != "" ORDER BY marca_control ASC');
+                                                                    $query_marca_control->execute();
+                                                                    $marcas_controles = $query_marca_control->fetchAll(PDO::FETCH_ASSOC);
+                                                                    foreach ($marcas_controles as $marca_control) {
+                                                                        $id_marca_control = $marca_control['id_car_ctrl'];
+                                                                        $nombre_marca_control = $marca_control['marca_control'];
+                                                                        ?>
+                                                                        <option value="<?php echo $id_marca_control;?>" data-control="<?php echo $nombre_marca_control?>">
+                                                                            <?php echo $nombre_marca_control;?>
+                                                                        </option>
+                                                                    <?php
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-md-12 campo Control">
+                                                            <div class="form-group">
                                                                 <label for="referencia_control35">Referencia</label>
                                                                 <select id="referencia_control35" name="referencia_control35" class="form-control" >
                                                                     <option value="">Seleccione una Referencia</option>
@@ -257,6 +210,31 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                     <div class="row">
                                                         <div class="col-md-12 campo Fuente">
                                                             <div class="form-group">
+                                                                <label for="marca_fuente">Marca</label>
+                                                                <select name="marca_fuente" id="marca_fuente" class="form-control">
+                                                                    <option value="">Seleccione una Marca</option>
+                                                                    <?php 
+                                                                    $query_modelo_fuente = $pdo->prepare('SELECT id_car_fuen, marca_fuente FROM caracteristicas_fuentes WHERE marca_fuente IS NOT NULL AND marca_fuente != ""  ORDER BY marca_fuente ASC');
+                                                                    $query_modelo_fuente->execute();
+                                                                    $modelos_fuentes = $query_modelo_fuente->fetchAll(PDO::FETCH_ASSOC);
+                                                                    foreach ($modelos_fuentes as $modelo_fuente){
+                                                                        $id_modelo_fuente = $modelo_fuente['id_car_fuen'];
+                                                                        $nombre_modelo_fuente = $modelo_fuente['marca_fuente'];
+                                                                        ?>
+                                                                        <option value="<?php echo $id_modelo_fuente;?>" data-modeloFuente="<?php echo $nombre_modelo_fuente?>">
+                                                                            <?php echo $nombre_modelo_fuente;?>
+                                                                        </option>
+                                                                    <?php
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-12 campo Fuente">
+                                                            <div class="form-group">
                                                                 <label for="modelo_fuente35">Modelo</label>
                                                                 <select name="modelo_fuente35" id="modelo_fuente35" class="form-control">
                                                                     <option value="">Seleccione un Modelo</option>
@@ -270,8 +248,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                         </div>
                                                     </div>
 
-                                                        <!-- LCD -->
-
+                                                    <!-- LCD -->
                                                     <div class="row">
                                                         <div class="col-md-11 campo LCD">
                                                             <div class="form-group">
@@ -288,7 +265,47 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                     </div>
                                                 </div>
                                             </div>
+                                            <!-- UBICACIONES Y EXISTENCIAS -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="ubicacion">Ubicación</label>
+                                                                <input type="text" class="form-control" id="ubicacion" name="ubicacion" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="existencia">Existencia</label>
+                                                                <input type="text" class="form-control" id="existencia" name="existencia" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="sub_almacen">Sub Almacén</label>
+                                                                <select name="sub_almacen" id="sub_almacen" class="form-control">
+                                                                    <option value="">Seleccione un Sub Almacén</option>
+                                                                    <?php
+                                                                    $query_sub_almacen = $pdo->prepare('SELECT * FROM t_sub_almacen WHERE habilitar = 1 ORDER BY sub_almacen ASC');
+                                                                    $query_sub_almacen->execute();
+                                                                    $subs_almacenes = $query_sub_almacen->fetchAll(PDO::FETCH_ASSOC);
+                                                                    foreach($subs_almacenes as $sub_almacen) {
+                                                                        echo '<option value="' . $sub_almacen['id'] . '">' . $sub_almacen['sub_almacen'] . '</option>';
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <!-- ALMACEN -->
@@ -296,13 +313,13 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <div class="row">
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label for="entrada_md">Almacén Destino</label>
                                                                 <select name="almacen_entrada_md" id="almacen_entrada_md" class="form-control" required>
                                                                     <option value="">Almacén Destino</option>
                                                                     <?php
-                                                                    $query_almacen_entra = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 4 AND nombre_almacen != "TechLed" ORDER BY nombre_almacen ASC');
+                                                                    $query_almacen_entra = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 3 AND nombre_almacen != "Principal" ORDER BY nombre_almacen ASC');
                                                                     $query_almacen_entra->execute();
                                                                     $almacenes_entras = $query_almacen_entra->fetchAll(PDO::FETCH_ASSOC);
                                                                     foreach($almacenes_entras as $almacen_entra) {
@@ -315,12 +332,28 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
+                                                                <label for="sub_almacen_destino">Sub Almacén</label>
+                                                                <select name="sub_almacen_destino" id="sub_almacen_destino" class="form-control" disabled>
+                                                                    <option value="">Seleccione un Sub Almacén</option>
+                                                                    <?php
+                                                                    $query_sub_almacen = $pdo->prepare('SELECT * FROM t_sub_almacen WHERE habilitar = 1 ORDER BY sub_almacen ASC');
+                                                                    $query_sub_almacen->execute();
+                                                                    $subs_almacenes = $query_sub_almacen->fetchAll(PDO::FETCH_ASSOC);
+                                                                    foreach($subs_almacenes as $sub_almacen) {
+                                                                        echo '<option value="' . $sub_almacen['id'] . '">' . $sub_almacen['sub_almacen'] . '</option>';
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>  
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
                                                                 <label for="entrada_md">Cantidad de Salida</label>
                                                                 <input type="text" name="entrada_md" id="entrada_md" class="form-control" placeholder="Cantidad Entrada">
                                                                 <small id="errorEntrada" class="text-danger" style="display:none;">La Cantidad de Salida no puede superar la existencia</small>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-5">
+                                                        <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label for="op_destino">Asignar a:</label>
                                                                 <input type="text" name="op_destino" id="op_destino" class="form-control" placeholder="Asignar" required>
@@ -339,7 +372,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                                     $query_almacen->execute();
                                                                     $almacenes = $query_almacen->fetchAll(PDO::FETCH_ASSOC);
                                                                     foreach($almacenes as $almacen) {
-                                                                        $selected = ($almacen['id_asignacion'] == 4) ? 'selected' : '';
+                                                                        $selected = ($almacen['id_asignacion'] == 3) ? 'selected' : '';
                                                                         echo '<option value="' . $almacen['id_asignacion'] . '" ' . $selected . '>' . $almacen['nombre_almacen'] . '</option>';
                                                                     }
                                                                     ?>
@@ -381,6 +414,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                     <table class="table table-bordered" id="tabla-articulos">
                                                         <thead>
                                                             <tr>
+                                                                <th>Separar</th>
                                                                 <th>Cantidad</th>
                                                                 <th>Producto</th>
                                                                 <th>Referencia</th>
@@ -400,17 +434,45 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                 </div>
                             </div>
 
+                            <!-- Modal Material Separado-->
+                            <div class="modal fade" id="modalValidarMaterial" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header bg-info text-white">
+                                        <h5 class="modal-title" id="modalLabel">Material Separado</h5>
+                                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="contenidoTablaMaterial">
+                                        <!-- Aquí se cargará dinámicamente la tabla con los registros -->
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <button type="button" id="btnGenerarPdfModal" class="btn btn-info">Generar PDF</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <hr>
 
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <a href="<?php echo $URL."admin/almacen/mv_diario/techled";?>" class="btn btn-default btn-block">Cancelar</a>
+                                        <a href="<?php echo $URL."admin/almacen/stock/techled";?>" class="btn btn-default btn-block">Cancelar</a>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <button id="generarPdf" class="btn btn-primary">Crear PDF y Movimiento</button>
+                                        <button id="generarPdf" class="btn btn-primary">Separar o Procesar Salida</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <button type="button" id="btnValidarMaterial" class="btn btn-info" data-toggle="modal" data-target="#modalValidarMaterial">Material Separado</button>
                                     </div>
                                 </div>
                             </div>
@@ -613,30 +675,59 @@ $(document).ready(function() {
 
 <script>
 $(document).ready(function () {
-    // Escuchar cambios en los selects después de seleccionar el id_producto_categoria
-    $('#serie_modulo, #referencia_control35, #modelo_fuente35').change(function () {
-        var idProductoCategoria = $('#id_producto_categoria').val(); // Obtener id_producto_categoria
-        var valorCampo = $(this).val(); // Obtener el valor del campo seleccionado
-        var selectId = $(this).attr('id'); // Identificar cuál select se utilizó
+    // Inicialmente deshabilitar el select de sub_almacen
+    $('#sub_almacen').prop('disabled', true);
 
-        // Enviar la solicitud AJAX con los datos
+    // Escuchar cambios en id_producto_categoria y los 3 selects
+    $('#id_producto_categoria, #serie_modulo, #referencia_control35, #modelo_fuente35').change(function () {
+        var idProductoCategoria = $('#id_producto_categoria').val();
+        var serieModulo = $('#serie_modulo').val();
+        var referenciaControl = $('#referencia_control35').val();
+        var modeloFuente = $('#modelo_fuente35').val();
+
+        // Si id_producto_categoria está seleccionado y al menos uno de los otros selects tiene valor, habilitar sub_almacen
+        if (idProductoCategoria && (serieModulo || referenciaControl || modeloFuente)) {
+            $('#sub_almacen').prop('disabled', false);
+        } else {
+            $('#sub_almacen').prop('disabled', true).val(''); // Deshabilitar y limpiar sub_almacen
+        }
+    });
+
+    // Escuchar cambios en sub_almacen para actualizar existencia
+    $('#sub_almacen').change(function () {
+        var idProductoCategoria = $('#id_producto_categoria').val();
+        var subAlmacen = $(this).val();
+        var valorCampo = $('#serie_modulo, #referencia_control35, #modelo_fuente35').filter(function () {
+            return $(this).val() !== "";
+        }).val(); // Obtener el primer valor seleccionado de los 3 selects
+        var selectId = $('#serie_modulo, #referencia_control35, #modelo_fuente35').filter(function () {
+            return $(this).val() !== "";
+        }).attr('id'); // Identificar cuál select se usó
+
+        // Limpiar existencia antes de hacer la nueva carga
+        $('#existencia').val(0);
+
+        if (!idProductoCategoria || !valorCampo || !subAlmacen) {
+            return;
+        }
+
+        // Hacer la consulta AJAX
         $.ajax({
-            url: 'obtener_datos_alma_techled.php', // Archivo PHP para procesar la solicitud
+            url: 'obtener_datos_alma_smartled.php',
             method: 'POST',
             data: {
                 id_producto_categoria: idProductoCategoria,
                 valor_campo: valorCampo,
-                select_id: selectId
+                select_id: selectId,
+                sub_almacen: subAlmacen
             },
             success: function (response) {
-                // Parsear la respuesta JSON
                 var data = JSON.parse(response);
 
                 if (data.error) {
-                    alert(data.error); // Mostrar error si existe
+                    alert(data.error);
+                    $('#existencia').val(0); // Si no hay coincidencias, existencia será 0
                 } else {
-                    // Actualizar los campos del formulario
-                    $('#ubicacion').val(data.posicion);
                     $('#existencia').val(data.cantidad_plena);
                 }
             }
@@ -669,31 +760,45 @@ $(document).ready(function () {
 </script>
 
 <style>
-    .cantidad {
+    
+    /* Estilo para el checkbox */
+    .checkbox {
+        width: 20px;
+        height: 20px;
+        margin-left: auto; /* Centra el checkbox horizontalmente */
+        margin-right: auto; /* Centra el checkbox horizontalmente */
+        display: block; /* Asegura que el checkbox ocupe su propio espacio */
+        position: relative;
+        top: 10%; /* Centra el checkbox verticalmente */
+        transform: translateY(-5%); /* Ajusta el desplazamiento vertical para un centrado perfecto */
+    }
+
+    .articuloSeleccionado {
         width: 80px; /* Ajustar el ancho */
         height: 30px; /* Ajustar la altura */
-        padding: 5px; /* Controlar el espacio interno */
+        padding: 10px; /* Controlar el espacio interno */
     }
-    .producto {
-        width: 350px;
+    .producto1 {
+        width: 240px;
         height: 30px;
     }
-    .referencia {
-        width: 350px;
+    .referencia2 {
+        width: 240px;
         height: 30px;
     }
-    .observacion {
-        width: 250px;
-        height: 40px; /* Diferente altura para este campo */
+    .observacion2 {
+        width: 360px;
+        height: 30px; /* Diferente altura para este campo */
         padding: 10px; /* Espacio interno más amplio */
     }
-    
+
     /* Ajustar el input dentro del contenedor */
     .contenedor input {
         width: 100%; /* Ajustar el ancho al del contenedor */
         height: 100%; /* Ajustar la altura al del contenedor */
         box-sizing: border-box; /* Incluir padding y border en el tamaño total */
     }
+
 </style>
 
 <script>
@@ -737,14 +842,21 @@ document.addEventListener('DOMContentLoaded', function () {
         const nuevaFila = document.createElement('tr');
         nuevaFila.innerHTML = `
             <td>
-                <input type="text" class="form-control cantidad1" name="cantidad1[]" value="${cantidad}" readonly>
+                <!-- Campo oculto con valor "1", solo se enviará si el checkbox no está marcado -->
+                <input type="hidden" name="articuloSeleccionado[]" id="articuloSeleccionado" value="0">
+
+                <!-- Checkbox para marcar -->
+                <input type="checkbox" class="checkbox form-check-input" id="articuloSeleccionado" name="articuloSeleccionado[]" value="1">
             </td>
             <td>
-                <input type="text" class="form-control producto1" name="producto1[]" value="${productoTexto}" readonly>
+                <input type="text" class="form-control cantidad1" id="cantidad1" name="cantidad1[]" value="${cantidad}" readonly>
+            </td>
+            <td>
+                <input type="text" class="form-control producto1" id="producto1" name="producto1[]" value="${productoTexto}" readonly>
                 <input type="hidden" id="producto_id12" name="producto_id12[]" value="${productoID}">
             </td>
             <td>
-                <input type="text" class="form-control referencia2" name="referencia2[]" value="${referencia}" readonly>
+                <input type="text" class="form-control referencia2" id="referencia2" name="referencia2[]" value="${referencia}" readonly>
                 <input type="hidden" id="referencia_id12" name="referencia_id12[]" value="${referenciaID}">
             </td>
             <td>
@@ -793,14 +905,26 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 </script>
 
-<script>
+<script> //GENERAR PDF DE SALIDA DE ARTICULOS
     document.getElementById('generarPdf').addEventListener('click', function () {
+
+
+        // Obtener el valor del checkbox (asegúrate de que el id de tu checkbox sea correcto)
+        const checkbox = document.getElementById('articuloSeleccionado'); // Cambia 'checkbox_id' por el id de tu checkbox
+        const isChecked = checkbox.checked ? "1" : "0"; // Si está marcado, es "1", si no, es "0"
+
+        // Validar si el checkbox está marcado (si es "1", no generamos el PDF)
+        if (isChecked === "1") {
+            alert("No se puede generar el PDF porque el checkbox está marcado.");
+            return; // Detener el proceso de generación del PDF
+        }
+
         // Crea una nueva instancia de jsPDF
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({
-            orientation: 'landscape', // Establece la orientación horizontal
+            orientation: 'portrait', // Establece la orientación horizontal
             unit: 'mm', // Unidad de medida
-            format: 'a4' // Formato de la hoja
+            format: [210, 297] // Formato de la hoja
         });
 
         // Datos adicionales
@@ -810,17 +934,20 @@ document.addEventListener('DOMContentLoaded', function () {
         const asignarA = document.getElementById('op_destino').value || "N/A";
 
         // Encabezado de la empresa
-        doc.setFontSize(16);
-        doc.text('SMARTLED COLOMBIA', 150, 10, { align: 'center' });
+        const pageWidth = 210; // Ancho total de la hoja en mm
+
+        doc.setFontSize(14);
+        doc.text('SMARTLED COLOMBIA', pageWidth / 2, 10, { align: 'center' });
+
         doc.setFontSize(12);
-        doc.text('Salida de Artículos del Almacén', 150, 20, { align: 'center' });
+        doc.text('Salida de Artículos del Almacén', pageWidth / 2, 18, { align: 'center' });
 
         // Información adicional
         doc.setFontSize(10);
-        doc.text(`Fecha: ${fecha}`, 10, 40);
-        doc.text(`# Documento: ${contadorSalida}`, 10, 45);
-        doc.text(`Almacén destino: ${almacenDestino}`, 10, 50);
-        doc.text(`Asignar a: ${asignarA}`, 10, 55);
+        doc.text(`Fecha: ${fecha}`, 10, 30);
+        doc.text(`# Documento: ${contadorSalida}`, 10, 35);
+        doc.text(`Almacén destino: ${almacenDestino}`, 10, 40);
+        doc.text(`Asignar a: ${asignarA}`, 10, 45);
 
         // Crear los datos para la tabla
         const tablaArticulos = document.getElementById('tabla-articulos').getElementsByTagName('tbody')[0];
@@ -843,25 +970,204 @@ document.addEventListener('DOMContentLoaded', function () {
         doc.autoTable({
             head: [['Cantidad', 'Producto', 'Referencia', 'Observación']], // Encabezados
             body: datosTabla, // Datos de la tabla
-            startY: 65, // Posición inicial
+            startY: 55, // Posición inicial
             styles: { fontSize: 8 }, // Tamaño de fuente
+            columnStyles: {
+            0: { cellWidth: 20 },  // Cantidad
+            1: { cellWidth: 50 },  // Producto
+            2: { cellWidth: 50 },  // Referencia
+            3: { cellWidth: 60 }   // Observación
+        },
             theme: 'grid', // Tema con bordes para la tabla
+            margin: { left: 10, right: 10 } // Márgenes laterales
         });
 
         // Agregar líneas para firma
-        const finalY = doc.lastAutoTable.finalY + 20; // Obtener la posición final de la tabla y dar espacio
+        const finalY = doc.lastAutoTable.finalY + 15; // Obtener la posición final de la tabla y dar espacio
 
         // Dibujar líneas horizontales
-        doc.line(60, finalY, 120, finalY); // Línea para "Entrega"
-        doc.line(180, finalY, 240, finalY); // Línea para "Recibe"
+        doc.line(20, finalY, 70, finalY); // Línea para "Entrega"
+        doc.line(100, finalY, 150, finalY); // Línea para "Recibe"
 
         // Agregar textos debajo de las líneas
         doc.setFontSize(10);
-        doc.text("Entrega", 80, finalY + 5); // Texto debajo de la línea de "Entrega"
-        doc.text("Recibe", 200, finalY + 5); // Texto debajo de la línea de "Recibe"
+        doc.text("Entrega", 35, finalY + 5); // Texto debajo de la línea de "Entrega"
+        doc.text("Recibe", 115, finalY + 5); // Texto debajo de la línea de "Recibe"
 
         // Guardar el PDF con un nombre específico
         doc.save('reporte_articulos.pdf');
     });
 </script>
 
+<script> // GENERAR EL PDF DE MATERIAL SEPARADO DEL ALMACEN
+    document.getElementById('btnValidarMaterial').addEventListener('click', function () {
+        fetch('validar_registros.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'validar_material' })
+})
+    .then(response => response.json())
+    .then(data => {
+        console.log('Respuesta del servidor:', data);  // Verifica la respuesta completa
+        if (data.success) {
+            console.log('Registros obtenidos:', data.registros);  // Verifica los registros obtenidos
+            let contenidoTabla = `<table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Separar</th>
+                                <th>Producto</th>
+                                <th>Referencia</th>
+                                <th>Cantidad</th>
+                                <th>Observaciones</th>
+                                <th>Asignado a:</th>
+                                <th>N° Movimiento</th>
+                                <th>Almacen Destino</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+data.registros.forEach(registro => {
+    contenidoTabla += `<tr>
+                        <td>
+                            <input type="checkbox" class="checkbox-material" data-id="${registro.id_movimiento_techled}">
+                        </td>
+                        <td>${registro.nombre_producto}</td>
+                        <td>${registro.nombre_referencia_2}</td>
+                        <td>${registro.cantidad_entrada}</td>
+                        <td>${registro.observaciones}</td>
+                        <td>${registro.op}</td>
+                        <td>${registro.consecu_sale}</td>
+                        <td>${registro.almacen_destino}</td>
+                        </tr>`;
+});
+
+contenidoTabla += `</tbody></table>`;
+document.getElementById('contenidoTablaMaterial').innerHTML = contenidoTabla;
+
+        } else {
+            alert('No se encontraron registros.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+
+    });
+
+    document.getElementById('btnGenerarPdfModal').addEventListener('click', function () {
+    const checkboxes = document.querySelectorAll('.checkbox-material:checked');
+    const registrosSeleccionados = [];
+    const idsActualizar = [];
+
+    // Inicializa variables para los datos adicionales
+    let fecha = new Date().toLocaleDateString();
+    let contadorSalida = "N/A";
+    let almacenDestino = "N/A";
+    let asignarA = "N/A";
+
+    checkboxes.forEach(checkbox => {
+        const fila = checkbox.closest('tr');
+        const columnas = Array.from(fila.querySelectorAll('td'));
+
+        // Asignar manualmente los valores que deseas extraer
+        const cantidad = columnas[3]?.textContent || "N/A"; // Cantidad
+        const producto = columnas[1]?.textContent || "N/A"; // Producto
+        const referencia = columnas[2]?.textContent || "N/A"; // Referencia
+        const observacion = columnas[4]?.textContent || "N/A"; // Observación
+
+         // Solo toma los datos adicionales del primer registro (si son comunes a todos)
+        if (!contadorSalida || contadorSalida === "N/A") contadorSalida = columnas[6]?.textContent || "N/A";
+        if (!almacenDestino || almacenDestino === "N/A") almacenDestino = columnas[7]?.textContent || "N/A";
+        if (!asignarA || asignarA === "N/A") asignarA = columnas[5]?.textContent || "N/A";
+
+        registrosSeleccionados.push([cantidad, producto, referencia, observacion]);
+
+        // También puedes asignar columnas específicas directamente a variables globales, si es necesario
+        idsActualizar.push(checkbox.dataset.id); // Almacenar el ID seleccionado
+    });
+
+    if (registrosSeleccionados.length === 0) {
+        alert('Por favor, selecciona al menos un registro.');
+        return;
+    }
+
+    // Generar el PDF con los datos seleccionados
+    generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA);
+
+    // Llamar a la función para actualizar registros en la base de datos
+    actualizarRegistros(idsActualizar);
+});
+
+// Función para generar el PDF con los datos
+function generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+        orientation: 'portrait', // Orientación horizontal
+        unit: 'mm', // Unidad de medida
+        format: [210, 297] // Media carta (ancho x alto)
+    });
+
+    // Encabezado de la empresa
+    const pageWidth = 210; // Ancho total de la hoja en mm
+
+    doc.setFontSize(14);
+    doc.text('SMARTLED COLOMBIA', pageWidth / 2, 10, { align: 'center' });
+
+    doc.setFontSize(12);
+    doc.text('Salida de Artículos del Almacén', pageWidth / 2, 18, { align: 'center' });
+
+    // Información adicional
+    doc.setFontSize(10);
+    doc.text(`Fecha: ${fecha}`, 10, 30);
+    doc.text(`# Documento: ${contadorSalida}`, 10, 35);
+    doc.text(`Almacén destino: ${almacenDestino}`, 10, 40);
+    doc.text(`Asignar a: ${asignarA}`, 10, 45);
+
+    // Crear la tabla con autoTable
+    doc.autoTable({
+        head: [['Cantidad', 'Producto', 'Referencia', 'Observación']], // Encabezados
+        body: registrosSeleccionados, // Datos de la tabla
+        startY: 55, // Posición inicial
+        styles: { fontSize: 8 }, // Tamaño de fuente
+        columnStyles: {
+            0: { cellWidth: 20 },  // Cantidad
+            1: { cellWidth: 50 },  // Producto
+            2: { cellWidth: 50 },  // Referencia
+            3: { cellWidth: 60 }   // Observación
+        },
+        theme: 'grid',
+        margin: { left: 10, right: 10 } // Márgenes laterales
+    });
+
+    // Agregar líneas para firmas
+    const finalY = doc.lastAutoTable.finalY + 15; // Posición después de la tabla
+
+    doc.line(20, finalY, 70, finalY); // Línea para "Entrega"
+    doc.line(100, finalY, 150, finalY); // Línea para "Recibe"
+
+    // Agregar textos para firmas
+    doc.setFontSize(10);
+    doc.text("Entrega", 35, finalY + 5); // Texto debajo de la línea de "Entrega"
+    doc.text("Recibe", 115, finalY + 5); // Texto debajo de la línea de "Recibe"
+
+    // Guardar el PDF
+    doc.save('material_validado.pdf');
+}
+
+function actualizarRegistros(ids) {
+    console.log('IDs enviados al servidor:', ids); // Verifica los IDs enviados
+    fetch('actualizar_registros.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: ids })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta del servidor:', data); // Verifica la respuesta del servidor
+            if (data.success) {
+                alert('Los registros se han actualizado correctamente.');
+            } else {
+                alert('Hubo un problema al actualizar los registros: ' + (data.message || 'Error desconocido.'));
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+</script>

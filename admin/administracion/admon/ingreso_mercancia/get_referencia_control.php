@@ -14,7 +14,7 @@ if (isset($_POST['marca_control'])) {
     $referencias = $query->fetchAll(PDO::FETCH_ASSOC);
 
         // Mostrar la opción por defecto
-        echo '<option value="">Selecciona una referencia</option>';
+        echo '<option value=""></option>';
 
     foreach ($referencias as $referencia) {
         echo '<option value="' . $referencia['id_referencia'] . '">' . $referencia['referencia'] . '</option>';

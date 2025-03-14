@@ -150,7 +150,7 @@ foreach ($almacenes_pricipales as $almacen_pricipal) {
 
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/almacen/inventario/principal/modulos";?>" class="btn btn-default btn-block">Cancelar</a>
+                                <a href="<?php echo $URL."admin/almacen/stock/smartled/modulos"; ?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" onclick="return confirm('Asegúrese de diligenciar correctamente los datos')" class="btn btn-success btn-block">Actualizar Módulo</button>

@@ -54,9 +54,9 @@ move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'],$location);
 try {
     if ($producto == 1 || $producto == 'módulo') {
         // Verifica que todas las variables estén definidas
-        if (isset($uso, $modelo_modulo1, $pitch, $medida_modulo, $medida_x, $medida_y, $pixel_x, $pixel_y, $serie_modulo, /*$referencia_modulo*/)) {
-            $sql_modulo1 = "INSERT INTO producto_modulo_creado (uso, modelo, pitch, tamano, tamano_x, tamano_y, pixel_x, pixel_y, serie, referencia, ruta, almacen) 
-                            VALUES (:uso, :modelo_modulo1, :pitch, :medida_modulo, :medida_x, :medida_y, :pixel_x, :pixel_y, :serie_modulo, :referencia_modulo, :evidencias, :almagrupo)";
+        if (isset($uso, $modelo_modulo1, $pitch, $medida_modulo, $medida_x, $medida_y, $pixel_x, $pixel_y, $serie_modulo)) {
+            $sql_modulo1 = "INSERT INTO producto_modulo_creado (uso, modelo, pitch, tamano, tamano_x, tamano_y, pixel_x, pixel_y, serie, referencia, ruta) 
+                            VALUES (:uso, :modelo_modulo1, :pitch, :medida_modulo, :medida_x, :medida_y, :pixel_x, :pixel_y, :serie_modulo, :referencia_modulo, :evidencias)";
             $sentencia_modulo1 = $pdo->prepare($sql_modulo1);
             $sentencia_modulo1->bindParam(':uso', $uso);
             $sentencia_modulo1->bindParam(':modelo_modulo1', $modelo_modulo1);
@@ -69,14 +69,13 @@ try {
             $sentencia_modulo1->bindParam(':serie_modulo', $serie_modulo);
             $sentencia_modulo1->bindParam(':referencia_modulo', $referencia_modulo);
             $sentencia_modulo1->bindParam(':evidencias', $filename);
-            $sentencia_modulo1->bindParam(':almagrupo', $almagrupo);
             $sentencia_modulo1->execute();
         }
 
     } elseif ($producto == 2 || $producto == 'controladora') {
         if (isset($marca_control3, $funcion_control3, $referencia_control3)) {
-            $sql_referencia = "INSERT INTO referencias_control (marca, funcion, referencia, descripcion, sim, puertos, px_x_puerto, pixel_max, pixel_x_max, pixel_y_max, ruta, almacen) 
-                            VALUES (:marca_control3, :funcion_control3, :referencia_control3, :descripcion3, :sim3, :puertos3, :pixel_x_puerto3, :pixel_maximo3, :pixel_x_maximo3, :pixel_y_maximo3, :evidencias, :almagrupo)";
+            $sql_referencia = "INSERT INTO referencias_control (marca, funcion, referencia, descripcion, sim, puertos, px_x_puerto, pixel_max, pixel_x_max, pixel_y_max, ruta) 
+                            VALUES (:marca_control3, :funcion_control3, :referencia_control3, :descripcion3, :sim3, :puertos3, :pixel_x_puerto3, :pixel_maximo3, :pixel_x_maximo3, :pixel_y_maximo3, :evidencias)";
             $sentencia_referencia = $pdo->prepare($sql_referencia);
             $sentencia_referencia->bindParam(':marca_control3', $marca_control3);
             $sentencia_referencia->bindParam(':funcion_control3', $funcion_control3);
@@ -89,20 +88,18 @@ try {
             $sentencia_referencia->bindParam(':pixel_x_maximo3', $pixel_x_maximo3);
             $sentencia_referencia->bindParam(':pixel_y_maximo3', $pixel_y_maximo3);
             $sentencia_referencia->bindParam(':evidencias', $filename);
-            $sentencia_referencia->bindParam(':almagrupo', $almagrupo);
             $sentencia_referencia->execute();
         }
 
     } elseif ($producto == 3 || $producto == 'fuente') {
         if (isset($marca_fuente, $tipo_fuente, $voltaje_fuente, $modelo_fuente)) {
-            $sql_fuente_modelo = "INSERT INTO referencias_fuente (marca_fuente, tipo_fuente, voltaje_salida, modelo_fuente, ruta, almacen) VALUES (:marca_fuente, :tipo_fuente, :voltaje_fuente, :modelo_fuente, :evidencias, :almagrupo)";
+            $sql_fuente_modelo = "INSERT INTO referencias_fuente (marca_fuente, tipo_fuente, voltaje_salida, modelo_fuente, ruta) VALUES (:marca_fuente, :tipo_fuente, :voltaje_fuente, :modelo_fuente, :evidencias)";
             $sentencia_fuente_modelo = $pdo->prepare($sql_fuente_modelo);
             $sentencia_fuente_modelo->bindParam(':marca_fuente', $marca_fuente);
             $sentencia_fuente_modelo->bindParam(':tipo_fuente', $tipo_fuente);
             $sentencia_fuente_modelo->bindParam(':voltaje_fuente', $voltaje_fuente);
             $sentencia_fuente_modelo->bindParam(':modelo_fuente', $modelo_fuente);
             $sentencia_fuente_modelo->bindParam(':evidencias', $filename);
-            $sentencia_fuente_modelo->bindParam(':almagrupo', $almagrupo);
             $sentencia_fuente_modelo->execute();
         }
     }

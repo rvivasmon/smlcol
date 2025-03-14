@@ -10,12 +10,12 @@ include('../../../../layout/admin/parte1.php');
 
 $id_get = $_GET['id'];
 
-$query = $pdo->prepare("SELECT * FROM alma_smartled WHERE id_almacen_principal = '$id_get'");
+$query = $pdo->prepare("SELECT * FROM alma_techled WHERE id_techled = '$id_get'");
 
 $query->execute(['id_get' => $id_get]);
 $usuarios = $query->fetchAll(PDO::FETCH_ASSOC);
 foreach ($usuarios as $usuario){
-    $id = $usuario['id_almacen_principal'];
+    $id = $usuario['id_techled'];
     $nombres = $usuario['tipo_producto'];
     $correos = $usuario['posicion'];
     $usuario_uso = $usuario['cantidad_plena'];

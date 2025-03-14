@@ -55,59 +55,57 @@ include('../../../../layout/admin/parte1.php');
                                         <?php
                                         $contador = 0;
                                         $query = $pdo->prepare('SELECT
-                                                                        mvd.*,
-                                                                        productomovido.tipo_producto AS nombre_producto,
-                                                                        almacen_origen.nombre_almacen AS almacen_origen,
-                                                                        almacen_destino.nombre_almacen AS almacen_destino,
-                                                                        CASE
-                                                                            WHEN mvd.tipo_producto = 1 THEN pitch_table.pitch -- Aquí se une la tabla tabla_pitch
-                                                                            WHEN mvd.tipo_producto = 2 THEN caraccon.marca_control
-                                                                            WHEN mvd.tipo_producto = 3 THEN caracfuen.marca_fuente
-                                                                            ELSE NULL
-                                                                        END AS nombre_referencia_1,
-                                                                        CASE
-                                                                            WHEN mvd.tipo_producto = 1 THEN tmc.serie
-                                                                            WHEN mvd.tipo_producto = 2 THEN caraccontrol.referencia
-                                                                            WHEN mvd.tipo_producto = 3 THEN caracfuentes.modelo_fuente
-                                                                            ELSE NULL
-                                                                        END AS nombre_referencia_2
-                                                                    FROM
-                                                                        movimiento_diario AS mvd
-                                                                    INNER JOIN
-                                                                        t_productos AS productomovido ON mvd.tipo_producto = productomovido.id_producto
-                                                                    LEFT JOIN
-                                                                        t_asignar_todos_almacenes AS almacen_origen ON mvd.almacen_origen1 = almacen_origen.id_asignacion
-                                                                    LEFT JOIN
-                                                                        t_asignar_todos_almacenes AS almacen_destino ON mvd.almacen_destino1 = almacen_destino.id_asignacion
-                                                                    LEFT JOIN
-                                                                        tabla_pitch AS tp ON mvd.referencia_2 = tp.id AND mvd.tipo_producto = 1
-                                                                    LEFT JOIN
-                                                                        caracteristicas_control AS caraccon ON mvd.referencia_2 = caraccon.id_car_ctrl AND mvd.tipo_producto = 2
-                                                                    LEFT JOIN
-                                                                        caracteristicas_fuentes AS caracfuen ON mvd.referencia_2 = caracfuen.id_car_fuen AND mvd.tipo_producto = 3
-                                                                    LEFT JOIN
-                                                                        producto_modulo_creado AS tmc ON mvd.referencia_2 = tmc.id AND mvd.tipo_producto = 1
-                                                                    LEFT JOIN
-                                                                        referencias_control AS caraccontrol ON mvd.referencia_2 = caraccontrol.id_referencia AND mvd.tipo_producto = 2
-                                                                    LEFT JOIN
-                                                                        referencias_fuente AS caracfuentes ON mvd.referencia_2 = caracfuentes.id_referencias_fuentes AND mvd.tipo_producto = 3
-                                                                    LEFT JOIN
-                                                                        tabla_pitch AS pitch_table ON tmc.pitch = pitch_table.id; -- Nueva unión con tabla_pitch
-                                                                    ');
-                                                                    $query->execute();
-                                                                    $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);
-                                                                    foreach ($movidiarios as $movidiario){
-                                                                        $id = $movidiario['id_movimiento_diario'];
-                                                                        $fecha = $movidiario['fecha'];
-                                                                        $producto = $movidiario['nombre_producto'];
-                                                                        $referencia1 = $movidiario['nombre_referencia_1'];
-                                                                        $referencia2 = $movidiario['nombre_referencia_2'];
-                                                                        $almacen_origen1 = $movidiario['almacen_origen'];
-                                                                        $almacen_destino1 = $movidiario['almacen_destino'];
-                                                                        $destino = $movidiario['op'];
-                                                                        $cantidades = $movidiario['cantidad_entrada'];
-                                                                        $observaciones = $movidiario['observaciones'];
-                                                                        $contador = $contador + 1;
+                                                                mvd.*,
+                                                                productomovido.tipo_producto AS nombre_producto,
+                                                                almacen_origen.nombre_almacen AS almacen_origen,
+                                                                almacen_destino.nombre_almacen AS almacen_destino,
+                                                                CASE
+                                                                    WHEN mvd.tipo_producto = 1 THEN tp.pitch
+                                                                    WHEN mvd.tipo_producto = 2 THEN caraccon.marca_control
+                                                                    WHEN mvd.tipo_producto = 3 THEN caracfuen.marca_fuente
+                                                                    ELSE NULL
+                                                                END AS nombre_referencia_1,
+                                                                CASE
+                                                                    WHEN mvd.tipo_producto = 1 THEN tmc.serie
+                                                                    WHEN mvd.tipo_producto = 2 THEN caraccontrol.referencia
+                                                                    WHEN mvd.tipo_producto = 3 THEN caracfuentes.modelo_fuente
+                                                                    ELSE NULL
+                                                                END AS nombre_referencia_2
+                                                            FROM
+                                                                movimiento_diario AS mvd
+                                                            INNER JOIN
+                                                                t_productos AS productomovido ON mvd.tipo_producto = productomovido.id_producto
+                                                            LEFT JOIN
+                                                                t_asignar_todos_almacenes AS almacen_origen ON mvd.almacen_origen1 = almacen_origen.id_asignacion
+                                                            LEFT JOIN
+                                                                t_asignar_todos_almacenes AS almacen_destino ON mvd.almacen_destino1 = almacen_destino.id_asignacion
+                                                            LEFT JOIN
+                                                                tabla_pitch AS tp ON mvd.referencia_2 = tp.id AND mvd.tipo_producto = 1
+                                                            LEFT JOIN
+                                                                caracteristicas_control AS caraccon ON mvd.referencia_2 = caraccon.id_car_ctrl AND mvd.tipo_producto = 2
+                                                            LEFT JOIN
+                                                                caracteristicas_fuentes AS caracfuen ON mvd.referencia_2 = caracfuen.id_car_fuen AND mvd.tipo_producto = 3
+                                                            LEFT JOIN
+                                                                producto_modulo_creado AS tmc ON mvd.referencia_2 = tmc.id AND mvd.tipo_producto = 1
+                                                            LEFT JOIN
+                                                                referencias_control AS caraccontrol ON mvd.referencia_2 = caraccontrol.id_referencia AND mvd.tipo_producto = 2
+                                                            LEFT JOIN
+                                                                referencias_fuente AS caracfuentes ON mvd.referencia_2 = caracfuentes.id_referencias_fuentes AND mvd.tipo_producto = 3;
+                                                            ');
+                                        $query->execute();
+                                        $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($movidiarios as $movidiario){
+                                            $id = $movidiario['id_movimiento_diario'];
+                                            $fecha = $movidiario['fecha'];
+                                            $producto = $movidiario['nombre_producto'];
+                                            $referencia1 = $movidiario['nombre_referencia_1'];
+                                            $referencia2 = $movidiario['nombre_referencia_2'];
+                                            $almacen_origen1 = $movidiario['almacen_origen'];
+                                            $almacen_destino1 = $movidiario['almacen_destino'];
+                                            $destino = $movidiario['op'];
+                                            $cantidades = $movidiario['cantidad_entrada'];
+                                            $observaciones = $movidiario['observaciones'];
+                                            $contador = $contador + 1;
                                         ?>
                                             <tr>
                                                 <td><?php echo htmlspecialchars($contador); ?></td>

@@ -33,7 +33,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Movimientos de Salida Almacén Principal</h1>
+                    <h1 class="m-0">Movimientos de Salida Almacén SmartLed</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
@@ -73,101 +73,42 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
 
                                         <!-- CATEGORÍA Y UBICACIONES -->
                                         <div class="row">                                    
-                                        <!-- CATEGORÍAS -->
-                                            <div class="col-md-8">
-                                                <div class="form-group">
-                                                    <label for="producto">Categoría</label>
-                                                    <select name="producto" id="producto" class="form-control">
-                                                        <option value="">Seleccione un Producto</option>
-                                                        <?php
-                                                        $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos WHERE tipo_producto IS NOT NULL AND tipo_producto != "" AND habilitar = "1" ORDER BY tipo_producto ASC');
-                                                        $query_producto->execute();
-                                                        $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
-                                                        foreach($productos as $producto) {
-                                                            $id_producto = $producto['id_producto'];
-                                                            $nombre_producto = $producto['tipo_producto'];
-                                                            ?>
-                                                            <option value="<?php echo $id_producto; ?>" data_nombre="<?php echo $nombre_producto; ?>">
-                                                                <?php echo $nombre_producto; ?>
-                                                            </option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
+                                            <!-- CATEGORÍAS -->
+                                            <div class="col-md-4">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="producto">Categoría</label>
+                                                            <select name="producto" id="producto" class="form-control">
+                                                                <option value="">Seleccione un Producto</option>
+                                                                <?php
+                                                                $query_producto = $pdo->prepare('SELECT id_producto, tipo_producto FROM t_productos WHERE tipo_producto IS NOT NULL AND tipo_producto != "" AND habilitar = "1" ORDER BY tipo_producto ASC');
+                                                                $query_producto->execute();
+                                                                $productos = $query_producto->fetchAll(PDO::FETCH_ASSOC);
+                                                                foreach($productos as $producto) {
+                                                                    $id_producto = $producto['id_producto'];
+                                                                    $nombre_producto = $producto['tipo_producto'];
+                                                                    ?>
+                                                                    <option value="<?php echo $id_producto; ?>" data_nombre="<?php echo $nombre_producto; ?>">
+                                                                        <?php echo $nombre_producto; ?>
+                                                                    </option>
+                                                                <?php
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <!-- MODULO -->
                                                 <div class="row">
                                                     <div class="col-md-12 campo Modulo">
                                                         <div class="form-group">
-                                                            <label for="pitch">Pitch</label>
-                                                            <select id="pitch" name="pitch" class="form-control">
-                                                                <option value="">Seleccione un pitch</option>
-                                                                <?php 
-                                                                $query_pitch = $pdo->prepare('SELECT DISTINCT pmc.pitch, tp.pitch AS pitch_nombre FROM producto_modulo_creado AS pmc INNER JOIN tabla_pitch AS tp ON pmc.pitch = tp.id ORDER BY tp.pitch ASC');
-                                                                $query_pitch->execute();
-                                                                $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
-                                                                foreach ($pitches as $pitch) {
-                                                                    $id_pitch = $pitch['pitch'];
-                                                                    $nombre_pitch = $pitch['pitch_nombre'];
-                                                                    ?>
-                                                                    <option value="<?php echo $id_pitch;?>" data-pitch="<?php echo $nombre_pitch?>">
-                                                                        <?php echo $nombre_pitch;?>
-                                                                    </option>
-                                                                <?php
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- CONTROLADORA -->
-                                                <div class="row">
-                                                    <div class="col-md-12 campo Control">
-                                                        <div class="form-group">
-                                                            <label for="marca_control">Marca</label>
-                                                            <select id="marca_control" name="marca_control" class="form-control" >
-                                                                <option value="">Seleccione una marca</option>
-                                                                <?php 
-                                                                $query_marca_control = $pdo->prepare('SELECT id_car_ctrl, marca_control FROM caracteristicas_control WHERE marca_control IS NOT NULL AND marca_control != "" ORDER BY marca_control ASC');
-                                                                $query_marca_control->execute();
-                                                                $marcas_controles = $query_marca_control->fetchAll(PDO::FETCH_ASSOC);
-                                                                foreach ($marcas_controles as $marca_control) {
-                                                                    $id_marca_control = $marca_control['id_car_ctrl'];
-                                                                    $nombre_marca_control = $marca_control['marca_control'];
-                                                                    ?>
-                                                                    <option value="<?php echo $id_marca_control;?>" data-control="<?php echo $nombre_marca_control?>">
-                                                                        <?php echo $nombre_marca_control;?>
-                                                                    </option>
-                                                                <?php
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- FUENTE -->
-                                                <div class="row">
-                                                    <div class="col-md-12 campo Fuente">
-                                                        <div class="form-group">
-                                                            <label for="marca_fuente">Marca</label>
-                                                            <select name="marca_fuente" id="marca_fuente" class="form-control">
-                                                                <option value="">Seleccione una Marca</option>
-                                                                <?php 
-                                                                $query_modelo_fuente = $pdo->prepare('SELECT id_car_fuen, marca_fuente FROM caracteristicas_fuentes WHERE marca_fuente IS NOT NULL AND marca_fuente != ""  ORDER BY marca_fuente ASC');
-                                                                $query_modelo_fuente->execute();
-                                                                $modelos_fuentes = $query_modelo_fuente->fetchAll(PDO::FETCH_ASSOC);
-                                                                foreach ($modelos_fuentes as $modelo_fuente){
-                                                                    $id_modelo_fuente = $modelo_fuente['id_car_fuen'];
-                                                                    $nombre_modelo_fuente = $modelo_fuente['marca_fuente'];
-                                                                    ?>
-                                                                    <option value="<?php echo $id_modelo_fuente;?>" data-modeloFuente="<?php echo $nombre_modelo_fuente?>">
-                                                                        <?php echo $nombre_modelo_fuente;?>
-                                                                    </option>
-                                                                <?php
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
+                                                                <label for="serie_modulo">Serie</label>
+                                                                <select id="serie_modulo" name="serie_modulo" class="form-control">
+                                                                    <option value="">Seleccione una Serie</option>
+                                                                    <!-- Las opciones se llenarán dinámicamente vía AJAX -->
+                                                                </select>
+                                                            </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -181,43 +122,30 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                     <input type="hidden" id="id_producto_categoria" name="id_producto_categoria">
                                                 </div>
                                             </div>
-                                            <!-- UBICACIONES Y EXISTENCIAS -->
+                                            <!-- PRODUCTOS -->
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="ubicacion">Ubicación</label>
-                                                                <input type="text" class="form-control" id="ubicacion" name="ubicacion" readonly>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="existencia">Existencia</label>
-                                                                <input type="text" class="form-control" id="existencia" name="existencia" readonly>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- PRODUCTOS -->
-                                        <div class="row">
-                                            <div class="col-md-8">
-                                                <div class="form-group">
-                                                        
                                                     <!-- MODULO -->
                                                     <div class="row">
                                                         <div class="col-md-12 campo Modulo">
                                                             <div class="form-group">
-                                                                <label for="serie_modulo">Serie</label>
-                                                                <select id="serie_modulo" name="serie_modulo" class="form-control">
-                                                                    <option value="">Seleccione una Serie</option>
-                                                                    <!-- Las opciones se llenarán dinámicamente vía AJAX -->
+                                                                <label for="pitch">Pitch</label>
+                                                                <select id="pitch" name="pitch" class="form-control">
+                                                                    <option value="">Seleccione un pitch</option>
+                                                                    <?php 
+                                                                    $query_pitch = $pdo->prepare('SELECT DISTINCT pmc.pitch, tp.pitch AS pitch_nombre FROM producto_modulo_creado AS pmc INNER JOIN tabla_pitch AS tp ON pmc.pitch = tp.id ORDER BY tp.pitch ASC');
+                                                                    $query_pitch->execute();
+                                                                    $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
+                                                                    foreach ($pitches as $pitch) {
+                                                                        $id_pitch = $pitch['pitch'];
+                                                                        $nombre_pitch = $pitch['pitch_nombre'];
+                                                                        ?>
+                                                                        <option value="<?php echo $id_pitch;?>" data-pitch="<?php echo $nombre_pitch?>">
+                                                                            <?php echo $nombre_pitch;?>
+                                                                        </option>
+                                                                    <?php
+                                                                    }
+                                                                    ?>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -240,6 +168,31 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                     <div class="row">
                                                         <div class="col-md-12 campo Control">
                                                             <div class="form-group">
+                                                                <label for="marca_control">Marca</label>
+                                                                <select id="marca_control" name="marca_control" class="form-control" >
+                                                                    <option value="">Seleccione una marca</option>
+                                                                    <?php 
+                                                                    $query_marca_control = $pdo->prepare('SELECT id_car_ctrl, marca_control FROM caracteristicas_control WHERE marca_control IS NOT NULL AND marca_control != "" ORDER BY marca_control ASC');
+                                                                    $query_marca_control->execute();
+                                                                    $marcas_controles = $query_marca_control->fetchAll(PDO::FETCH_ASSOC);
+                                                                    foreach ($marcas_controles as $marca_control) {
+                                                                        $id_marca_control = $marca_control['id_car_ctrl'];
+                                                                        $nombre_marca_control = $marca_control['marca_control'];
+                                                                        ?>
+                                                                        <option value="<?php echo $id_marca_control;?>" data-control="<?php echo $nombre_marca_control?>">
+                                                                            <?php echo $nombre_marca_control;?>
+                                                                        </option>
+                                                                    <?php
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-md-12 campo Control">
+                                                            <div class="form-group">
                                                                 <label for="referencia_control35">Referencia</label>
                                                                 <select id="referencia_control35" name="referencia_control35" class="form-control" >
                                                                     <option value="">Seleccione una Referencia</option>
@@ -257,6 +210,31 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                     <div class="row">
                                                         <div class="col-md-12 campo Fuente">
                                                             <div class="form-group">
+                                                                <label for="marca_fuente">Marca</label>
+                                                                <select name="marca_fuente" id="marca_fuente" class="form-control">
+                                                                    <option value="">Seleccione una Marca</option>
+                                                                    <?php 
+                                                                    $query_modelo_fuente = $pdo->prepare('SELECT id_car_fuen, marca_fuente FROM caracteristicas_fuentes WHERE marca_fuente IS NOT NULL AND marca_fuente != ""  ORDER BY marca_fuente ASC');
+                                                                    $query_modelo_fuente->execute();
+                                                                    $modelos_fuentes = $query_modelo_fuente->fetchAll(PDO::FETCH_ASSOC);
+                                                                    foreach ($modelos_fuentes as $modelo_fuente){
+                                                                        $id_modelo_fuente = $modelo_fuente['id_car_fuen'];
+                                                                        $nombre_modelo_fuente = $modelo_fuente['marca_fuente'];
+                                                                        ?>
+                                                                        <option value="<?php echo $id_modelo_fuente;?>" data-modeloFuente="<?php echo $nombre_modelo_fuente?>">
+                                                                            <?php echo $nombre_modelo_fuente;?>
+                                                                        </option>
+                                                                    <?php
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-12 campo Fuente">
+                                                            <div class="form-group">
                                                                 <label for="modelo_fuente35">Modelo</label>
                                                                 <select name="modelo_fuente35" id="modelo_fuente35" class="form-control">
                                                                     <option value="">Seleccione un Modelo</option>
@@ -270,8 +248,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                         </div>
                                                     </div>
 
-                                                        <!-- LCD -->
-
+                                                    <!-- LCD -->
                                                     <div class="row">
                                                         <div class="col-md-11 campo LCD">
                                                             <div class="form-group">
@@ -288,7 +265,47 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                     </div>
                                                 </div>
                                             </div>
+                                            <!-- UBICACIONES Y EXISTENCIAS -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="ubicacion">Ubicación</label>
+                                                                <input type="text" class="form-control" id="ubicacion" name="ubicacion" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="existencia">Existencia</label>
+                                                                <input type="text" class="form-control" id="existencia" name="existencia" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="sub_almacen">Sub Almacén</label>
+                                                                <select name="sub_almacen" id="sub_almacen" class="form-control">
+                                                                    <option value="">Seleccione un Sub Almacén</option>
+                                                                    <?php
+                                                                    $query_sub_almacen = $pdo->prepare('SELECT * FROM t_sub_almacen WHERE habilitar = 1 ORDER BY sub_almacen ASC');
+                                                                    $query_sub_almacen->execute();
+                                                                    $subs_almacenes = $query_sub_almacen->fetchAll(PDO::FETCH_ASSOC);
+                                                                    foreach($subs_almacenes as $sub_almacen) {
+                                                                        echo '<option value="' . $sub_almacen['id'] . '">' . $sub_almacen['sub_almacen'] . '</option>';
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <!-- ALMACEN -->
@@ -296,7 +313,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <div class="row">
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label for="entrada_md">Almacén Destino</label>
                                                                 <select name="almacen_entrada_md" id="almacen_entrada_md" class="form-control" required>
@@ -315,12 +332,28 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
+                                                                <label for="sub_almacen_destino">Sub Almacén</label>
+                                                                <select name="sub_almacen_destino" id="sub_almacen_destino" class="form-control" disabled>
+                                                                    <option value="">Seleccione un Sub Almacén</option>
+                                                                    <?php
+                                                                    $query_sub_almacen = $pdo->prepare('SELECT * FROM t_sub_almacen WHERE habilitar = 1 ORDER BY sub_almacen ASC');
+                                                                    $query_sub_almacen->execute();
+                                                                    $subs_almacenes = $query_sub_almacen->fetchAll(PDO::FETCH_ASSOC);
+                                                                    foreach($subs_almacenes as $sub_almacen) {
+                                                                        echo '<option value="' . $sub_almacen['id'] . '">' . $sub_almacen['sub_almacen'] . '</option>';
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>  
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
                                                                 <label for="entrada_md">Cantidad de Salida</label>
                                                                 <input type="text" name="entrada_md" id="entrada_md" class="form-control" placeholder="Cantidad Entrada">
                                                                 <small id="errorEntrada" class="text-danger" style="display:none;">La Cantidad de Salida no puede superar la existencia</small>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-5">
+                                                        <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label for="op_destino">Asignar a:</label>
                                                                 <input type="text" name="op_destino" id="op_destino" class="form-control" placeholder="Asignar" required>
@@ -429,7 +462,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <a href="<?php echo $URL."admin/almacen/mv_diario/smartled";?>" class="btn btn-default btn-block">Cancelar</a>
+                                        <a href="<?php echo $URL."admin/almacen/stock/smartled";?>" class="btn btn-default btn-block">Cancelar</a>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -642,36 +675,69 @@ $(document).ready(function() {
 
 <script>
 $(document).ready(function () {
-    // Escuchar cambios en los selects después de seleccionar el id_producto_categoria
-    $('#serie_modulo, #referencia_control35, #modelo_fuente35').change(function () {
-        var idProductoCategoria = $('#id_producto_categoria').val(); // Obtener id_producto_categoria
-        var valorCampo = $(this).val(); // Obtener el valor del campo seleccionado
-        var selectId = $(this).attr('id'); // Identificar cuál select se utilizó
+    // Inicialmente deshabilitar el select de sub_almacen
+    $('#sub_almacen').prop('disabled', true);
 
-        // Enviar la solicitud AJAX con los datos
+    // Escuchar cambios en id_producto_categoria y los 3 selects
+    $('#id_producto_categoria, #serie_modulo, #referencia_control35, #modelo_fuente35').change(function () {
+        var idProductoCategoria = $('#id_producto_categoria').val();
+        var serieModulo = $('#serie_modulo').val();
+        var referenciaControl = $('#referencia_control35').val();
+        var modeloFuente = $('#modelo_fuente35').val();
+
+        // Si id_producto_categoria está seleccionado y al menos uno de los otros selects tiene valor, habilitar sub_almacen
+        if (idProductoCategoria && (serieModulo || referenciaControl || modeloFuente)) {
+            $('#sub_almacen').prop('disabled', false);
+        } else {
+            $('#sub_almacen').prop('disabled', true).val(''); // Deshabilitar y limpiar sub_almacen
+        }
+    });
+
+    // Escuchar cambios en sub_almacen para actualizar existencia
+    $('#sub_almacen').change(function () {
+        var idProductoCategoria = $('#id_producto_categoria').val();
+        var subAlmacen = $(this).val();
+        var valorCampo = $('#serie_modulo, #referencia_control35, #modelo_fuente35').filter(function () {
+            return $(this).val() !== "";
+        }).val(); // Obtener el primer valor seleccionado de los 3 selects
+        var selectId = $('#serie_modulo, #referencia_control35, #modelo_fuente35').filter(function () {
+            return $(this).val() !== "";
+        }).attr('id'); // Identificar cuál select se usó
+
+        // Limpiar existencia antes de hacer la nueva carga
+        $('#existencia').val(0);
+
+        if (!idProductoCategoria || !valorCampo || !subAlmacen) {
+            return;
+        }
+
+        // Hacer la consulta AJAX
         $.ajax({
-            url: 'obtener_datos_alma_smartled.php', // Archivo PHP para procesar la solicitud
+            url: 'obtener_datos_alma_smartled.php',
             method: 'POST',
             data: {
                 id_producto_categoria: idProductoCategoria,
                 valor_campo: valorCampo,
-                select_id: selectId
+                select_id: selectId,
+                sub_almacen: subAlmacen
             },
             success: function (response) {
-                // Parsear la respuesta JSON
                 var data = JSON.parse(response);
 
                 if (data.error) {
-                    alert(data.error); // Mostrar error si existe
+                    alert(data.error);
+                    $('#existencia').val(0); // Si no hay coincidencias, existencia será 0
                 } else {
-                    // Actualizar los campos del formulario
-                    $('#ubicacion').val(data.posicion);
                     $('#existencia').val(data.cantidad_plena);
+
+                    // Asegurarse de que el campo de posición está en el formulario
+                    $('#ubicacion').val(data.posicion); 
                 }
             }
         });
     });
 });
+
 </script>
 
 <script>
@@ -1108,4 +1174,19 @@ function actualizarRegistros(ids) {
         })
         .catch(error => console.error('Error:', error));
 }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let almacenEntrada = document.getElementById("almacen_entrada_md");
+        let subAlmacenDestino = document.getElementById("sub_almacen_destino");
+
+        almacenEntrada.addEventListener("change", function() {
+            if (almacenEntrada.value === "4") {
+                subAlmacenDestino.removeAttribute("disabled");
+            } else {
+                subAlmacenDestino.setAttribute("disabled", "disabled");
+            }
+        });
+    });
 </script>

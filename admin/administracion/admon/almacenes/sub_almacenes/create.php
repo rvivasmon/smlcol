@@ -32,12 +32,6 @@ include('../../../../../layout/admin/parte1.php');
                                     <input type="text" name="bodega" id="bodega" class="form-control" placeholder="Nombre Bodega" required>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="descripcion">Descripción</label>
-                                    <input type="text" name="descripcion" id="descripcion" class="form-control" placeholder="Descripción" required>
-                                </div>
-                            </div>
                         </div>
 
                         <!-- Este es el campo oculto del ID del cliente seleccionado aquí -->

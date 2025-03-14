@@ -32,7 +32,7 @@ include('../../../../layout/admin/parte1.php');
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="">Origen de Solicitud</label>
+                                                <label for="">Solicitante</label>
                                                 <input type="text" name="origen_solicitud" id="origen_solicitud" class="form-control" value=""> <!-- FALTA COLOCAR AQUÍ DE DÓNDE PROVIENE LA SOLICITUD OJO -->
                                             </div>
                                         </div>
@@ -50,15 +50,21 @@ include('../../../../layout/admin/parte1.php');
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="">Tipo</label>
-                                                <select class="form-control"  id="tipoproducto" name="tipoproducto" required>
-                                                    <option value="">Seleccionar Tipo Producto</option>
-                                                    <option value="Fuentes">Fuentes</option>
-                                                    <option value="Modulos">Modulos</option>
-                                                    <option value="Tarjetas">Tarjetas</option>
-                                                    <option value="Sistema de Control">Sistema de Control</option>
-                                                    <option value="Video Procesador">Video Procesador</option>
-                                                    <option value="LCD">LCD</option>
+                                                <label for="tipo_producto">Tipo</label>
+                                                <select class="form-control" name="tipo_producto" id="tipo_producto">
+                                                    <option value="">Seleccione un tipo</option>
+                                                    <?php 
+                                                    $query_pitch = $pdo->prepare('SELECT DISTINCT tpd.id_producto, tpd.tipo_producto 
+                                                                                FROM alma_smartled AS mvd 
+                                                                                INNER JOIN t_productos AS tpd 
+                                                                                ON mvd.tipo_producto = tpd.id_producto');
+                                                    $query_pitch->execute();
+                                                    $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
+
+                                                    foreach($pitches as $pitch) {
+                                                        echo '<option value="' . $pitch['id_producto'] . '">' . $pitch['tipo_producto'] . '</option>';
+                                                    }
+                                                    ?>
                                                 </select>
                                             </div>
                                         </div>
@@ -70,64 +76,25 @@ include('../../../../layout/admin/parte1.php');
                                                 <input type="text" name="usuarioperador" class="form-control" value="<?php echo $sesion_nombre; ?>" hidden>
                                             </div>
                                         </div>
+
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Categoría 1</label>
-                                                <select class= "form-control" name="categoria" id="categoria">
-                                                <option value="">Seleccione la categoría 1</option>
-                                                    <?php 
-                                                    $query_pitch = $pdo->prepare('SELECT * FROM movimiento_diario');
-                                                    $query_pitch->execute();
-                                                    $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
-                                                    
-                                                    // Filtrar pitches únicos
-                                                    $pitches_unicos = [];
-                                                    $pitches_unicos_keys = [];
-
-                                                    foreach($pitches as $pitch) {
-                                                        if (!in_array($pitch['referencia_1'], $pitches_unicos)) {
-                                                            $pitches_unicos[] = $pitch['referencia_1'];
-                                                            $pitches_unicos_keys[] = $pitch;
-                                                        }
-                                                    }
-
-                                                    // Generar opciones únicas
-                                                    foreach($pitches_unicos_keys as $pitch_unico) {
-                                                        echo '<option value="' . $pitch_unico['id_movimiento_diario'] . '">' . $pitch_unico['referencia_1'] . '</option>';
-                                                    }
-                                                    ?>
+                                                <label for="categoria1">Categoría 1</label>
+                                                <select class="form-control" name="categoria1" id="categoria1">
+                                                    <option value="">Seleccione la categoría 1</option>
                                                 </select>
                                             </div>
                                         </div>
+
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Categoría 2</label>
-                                                <select class="form-control" name="categoria" id="categoria">
-                                                <option value="">Seleccione la categoría</option>
-                                                    <?php 
-                                                    $query_pitch = $pdo->prepare('SELECT * FROM movimiento_diario');
-                                                    $query_pitch->execute();
-                                                    $pitches = $query_pitch->fetchAll(PDO::FETCH_ASSOC);
-                                                    
-                                                    // Filtrar pitches únicos
-                                                    $pitches_unicos = [];
-                                                    $pitches_unicos_keys = [];
-
-                                                    foreach($pitches as $pitch) {
-                                                        if (!in_array($pitch['referencia_2'], $pitches_unicos)) {
-                                                            $pitches_unicos[] = $pitch['referencia_2'];
-                                                            $pitches_unicos_keys[] = $pitch;
-                                                        }
-                                                    }
-
-                                                    // Generar opciones únicas
-                                                    foreach($pitches_unicos_keys as $pitch_unico) {
-                                                        echo '<option value="' . $pitch_unico['id_movimiento_diario'] . '">' . $pitch_unico['referencia_2'] . '</option>';
-                                                    }
-                                                    ?>
+                                                <label for="categoria2">Categoría 2</label>
+                                                <select class="form-control" name="categoria2" id="categoria2">
+                                                    <option value="">Seleccione la categoría 2</option>
                                                 </select>
                                             </div>
                                         </div>
+
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="">Cantidad</label>
@@ -188,3 +155,38 @@ include('../../../../layout/admin/parte1.php');
 </script>
 
 <?php include('../../../../layout/admin/parte2.php');?>
+
+<script>
+$(document).ready(function() {
+    // Cuando cambia el Tipo de Producto
+    $("#tipo_producto").change(function() {
+        var tipo_id = $(this).val();
+        $("#categoria1").html('<option value="">Cargando...</option>'); // Mensaje de carga
+        $("#categoria2").html('<option value="">Seleccione la categoría 2</option>'); // Reset categoría 2
+
+        $.ajax({
+            url: 'get_categorias.php',
+            type: 'POST',
+            data: {tipo_id: tipo_id},
+            success: function(response) {
+                $("#categoria1").html(response); // Actualizar select
+            }
+        });
+    });
+
+    // Cuando cambia la Categoría 1
+    $("#categoria1").change(function() {
+        var categoria1_id = $(this).val();
+        $("#categoria2").html('<option value="">Cargando...</option>');
+
+        $.ajax({
+            url: 'get_subcategorias.php',
+            type: 'POST',
+            data: {categoria1_id: categoria1_id},
+            success: function(response) {
+                $("#categoria2").html(response);
+            }
+        });
+    });
+});
+</script>

@@ -88,7 +88,7 @@ include('../../../layout/admin/parte1.php');
                                                                     alma_total AS ato
                                                                 ');
                                         $query->execute();
-                                        $invgenerales = $query
+                                        $invgenerales = $query->fetchAll(PDO::FETCH_ASSOC);
                                         ?>
                                     </tbody>
                                 </table>
@@ -247,7 +247,7 @@ include('../../../layout/admin/parte1.php');
     const columnIndex = contextMenu.getAttribute('data-column-index'); // Obtener índice de la columna seleccionada
     const table = $('#table_stcs').DataTable(); // Instancia de DataTables
 
-    if (columnIndex === "5") { // Suponiendo que la columna "Cantidad" está en la posición 8 (índice basado en 0)
+    if (parseInt(columnIndex) === 5) { // Suponiendo que la columna "Cantidad" está en la posición 8 (índice basado en 0)
         // Mostrar alerta SweetAlert2 para solicitar el valor con operador
         const { value: filterValue } = await Swal.fire({
             title: "Filtrar por cantidad",

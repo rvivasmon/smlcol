@@ -85,10 +85,10 @@ foreach ($roles_permisos as $rol_permiso) {
       <link rel="icon" type="image/png" href="/favicon.png">
 
       <!-- Main CSS -->
-      <link rel="stylesheet" href="css/main.css">
+      <!--<link rel="stylesheet" href="css/main.css">-->
 
       <!-- Style QR-->
-      <link rel="stylesheet" href="css/styles.css">
+      <!--<link rel="stylesheet" href="css/styles.css">-->
 
     </head>
 
@@ -245,10 +245,10 @@ foreach ($roles_permisos as $rol_permiso) {
                         // Ejemplo de generación dinámica de submenús para Consulta Stock
 
                         // Conectar a la base de datos (asegúrate de tener la conexión establecida en $pdo)
-$sql = "SELECT almacen_destino1 FROM movimiento_admon WHERE habilitar_almacen_entra = 0";
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$almacenes_alerta = $stmt->fetchAll(PDO::FETCH_COLUMN); // Obtiene solo los valores de la columna almacen_destino1
+                        $sql = "SELECT almacen_destino1 FROM movimiento_admon WHERE habilitar_almacen_entra = 0";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute();
+                        $almacenes_alerta = $stmt->fetchAll(PDO::FETCH_COLUMN); // Obtiene solo los valores de la columna almacen_destino1
 
 
                         // Ejemplo de datos simulados (reemplaza con tu lógica de datos real)
@@ -264,16 +264,16 @@ $almacenes_alerta = $stmt->fetchAll(PDO::FETCH_COLUMN); // Obtiene solo los valo
                           array('id' => 11, 'nombre' => 'Almacén Aliados'),
                           array('id' => 12, 'nombre' => 'Almacén General'),*/
                           // Agregar más almacenes según necesites
-                          //array('id' => 13, 'nombre' => 'Almacén MMP'),
+                          array('id' => 13, 'nombre' => 'Almacén MMP'),
                         );
 
                         // Modificar los nombres de los almacenes con alerta
-foreach ($almacenes as &$almacen) {
-  if (in_array($almacen['id'], $almacenes_alerta)) {
-      $almacen['nombre'] .= ' <span style="color: red;">⚠</span>'; // Agregar un icono de alerta
-  }
-}
-unset($almacen); // Romper la referencia
+                        foreach ($almacenes as &$almacen) {
+                          if (in_array($almacen['id'], $almacenes_alerta)) {
+                              $almacen['nombre'] .= ' <span style="color: red;">⚠</span>'; // Agregar un icono de alerta
+                          }
+                        }
+                        unset($almacen); // Romper la referencia
 
                         $productos = array(
                           array('id' => 6, 'nombre' => 'General'),
@@ -285,7 +285,7 @@ unset($almacen); // Romper la referencia
                           <a href="#" class="nav-link active">
                             <i class="nav-icon fas fa-warehouse"></i>
                             <p>
-                              STOCK E INVENTARIO
+                              STOCK / MOVIMIENTOS
                               <i class="right fas fa-angle-left"></i>
                             </p>
                           </a>

@@ -20,7 +20,7 @@ $sentencia->bindParam(':observacion', $observacion);
 
 if ($sentencia->execute()) {
     echo "Movimiento actualizado exitosamente."; // Mensaje de texto
-    header('Location: ' . $URL . 'admin/almacen/mv_diario/techled');
+    header('Location: ' . $URL . 'admin/almacen/mv_diario/index.php');
 } else {
     // Maneja los posibles errores durante la ejecución
     $errorInfo = $sentencia->errorInfo();

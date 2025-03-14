@@ -1,0 +1,118 @@
+
+      <!-- Contador de notificaciones -->
+      <script>
+          function actualizarNotificaciones() {
+              $.ajax({
+                  url: "<?php echo $URL; ?>admin/help/chat/php/backend.php", // Ruta corregida
+                  type: "GET",
+                  dataType: "json",
+                  success: function(response) {
+                      let contadorElement = $("#contadorNotificaciones");
+                      let listaNotificaciones = $("#listaNotificaciones");
+
+                      if (response.status === "success" && response.total_unread_count > 0) {
+                          contadorElement.text(response.total_unread_count).show();
+                          listaNotificaciones.html('');
+                          response.notificaciones.forEach(notificacion => {
+                              listaNotificaciones.append(`
+                                  <a href="#" class="dropdown-item">
+                                      <strong>${notificacion.usuario}</strong>: ${notificacion.mensaje}
+                                      <span class="float-right text-muted text-sm">${notificacion.fecha}</span>
+                                  </a>
+                                  <div class="dropdown-divider"></div>
+                              `);
+                          });
+                      } else {
+                          contadorElement.hide();
+                          listaNotificaciones.html('<p class="text-muted text-center">No hay nuevas notificaciones</p>');
+                      }
+                  },
+                  error: function(xhr, status, error) {
+                      console.error("Error al obtener notificaciones:", error);
+                      console.log("Detalles:", xhr.responseText);
+                  }
+              });
+          }
+
+          window.addEventListener("message", function(event) {
+              if (event.data.tipo === "notificacion") {
+                  let contadorElement = $("#contadorNotificaciones");
+                  let listaNotificaciones = $("#listaNotificaciones");
+                  let totalNotificaciones = parseInt(contadorElement.text()) || 0;
+                  totalNotificaciones += 1;
+                  contadorElement.text(totalNotificaciones).show();
+                  listaNotificaciones.prepend(`
+                      <a href="#" class="dropdown-item">
+                          <strong>${event.data.usuario}</strong>: ${event.data.mensaje}
+                          <span class="float-right text-muted text-sm">Ahora</span>
+                      </a>
+                      <div class="dropdown-divider"></div>
+                  `);
+              }
+          });
+
+          setInterval(actualizarNotificaciones, 5000);
+      </script>
+
+      <!-- generador de alertas -->
+      <script>
+          let previousUnreadCount = parseInt(localStorage.getItem("unreadMessages")) || 0;
+
+          function playNotificationSound() {
+              const notificationSound = new Audio("../../admin/help/chat/php/sonido/tono.mp3");
+              notificationSound.play();
+          }
+
+          function showUnreadMessagesAlertWithSound(unreadCount) {
+              playNotificationSound();
+              Swal.fire({
+                  title: "Nuevo mensaje",
+                  text: `Tienes ${unreadCount} mensaje(s) no leído(s).`,
+                  icon: "info",
+                  confirmButtonText: "Ir al chat",
+                  showCancelButton: true,
+                  cancelButtonText: "Cerrar",
+                  customClass: {
+                      popup: 'custom-swal-popup',
+                      confirmButton: 'custom-swal-confirm',
+                      cancelButton: 'custom-swal-cancel'
+                  }
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                      window.location.href = "../../admin/help/index.php";
+                  }
+              });
+          }
+
+          function actualizarNotificaciones() {
+              $.ajax({
+                  url: "<?php echo $URL; ?>admin/help/chat/php/backend.php",
+                  type: "GET",
+                  dataType: "json",
+                  success: function(response) {
+                      let contadorElement = $("#contadorNotificaciones");
+                      let listaNotificaciones = $("#listaNotificaciones");
+
+                      if (response.status === "success") {
+                          let newUnreadCount = response.total_unread_count;
+
+                          // 🔥 **NUEVO: Verificar si hay más notificaciones que antes**
+                          if (newUnreadCount > previousUnreadCount) {
+                              localStorage.setItem("unreadMessages", newUnreadCount);
+                              showUnreadMessagesAlertWithSound(newUnreadCount);
+                          } 
+
+                          // 🔥 **NUEVO: Guardar la cantidad de notificaciones actual para la siguiente verificación**
+                          previousUnreadCount = newUnreadCount;
+                      }
+                  },
+                  error: function(xhr, status, error) {
+                      console.error("Error al obtener notificaciones:", error);
+                      console.log("Detalles:", xhr.responseText);
+                  }
+              });
+          }
+
+          // Ejecutar cada 5 segundos
+          setInterval(actualizarNotificaciones, 5000);
+      </script>

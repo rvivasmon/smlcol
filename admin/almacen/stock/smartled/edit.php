@@ -10,21 +10,67 @@ include('../../../../layout/admin/parte1.php');
 
 $id_get = $_GET['id'];
 
-$query = $pdo->prepare("SELECT * FROM alma_smartled WHERE id_almacen_principal = '$id_get'");
+$query = $pdo->prepare("SELECT
+                                mvd.*,
+                                productomovido.tipo_producto AS nombre_producto,
+                                almacen_origen.nombre_almacen AS almacen_origen,
+                                almacen_destino.nombre_almacen AS almacen_destino,
+                                sub_almacen.sub_almacen AS nombre_sub_almacen,
+                                CASE
+                                WHEN mvd.tipo_producto = 1 THEN pitch_table.pitch -- Aquí se une la tabla tabla_pitch
+                                WHEN mvd.tipo_producto = 2 THEN caraccon.marca_control
+                                WHEN mvd.tipo_producto = 3 THEN caracfue.marca_fuente
+                                ELSE NULL
+                                END AS nombre_referencia_1,
+                                CASE
+                                WHEN mvd.tipo_producto = 1 THEN tmc.serie
+                                WHEN mvd.tipo_producto = 2 THEN refecon.referencia
+                                WHEN mvd.tipo_producto = 3 THEN refefue.modelo_fuente
+                                ELSE NULL
+                                END AS nombre_referencia_2
+                                FROM
+                                movimiento_diario AS mvd
+                                INNER JOIN
+                                t_productos AS productomovido ON mvd.tipo_producto = productomovido.id_producto
+                                LEFT JOIN
+                                t_asignar_todos_almacenes AS almacen_origen ON mvd.almacen_origen1 = almacen_origen.id_asignacion
+                                LEFT JOIN
+                                t_asignar_todos_almacenes AS almacen_destino ON mvd.almacen_destino1 = almacen_destino.id_asignacion
 
-$query->execute(['id_get' => $id_get]);
+
+                                LEFT JOIN
+                                tabla_pitch AS tp ON mvd.referencia_2 = tp.id AND mvd.tipo_producto = 1
+                                LEFT JOIN
+                                referencias_control AS refecon ON mvd.referencia_2 = refecon.id_referencia AND mvd.tipo_producto = 2
+                                LEFT JOIN
+                                referencias_fuente AS refefue ON mvd.referencia_2 = refefue.id_referencias_fuentes AND mvd.tipo_producto = 3
+
+                                LEFT JOIN
+                                producto_modulo_creado AS tmc ON mvd.referencia_2 = tmc.id AND mvd.tipo_producto = 1
+                                LEFT JOIN
+                                caracteristicas_control AS caraccon ON refecon.marca = caraccon.id_car_ctrl AND mvd.tipo_producto = 2
+                                LEFT JOIN
+                                caracteristicas_fuentes AS caracfue ON refefue.marca_fuente = caracfue.id_car_fuen AND mvd.tipo_producto = 3
+                                LEFT JOIN
+                                tabla_pitch AS pitch_table ON tmc.pitch = pitch_table.id
+                                LEFT JOIN
+                                t_sub_almacen AS sub_almacen ON mvd.sub_almacen = sub_almacen.id
+                                WHERE
+                                    id_movimiento_diario = :id_movimiento_diario
+                                ");
+$query->execute(['id_movimiento_diario' => $id_get]);
 $usuarios = $query->fetchAll(PDO::FETCH_ASSOC);
 foreach ($usuarios as $usuario){
-    $id = $usuario['id_almacen_principal'];
-    $nombres = $usuario['tipo_producto'];
-    $correos = $usuario['posicion'];
-    $usuario_uso = $usuario['cantidad_plena'];
-    $cargo = $usuario['producto'];
-    $estado = $usuario['observacion'];
-    $valor_actual_en_edicion = $usuario['funcion_control'];
-    $valor_actual_en_edicion_cargo = $usuario['tipo_fuente'];
-    $pass = $usuario['referencia'];
-
+    $id = $usuario['id_movimiento_diario'];
+    $fecha = $usuario['fecha'];
+    $producto = $usuario['nombre_producto'];
+    $referencia = $usuario['nombre_referencia_2'];
+    $origen = $usuario['almacen_origen'];
+    $cantidad = $usuario['cantidad_entrada'];
+    $observaciones = $usuario['observaciones'];
+    $op = $usuario['op'];
+    $sub_almacen = $usuario['nombre_sub_almacen'];
+    $usuario = $usuario['id_usuario'];
 }
 
 ?>
@@ -34,7 +80,7 @@ foreach ($usuarios as $usuario){
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Edición Usuario</h1>
+                    <h1 class="m-0">Edición Movimientod Diario</h1>
 
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -46,84 +92,56 @@ foreach ($usuarios as $usuario){
                 <div class="card-body">
                     <form action="controller_edit.php" method="post">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="">Nombre</label>
-                                    <input type="text" name="nombre" value="<?php echo $nombres;?>" class="form-control" placeholder="Nombre Completo" required>
+                                    <label for="fecha">Fecha</label>
+                                    <input type="date" name="fecha" id="fecha" value="<?php echo $fecha;?>" class="form-control" placeholder="Nombre Completo" readonly>
+                                    <input type="hidden" name="id_movimiento_diario" value="<?php echo $id; ?>"> 
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="">Usuario</label>
-                                    <input type="text" name="usuario" value="<?php echo $usuario_uso;?>" class="form-control" placeholder="Usuario">
-                                    <input type="text" name="id_usuario" value="<?php echo $id_get;?>" hidden>
+                                    <label for="producto">Producto</label>
+                                    <input type="text" name="producto" id="producto" value="<?php echo $producto;?>" class="form-control" placeholder="Usuario" readonly>>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="">Correo Electrónico</label>
-                                    <input type="text" name="email" value="<?php echo $correos;?>" class="form-control" placeholder="Email" required>
+                                    <label for="referencia">Referencia</label>
+                                    <input type="text" name="referencia" id="referencia" value="<?php echo $referencia;?>" class="form-control" placeholder="Email" readonly>>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="cantidad">Cantidad</label>
+                                    <input type="text" name="cantidad" id="cantidad" value="<?php echo $cantidad;?>" class="form-control" placeholder="Email" readonly>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="">Cargo</label>
-                                    <select name="id_cargo" id="id_cargo" class="form-control" required>
-                                        
-                                        <?php
-                                        $query_cargo = $pdo->prepare('SELECT * FROM cargo');
-                                        $query_cargo->execute();
-                                        $cargos = $query_cargo->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach($cargos as $cargo) {
-
-                                            $id_cargo = $cargo['id_cargo'];
-                                            $cargo_descripcion = $cargo['descripcion'];
-                                            $selected = ($id_cargo == $valor_actual_en_edicion_cargo) ? 'selected' : '';
-                                            ?>
-                                            <option value="<?php echo $id_cargo; ?>" <?php echo $selected; ?>><?php echo $cargo_descripcion; ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
+                                    <label for="origen">Origen</label>
+                                    <input type="text" name="origen" id="origen" value="<?php echo $origen;?>" class="form-control" placeholder="Email" readonly>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="">Estado</label>
-                                    <select name="id_estado" id="id_estado" class="form-control" required>
-                                        
-                                    <?php
-                                        $query_estado = $pdo->prepare('SELECT * FROM t_estado');
-                                        $query_estado->execute();
-                                        $estados = $query_estado->fetchAll(PDO::FETCH_ASSOC);
-                                        
-                                        foreach($estados as $estado) {
-                                            $id_estado = $estado['id'];
-                                            $estado_descripcion = $estado['estado_general'];
-                                            if(!empty($estado_descripcion)) { // Verifica si el estado tiene datos antes de mostrarlo
-                                            $selected = ($id_estado == $valor_actual_en_edicion) ? 'selected' : '';
-                                            ?>
-                                            <option value="<?php echo $id_estado; ?>" <?php echo $selected; ?>><?php echo $estado_descripcion; ?></option>
-                                        <?php
-                                        }
-                                    }
-                                    ?>
-                                    </select>
+                                    <label for="op">OC / STOCK</label>
+                                    <input type="text" name="op" id="op" value="<?php echo $op;?>" class="form-control" placeholder="Email" readonly>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="">Contraseña</label>
-                                    <input type="text" name="pass" class="form-control" placeholder="Contraseña">
-
-                                        <!-- Checkbox para indicar si es la primera vez -->
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" name="reset_password" id="reset_password" value="1">
-                                        <label class="form-check-label" for="reset_password">Reestablecer Contraseña</label>
-                                    </div>
+                                    <label for="sub_almacen">Sub Almacén</label>
+                                    <input type="text" name="sub_almacen" id="sub_almacen" value="<?php echo $sub_almacen;?>" class="form-control" placeholder="Email" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="observacion">Observaciones</label>
+                                    <textarea name="observacion" id="observacion" class="form-control" rows="4" cols="50"><?php echo $observaciones; ?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -131,7 +149,7 @@ foreach ($usuarios as $usuario){
 
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/ti/usuarios/";?>" class="btn btn-default btn-block">Cancelar</a>
+                                <a href="<?php echo $URL."admin/almacen/stock/smartled"; ?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" onclick="return confirm('Asegurese de diligenciar correctamente los datos')" class="btn btn-success btn-block">Actualizar Usuario</button>

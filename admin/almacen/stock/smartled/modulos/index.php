@@ -46,9 +46,10 @@ include('../../../../../layout/admin/parte1.php');
                                             <th>Serie Modulo</th>
                                             <th>Referencia</th>
                                             <th>Tamaño</th>
-                                            <th>Observación</th>
                                             <th>Posición</th>
+                                            <th>Observación</th>
                                             <th>Existencia</th>
+                                            <th>Sub Almacén</th>
                                             <th><center>Acciones</center></th>
                                         </tr>
                                     </thead>
@@ -63,6 +64,7 @@ include('../../../../../layout/admin/parte1.php');
                                             pmc.serie as nombre_serie,
                                             pmc.referencia as nombre_referencia,
                                             ttm.tamanos_modulos as nombre_tamano,
+                                            tsa.sub_almacen as nombre_sub_almacen,
                                             da.posiciones as nombre_posicion
                                         FROM
                                             alma_smartled AS ap
@@ -78,6 +80,8 @@ include('../../../../../layout/admin/parte1.php');
                                             t_uso_productos AS tup ON pmc.uso = tup.id_uso
                                         LEFT JOIN
                                             distribucion_almacen AS da ON ap.posicion = da.id
+                                        LEFT JOIN
+                                            t_sub_almacen AS tsa ON ap.sub_almacen = tsa.id
                                         WHERE
                                             ap.tipo_producto = 1 AND ap.habilitar = 1
                                         ');
@@ -95,6 +99,7 @@ include('../../../../../layout/admin/parte1.php');
                                             $tamano = $almacen_pricipal['nombre_tamano'];
                                             $existencia = $almacen_pricipal['cantidad_plena'];
                                             $observacion = $almacen_pricipal['observacion'];
+                                            $nombre_sub_almacen = $almacen_pricipal['nombre_sub_almacen'];
                                             $contador = $contador + 1;
 
                                         ?>
@@ -109,6 +114,7 @@ include('../../../../../layout/admin/parte1.php');
                                                 <td><?php echo htmlspecialchars($observacion); ?></td>
                                                 <td><?php echo htmlspecialchars($posicion); ?></td>
                                                 <td><?php echo htmlspecialchars($existencia); ?></td>
+                                                <td><?php echo htmlspecialchars($nombre_sub_almacen); ?></td>
                                                 <td>
                                                     <center>
                                                         <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
@@ -160,7 +166,7 @@ include('../../../../../layout/admin/parte1.php');
 <script>
     $(function () {
     var table = $("#table_stcs").DataTable({
-        "pageLength": 25,
+        "pageLength": 10,
         "language": {
             "emptyTable": "No hay información",
             "info": "Mostrando _START_ a _END_ de _TOTAL_ Módulos",

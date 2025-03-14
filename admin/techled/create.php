@@ -51,7 +51,7 @@ include('../../layout/admin/parte1.php');
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="serial">Serial</label>
-                                            <input type="text" name="serial" id="serial" class="form-control" placeholder="Ingresa el serial" pattern="[A-Za-z0-9]+" title="Solo se permiten letras y números" required>
+                                            <input type="text" name="serial" id="serial" class="form-control" placeholder="Ingresa el serial" required>
                                         </div>
                                     </div>
 

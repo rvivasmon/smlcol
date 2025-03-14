@@ -12,7 +12,7 @@ $query = $pdo->prepare("SELECT
                                 ap.CREATED_AT as nombre_fecha,
                                 da.posiciones as nombre_posicion
                             FROM
-                                alma_smartled AS ap
+                                alma_techled AS ap
                             INNER JOIN 
                                 producto_modulo_creado AS pmc ON ap.producto = pmc.id
                             LEFT JOIN
@@ -26,13 +26,13 @@ $query = $pdo->prepare("SELECT
                             LEFT JOIN
                                 distribucion_almacen AS da ON ap.posicion = da.id
                             WHERE
-                                ap.id_almacen_principal = :id_modulo
+                                ap.id_techled = :id_modulo
                             ");
 
 $query->execute(['id_modulo' => $id_modulo]);
 $almacenes_pricipales = $query->fetchAll(PDO::FETCH_ASSOC);
 foreach ($almacenes_pricipales as $almacen_pricipal){
-    $id = $almacen_pricipal['id_almacen_principal'];
+    $id = $almacen_pricipal['id_techled'];
     $fecha_ingreso = $almacen_pricipal['nombre_fecha'];
     $uso = $almacen_pricipal['nombre_uso'];
     $pitch = $almacen_pricipal['nombre_pitch'];
