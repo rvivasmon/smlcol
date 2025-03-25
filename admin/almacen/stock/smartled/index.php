@@ -98,7 +98,7 @@ $movimientos = $queryMovimientos->fetchAll(PDO::FETCH_ASSOC);
                                             <th>Referencia 2</th>
                                             <th>Almacén Origen</th>
                                             <th>Almacén Destino</th>
-                                            <th>Destino</th>
+                                            <th>Asignada a:</th>
                                             <th>Cantidad</th>
                                             <th>Observación</th>
                                             <th>Sub Almacén</th>
@@ -134,17 +134,12 @@ $movimientos = $queryMovimientos->fetchAll(PDO::FETCH_ASSOC);
                                                                     t_asignar_todos_almacenes AS almacen_origen ON mvd.almacen_origen1 = almacen_origen.id_asignacion
                                                                 LEFT JOIN
                                                                     t_asignar_todos_almacenes AS almacen_destino ON mvd.almacen_destino1 = almacen_destino.id_asignacion
-
-
                                                                 LEFT JOIN
                                                                     tabla_pitch AS tp ON mvd.referencia_2 = tp.id AND mvd.tipo_producto = 1
                                                                 LEFT JOIN
                                                                     referencias_control AS refecon ON mvd.referencia_2 = refecon.id_referencia AND mvd.tipo_producto = 2
                                                                 LEFT JOIN
                                                                     referencias_fuente AS refefue ON mvd.referencia_2 = refefue.id_referencias_fuentes AND mvd.tipo_producto = 3
-
-
-
                                                                 LEFT JOIN
                                                                     producto_modulo_creado AS tmc ON mvd.referencia_2 = tmc.id AND mvd.tipo_producto = 1
                                                                 LEFT JOIN
@@ -155,6 +150,8 @@ $movimientos = $queryMovimientos->fetchAll(PDO::FETCH_ASSOC);
                                                                     tabla_pitch AS pitch_table ON tmc.pitch = pitch_table.id
                                                                 LEFT JOIN
                                                                     t_sub_almacen AS sub_almacen ON mvd.sub_almacen = sub_almacen.id
+                                                                ORDER BY 
+                                                                    fecha DESC
                                                             ');
                                         $query->execute();
                                         $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);

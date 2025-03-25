@@ -178,7 +178,7 @@ foreach ($roles_permisos as $rol_permiso) {
                           </a>
                           <ul class="nav nav-treeview">
                             <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/administracion/tracking/tracking_col/index_tracking.php" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/administracion/tracking/tracking_col" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>COMPRA TECHLED</p>
                               </a>

@@ -126,7 +126,7 @@ foreach ($usuarios as $usuario){
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="op">OC / STOCK</label>
+                                    <label for="op">Asignada a:</label>
                                     <input type="text" name="op" id="op" value="<?php echo $op;?>" class="form-control" placeholder="Email" readonly>
                                 </div>
                             </div>

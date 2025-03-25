@@ -62,7 +62,7 @@ include('../../../../layout/admin/parte1.php');
                                     $origin = $tracking['contador_colombia'];
                                     $type = $tracking['type'];
                                     $category = $tracking['category'];
-                                    $quantitly = $tracking['quantitly'];
+                                    $quantitly = $tracking['cantidad'];
                                     $status = $tracking['status'];
                                     $date_status = $tracking['date_status'];
                                     $obscolombia = $tracking['observaciones_colombia'];

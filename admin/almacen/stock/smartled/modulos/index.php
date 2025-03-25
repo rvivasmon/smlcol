@@ -165,42 +165,65 @@ include('../../../../../layout/admin/parte1.php');
 
 <script>
     $(function () {
-    var table = $("#table_stcs").DataTable({
-        "pageLength": 10,
-        "language": {
-            "emptyTable": "No hay información",
-            "info": "Mostrando _START_ a _END_ de _TOTAL_ Módulos",
-            "infoEmpty": "Mostrando 0 a 0 de 0 Módulos",
-            "infoFiltered": "(Filtrado de _MAX_ total Módulos)",
-            "lengthMenu": "Mostrar _MENU_ Módulos",
-            "search": "Buscador:",
-            "zeroRecords": "Sin resultados encontrados",
-            "paginate": {
-                "first": "Primero",
-                "last": "Último",
-                "next": "Siguiente",
-                "previous": "Anterior"
-            }
-        },
-        "responsive": true,
-        "lengthChange": true,
-        "autoWidth": false,
-    });
+        var table = $("#table_stcs").DataTable({
+            "pageLength": 10, // Número de elementos por página
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]], // Opciones de selección
+            "language": {
+                "emptyTable": "No hay información",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Módulos",
+                "infoEmpty": "Mostrando 0 a 0 de 0 Módulos",
+                "infoFiltered": "(Filtrado de _MAX_ total Módulos)",
+                "lengthMenu": "Mostrar _MENU_ Módulos",
+                "search": "Buscador:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+            "responsive": true,
+            "lengthChange": true,
+            "autoWidth": false,
+            "dom": '<"top"lfB>rt<"bottom"ip><"clear">', // Asegura que el paginador y los botones aparezcan bien
+            "buttons": [
+                {
+                    extend: 'collection',
+                    text: 'Reportes',
+                    orientation: 'landscape',
+                    buttons: [
+                        { text: 'Copiar', extend: 'copy' },
+                        { extend: 'pdf' },
+                        { extend: 'csv' },
+                        { extend: 'excel' },
+                        { text: 'Imprimir', extend: 'print' }
+                    ]
+                },
+                {
+                    extend: 'colvis',
+                    text: 'Visor de columnas',
+                    collectionLayout: 'fixed three-column'
+                }
+            ]
+        });
 
-    // Filtrar por Columna 1 (ID) con búsqueda exacta
-    $('#filter-col1').on('keyup', function () {
-        var value = $.fn.dataTable.util.escapeRegex(this.value); // Escapar caracteres especiales
-        table.column(1).search(value ? '^' + value + '$' : '', true, false).draw();
-        // ^ y $ aseguran coincidencia exacta; regex=true activa expresiones regulares
-    });
+        // Agregar los botones al contenedor de DataTables
+        table.buttons().container().appendTo('#table_stcs_wrapper .col-md-6:eq(0)');
 
-    // Filtrar por Columna 2 (Pitch)
-    $('#filter-col2').on('keyup', function () {
-        table.column(2).search(this.value).draw(); // Columna 1 es la segunda columna
-    });
-});
+        // Filtrar por Columna 1 (ID) con búsqueda exacta
+        $('#filter-col1').on('keyup', function () {
+            var value = $.fn.dataTable.util.escapeRegex(this.value);
+            table.column(1).search(value ? '^' + value + '$' : '', true, false).draw();
+        });
 
+        // Filtrar por Columna 2 (Pitch)
+        $('#filter-col2').on('keyup', function () {
+            table.column(2).search(this.value).draw();
+        });
+    });
 </script>
+
 
 <script>
   $(document).ready(function() {

@@ -12,11 +12,11 @@ if (isset($_POST['modelo'])) {
                   WHERE p.modelo = :modelo";
 
         $stmt = $pdo->prepare($query);
-        $stmt->bindParam(":modelo", $modelo, PDO::PARAM_INT);
+        $stmt->bindParam(":modelo", $modelo);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        echo '<option value="">Seleccione un pitch</option>';
+        echo '<option value=""></option>';
         foreach ($result as $row) {
             echo '<option value="' . $row['id'] . '">' . $row['pitch'] . '</option>';
         }

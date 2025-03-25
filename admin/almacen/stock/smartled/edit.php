@@ -36,15 +36,12 @@ $query = $pdo->prepare("SELECT
                                 t_asignar_todos_almacenes AS almacen_origen ON mvd.almacen_origen1 = almacen_origen.id_asignacion
                                 LEFT JOIN
                                 t_asignar_todos_almacenes AS almacen_destino ON mvd.almacen_destino1 = almacen_destino.id_asignacion
-
-
                                 LEFT JOIN
                                 tabla_pitch AS tp ON mvd.referencia_2 = tp.id AND mvd.tipo_producto = 1
                                 LEFT JOIN
                                 referencias_control AS refecon ON mvd.referencia_2 = refecon.id_referencia AND mvd.tipo_producto = 2
                                 LEFT JOIN
                                 referencias_fuente AS refefue ON mvd.referencia_2 = refefue.id_referencias_fuentes AND mvd.tipo_producto = 3
-
                                 LEFT JOIN
                                 producto_modulo_creado AS tmc ON mvd.referencia_2 = tmc.id AND mvd.tipo_producto = 1
                                 LEFT JOIN
@@ -128,8 +125,8 @@ foreach ($usuarios as $usuario){
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="op">OC / STOCK</label>
-                                    <input type="text" name="op" id="op" value="<?php echo $op;?>" class="form-control" placeholder="Email" readonly>
+                                    <label for="op">ASIGNADA A:</label>
+                                    <input type="text" name="op" id="op" value="<?php echo $op;?>" class="form-control" placeholder="Email">
                                 </div>
                             </div>
                             <div class="col-md-3">
