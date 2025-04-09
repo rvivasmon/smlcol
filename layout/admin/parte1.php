@@ -237,10 +237,8 @@ foreach ($roles_permisos as $rol_permiso) {
                     <?php
                       }
                     ?>
-
                     <?php
                       if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="14") || ($id_rol_sesion_usuario=="15") ){ ?>
-
                     <?php
                         // Ejemplo de generación dinámica de submenús para Consulta Stock
 
@@ -281,201 +279,118 @@ foreach ($roles_permisos as $rol_permiso) {
                         );
                       ?>
 
-                        <li class="nav-item">
-                          <a href="#" class="nav-link active">
-                            <i class="nav-icon fas fa-warehouse"></i>
-                            <p>
-                              STOCK / MOVIMIENTOS
-                              <i class="right fas fa-angle-left"></i>
-                            </p>
-                          </a>
-                          <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                              <a href="#" class="nav-link">
-                                <i class="fas fa-box-open nav-icon"></i>
-                                  <p>Consulta Stock</p>
-                              </a>
-                              <ul class="nav nav-treeview">
-                                  <?php foreach ($almacenes as $almacen): ?>
-                                      <li class="nav-item">
-                                          <a href="#" class="nav-link">
-                                              <i class="nav-icon fas fa-circle"></i>
-                                              <p><?php echo $almacen['nombre']; ?></p>
-                                          </a>
-                                          <ul class="nav nav-treeview">
-                                              <?php foreach ($productos as $producto): ?>
-                                                  <?php
-                                                  // Definir variables para las URL por defecto
-                                                  $url_producto = "#"; // URL por defecto si no se cumple ninguna condición
-                                                  // Condiciones para las direcciones específicas
-                                                  if ($almacen['id'] == 3) {
-                                                      if ($producto['id'] == 1) {
-                                                          $url_producto = $URL . "admin/almacen/stock/smartled/index_modulos.php";
-                                                      } elseif ($producto['id'] == 2) {
-                                                          $url_producto = $URL . "admin/almacen/stock/smartled/index_control.php";
-                                                      } elseif ($producto['id'] == 3) {
-                                                          $url_producto = $URL . "admin/almacen/stock/smartled/index_fuentes.php";
-                                                      } elseif ($producto['id'] == 6) {
-                                                        $url_producto = $URL . "admin/almacen/stock/smartled/index.php";
-                                                    }
-                                                      // Agregar más condiciones según sea necesario
-                                                  } elseif ($almacen['id'] == 4) {
-                                                    if ($producto['id'] == 1) {
-                                                      $url_producto = $URL . "admin/almacen/stock/techled/index_modulos.php";
-                                                  } elseif ($producto['id'] == 2) {
-                                                      $url_producto = $URL . "admin/almacen/stock/techled/index_control.php";
-                                                  } elseif ($producto['id'] == 3) {
-                                                      $url_producto = $URL . "admin/almacen/stock/techled/index_fuentes.php";
-                                                  } elseif ($producto['id'] == 6) {
-                                                    $url_producto = $URL . "admin/almacen/stock/techled/index.php";
-                                                }
-                                                  } elseif ($almacen['id'] == 5) {
-                                                    if ($producto['id'] == 1) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
-                                                  } elseif ($producto['id'] == 2) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
-                                                  } elseif ($producto['id'] == 3) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
-                                                  } elseif ($producto['id'] == 6) {
-                                                    $url_producto = $URL . "admin/almacen/inventario/importacion/index.php";
-                                                }
-                                                  } elseif ($almacen['id'] == 6) {
-                                                    if ($producto['id'] == 1) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
-                                                  } elseif ($producto['id'] == 2) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
-                                                  } elseif ($producto['id'] == 3) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
-                                                  } elseif ($producto['id'] == 6) {
-                                                    $url_producto = $URL . "admin/almacen/inventario/tecnica/index.php";
-                                                }
-                                                  } elseif ($almacen['id'] == 7) {
-                                                    if ($producto['id'] == 1) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
-                                                  } elseif ($producto['id'] == 2) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
-                                                  } elseif ($producto['id'] == 3) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
-                                                  } elseif ($producto['id'] == 6) {
-                                                    $url_producto = $URL . "admin/almacen/inventario/planta/index.php";
-                                                }
-                                                  } elseif ($almacen['id'] == 8) {
-                                                    if ($producto['id'] == 1) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
-                                                  } elseif ($producto['id'] == 2) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
-                                                  } elseif ($producto['id'] == 3) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
-                                                  } elseif ($producto['id'] == 6) {
-                                                    $url_producto = $URL . "admin/almacen/inventario/pruebas/index.php";
-                                                }
-                                                  } elseif ($almacen['id'] == 9) {
-                                                    if ($producto['id'] == 1) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
-                                                  } elseif ($producto['id'] == 2) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
-                                                  } elseif ($producto['id'] == 3) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
-                                                  } elseif ($producto['id'] == 6) {
-                                                    $url_producto = $URL . "admin/almacen/inventario/desechados/index.php";
-                                                }
-                                                  } elseif ($almacen['id'] == 10) {
-                                                    if ($producto['id'] == 1) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
-                                                  } elseif ($producto['id'] == 2) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
-                                                  } elseif ($producto['id'] == 3) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
-                                                  } elseif ($producto['id'] == 6) {
-                                                    $url_producto = $URL . "admin/almacen/inventario/soporte_tecnico/index.php";
-                                                }
-                                                  } elseif ($almacen['id'] == 11) {
-                                                    if ($producto['id'] == 1) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
-                                                  } elseif ($producto['id'] == 2) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
-                                                  } elseif ($producto['id'] == 3) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
-                                                  } elseif ($producto['id'] == 6) {
-                                                    $url_producto = $URL . "admin/almacen/inventario/aliados/index.php";
-                                                }
-                                                  } elseif ($almacen['id'] == 12) {
-                                                    if ($producto['id'] == 1) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
-                                                  } elseif ($producto['id'] == 2) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
-                                                  } elseif ($producto['id'] == 3) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
-                                                  } elseif ($producto['id'] == 6) {
-                                                    $url_producto = $URL . "admin/almacen/inventario/almacenes/index.php";
-                                                }
-                                                  } elseif ($almacen['id'] == 13) {
-                                                    if ($producto['id'] == 1) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_modulos.php";
-                                                  } elseif ($producto['id'] == 2) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_control.php";
-                                                  } elseif ($producto['id'] == 3) {
-                                                      $url_producto = $URL . "admin/almacen/inventario/index_fuentes.php";
-                                                  } elseif ($producto['id'] == 6) {
-                                                    $url_producto = $URL . "admin/almacen/inventario/mmp/index.php";
-                                                }
-                                                  }
-                                                  ?>
-                                                  <li class="nav-item">
-                                                      <a href="<?php echo $url_producto; ?>" class="nav-link">
-                                                          <i class="far fa-dot-circle nav-icon"></i>
-                                                          <p><?php echo $producto['nombre']; ?></p>
-                                                      </a>
-                                                  </li>
-                                              <?php endforeach; ?>
-                                          </ul>
-                                      </li>
-                                  <?php endforeach; ?>
-                              </ul>
-                            </li>
-                            <li class="nav-item" hidden>
-                              <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Consulta de Inventario</p>
-                              </a>
-                              <ul class="nav nav-treeview"> <!-- Submenú -->
-                                <li class="nav-item">
-                                  <a href="<?php echo $URL;?>admin/almacen/mv_diario/smartled" class="nav-link">
-                                    <i class="far fa-dot-circle nav-icon"></i>
-                                    <p>Inventario Smartled</p>
-                                  </a>
-                                </li>
-                                <li class="nav-item">
-                                  <a href="<?php echo $URL; ?>admin/almacen/mv_diario/techled" class="nav-link">
-                                    <i class="far fa-dot-circle nav-icon"></i>
-                                    <p>Inventario TechLed</p>
-                                  </a>
-                                </li>
-                                <li class="nav-item">
-                                  <a href="<?php echo $URL;?>admin/almacen/mv_diario/mmp" class="nav-link">
-                                    <i class="far fa-dot-circle nav-icon"></i>
-                                    <p>Inventario MMP</p>
-                                  </a>
-                                </li>
-                              </ul>
-                            </li>
-                            <li class="nav-item">
-                              <a href="<?php echo $URL;?>admin/operacion/pop/rop/" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>ROP </p>
-                              </a>
-                            </li>
-                          </ul>
-                        </li>
+<li class="nav-item menu">
+  <a href="#" class="nav-link active">
+    <i class="nav-icon fas fa-warehouse"></i>
+    <p>
+      STOCK / MOVIMIENTOS
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  
+  <ul class="nav nav-treeview">
+    
+    <!-- CONSULTA STOCK -->
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="fas fa-box-open nav-icon"></i>
+        <p>Consulta Stock <i class="right fas fa-angle-left"></i></p>
+      </a>
+      
+      <ul class="nav nav-treeview" style="padding-left: 20px;">
+        <?php foreach ($almacenes as $almacen): ?>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-circle"></i>
+              <p><?php echo $almacen['nombre']; ?> <i class="right fas fa-angle-left"></i></p>
+            </a>
+
+            <ul class="nav nav-treeview" style="padding-left: 20px;">
+              <?php foreach ($productos as $producto): ?>
+                <?php
+                $url_producto = "#";
+                if ($almacen['id'] == 3) {
+                  if ($producto['id'] == 1) {
+                    $url_producto = $URL . "admin/almacen/stock/smartled/index_modulos.php";
+                  } elseif ($producto['id'] == 2) {
+                    $url_producto = $URL . "admin/almacen/stock/smartled/index_control.php";
+                  } elseif ($producto['id'] == 3) {
+                    $url_producto = $URL . "admin/almacen/stock/smartled/index_fuentes.php";
+                  } elseif ($producto['id'] == 6) {
+                    $url_producto = $URL . "admin/almacen/stock/smartled/index.php";
+                  }
+                } elseif ($almacen['id'] == 4) {
+                  if ($producto['id'] == 1) {
+                    $url_producto = $URL . "admin/almacen/stock/techled/index_modulos.php";
+                  } elseif ($producto['id'] == 2) {
+                    $url_producto = $URL . "admin/almacen/stock/techled/index_control.php";
+                  } elseif ($producto['id'] == 3) {
+                    $url_producto = $URL . "admin/almacen/stock/techled/index_fuentes.php";
+                  } elseif ($producto['id'] == 6) {
+                    $url_producto = $URL . "admin/almacen/stock/techled/index.php";
+                  }
+                }
+                ?>
+                <li class="nav-item">
+                  <a href="<?php echo $url_producto; ?>" class="nav-link">
+                    <i class="far fa-dot-circle nav-icon"></i>
+                    <p><?php echo $producto['nombre']; ?></p>
+                  </a>
+                </li>
+              <?php endforeach; ?>
+            </ul>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    </li>
+
+    <!-- CONSULTA DE INVENTARIO (OCULTO) -->
+    <li class="nav-item" hidden>
+      <a href="#" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Consulta de Inventario</p>
+      </a>
+      <ul class="nav nav-treeview" style="padding-left: 20px;">
+        <li class="nav-item">
+          <a href="<?php echo $URL;?>admin/almacen/mv_diario/smartled" class="nav-link">
+            <i class="far fa-dot-circle nav-icon"></i>
+            <p>Inventario Smartled</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="<?php echo $URL; ?>admin/almacen/mv_diario/techled" class="nav-link">
+            <i class="far fa-dot-circle nav-icon"></i>
+            <p>Inventario TechLed</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="<?php echo $URL;?>admin/almacen/mv_diario/mmp" class="nav-link">
+            <i class="far fa-dot-circle nav-icon"></i>
+            <p>Inventario MMP</p>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- ROP -->
+    <li class="nav-item">
+      <a href="<?php echo $URL;?>admin/operacion/pop/rop/" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p>ROP </p>
+      </a>
+    </li>
+
+  </ul>
+</li>
+
 
                     <?php
                       }
                     ?>
-
                     <?php
                       if( ($id_rol_sesion_usuario=="7") || ($id_rol_sesion_usuario=="14") ){ ?>
 
-                        <li class="nav-item">
+                        <li class="nav-item"> 
                           <a href="#" class="nav-link active">
                             <i class="nav-icon fas fa-cogs"></i>
                             <p>
@@ -746,7 +661,7 @@ foreach ($roles_permisos as $rol_permiso) {
                           </a>
                           <ul class="nav nav-treeview">
                             <li class="nav-item" >
-                              <a href="<?php echo $URL;?>admin/techled1/tracking_chi/index_tracking.php" class="nav-link">
+                              <a href="<?php echo $URL;?>admin/techled/tracking_chi/index.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Requests Tracking</p>
                               </a>

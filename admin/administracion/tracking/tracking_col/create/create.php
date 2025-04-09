@@ -358,14 +358,21 @@ include('../../../../../layout/admin/parte1.php');
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Categoría</th>
-                                                    <th>Marca - Modelo / Referencia - Pitch</th>
-                                                    <th>Pitch</th>                                                    
+                                                    <th>Marca - Modelo / Referencia - Pitch</th>                                                  
                                                     <th>Marca</th>
                                                     <th>Referencia</th>
                                                     <th>Marca</th>
                                                     <th>Modelo</th>
-                                                    <th>Justificaión</th>
+                                                    <th>Uso</th>
+                                                    <th>Modelo</th>
+                                                    <th>Pitch</th>
+                                                    <th>Tamaño X</th>
+                                                    <th>Tamaño Y</th>
+                                                    <th>Pixel X</th>
+                                                    <th>Pixel Y</th>
+                                                    <th>Pixel TOTAL</th>
                                                     <th>Cantidad</th>
+                                                    <th>Justificaión</th>
                                                     <th><center>Acciones</center></th>
                                                 </tr>
                                             </thead>
@@ -753,30 +760,22 @@ include('../../../../../layout/admin/parte1.php');
             newRow.innerHTML = `
                 <td>${itemNumber}</td>  
                 <td>${producto}</td>
-                <td>${modeloNombre}</td>
-                <td>${pitch}</td>            
+                <td>${modeloNombre}</td>         
                 <td>${marcaControl}</td>
                 <td>${referenciaControl35}</td>
                 <td>${marcaFuente}</td>
                 <td>${modeloFuente35}</td>
-                <td>${justificacion}</td>
+                <td>${uso}</td>
+                <td>${modelo}</td>
+                <td>${pitch}</td>
+                <td>${x_mm}</td>
+                <td>${y_mm}</td>
+                <td>${resol_xId}</td>
+                <td>${resol_yId}</td>
+                <td>${pixel_moduloId}</td>
                 <td>${cantidadEntradaMd}</td>
-                <td>
-                    <input type="hidden" name="uso_id[]" value="${usoId}">
-                    <input type="hidden" name="modelo_id[]" value="${modeloId}">
-                    <input type="hidden" name="pitch_id[]" value="${pitchId}">
-                    <input type="hidden" name="x_mm_id[]" value="${x_mmId}">
-                    <input type="hidden" name="y_mm_id[]" value="${y_mmId}">
-                    <input type="hidden" name="resol_x_id[]" value="${resol_xId}">
-                    <input type="hidden" name="resol_y_id[]" value="${resol_yId}">
-                    <input type="hidden" name="pixel_modulo_id[]" value="${pixel_moduloId}">
-                    <input type="hidden" name="marca_control_id[]" value="${marcaControlId}">
-                    <input type="hidden" name="referencia_control35_id[]" value="${referenciaControl35Id}">
-                    <input type="hidden" name="marca_fuente_id[]" value="${marcaFuenteId}">
-                    <input type="hidden" name="modelo_fuente35_id[]" value="${modeloFuente35Id}">
-                    <input type="hidden" name="cantidad_entrada_md[]" value="${cantidadEntradaMd}">
-                    <input type="hidden" name="justificacion[]" value="${justificacion}">
-                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>
+                <td>${justificacion}</td>
+                <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>
                 </td>
             `;
             tableBody.appendChild(newRow);
@@ -819,24 +818,20 @@ include('../../../../../layout/admin/parte1.php');
             item: cells[0].innerText,
             producto: cells[1].innerText,
             modeloNombre: cells[2].innerText,
-            pitch: cells[3].innerText,
-            marca_control: cells[4].innerText,
-            referencia_control35: cells[5].innerText,
-            marca_fuente: cells[6].innerText,
-            modelo_fuente35: cells[7].innerText,
-            justificacion: cells[8].innerText,
-            cantidad_entrada_md: cells[9].innerText,
-            uso_id: row.querySelector('input[name="uso_id[]"]').value,
-            modelo_id: row.querySelector('input[name="modelo_id[]"]').value,
-            x_mm_id: row.querySelector('input[name="x_mm_id[]"]').value,
-            y_mm_id: row.querySelector('input[name="y_mm_id[]"]').value,
-            resol_x_id: row.querySelector('input[name="resol_x_id[]"]').value,
-            resol_y_id: row.querySelector('input[name="resol_y_id[]"]').value,
-            pixel_modulo_id: row.querySelector('input[name="pixel_modulo_id[]"]').value,
-            marca_control_id: row.querySelector('input[name="marca_control_id[]"]').value,
-            referencia_control35_id: row.querySelector('input[name="referencia_control35_id[]"]').value,
-            marca_fuente_id: row.querySelector('input[name="marca_fuente_id[]"]').value,
-            modelo_fuente35_id: row.querySelector('input[name="modelo_fuente35_id[]"]').value
+            marca_control: cells[3].innerText,
+            referencia_control35: cells[4].innerText,
+            marca_fuente: cells[5].innerText,
+            modelo_fuente35: cells[6].innerText,
+            uso: cells[7].innerText,
+            modelo: cells[8].innerText,
+            pitch: cells[9].innerText,
+            x_mm: cells[10].innerText,
+            y_mm: cells[11].innerText,
+            resol_x: cells[12].innerText,
+            resol_y: cells[13].innerText,
+            pixel_modulo: cells[14].innerText,
+            cantidad_entrada_md: cells[15].innerText,
+            justificacion: cells[16].innerText,
         };
         itemData.push(rowData);
     });

@@ -5,181 +5,162 @@ include('../../../../../app/config/conexion.php');
 include('../../../../../layout/admin/sesion.php');
 include('../../../../../layout/admin/datos_sesion_user.php');
 
-// Obtener datos del formulario
-$fecha = $_POST['fecha'] ?? null;
-$contador_salida = $_POST['contador_sale'] ?? null;
-$almacen_entrada_md = $_POST['almacen_entrada_md'] ?? null;
-$op_destino = $_POST['op_destino'] ?? null;
-$usuario = $_POST['idusuario'] ?? null;
-$productos = $_POST['producto_id12'] ?? []; 
-$observaciones = $_POST['observacion2'] ?? [];
-$referencias_21 = $_POST['referencia_id12'] ?? [];
-$almacen_salida_md = $_POST['almacen_salida_md'] ?? null;
-$salidas_md = $_POST['cantidad1'] ?? [];
-$entradas_md = $_POST['cantidad1'] ?? [];
-$almacen_entrada_md_id = $_POST['almacen_entrada_md_id'] ?? null;
-$sub_almacen_destino = $_POST['sub_almacen_destino'] ?? null;
-$sub_almacen = $_POST['sub_almacen'] ?? null;
-$separar_material = !empty($_POST['articuloSeleccionado']) ? $_POST['articuloSeleccionado'] : [0];
+
+/*/COODIGO PARA VISUALIZAR LO QUE LLEGA AL CONTROLLER POR METODO POST
+
+echo "<pre>";
+print_r($_POST);
+echo "</pre>";
+exit;
+
+*/
 
 
+try {
+    // Iniciar transacción
+    $pdo->beginTransaction();
 
-// Validar que los arrays no estén vacíos y tengan la misma cantidad de elementos
-if (empty($productos) || count($productos) !== count($observaciones) || count($productos) !== count($referencias_21) || count($productos) !== count($salidas_md) || count($productos) !== count($entradas_md)) {
-    error_log("Error: Los datos enviados no son consistentes. Productos: " . json_encode($productos), 3, 'error.log');
-    $_SESSION['msj'] = 'Error: Los datos enviados no son consistentes.';
+    // Obtener datos del formulario
+    $fecha = $_POST['fecha'] ?? null;
+    $contador_salida = $_POST['contador_sale'] ?? null;
+    $almacen_entrada_md = $_POST['almacen_entrada_md'] ?? null;
+    $op_destino = $_POST['op_destino'] ?? null;
+    $usuario = $_POST['idusuario'] ?? null;
+    $productos = $_POST['producto_id12'] ?? [];
+    $observaciones = $_POST['observacion2'] ?? [];
+    $referencias_21 = $_POST['referencia_id12'] ?? [];
+    $almacen_salida_md = $_POST['almacen_salida_md'] ?? null;
+    $salidas_md = $_POST['cantidad1'] ?? [];
+    $entradas_md = $_POST['cantidad1'] ?? [];
+    $sub_almacen = $_POST['sub_almacen'] ?? [];
+    $separar_material = !empty($_POST['articuloSeleccionado']) ? $_POST['articuloSeleccionado'] : [0];
+    $tecnico_recibe = $_POST['tecnico_recibe'] ?? null;
+
+    // Validar que los arrays sean consistentes
+    if (
+        empty($productos) ||
+        count($productos) !== count($observaciones) ||
+        count($productos) !== count($referencias_21) ||
+        count($productos) !== count($salidas_md) ||
+        count($productos) !== count($entradas_md)
+    ) {
+        throw new Exception("Error: Los datos enviados no son consistentes.");
+    }
+
+    // Función para actualizar el inventario
+    function actualizarInventario($pdo, $tabla, $producto, $referencia_21, $cantidad, $sub_almacen) {
+        $campo_cantidad = ($tabla === 'alma_smartled' || $tabla === 'alma_techled') ? 'cantidad_plena' : 'existencias';
+
+        // Verificar si el producto ya existe en el inventario con los tres criterios
+        $sql_verificar = "SELECT $campo_cantidad FROM $tabla 
+                            WHERE tipo_producto = :producto 
+                            AND producto = :referencia_21 
+                            AND sub_almacen = :sub_almacen";
+        $stmt = $pdo->prepare($sql_verificar);
+        $stmt->execute([
+            ':producto' => $producto,
+            ':referencia_21' => $referencia_21,
+            ':sub_almacen' => $sub_almacen
+        ]);
+
+        if ($stmt->rowCount() > 0) {
+            // Si existe, actualizar la cantidad
+            $sql_update = "UPDATE $tabla 
+                            SET $campo_cantidad = $campo_cantidad + :cantidad 
+                            WHERE tipo_producto = :producto 
+                            AND producto = :referencia_21 
+                            AND sub_almacen = :sub_almacen";
+            $stmt_update = $pdo->prepare($sql_update);
+            return $stmt_update->execute([
+                ':cantidad' => $cantidad,
+                ':producto' => $producto,
+                ':referencia_21' => $referencia_21,
+                ':sub_almacen' => $sub_almacen
+            ]);
+        } else {
+            // Si no existe, insertar un nuevo registro
+            $sql_insert = "INSERT INTO $tabla (tipo_producto, producto, $campo_cantidad, sub_almacen) 
+                            VALUES (:producto, :referencia_21, :cantidad, :sub_almacen)";
+            $stmt_insert = $pdo->prepare($sql_insert);
+            return $stmt_insert->execute([
+                ':producto' => $producto,
+                ':referencia_21' => $referencia_21,
+                ':cantidad' => $cantidad,
+                ':sub_almacen' => $sub_almacen
+            ]);
+        }
+    }
+
+    // Relación de almacenes con sus tablas
+    $almacenes = [
+        3 => 'alma_smartled',
+        4 => 'alma_techled',
+        5 => 'alma_importacion',
+        6 => 'alma_tecnica',
+        7 => 'alma_planta',
+        8 => 'alma_pruebas',
+        9 => 'alma_desechados',
+        10 => 'alma_soporte_tecnico',
+        11 => 'alma_aliados',
+        12 => 'alma_china'
+    ];
+
+    // Procesar cada producto
+    for ($i = 0; $i < count($productos); $i++) {
+        $producto = $productos[$i];
+        $observacion = $observaciones[$i];
+        $referencia_21 = $referencias_21[$i];
+        $salida_md = -abs(floatval($salidas_md[$i])); // Asegura que sea negativo
+        $entrada_md = abs(floatval($entradas_md[$i])); // Asegura que sea positivo
+        $sub_almacen_actual = is_array($sub_almacen) && isset($sub_almacen[$i]) ? $sub_almacen[$i] : 'General'; 
+        $valor_separar_material = in_array("1", $separar_material) ? "1" : 0;
+
+        // Depuración: Verificar si `sub_almacen` se está capturando correctamente
+        error_log("Sub-Almacén procesado: " . $sub_almacen_actual);
+
+        // Insertar en movimiento_diario si el almacén de salida es Smartled (3)
+        if ($almacen_salida_md == 3) {
+            $sql_movimiento_diario = "INSERT INTO movimiento_diario 
+                (fecha, tipo_producto, referencia_2, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, consecu_sale, separar_material, sub_almacen, tecnico_recibe) 
+                VALUES (:fecha, :producto, :referencia_21, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :contador_salida, :separar_material, :sub_almacen, :tecnico_recibe)";
+            
+            $stmt_diario = $pdo->prepare($sql_movimiento_diario);
+            $stmt_diario->execute([
+                ':fecha' => $fecha,
+                ':producto' => $producto,
+                ':referencia_21' => $referencia_21,
+                ':almacen_salida_md' => $almacen_salida_md,
+                ':salida_md' => $salida_md,
+                ':almacen_entrada_md' => $almacen_entrada_md,
+                ':entrada_md' => $entrada_md,
+                ':observacion' => $observacion,
+                ':usuario' => $usuario,
+                ':op_destino' => $op_destino,
+                ':contador_salida' => $contador_salida,
+                ':separar_material' => $valor_separar_material,
+                ':sub_almacen' => $sub_almacen_actual,
+                ':tecnico_recibe' => $tecnico_recibe
+            ]);
+        }
+
+        // Actualizar existencias en almacenes
+        if (isset($almacenes[$almacen_salida_md])) {
+            actualizarInventario($pdo, $almacenes[$almacen_salida_md], $producto, $referencia_21, $salida_md, $sub_almacen_actual);
+        }
+
+        if (isset($almacenes[$almacen_entrada_md])) {
+            actualizarInventario($pdo, $almacenes[$almacen_entrada_md], $producto, $referencia_21, $entrada_md, $sub_almacen_actual);
+        }
+    }
+
+    $pdo->commit();
+    header("Location: create_movimiento_salida_final.php");
+} catch (Exception $e) {
+    $pdo->rollBack();
+    error_log("Error: " . $e->getMessage(), 3, 'error.log');
+    $_SESSION['msj'] = 'Ocurrió un error en el proceso.';
     header("Location: create_movimiento_salida_final.php");
     exit;
 }
 
-// Función para validar y actualizar/insertar producto en almacenes
-function validarProductoEnAlmacen($pdo, $tabla, $producto, $referencia_21, $cantidad, $sub_almacen_destino) {
-    $campo_cantidad = ($tabla === 'alma_smartled' || $tabla === 'alma_techled') ? 'cantidad_plena' : 'existencias';
-    $sql_check = "SELECT * FROM $tabla WHERE tipo_producto = :producto AND producto = :referencia_21 AND sub_almacen = :sub_almacen_destino";
-    $stmt_check = $pdo->prepare($sql_check);
-    $stmt_check->bindParam(':producto', $producto);
-    $stmt_check->bindParam(':referencia_21', $referencia_21);
-    $stmt_check->bindParam(':sub_almacen_destino', $sub_almacen_destino);
-    $stmt_check->execute();
-
-    if ($stmt_check->rowCount() > 0) {
-        // Producto encontrado, actualizar existencias
-        $sql_update = "UPDATE $tabla SET $campo_cantidad = $campo_cantidad + :cantidad WHERE tipo_producto = :producto AND producto = :referencia_21 AND sub_almacen = :sub_almacen_destino";
-        $stmt_update = $pdo->prepare($sql_update);
-        $stmt_update->bindParam(':cantidad', $cantidad);
-        $stmt_update->bindParam(':producto', $producto);
-        $stmt_update->bindParam(':referencia_21', $referencia_21);
-        $stmt_update->bindParam(':sub_almacen_destino', $sub_almacen_destino);
-        $stmt_update->execute();
-
-        $_SESSION['msj'] = "Producto encontrado en $producto ($tabla) y actualizado correctamente.";
-        return true;
-    } else {
-        // Producto no encontrado, insertar nuevo registro
-        $sql_insert = "INSERT INTO $tabla (tipo_producto, producto, $campo_cantidad, sub_almacen) VALUES (:producto, :referencia_21, :cantidad, :sub_almacen_destino)";
-        $stmt_insert = $pdo->prepare($sql_insert);
-        $stmt_insert->bindParam(':producto', $producto);
-        $stmt_insert->bindParam(':referencia_21', $referencia_21);
-        $stmt_insert->bindParam(':cantidad', $cantidad);
-        $stmt_insert->bindParam(':sub_almacen_destino', $sub_almacen_destino);
-        $stmt_insert->execute();
-
-        $_SESSION['msj'] = "Producto no encontrado en $producto ($tabla), se ha creado una nueva entrada.";
-        return false;
-    }
-}
-
-// Almacenes con sus respectivas tablas
-$almacenes = [
-    3 => 'alma_smartled',
-    4 => 'alma_techled',
-    5 => 'alma_importacion',
-    6 => 'alma_tecnica',
-    7 => 'alma_planta',
-    8 => 'alma_pruebas',
-    9 => 'alma_desechados',
-    10 => 'alma_soporte_tecnico',
-    11 => 'alma_aliados',
-    12 => 'alma_china'
-];
-
-// Bucle para procesar los productos
-for ($i = 0; $i < count($productos); $i++) {
-    $producto = $productos[$i];
-    $observacion = $observaciones[$i];
-    $referencia_21 = $referencias_21[$i];
-    $salida_md = -abs(floatval($salidas_md[$i]));  // Asegúrate de que el valor sea negativo para salida
-    $entrada_md = abs(floatval($entradas_md[$i])); // Asegúrate de que el valor sea positivo para entrada
-
-        // Determinar si se debe asignar "2" al campo separar_material
-        $valor_separar_material = in_array("1", $separar_material) ? "1" : 0;
-
-    // Si el almacén de salida es 3 o "alma_smartled", insertamos en movimiento_diario
-    if ($almacen_salida_md == 3 || $almacen_salida_md == 'alma_smartled') {
-        // Preparar datos de movimiento para la inserción
-        $datos_movimiento = [
-            ':fecha' => $fecha,
-            ':producto' => $producto,
-            ':almacen_salida_md' => $almacen_salida_md,
-            ':salida_md' => $salida_md,
-            ':almacen_entrada_md' => $almacen_entrada_md,
-            ':entrada_md' => $entrada_md,
-            ':observacion' => $observacion,
-            ':usuario' => $usuario,
-            ':op_destino' => $op_destino,
-            ':referencia_21' => $referencia_21,
-            ':contador_salida' => $contador_salida, // Agregar contador_salida
-            ':separar_material' => $valor_separar_material, // Agregar separar_material
-            ':sub_almacen' => $sub_almacen,
-        ];
-
-        // Insertar en movimiento_diario
-        $sql_movimiento_diario = "INSERT INTO movimiento_diario 
-            (fecha, tipo_producto, referencia_2, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, consecu_sale, separar_material, sub_almacen) 
-            VALUES (:fecha, :producto, :referencia_21, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :contador_salida, :separar_material, :sub_almacen)";
-        
-        $stmt_diario = $pdo->prepare($sql_movimiento_diario);
-        if (!$stmt_diario->execute($datos_movimiento)) {
-            error_log("Error al insertar en movimiento_diario: " . implode(", ", $stmt_diario->errorInfo()), 3, 'error.log');
-            $_SESSION['msj'] = 'Error al insertar en movimiento_diario.';
-            header("Location: create_movimiento_salida_final.php");
-            exit;
-        }
-    }
-
-    // Solo insertar en movimiento_techled si el almacén de entrada es 4 o "alma_techled"
-    if ($almacen_entrada_md == 4 || $almacen_entrada_md == 'alma_techled') {
-        // Obtener el último valor de 'consecu_entra' de la tabla 'movimiento_techled' y aumentarlo en 1
-        $sql_last_consecu = "SELECT MAX(consecu_entra) AS last_consecu FROM movimiento_techled";
-        $stmt_consecu = $pdo->prepare($sql_last_consecu);
-        $stmt_consecu->execute();
-        $result = $stmt_consecu->fetch(PDO::FETCH_ASSOC);
-        $last_consecu = $result['last_consecu'];
-        $consecu_entra = $last_consecu + 1;
-
-        // Preparar datos de movimiento para la inserción en movimiento_techled
-        $datos_techled = [
-            ':fecha' => $fecha,
-            ':producto' => $producto,
-            ':almacen_salida_md' => $almacen_salida_md,
-            ':salida_md' => $salida_md,
-            ':almacen_entrada_md' => $almacen_entrada_md,
-            ':entrada_md' => $entrada_md,
-            ':observacion' => $observacion,
-            ':usuario' => $usuario,
-            ':op_destino' => $op_destino,
-            ':referencia_21' => $referencia_21,
-            ':consecu_entra' => $consecu_entra, // Usamos el valor incrementado
-            ':sub_almacen_destino' => $sub_almacen_destino,
-
-        ];
-
-        // Insertar en movimiento_techled
-        $sql_movimiento_techled = "INSERT INTO movimiento_techled 
-            (fecha, tipo_producto, referencia_2, almacen_origen1, cantidad_salida, almacen_destino1, cantidad_entrada, observaciones, id_usuario, op, consecu_entra, sub_almacen) 
-            VALUES (:fecha, :producto, :referencia_21, :almacen_salida_md, :salida_md, :almacen_entrada_md, :entrada_md, :observacion, :usuario, :op_destino, :consecu_entra, :sub_almacen_destino)";
-        
-        $stmt_techled = $pdo->prepare($sql_movimiento_techled);
-        if (!$stmt_techled->execute($datos_techled)) {
-            error_log("Error al insertar en movimiento_techled: " . implode(", ", $stmt_techled->errorInfo()), 3, 'error.log');
-            $_SESSION['msj'] = 'Error al insertar en movimiento_techled.';
-            header("Location: create_movimiento_salida_final.php");
-            exit;
-        }
-    }
-
-    // Validar producto en el almacén de salida (función usada en ambos casos)
-    if (array_key_exists($almacen_salida_md, $almacenes)) {
-        validarProductoEnAlmacen($pdo, $almacenes[$almacen_salida_md], $producto, $referencia_21, $salida_md, $sub_almacen);
-    }
-
-    // Validar producto en el almacén de entrada (función usada en ambos casos)
-    if (array_key_exists($almacen_entrada_md, $almacenes)) {
-        validarProductoEnAlmacen($pdo, $almacenes[$almacen_entrada_md], $producto, $referencia_21, $entrada_md, $sub_almacen_destino);
-    }
-}
-
-// Redirigir después de la operación
-header("Location: create_movimiento_salida_final.php");
-exit;
 ?>

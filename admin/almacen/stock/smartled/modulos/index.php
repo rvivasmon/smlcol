@@ -111,8 +111,8 @@ include('../../../../../layout/admin/parte1.php');
                                                 <td><?php echo htmlspecialchars($serie_modulo); ?></td>
                                                 <td><?php echo htmlspecialchars($referencia_modulo); ?></td>
                                                 <td><?php echo htmlspecialchars($tamano); ?></td>
-                                                <td><?php echo htmlspecialchars($observacion); ?></td>
                                                 <td><?php echo htmlspecialchars($posicion); ?></td>
+                                                <td><?php echo htmlspecialchars($observacion); ?></td>
                                                 <td><?php echo htmlspecialchars($existencia); ?></td>
                                                 <td><?php echo htmlspecialchars($nombre_sub_almacen); ?></td>
                                                 <td>

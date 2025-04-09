@@ -24,7 +24,8 @@ SET
     guia = :guia,
     fecha_guia = :fecha_guia,
     observaciones_china = :obschina,
-    fecha_envio = :date_finished
+    fecha_envio = :date_finished,
+    enviar = 1
     WHERE 
     id = :id");
 
@@ -41,7 +42,7 @@ $sentencia->bindParam(':finished', $finished);
 
 if ($sentencia->execute()) {
   echo "Usuario actualizado exitosamente"; // Mensaje de éxito
-  header('Location:' .$URL.'admin/administracion/tracking/tracking_chi/index_tracking.php');
+  header('Location:' .$URL.'admin/techled/tracking_chi/index.php');
 } else {
   // Maneja los posibles errores durante la ejecución
     $errorInfo = $sentencia->errorInfo();

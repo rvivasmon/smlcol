@@ -102,6 +102,7 @@ $movimientos = $queryMovimientos->fetchAll(PDO::FETCH_ASSOC);
                                             <th>Cantidad</th>
                                             <th>Observación</th>
                                             <th>Sub Almacén</th>
+                                            <th>Recibe</th>
                                             <th><center>Acciones</center></th>
                                         </tr>
                                     </thead>
@@ -114,6 +115,7 @@ $movimientos = $queryMovimientos->fetchAll(PDO::FETCH_ASSOC);
                                                                     almacen_origen.nombre_almacen AS almacen_origen,
                                                                     almacen_destino.nombre_almacen AS almacen_destino,
                                                                     sub_almacen.sub_almacen AS nombre_sub_almacen,
+                                                                    COALESCE(tc.nombre, mvd.tecnico_recibe) AS nombre_tecnico,
                                                                 CASE
                                                                     WHEN mvd.tipo_producto = 1 THEN pitch_table.pitch -- Aquí se une la tabla tabla_pitch
                                                                     WHEN mvd.tipo_producto = 2 THEN caraccon.marca_control
@@ -150,8 +152,10 @@ $movimientos = $queryMovimientos->fetchAll(PDO::FETCH_ASSOC);
                                                                     tabla_pitch AS pitch_table ON tmc.pitch = pitch_table.id
                                                                 LEFT JOIN
                                                                     t_sub_almacen AS sub_almacen ON mvd.sub_almacen = sub_almacen.id
+                                                                LEFT JOIN
+                                                                    tecnicos AS tc ON mvd.tecnico_recibe = tc.id
                                                                 ORDER BY 
-                                                                    fecha DESC
+                                                                    20 DESC
                                                             ');
                                         $query->execute();
                                         $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -167,6 +171,7 @@ $movimientos = $queryMovimientos->fetchAll(PDO::FETCH_ASSOC);
                                             $cantidades = $movidiario['cantidad_entrada'];
                                             $observaciones = $movidiario['observaciones'];
                                             $sub_almacen = $movidiario['nombre_sub_almacen'];
+                                            $tecnico = $movidiario['nombre_tecnico'];
                                             $contador = $contador + 1;
                                         ?>
                                             <tr>
@@ -181,6 +186,7 @@ $movimientos = $queryMovimientos->fetchAll(PDO::FETCH_ASSOC);
                                                 <td><?php echo htmlspecialchars($cantidades); ?></td>
                                                 <td><?php echo htmlspecialchars($observaciones); ?></td>
                                                 <td><?php echo htmlspecialchars($sub_almacen); ?></td>
+                                                <td><?php echo htmlspecialchars($tecnico); ?></td>
                                                 <td>
                                                     <center>
                                                         <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>

@@ -379,7 +379,7 @@ $usuario = $sesion_usuario['nombre'];
                                         <div class="col-md-4" hidden>
                                             <div class="form-group">
                                                 <label for="almacen_grupo">ALMACEN</label>
-                                                <select id="almacen_grupo" name="almacen_grupo" class="form-control" required>
+                                                <select id="almacen_grupo" name="almacen_grupo" class="form-control">
                                                     <option value="" disabled selected>Seleccione un Almacen</option>
                                                     <?php
                                                     $query_almagrupo = $pdo->prepare('SELECT id, almacenes FROM almacenes_grupo WHERE almacenes IS NOT NULL AND almacenes != "" ORDER BY almacenes ASC');

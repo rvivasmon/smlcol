@@ -18,108 +18,106 @@ include('../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Solicitudes SML / TL</h1>
-                    <div class="card card-blue">
+                <h1 class="m-0">Solicitudes SML / TL a Producción</h1>
+                      <div class="card card-blue">
                         <div class="card-header">
-                            ACTIVAS
+                          ACTIVAS
                         </div>
 
                         <button id="edit-selected" class="btn btn-warning btn-sm" disabled>Enviar Seleccionados</button>
 
-
                         <hr>
 
-                    <div class="card-body">
-                        <div class="table-responsive">
-                        <table id="table_tracking" class="table table-striped table-hover table-bordered">
-                            <thead>
+                        <div class="card-body">
+                          <div class="table-responsive">
+                            <table id="table_tracking" class="table table-striped table-hover table-bordered">
+                              <thead>
                                 <tr>
-                                    <th><input type="checkbox" id="select-all"></th> <!-- Checkbox para seleccionar todos -->
-                                    <th>ID</th>
-                                    <th>Fecha</th>
-                                    <th>Tipo</th>
-                                    <th>Descripción</th>
-                                    <th>Cantidad</th>
-                                    <th>Observación</th>
-                                    <th>En fabricación</th>
-                                    <th>Terminado</th>
-                                    <th><center>Acciones</center></th>
+                                  <th>ID</th>
+                                  <th>Fecha</th>
+                                  <th>ID Solicitud</th>
+                                  <th>Tipo</th>
+                                  <th>Cantidad</th>
+                                  <th>Observación</th>
+                                  <th>En fabricación</th>
+                                  <th>Terminado</th>
+                                  <th>Enviado</th>
+                                  <th><center>Acciones</center></th>
+                                  <th><input type="checkbox" id="select-all"> Envío</th> <!-- Checkbox para seleccionar todos -->
                                 </tr>
-                            </thead>
-                            <tbody>
+                              </thead>
+                              <tbody>
                                 <?php
                                 $contador = 0;
-                                $query = $pdo->prepare('SELECT * FROM tracking WHERE status = "2" AND estado = "1"');
+                                $query = $pdo->prepare('SELECT * FROM tracking WHERE status = "2" AND recibido = "1"');
 
                                 $query->execute();
                                 $trackings = $query->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($trackings as $tracking){
-                                    $id = $tracking['id'];
-                                    $date = $tracking['date_status'];
-                                    $type = $tracking['type'];
-                                    $category = $tracking['category'];
-                                    $quantitly = $tracking['quantitly'];
-                                    $obscolombia = $tracking['observaciones_colombia'];
-                                    $en_ejecucion = $tracking['en_produccion'];
-                                    $finished = $tracking['finished'];
-                                    $contador = $contador + 1;
+                                  $id = $tracking['id'];
+                                  $date = $tracking['date_status'];
+                                  $id_solicitud = $tracking['codigo_generado'];
+                                  $type = $tracking['producto'];
+                                  $category = $tracking['category'];
+                                  $quantitly = $tracking['cantidad'];
+                                  $obscolombia = $tracking['observaciones_colombia'];
+                                  $en_ejecucion = $tracking['en_produccion'];
+                                  $finished = $tracking['finished'];
+                                  $enviar = $tracking['enviar'];
+                                  $contador = $contador + 1;
 
-                                    // Reemplazar el valor numérico por el texto correspondiente
-                                    if ($finished == 0) {
-                                        $finished_text = '';
-                                    } elseif ($finished == 1) {
-                                        $finished_text = 'SÍ';
-                                    } elseif ($finished == 2) {
-                                        $finished_text = 'NO';
-                                    } else {
-                                        $finished_text = $finished; // Por si acaso hay otros valores inesperados
-                                    }
+                                  // Reemplazar el valor numérico por el texto correspondiente
+                                  $finished_text = $finished ? ($finished == 1 ? 'SÍ' : 'NO') : '';
 
-                                    //Reemplazo el valorde en_ejecucion por el texto correspondiente
-                                    if ($en_ejecucion == 1) {
-                                        
-                                        $en_ejecucion_text = 'SÍ';
-                                    
-                                    } else {
+                                  //Reemplazo el valorde en_ejecucion por el texto correspondiente
+                                  $en_ejecucion_text = $en_ejecucion ? ($en_ejecucion == 1 ? 'SÍ' : 'NO') : '';
 
-                                        $en_ejecucion_text = '';
+                                  // Reemplazo el valor numérico por el texto correspondiente
+                                  $enviado_text = $enviar ? ($enviar == 0 ? 'NO' : 'SÍ') : '';
 
-                                    }
+                                  // Determinar si los botones deben estar deshabilitados
+                                  $disable_procesar = $en_ejecucion == 1 ? 'disabled' : '';
+                                  $disable_terminar = $en_ejecucion != 1 || $finished == 1 ? 'disabled' : '';
 
-                                    // Determinar si los botones deben estar deshabilitados
-                                    $disable_procesar = $en_ejecucion == 1 ? 'disabled' : '';
-                                    $disable_terminar = $en_ejecucion != 1 || $finished == 1 ? 'disabled' : '';
+                                  // Deshabilitar boton de envíar si ya se envió producto
+                                  $disable_enviar = ($finished == 1 && intval($enviar) == 0) ? '' : 'disabled';
+
+                                  // Habilitar y deshabilitar Checkbox
+                                  $disable_checkbox = ($finished == 1 && intval($enviar) == 0) ? '' : 'disabled';
                                 ?>
-                                    <tr>
-                                        <td><input type="checkbox" class="record-checkbox" value="<?php echo $id; ?>"></td> <!-- Checkbox por registro -->
-                                        <td><a href="<?php echo $URL; ?>admin/techled1/tracking_chi/show_tracking.php?id=<?php echo $id; ?>"><?php echo $contador; ?></a></td>
-                                        <td><?php echo $date; ?></td>
-                                        <td><?php echo $type; ?></td>
-                                        <td><?php echo $category; ?></td>
-                                        <td><?php echo $quantitly; ?></td>
-                                        <td><?php echo $obscolombia; ?></td>
-                                        <td><?php echo $en_ejecucion_text; ?></td> <!-- Mostrar el texto en_ejecucion -->
-                                        <td><?php echo $finished_text; ?></td>
-                                        <td>
-                                            <center>
-                                                <button onclick="confirmarProduccion(<?php echo $id; ?>)" class="btn btn-info btn-sm" <?php echo $disable_procesar; ?>>Procesar <i class="fas fa-eye"></i></button>
-                                                <button onclick="terminarProduccion(<?php echo $id; ?>, <?php echo $en_ejecucion; ?>)" class="btn btn-success btn-sm" <?php echo $disable_terminar; ?>>Terminar <i class="fas fa-pen"></i></button>
-                                                <a href="edit_tracking.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Enviar <i class="fas fa-ship"></i></a>
-                                            </center>
-                                        </td>
-                                    </tr>
+                                  <tr>
+                                      <td><a href="<?php echo $URL; ?>admin/techled/tracking_chi/show.php?id=<?php echo $id; ?>"><?php echo $contador; ?></a></td>
+                                      <td><?php echo $date; ?></td>
+                                      <td><?php echo $id_solicitud; ?></td>
+                                      <td><?php echo $type; ?></td>
+                                      <td><?php echo $quantitly; ?></td>
+                                      <td><?php echo $obscolombia; ?></td>
+                                      <td><?php echo $en_ejecucion_text; ?></td> <!-- Mostrar el texto en_ejecucion -->
+                                      <td><?php echo $finished_text; ?></td>
+                                      <td><?php echo $enviado_text; ?></td>
+                                      <td>
+                                        <center>
+                                          <button onclick="confirmarProduccion(<?php echo $id; ?>)" class="btn btn-info btn-sm" <?php echo $disable_procesar; ?>>Procesar <i class="fas fa-eye"></i></button>
+                                          <button onclick="terminarProduccion(<?php echo $id; ?>, <?php echo $en_ejecucion; ?>)" class="btn btn-success btn-sm" <?php echo $disable_terminar; ?>>Terminar <i class="fas fa-pen"></i></button>
+                                          <a href="envio.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm" <?php echo $disable_enviar; ?>>Enviar <i class="fas fa-ship"></i></a>
+                                        </center>
+                                      </td>
+                                      <td>
+                                        <input type="checkbox" class="record-checkbox" value="<?php echo $id; ?>" <?php echo $disable_checkbox; ?>>
+                                      </td>
+                                  </tr>
                                 <?php
-                            }                            
-                        ?>
-                    </tbody>
-                    </table>
-                    </div>
-                </div>
-                </div>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-</div>
+                                }                            
+                                ?>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
 </div>
 
 <!-- Modal HTML -->
@@ -295,7 +293,7 @@ include('../../../layout/admin/parte1.php');
 
       const formData = new FormData(this);
 
-      fetch('update_tracking.php', {
+      fetch('update.php', {
         method: 'POST',
         body: formData,
       })
@@ -315,3 +313,14 @@ include('../../../layout/admin/parte1.php');
   });
 </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".btn-danger").forEach(btn => {
+            if (btn.hasAttribute("disabled")) {
+                btn.classList.add("disabled"); // Agregar clase para deshabilitar
+                btn.style.pointerEvents = "none"; // Evita clics
+                btn.style.opacity = "0.5"; // Lo hace visualmente deshabilitado
+            }
+        });
+    });
+</script>

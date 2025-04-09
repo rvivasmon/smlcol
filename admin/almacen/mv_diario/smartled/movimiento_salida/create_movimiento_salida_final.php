@@ -55,6 +55,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                 <div class="form-group">
                                                     <label for="fecha">Fecha</label>
                                                     <input type="date" id="fecha" name="fecha" class="form-control" placeholder="Fecha" readonly>
+                                                    <input type="hidden" id="tecnico_recibe" name="tecnico_recibe" value="">
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -290,7 +291,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label for="sub_almacen">Sub Almacén</label>
-                                                                <select name="sub_almacen" id="sub_almacen" class="form-control">
+                                                                <select name="sub_almacen[]" id="sub_almacen" class="form-control">
                                                                     <option value="">Seleccione un Sub Almacén</option>
                                                                     <?php
                                                                     $query_sub_almacen = $pdo->prepare('SELECT * FROM t_sub_almacen WHERE habilitar = 1 ORDER BY sub_almacen ASC');
@@ -329,23 +330,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                                 </select>
                                                                 <input class="form-control" name="almacen_entrada_md_id" id="almacen_entrada_md_id" hidden>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="sub_almacen_destino">Sub Almacén</label>
-                                                                <select name="sub_almacen_destino" id="sub_almacen_destino" class="form-control" disabled>
-                                                                    <option value="">Seleccione un Sub Almacén</option>
-                                                                    <?php
-                                                                    $query_sub_almacen = $pdo->prepare('SELECT * FROM t_sub_almacen WHERE habilitar = 1 ORDER BY sub_almacen ASC');
-                                                                    $query_sub_almacen->execute();
-                                                                    $subs_almacenes = $query_sub_almacen->fetchAll(PDO::FETCH_ASSOC);
-                                                                    foreach($subs_almacenes as $sub_almacen) {
-                                                                        echo '<option value="' . $sub_almacen['id'] . '">' . $sub_almacen['sub_almacen'] . '</option>';
-                                                                    }
-                                                                    ?>
-                                                                </select>
-                                                            </div>
-                                                        </div>  
+                                                        </div> 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label for="entrada_md">Cantidad de Salida</label>
@@ -419,6 +404,7 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                                 <th>Producto</th>
                                                                 <th>Referencia</th>
                                                                 <th>Observación</th>
+                                                                <th>Sub Almacén</th>
                                                                 <th>Acción</th>
                                                             </tr>
                                                         </thead>
@@ -453,6 +439,60 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                         <button type="button" id="btnGenerarPdfModal" class="btn btn-info">Generar PDF</button>
                                     </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal de Selección de Técnico -->
+                            <div id="modalSeleccionTecnico" class="modal fade" tabindex="-1">y
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Seleccione un Técnico</h5>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <select id="selectTecnico" class="form-control">
+                                                <option value="">Seleccione un técnico</option>
+                                                <?php 
+                                                    $sql = "SELECT id, nombre FROM tecnicos ORDER BY nombre ASC";
+                                                    $stmt = $pdo->query($sql);
+                                                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                                        echo '<option value="' . $row['id'] . '">' . htmlspecialchars($row['nombre']) . '</option>';
+                                                    }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button id="btnConfirmarTecnico" class="btn btn-primary">Guardar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal de Selección de Técnico -->
+                            <div id="modalSeleccionTecnicoApartado" class="modal fade" tabindex="-1">y
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Seleccione un Técnico</h5>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <select id="selectTecnicoAprobado" class="form-control">
+                                                <option value="">Seleccione un técnico</option>
+                                                <?php 
+                                                    $sql = "SELECT id, nombre FROM tecnicos ORDER BY nombre ASC";
+                                                    $stmt = $pdo->query($sql);
+                                                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                                        echo '<option value="' . $row['id'] . '">' . htmlspecialchars($row['nombre']) . '</option>';
+                                                    }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button id="btnConfirmarTecnico1" class="btn btn-primary">Guardar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -604,7 +644,7 @@ $(document).ready(function() {
     // Función para limpiar todos los campos del formulario, excluyendo el campo 'producto'
     function limpiarCampos() {
     // Limpiar todos los campos de texto, excluyendo los campos de la tabla
-    $('input[type="text"]').not('#producto, #almacen_salida_md, #id_producto_categoria, #cantidad1, #producto1, #referencia2, #contador_sale, .observacion2, #op_destino, .cantidad1, #producto_id12, #referencia_id12, .producto1, .referencia2').val('');
+    $('input[type="text"]').not('#producto, #almacen_salida_md, #id_producto_categoria, #cantidad1, #producto1, #referencia2, #contador_sale, .observacion2, #op_destino, .cantidad1, #producto_id12, #sub_almacen, #referencia_id12, .producto1, .referencia2, .sub_almacen1').val('');
     $('input[type="number"]').val('');
     $('input[type="file"]').val('');
     $('select').not('#producto, #almacen_salida_md, #almacen_entrada_md').val('');
@@ -805,7 +845,7 @@ $(document).ready(function () {
 
 </style>
 
-<script>
+<script> // Creaer, limpiar y eliminar filas a las tablas
 document.addEventListener('DOMContentLoaded', function () {
     const btnAgregarArticulo = document.getElementById('btnAgregarArticulo');
     const tablaArticulos = document.getElementById('tabla-articulos').getElementsByTagName('tbody')[0];
@@ -826,6 +866,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const referenciaControl35Texto = document.getElementById('referencia_control35').options[document.getElementById('referencia_control35').selectedIndex]?.text || '';
         const campoModeloFuente = document.getElementById('modelo_fuente35').value;  // ID modelo_fuente35
         const modeloFuenteTexto = document.getElementById('modelo_fuente35').options[document.getElementById('modelo_fuente35').selectedIndex]?.text || '';
+        const campoSubAlmacen = document.getElementById('sub_almacen').value.trim() || "0"; // Evita valores vacíos
+        const subAlmacenTexto = document.getElementById('sub_almacen').options[document.getElementById('sub_almacen').selectedIndex]?.text || '';
 
         // Determinar la referencia y su ID
         let referencia = '';
@@ -846,10 +888,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const nuevaFila = document.createElement('tr');
         nuevaFila.innerHTML = `
             <td>
-                <!-- Campo oculto con valor "1", solo se enviará si el checkbox no está marcado -->
                 <input type="hidden" name="articuloSeleccionado[]" id="articuloSeleccionado" value="0">
-
-                <!-- Checkbox para marcar -->
                 <input type="checkbox" class="checkbox form-check-input" id="articuloSeleccionado" name="articuloSeleccionado[]" value="1">
             </td>
             <td>
@@ -867,9 +906,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 <input type="text" class="form-control observacion2" id="observacion2" name="observacion2[]" value="${observacion}" readonly>
             </td>
             <td>
+                <input type="text" class="form-control sub_almacen1" id="sub_almacen1" name="sub_almacen1[]" value="${subAlmacenTexto}" readonly>
+                <input type="hidden" id="sub_almacen" name="sub_almacen[]" value="${campoSubAlmacen}">
+
+            </td>
+            <td>
                 <button type="button" class="btn btn-danger btnEliminarArticulo">Eliminar</button>
             </td>
         `;
+
+        console.log("ID Sub-Almacén:", campoSubAlmacen);
+        console.log("Texto Sub-Almacén:", subAlmacenTexto);
 
         // Agregar fila a la tabla
         tablaArticulos.appendChild(nuevaFila);
@@ -889,118 +936,159 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('modelo_fuente35').value = '';
         document.getElementById('campo_referencia').value = '';
         document.getElementById('marca_control').value = '';
-        document.getElementById('marca_fuente').value = '';        
+        document.getElementById('marca_fuente').value = '';
+        document.getElementById('ubicacion').value = '';
+        document.getElementById('existencia').value = '';
+        document.getElementById('sub_almacen').value = '';  
     });
 });
 </script>
 
-<script>
-    const entradaMd = document.getElementById('entrada_md');
-    const existencia = document.getElementById('existencia');
-    const errorEntrada = document.getElementById('errorEntrada');
-
-    entradaMd.addEventListener('input', function() {
-        if (parseInt(this.value) > parseInt(existencia.value)) {
-            errorEntrada.style.display = 'block';
-            this.value = ''; // Borra el valor si es inválido
-        } else {
-            errorEntrada.style.display = 'none';
-        }
-    });
-</script>
-
+<!--
 <script> //GENERAR PDF DE SALIDA DE ARTICULOS
-    document.getElementById('generarPdf').addEventListener('click', function () {
+let registrosSeleccionados = [];
+let idsActualizar = [];
+let fecha = new Date().toLocaleDateString();
+let contadorSalida = "N/A";
+let almacenDestino = "N/A";
+let asignarA = "N/A";
 
+// Función para manejar la generación del PDF
+function manejarGeneracionPDF() {
+    generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA);
+    actualizarRegistros(idsActualizar, document.getElementById('tecnico_recibe').value);
+}
 
-        // Obtener el valor del checkbox (asegúrate de que el id de tu checkbox sea correcto)
-        const checkbox = document.getElementById('articuloSeleccionado'); // Cambia 'checkbox_id' por el id de tu checkbox
-        const isChecked = checkbox.checked ? "1" : "0"; // Si está marcado, es "1", si no, es "0"
+// Evento principal al hacer clic en el botón
+document.getElementById('btnGenerarPdfModal').addEventListener('click', function () {
+    const checkboxes = document.querySelectorAll('.checkbox-material:checked');
+    registrosSeleccionados = [];
+    idsActualizar = [];
 
-        // Validar si el checkbox está marcado (si es "1", no generamos el PDF)
-        if (isChecked === "1") {
-            alert("No se puede generar el PDF porque el checkbox está marcado.");
-            return; // Detener el proceso de generación del PDF
-        }
+    const articuloSeleccionado = document.getElementById('articuloSeleccionado');
 
-        // Crea una nueva instancia de jsPDF
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({
-            orientation: 'portrait', // Establece la orientación horizontal
-            unit: 'mm', // Unidad de medida
-            format: [210, 297] // Formato de la hoja
-        });
+    checkboxes.forEach(checkbox => {
+        const fila = checkbox.closest('tr');
+        const columnas = Array.from(fila.querySelectorAll('td'));
 
-        // Datos adicionales
-        const fecha = new Date().toLocaleDateString();
-        const contadorSalida = document.getElementById('contador_sale').value || "N/A";
-        const almacenDestino = document.getElementById('almacen_entrada_md').options[document.getElementById('almacen_entrada_md').selectedIndex].text || "N/A";
-        const asignarA = document.getElementById('op_destino').value || "N/A";
+        const cantidad = columnas[3]?.textContent || "N/A";
+        const producto = columnas[1]?.textContent || "N/A";
+        const referencia = columnas[2]?.textContent || "N/A";
+        const observacion = columnas[4]?.textContent || "N/A";
 
-        // Encabezado de la empresa
-        const pageWidth = 210; // Ancho total de la hoja en mm
+        if (!contadorSalida || contadorSalida === "N/A") contadorSalida = columnas[6]?.textContent || "N/A";
+        if (!almacenDestino || almacenDestino === "N/A") almacenDestino = columnas[7]?.textContent || "N/A";
+        if (!asignarA || asignarA === "N/A") asignarA = columnas[5]?.textContent || "N/A";
 
-        doc.setFontSize(14);
-        doc.text('SMARTLED COLOMBIA', pageWidth / 2, 10, { align: 'center' });
-
-        doc.setFontSize(12);
-        doc.text('Salida de Artículos del Almacén', pageWidth / 2, 18, { align: 'center' });
-
-        // Información adicional
-        doc.setFontSize(10);
-        doc.text(`Fecha: ${fecha}`, 10, 30);
-        doc.text(`# Documento: ${contadorSalida}`, 10, 35);
-        doc.text(`Almacén destino: ${almacenDestino}`, 10, 40);
-        doc.text(`Asignar a: ${asignarA}`, 10, 45);
-
-        // Crear los datos para la tabla
-        const tablaArticulos = document.getElementById('tabla-articulos').getElementsByTagName('tbody')[0];
-        const datosTabla = []; // Aquí almacenaremos las filas de datos
-
-        for (let i = 0; i < tablaArticulos.rows.length; i++) {
-            const fila = tablaArticulos.rows[i];
-
-            // Extraer valores de los inputs en las celdas
-            const cantidad = fila.querySelector('.cantidad1').value || "";
-            const producto = fila.querySelector('.producto1').value || "";
-            const referencia = fila.querySelector('.referencia2').value || "";
-            const observacion = fila.querySelector('.observacion2').value || "";
-
-            // Agregar la fila de datos como un array
-            datosTabla.push([cantidad, producto, referencia, observacion]);
-        }
-
-        // Usar autoTable para crear la tabla
-        doc.autoTable({
-            head: [['Cantidad', 'Producto', 'Referencia', 'Observación']], // Encabezados
-            body: datosTabla, // Datos de la tabla
-            startY: 55, // Posición inicial
-            styles: { fontSize: 8 }, // Tamaño de fuente
-            columnStyles: {
-            0: { cellWidth: 20 },  // Cantidad
-            1: { cellWidth: 50 },  // Producto
-            2: { cellWidth: 50 },  // Referencia
-            3: { cellWidth: 60 }   // Observación
-        },
-            theme: 'grid', // Tema con bordes para la tabla
-            margin: { left: 10, right: 10 } // Márgenes laterales
-        });
-
-        // Agregar líneas para firma
-        const finalY = doc.lastAutoTable.finalY + 15; // Obtener la posición final de la tabla y dar espacio
-
-        // Dibujar líneas horizontales
-        doc.line(20, finalY, 70, finalY); // Línea para "Entrega"
-        doc.line(100, finalY, 150, finalY); // Línea para "Recibe"
-
-        // Agregar textos debajo de las líneas
-        doc.setFontSize(10);
-        doc.text("Entrega", 35, finalY + 5); // Texto debajo de la línea de "Entrega"
-        doc.text("Recibe", 115, finalY + 5); // Texto debajo de la línea de "Recibe"
-
-        // Guardar el PDF con un nombre específico
-        doc.save('reporte_articulos.pdf');
+        registrosSeleccionados.push([cantidad, producto, referencia, observacion]);
+        idsActualizar.push(checkbox.dataset.id);
     });
+
+    if (registrosSeleccionados.length === 0) {
+        alert('Por favor, selecciona al menos un registro.');
+        return;
+    }
+
+    // ✅ SI articuloSeleccionado NO está marcado, abrir modal técnico
+    if (!articuloSeleccionado.checked) {
+        $('#modalSeleccionTecnico').modal('show');
+    } else {
+        // ✅ SI está marcado, guardar info + generar PDF
+        document.getElementById('tecnico_recibe').value = asignarA;
+        manejarGeneracionPDF(); // esto incluye guardar y generar PDF
+    }
+});
+
+// ✅ Confirmar técnico (solo guarda, NO genera PDF)
+document.getElementById('confirmarTecnico').addEventListener('click', function () {
+    const tecnico = document.getElementById('selectTecnico').value;
+    const tecnicoTexto = document.getElementById('selectTecnico').options[document.getElementById('selectTecnico').selectedIndex].text;
+
+    if (!tecnico) {
+        alert('Por favor selecciona un técnico.');
+        return;
+    }
+
+    document.getElementById('tecnico_recibe').value = tecnicoTexto;
+    $('#modalSeleccionTecnico').modal('hide');
+
+    // ✅ Solo guardar datos, SIN generar PDF
+    actualizarRegistros(idsActualizar, tecnicoTexto);
+});
+
+
+// Confirmación del técnico en el modal
+document.getElementById('confirmarTecnico').addEventListener('click', function () {
+    const tecnico = document.getElementById('selectTecnico').value;
+    const tecnicoTexto = document.getElementById('selectTecnico').options[document.getElementById('selectTecnico').selectedIndex].text;
+
+    if (!tecnico) {
+        alert('Por favor selecciona un técnico.');
+        return;
+    }
+
+    document.getElementById('tecnico_recibe').value = tecnicoTexto;
+    $('#modalSeleccionTecnico').modal('hide');
+    manejarGeneracionPDF();
+});
+
+function generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: [210, 297] });
+
+    const pageWidth = 210;
+
+    doc.setFontSize(14);
+    doc.text('SMARTLED COLOMBIA', pageWidth / 2, 10, { align: 'center' });
+    doc.setFontSize(12);
+    doc.text('Salida de Artículos del Almacén', pageWidth / 2, 18, { align: 'center' });
+
+    doc.setFontSize(10);
+    doc.text(`Fecha: ${fecha}`, 10, 30);
+    doc.text(`# Documento: ${contadorSalida}`, 10, 35);
+    doc.text(`Almacén destino: ${almacenDestino}`, 10, 40);
+    doc.text(`Asignar a: ${document.getElementById('tecnico_recibe').value}`, 10, 45);
+
+    doc.autoTable({
+        head: [['Cantidad', 'Producto', 'Referencia', 'Observación']],
+        body: registrosSeleccionados,
+        startY: 55,
+        styles: { fontSize: 8 },
+        columnStyles: {
+            0: { cellWidth: 20 },
+            1: { cellWidth: 50 },
+            2: { cellWidth: 50 },
+            3: { cellWidth: 60 }
+        },
+        theme: 'grid',
+        margin: { left: 10, right: 10 }
+    });
+
+    const finalY = doc.lastAutoTable.finalY + 15;
+    doc.line(20, finalY, 70, finalY);
+    doc.line(100, finalY, 150, finalY);
+    doc.setFontSize(10);
+    doc.text("Entrega", 35, finalY + 5);
+    doc.text("Recibe", 115, finalY + 5);
+    doc.save('material_validado.pdf');
+}
+
+function actualizarRegistros(ids, tecnicoRecibe) {
+    fetch('actualizar_registros.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: ids, tecnico_recibe: tecnicoRecibe })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Registros actualizados correctamente.');
+        } else {
+            alert('Error al actualizar: ' + (data.message || 'Desconocido'));
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
 </script>
 
 <script> // GENERAR EL PDF DE MATERIAL SEPARADO DEL ALMACEN
@@ -1058,34 +1146,26 @@ document.getElementById('contenidoTablaMaterial').innerHTML = contenidoTabla;
 
     document.getElementById('btnGenerarPdfModal').addEventListener('click', function () {
     const checkboxes = document.querySelectorAll('.checkbox-material:checked');
-    const registrosSeleccionados = [];
-    const idsActualizar = [];
+    registrosSeleccionados = [];
+    idsActualizar = [];
 
-    // Inicializa variables para los datos adicionales
-    let fecha = new Date().toLocaleDateString();
-    let contadorSalida = "N/A";
-    let almacenDestino = "N/A";
-    let asignarA = "N/A";
+    const articuloSeleccionado = document.getElementById('articuloSeleccionado');
 
     checkboxes.forEach(checkbox => {
         const fila = checkbox.closest('tr');
         const columnas = Array.from(fila.querySelectorAll('td'));
 
-        // Asignar manualmente los valores que deseas extraer
-        const cantidad = columnas[3]?.textContent || "N/A"; // Cantidad
-        const producto = columnas[1]?.textContent || "N/A"; // Producto
-        const referencia = columnas[2]?.textContent || "N/A"; // Referencia
-        const observacion = columnas[4]?.textContent || "N/A"; // Observación
+        const cantidad = columnas[3]?.textContent || "N/A";
+        const producto = columnas[1]?.textContent || "N/A";
+        const referencia = columnas[2]?.textContent || "N/A";
+        const observacion = columnas[4]?.textContent || "N/A";
 
-         // Solo toma los datos adicionales del primer registro (si son comunes a todos)
         if (!contadorSalida || contadorSalida === "N/A") contadorSalida = columnas[6]?.textContent || "N/A";
         if (!almacenDestino || almacenDestino === "N/A") almacenDestino = columnas[7]?.textContent || "N/A";
         if (!asignarA || asignarA === "N/A") asignarA = columnas[5]?.textContent || "N/A";
 
         registrosSeleccionados.push([cantidad, producto, referencia, observacion]);
-
-        // También puedes asignar columnas específicas directamente a variables globales, si es necesario
-        idsActualizar.push(checkbox.dataset.id); // Almacenar el ID seleccionado
+        idsActualizar.push(checkbox.dataset.id);
     });
 
     if (registrosSeleccionados.length === 0) {
@@ -1093,12 +1173,33 @@ document.getElementById('contenidoTablaMaterial').innerHTML = contenidoTabla;
         return;
     }
 
-    // Generar el PDF con los datos seleccionados
-    generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA);
-
-    // Llamar a la función para actualizar registros en la base de datos
-    actualizarRegistros(idsActualizar);
+    // ✅ SI articuloSeleccionado NO está marcado, abrir modal técnico
+    if (!articuloSeleccionado.checked) {
+        $('#modalSeleccionTecnico').modal('show');
+    } else {
+        // ✅ SI está marcado, guardar info + generar PDF
+        document.getElementById('tecnico_recibe').value = asignarA;
+        manejarGeneracionPDF(); // esto incluye guardar y generar PDF
+    }
 });
+
+// ✅ Confirmar técnico (solo guarda, NO genera PDF)
+document.getElementById('confirmarTecnico').addEventListener('click', function () {
+    const tecnico = document.getElementById('selectTecnico').value;
+    const tecnicoTexto = document.getElementById('selectTecnico').options[document.getElementById('selectTecnico').selectedIndex].text;
+
+    if (!tecnico) {
+        alert('Por favor selecciona un técnico.');
+        return;
+    }
+
+    document.getElementById('tecnico_recibe').value = tecnicoTexto;
+    $('#modalSeleccionTecnico').modal('hide');
+
+    // ✅ Solo guardar datos, SIN generar PDF
+    actualizarRegistros(idsActualizar, tecnicoTexto);
+});
+
 
 // Función para generar el PDF con los datos
 function generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA) {
@@ -1175,6 +1276,22 @@ function actualizarRegistros(ids) {
         .catch(error => console.error('Error:', error));
 }
 </script>
+-->
+
+<script>
+    const entradaMd = document.getElementById('entrada_md');
+    const existencia = document.getElementById('existencia');
+    const errorEntrada = document.getElementById('errorEntrada');
+
+    entradaMd.addEventListener('input', function() {
+        if (parseInt(this.value) > parseInt(existencia.value)) {
+            errorEntrada.style.display = 'block';
+            this.value = ''; // Borra el valor si es inválido
+        } else {
+            errorEntrada.style.display = 'none';
+        }
+    });
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -1190,3 +1307,60 @@ function actualizarRegistros(ids) {
         });
     });
 </script>
+
+<script>
+    document.addEventListener('submit', function (event) {
+    document.querySelectorAll('select[name="sub_almacen[]"]').forEach(select => {
+        if (select.value.trim() === "") {
+            select.remove(); // Elimina el campo vacío para que no se envíe
+        }
+    });
+});
+
+</script>
+
+<script>
+document.getElementById('generarPdf').addEventListener('click', function (e) {
+    e.preventDefault(); // Detiene el envío del formulario si lo hay
+
+    // PASO 1: Recolectar los checkboxes
+    const checkboxes = document.querySelectorAll('input[name="articuloSeleccionado[]"]');
+
+    let marcado = false;
+    checkboxes.forEach(cb => {
+        if (cb.checked && cb.value === "1") {
+            marcado = true;
+        }
+    });
+
+    console.log("¿Checkbox marcado?:", marcado);
+
+    if (!marcado) {
+        console.log("Abriendo modal porque no hay artículo seleccionado...");
+        $('#modalSeleccionTecnico').modal('show'); // Mostrar el modal con jQuery + Bootstrap
+        return;
+    }
+
+    console.log("Checkbox marcado. Continuando con la generación del PDF...");
+    // Aquí iría el código para continuar normalmente (enviar formulario, generar PDF, etc.)
+});
+
+document.getElementById('btnConfirmarTecnico').addEventListener('click', function () {
+    const tecnicoSeleccionado = document.getElementById('selectTecnico').value;
+
+    if (!tecnicoSeleccionado) {
+        alert("Por favor selecciona un técnico.");
+        return;
+    }
+
+    // Guardar valor en el input oculto
+    document.getElementById('tecnico_recibe').value = tecnicoSeleccionado;
+
+    console.log("Técnico asignado:", tecnicoSeleccionado);
+
+    // Cerrar el modal
+    $('#modalSeleccionTecnico').modal('hide');
+
+});
+</script>
+

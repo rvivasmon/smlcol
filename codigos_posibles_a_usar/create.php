@@ -24,7 +24,7 @@ include('../../../../layout/admin/parte1.php');
                     Introduzca la información correspondiente
                 </div>
                 <div class="card-body">
-                    <form id="formulario" action="controller_create_tracking.php" method="POST" enctype="multipart/form-data">
+                    <form id="formulario" action="controller_create.php" method="POST" enctype="multipart/form-data">
 
                         <div class="row">
                             <div class="col-md-8">

@@ -21,101 +21,117 @@ include('../../../../layout/admin/parte1.php');
                         <div class="card-header">
                             ACTIVAS
                         </div>
+                        <button id="processSelected" class="btn btn-warning">Procesar Seleccionados</button>
 
                         <hr>
 
-                    <div class="card-tools ml-4">
-                        <a href="create/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear nueva solicitud</a>
-                    </div>
+                        <div class="card-tools ml-4">
+                            <a href="create/create.php" class="btn btn-warning"><i class="bi bi-plus-square"></i> Crear nueva solicitud</a>
+                        </div>
                     
-                    <div class="card-body">
-                        <div class="table-responsive">
-                        <table id="table_tracking" class="table table-striped table-hover table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Fecha</th>
-                                    <th>Origen Solicitud</th>
-                                    <th>Tipo</th>
-                                    <th>Descripción</th>
-                                    <th>Cantidad</th>
-                                    <th>Procesado</th>
-                                    <th>Fecha Procesado</th>
-                                    <th>Observación</th>
-                                    <th>Inicio de Fabricación</th>
-                                    <th>Terminado</th>
-                                    <th>Enviado</th>
-                                    <th>Fecha Envío</th>
-                                    <th><center>Acciones</center></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $contador = 0;
-                                $query = $pdo->prepare('SELECT * FROM tracking WHERE estado = "1"');
-
-                                $query->execute();
-                                $trackings = $query->fetchAll(PDO::FETCH_ASSOC);
-                                foreach ($trackings as $tracking){
-                                    $id = $tracking['id'];
-                                    $date = $tracking['date'];
-                                    $origin = $tracking['contador_colombia'];
-                                    $type = $tracking['type'];
-                                    $category = $tracking['category'];
-                                    $quantitly = $tracking['cantidad'];
-                                    $status = $tracking['status'];
-                                    $date_status = $tracking['date_status'];
-                                    $obscolombia = $tracking['observaciones_colombia'];
-                                    $inicio_prod = $tracking['inicio_produccion'];
-                                    $finished = $tracking['finished'];
-                                    $enviado = $tracking['enviar'];
-                                    $fecha_envio = $tracking['fecha_envio'];
-                                    $contador = $contador + 1;
-
-                                    // convertir el valor de "status" a "NO" o "SÍ"
-                                    $statusText = ($status == 1) ? "NO" : (($status == 2) ? "SÍ" : "Desconocido");
-
-                                    // Convertir el valor de "finished" a los valores requeridos
-                                    $finishedText = ($finished == 0) ? "" : (($finished == 1) ? "SÍ" : "NO");
-
-                                    // Reemplazo el valor de enviado por el texto correspondiente
-                                    $enviado_text = $enviado ? ($enviado == 1 ? 'SÍ' : 'NO') : ''; // Si $enviado es nulo o vacío, dejarlo vacío en el formulario
-
-                                    ?>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                            <table id="table_tracking" class="table table-striped table-hover table-bordered">
+                                <thead>
                                     <tr>
-                                        <td><?php echo $contador; ?></td>
-                                        <td><?php echo $date; ?></td>
-                                        <td><?php echo $origin; ?></td>
-                                        <td><?php echo $type; ?></td>
-                                        <td><?php echo $category; ?></td>
-                                        <td><?php echo $quantitly; ?></td>
-                                        <td><a href="#" class="change-status" data-id="<?php echo $id; ?>"><?php echo $statusText; ?></a></td>
-                                        <td><?php echo $date_status; ?></td>
-                                        <td><?php echo $obscolombia; ?></td>
-                                        <td><?php echo $inicio_prod; ?></td>
-                                        <td><?php echo $finishedText; ?></td>
-                                        <td><?php echo $enviado_text; ?></td>
-                                        <td><?php echo $fecha_envio; ?></td>
-                                        <td>
-                                            <center>
-                                                <a href="show_tracking.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
-                                                <a href="edit_tracking.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">Editar <i class="fas fa-pen"></i></a>
-                                                <a href="delete_tracking.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
-                                            </center>
-                                        </td>
+                                        <th>ID</th>
+                                        <th>Fecha</th>
+                                        <th>Id Solicitud</th>
+                                        <th>Origen</th>
+                                        <th>Fecha Oc</th>
+                                        <th>Producto</th>
+                                        <th>Procesado</th>
+                                        <th>Fecha Procesado</th>
+                                        <th>Observación Colombia</th>
+                                        <th>Inicio de Fabricación</th>
+                                        <th>Terminado</th>
+                                        <th>Enviado</th>
+                                        <th>Fecha Envío</th>
+                                        <th>Recibido</th>
+                                        <th><center>Acciones</center></th>
                                     </tr>
-                                <?php
-                            }                            
-                        ?>
-                    </tbody>
-                    </table>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $contador = 0;
+                                    $query = $pdo->prepare('SELECT * FROM tracking WHERE recibido = "1"');
+
+                                    $query->execute();
+                                    $trackings = $query->fetchAll(PDO::FETCH_ASSOC);
+                                    foreach ($trackings as $tracking){
+                                        $id = $tracking['id'];
+                                        $date = $tracking['date'];
+                                        $origin = $tracking['codigo_generado'];
+                                        $type = $tracking['origen'];
+                                        $category = $tracking['fecha_oc'];
+                                        $quantitly = $tracking['producto'];
+                                        $status = $tracking['status'];
+                                        $date_status = $tracking['date_status'];
+                                        $obscolombia = $tracking['observaciones_colombia'];
+                                        $inicio_prod = $tracking['inicio_produccion'];
+                                        $finished = $tracking['date_finished'];
+                                        $enviado = $tracking['enviar'];
+                                        $fecha_envio = $tracking['fecha_envio'];
+                                        $recibido = $tracking['recibido'];
+                                        $contador = $contador + 1;
+
+                                        // convertir el valor de "status" a "NO" o "SÍ"
+                                        $statusText = ($status == 1) ? "NO" : (($status == 2) ? "SÍ" : "Desconocido");
+
+                                        // Convertir el valor de "finished" a los valores requeridos
+                                        $finishedText = ($finished == 0) ? "" : (($finished == 1) ? "SÍ" : "NO");
+
+                                        // Reemplazo el valor de enviado por el texto correspondiente
+                                        $enviado_text = $enviado ? ($enviado == 1 ? 'SÍ' : 'NO') : ''; // Si $enviado es nulo o vacío, dejarlo vacío en el formulario
+
+                                        // Cambiar el valor de "Recibido" por los valores requeridos
+                                        $recibido_text = $recibido ? ($recibido == 1 ? 'NO' : 'SÍ') : '';
+
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $contador; ?></td>
+                                            <td><?php echo $date; ?></td>
+                                            <td><?php echo $origin; ?></td>
+                                            <td><?php echo $type; ?></td>
+                                            <td><?php echo $category; ?></td>
+                                            <td><?php echo $quantitly; ?></td>
+                                            <td>
+                                                <input type="checkbox" class="tracking-checkbox" name="tracking_ids[]" value="<?php echo $id; ?>"
+                                                <?php echo ($status == 2) ? 'checked disabled' : ''; ?>>
+                                                <?php echo $statusText; ?>
+                                            </td>
+                                            <!--<td><a href="#" class="change-status" data-id="<?php echo $id; ?>"><?php echo $statusText; ?></a></td>  LINEA PARA MOSTRAR SÍ O NO EN EL INDEX -->
+                                            <td><?php echo $date_status; ?></td>
+                                            <td><?php echo $obscolombia; ?></td>
+                                            <td><?php echo $inicio_prod; ?></td>
+                                            <td><?php echo $finished; ?></td>
+                                            <td><?php echo $enviado_text; ?></td>
+                                            <td><?php echo $fecha_envio; ?></td>
+                                            <td><?php echo $recibido_text; ?></td>
+                                            <td>
+                                                <center>
+                                                    <a href="show.php?id=<?php echo $id; ?>" class="btn btn-info btn-sm">Mostrar <i class="fas fa-eye"></i></a>
+                                                    <?php if ($status != 2): ?>
+                                                        <a href="edit.php?id=<?php echo $id; ?>" class="btn btn-success btn-sm">
+                                                            Editar <i class="fas fa-pen"></i>
+                                                        </a>
+                                                    <?php endif; ?>
+                                                    <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                    <?php
+                                }                            
+                            ?>
+                        </tbody>
+                        </table>
+                        </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-</div>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
 </div>
 
 <!-- Modal para cambiar el estado -->
@@ -130,8 +146,8 @@ include('../../../../layout/admin/parte1.php');
             </div>
             <div class="modal-body">
                 <form id="changeStatusForm" method="post">
-                    <input type="hidden" name="id" id="trackingId">
-                    <div class="form-group">
+                <input type="hidden" name="tracking_ids" id="trackingIds">
+                <div class="form-group">
                         <label for="status">PROCESAR?</label>
                         <select name="status" id="status" class="form-control" required>
                             <option value="2">Sí</option>
@@ -201,17 +217,20 @@ include('../../../../layout/admin/parte1.php');
 </script>
 
 <script>
-$(document).ready(function() {
-    // Abrir modal al hacer clic en el campo "Procesado"
-    $('.change-status').click(function() {
+    $(document).ready(function() {
+    // Abrir modal al hacer clic en "Procesar Seleccionados"
+    $('#processSelected').click(function() {
+        var selectedIds = [];
+        $('.tracking-checkbox:checked:not(:disabled)').each(function() {
+            selectedIds.push($(this).val());
+        });
 
-        if (!isAdmin) {
-            alert('NO ESTÁ AUTORIZADO');
+        if (selectedIds.length === 0) {
+            alert('Seleccione al menos una solicitud.');
             return;
         }
 
-        var trackingId = $(this).data('id');
-        $('#trackingId').val(trackingId);
+        $('#trackingIds').val(selectedIds.join(',')); // Guardar IDs en input oculto
         $('#changeStatusModal').modal('show');
     });
 
@@ -225,7 +244,7 @@ $(document).ready(function() {
             url: 'change_status.php',
             data: formData,
             success: function(response) {
-                location.reload(); // Recargar la página después de actualizar el estado
+                location.reload(); // Recargar la página después de actualizar
             },
             error: function() {
                 alert('Error al actualizar el estado.');

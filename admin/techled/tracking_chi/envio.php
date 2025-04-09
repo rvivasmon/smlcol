@@ -48,12 +48,12 @@ if (empty($date_finished)) {
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
-            <div class="card">
-                <div class="card-header" style="background-color: #00A000; color: #ffffff">
+            <div class="card card-danger" style="width: 120rem;">
+                <div class="card-header">
                     Introduzca la información correspondiente
                 </div>
                 <div class="card-body">
-                    <form action="controller_edit_tracking.php" method="post">
+                    <form action="controller_envio.php" method="post">
                     <input type="hidden" name="finished" value="2">
 
 
@@ -109,10 +109,10 @@ if (empty($date_finished)) {
 
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?php echo $URL."admin/techled/tracking_chi/index_tracking.php";?>" class="btn btn-default btn-block">Cancelar</a>
+                                <a href="<?php echo $URL."admin/techled/tracking_chi/index.php";?>" class="btn btn-default btn-block">Cancelar</a>
                             </div>
                             <div class="col-md-2">
-                                <button type="submit" onclick="return confirm('Asegurese de diligenciar correctamente los datos')" class="btn btn-success btn-block">Enviar Producto</button>
+                                <button type="submit" onclick="return confirm('Asegurese de diligenciar correctamente los datos')" class="btn btn-danger btn-block">Enviar Producto</button>
                             </div>
                         </div>
 

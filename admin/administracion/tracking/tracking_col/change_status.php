@@ -1,28 +1,27 @@
 <?php
-session_start();
+
 include('../../../../app/config/config.php');
 include('../../../../app/config/conexion.php');
 
-// Asegúrate de que el usuario esté autenticado
-if (!isset($_SESSION['sesion_cargo']) || $_SESSION['sesion_cargo'] != 'Administrador') {
-    echo 'NO AUTORIZADO';
-    exit;
-}
+include('../../../../layout/admin/sesion.php');
+include('../../../../layout/admin/datos_sesion_user.php');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id = $_POST['id'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $ids = explode(',', $_POST['tracking_ids']); // Convertir string en array
     $status = $_POST['status'];
-    $date_status = ($status == 2) ? date('Y-m-d H:i:s') : null;
+    $date_status = date('Y-m-d H:i:s'); // Fecha y hora actual
 
-    $query = $pdo->prepare('UPDATE tracking SET status = :status, date_status = :date_status WHERE id = :id');
-    $query->bindParam(':status', $status);
-    $query->bindParam(':date_status', $date_status);
-    $query->bindParam(':id', $id);
-
-    if ($query->execute()) {
-        echo 'success';
-    } else {
-        echo 'error';
+    foreach ($ids as $id) {
+        $query = $pdo->prepare("UPDATE tracking SET status = :status, date_status = :date_status WHERE id = :id");
+        $query->execute([
+            'status' => $status,
+            'date_status' => $date_status,
+            'id' => $id
+        ]);
     }
+
+    echo "Estado actualizado con éxito.";
 }
+
+
 ?>

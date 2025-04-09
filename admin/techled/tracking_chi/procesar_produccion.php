@@ -15,7 +15,7 @@ if (isset($_GET['id'])) {
     if ($query->execute()) {
         // Redirigir de vuelta a la página de solicitudes activas
         // header("Location: solicitudes_activas.php");
-        header("Location: index_tracking.php");
+        header("Location: index.php");
         exit();
     } else {
         echo "Error al iniciar la producción del producto.";

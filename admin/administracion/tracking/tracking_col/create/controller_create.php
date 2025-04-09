@@ -59,18 +59,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     ':uso' => $item['uso'] ?? null,
                     ':pitch' => $item['pitch'] ?? null,
                     ':modelo_nombre' => $item['modeloNombre'] ?? null,
-                    ':modelo' => $item['modelo'] ?? null,
-                    ':x_mm' => $item['x_mm'] ?? null,
-                    ':y_mm' => $item['y_mm'] ?? null,
-                    ':resol_x' => $item['resol_x'] ?? null,
-                    ':resol_y' => $item['resol_y'] ?? null,
-                    ':pixel_modulo' => $item['pixel_modulo'] ?? null,
+                    ':modelo' => $item['modelo'] ?? null, 
+                    ':x_mm' => $item['x_mm'] ?? null, 
+                    ':y_mm' => $item['y_mm'] ?? null, 
+                    ':resol_x' => $item['resol_x'] ?? null, 
+                    ':resol_y' => $item['resol_y'] ?? null, 
+                    ':pixel_modulo' => $item['pixel_modulo'] ?? null, 
                     ':marca_control' => $item['marca_control'] ?? null,
                     ':referencia_control35' => $item['referencia_control35'] ?? null,
                     ':marca_fuente' => $item['marca_fuente'] ?? null,
                     ':modelo_fuente35' => $item['modelo_fuente35'] ?? null,
                     ':obscolombia' => $item['justificacion'] ?? null
                 ]);
+                
             }
         }
 
