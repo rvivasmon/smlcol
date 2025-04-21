@@ -320,12 +320,12 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                                 <select name="almacen_entrada_md" id="almacen_entrada_md" class="form-control" required>
                                                                     <option value="">Almacén Destino</option>
                                                                     <?php
-                                                                    $query_almacen_entra = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 3 AND nombre_almacen != "Principal" ORDER BY nombre_almacen ASC');
-                                                                    $query_almacen_entra->execute();
-                                                                    $almacenes_entras = $query_almacen_entra->fetchAll(PDO::FETCH_ASSOC);
-                                                                    foreach($almacenes_entras as $almacen_entra) {
-                                                                        echo '<option value="' . $almacen_entra['id_asignacion'] . '">' . $almacen_entra['nombre_almacen'] . '</option>';
-                                                                    }
+                                                                        $query_almacen_entra = $pdo->prepare('SELECT * FROM t_asignar_todos_almacenes WHERE id_asignacion != 3 AND nombre_almacen != "Principal" ORDER BY nombre_almacen ASC');
+                                                                        $query_almacen_entra->execute();
+                                                                        $almacenes_entras = $query_almacen_entra->fetchAll(PDO::FETCH_ASSOC);
+                                                                        foreach($almacenes_entras as $almacen_entra) {
+                                                                            echo '<option value="' . $almacen_entra['id_asignacion'] . '" data-nombre="' . htmlspecialchars($almacen_entra['nombre_almacen']) . '">' . htmlspecialchars($almacen_entra['nombre_almacen']) . '</option>';
+                                                                        }
                                                                     ?>
                                                                 </select>
                                                                 <input class="form-control" name="almacen_entrada_md_id" id="almacen_entrada_md_id" hidden>
@@ -800,7 +800,6 @@ $(document).ready(function () {
     document.getElementById('campo_serie').value = serie;  // Asignar serie a un campo oculto (ejemplo)
     document.getElementById('campo_referencia').value = referencia;  // Asignar referencia a otro campo
 });
-
 </script>
 
 <style>
@@ -944,340 +943,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<!--
-<script> //GENERAR PDF DE SALIDA DE ARTICULOS
-let registrosSeleccionados = [];
-let idsActualizar = [];
-let fecha = new Date().toLocaleDateString();
-let contadorSalida = "N/A";
-let almacenDestino = "N/A";
-let asignarA = "N/A";
-
-// Función para manejar la generación del PDF
-function manejarGeneracionPDF() {
-    generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA);
-    actualizarRegistros(idsActualizar, document.getElementById('tecnico_recibe').value);
-}
-
-// Evento principal al hacer clic en el botón
-document.getElementById('btnGenerarPdfModal').addEventListener('click', function () {
-    const checkboxes = document.querySelectorAll('.checkbox-material:checked');
-    registrosSeleccionados = [];
-    idsActualizar = [];
-
-    const articuloSeleccionado = document.getElementById('articuloSeleccionado');
-
-    checkboxes.forEach(checkbox => {
-        const fila = checkbox.closest('tr');
-        const columnas = Array.from(fila.querySelectorAll('td'));
-
-        const cantidad = columnas[3]?.textContent || "N/A";
-        const producto = columnas[1]?.textContent || "N/A";
-        const referencia = columnas[2]?.textContent || "N/A";
-        const observacion = columnas[4]?.textContent || "N/A";
-
-        if (!contadorSalida || contadorSalida === "N/A") contadorSalida = columnas[6]?.textContent || "N/A";
-        if (!almacenDestino || almacenDestino === "N/A") almacenDestino = columnas[7]?.textContent || "N/A";
-        if (!asignarA || asignarA === "N/A") asignarA = columnas[5]?.textContent || "N/A";
-
-        registrosSeleccionados.push([cantidad, producto, referencia, observacion]);
-        idsActualizar.push(checkbox.dataset.id);
-    });
-
-    if (registrosSeleccionados.length === 0) {
-        alert('Por favor, selecciona al menos un registro.');
-        return;
-    }
-
-    // ✅ SI articuloSeleccionado NO está marcado, abrir modal técnico
-    if (!articuloSeleccionado.checked) {
-        $('#modalSeleccionTecnico').modal('show');
-    } else {
-        // ✅ SI está marcado, guardar info + generar PDF
-        document.getElementById('tecnico_recibe').value = asignarA;
-        manejarGeneracionPDF(); // esto incluye guardar y generar PDF
-    }
-});
-
-// ✅ Confirmar técnico (solo guarda, NO genera PDF)
-document.getElementById('confirmarTecnico').addEventListener('click', function () {
-    const tecnico = document.getElementById('selectTecnico').value;
-    const tecnicoTexto = document.getElementById('selectTecnico').options[document.getElementById('selectTecnico').selectedIndex].text;
-
-    if (!tecnico) {
-        alert('Por favor selecciona un técnico.');
-        return;
-    }
-
-    document.getElementById('tecnico_recibe').value = tecnicoTexto;
-    $('#modalSeleccionTecnico').modal('hide');
-
-    // ✅ Solo guardar datos, SIN generar PDF
-    actualizarRegistros(idsActualizar, tecnicoTexto);
-});
-
-
-// Confirmación del técnico en el modal
-document.getElementById('confirmarTecnico').addEventListener('click', function () {
-    const tecnico = document.getElementById('selectTecnico').value;
-    const tecnicoTexto = document.getElementById('selectTecnico').options[document.getElementById('selectTecnico').selectedIndex].text;
-
-    if (!tecnico) {
-        alert('Por favor selecciona un técnico.');
-        return;
-    }
-
-    document.getElementById('tecnico_recibe').value = tecnicoTexto;
-    $('#modalSeleccionTecnico').modal('hide');
-    manejarGeneracionPDF();
-});
-
-function generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA) {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: [210, 297] });
-
-    const pageWidth = 210;
-
-    doc.setFontSize(14);
-    doc.text('SMARTLED COLOMBIA', pageWidth / 2, 10, { align: 'center' });
-    doc.setFontSize(12);
-    doc.text('Salida de Artículos del Almacén', pageWidth / 2, 18, { align: 'center' });
-
-    doc.setFontSize(10);
-    doc.text(`Fecha: ${fecha}`, 10, 30);
-    doc.text(`# Documento: ${contadorSalida}`, 10, 35);
-    doc.text(`Almacén destino: ${almacenDestino}`, 10, 40);
-    doc.text(`Asignar a: ${document.getElementById('tecnico_recibe').value}`, 10, 45);
-
-    doc.autoTable({
-        head: [['Cantidad', 'Producto', 'Referencia', 'Observación']],
-        body: registrosSeleccionados,
-        startY: 55,
-        styles: { fontSize: 8 },
-        columnStyles: {
-            0: { cellWidth: 20 },
-            1: { cellWidth: 50 },
-            2: { cellWidth: 50 },
-            3: { cellWidth: 60 }
-        },
-        theme: 'grid',
-        margin: { left: 10, right: 10 }
-    });
-
-    const finalY = doc.lastAutoTable.finalY + 15;
-    doc.line(20, finalY, 70, finalY);
-    doc.line(100, finalY, 150, finalY);
-    doc.setFontSize(10);
-    doc.text("Entrega", 35, finalY + 5);
-    doc.text("Recibe", 115, finalY + 5);
-    doc.save('material_validado.pdf');
-}
-
-function actualizarRegistros(ids, tecnicoRecibe) {
-    fetch('actualizar_registros.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ids: ids, tecnico_recibe: tecnicoRecibe })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Registros actualizados correctamente.');
-        } else {
-            alert('Error al actualizar: ' + (data.message || 'Desconocido'));
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
-</script>
-
-<script> // GENERAR EL PDF DE MATERIAL SEPARADO DEL ALMACEN
-    document.getElementById('btnValidarMaterial').addEventListener('click', function () {
-        fetch('validar_registros.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'validar_material' })
-})
-    .then(response => response.json())
-    .then(data => {
-        console.log('Respuesta del servidor:', data);  // Verifica la respuesta completa
-        if (data.success) {
-            console.log('Registros obtenidos:', data.registros);  // Verifica los registros obtenidos
-            let contenidoTabla = `<table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Separar</th>
-                                <th>Producto</th>
-                                <th>Referencia</th>
-                                <th>Cantidad</th>
-                                <th>Observaciones</th>
-                                <th>Asignado a:</th>
-                                <th>N° Movimiento</th>
-                                <th>Almacen Destino</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
-
-data.registros.forEach(registro => {
-    contenidoTabla += `<tr>
-                        <td>
-                            <input type="checkbox" class="checkbox-material" data-id="${registro.id_movimiento_diario}">
-                        </td>
-                        <td>${registro.nombre_producto}</td>
-                        <td>${registro.nombre_referencia_2}</td>
-                        <td>${registro.cantidad_entrada}</td>
-                        <td>${registro.observaciones}</td>
-                        <td>${registro.op}</td>
-                        <td>${registro.consecu_sale}</td>
-                        <td>${registro.almacen_destino}</td>
-                        </tr>`;
-});
-
-contenidoTabla += `</tbody></table>`;
-document.getElementById('contenidoTablaMaterial').innerHTML = contenidoTabla;
-
-        } else {
-            alert('No se encontraron registros.');
-        }
-    })
-    .catch(error => console.error('Error:', error));
-
-    });
-
-    document.getElementById('btnGenerarPdfModal').addEventListener('click', function () {
-    const checkboxes = document.querySelectorAll('.checkbox-material:checked');
-    registrosSeleccionados = [];
-    idsActualizar = [];
-
-    const articuloSeleccionado = document.getElementById('articuloSeleccionado');
-
-    checkboxes.forEach(checkbox => {
-        const fila = checkbox.closest('tr');
-        const columnas = Array.from(fila.querySelectorAll('td'));
-
-        const cantidad = columnas[3]?.textContent || "N/A";
-        const producto = columnas[1]?.textContent || "N/A";
-        const referencia = columnas[2]?.textContent || "N/A";
-        const observacion = columnas[4]?.textContent || "N/A";
-
-        if (!contadorSalida || contadorSalida === "N/A") contadorSalida = columnas[6]?.textContent || "N/A";
-        if (!almacenDestino || almacenDestino === "N/A") almacenDestino = columnas[7]?.textContent || "N/A";
-        if (!asignarA || asignarA === "N/A") asignarA = columnas[5]?.textContent || "N/A";
-
-        registrosSeleccionados.push([cantidad, producto, referencia, observacion]);
-        idsActualizar.push(checkbox.dataset.id);
-    });
-
-    if (registrosSeleccionados.length === 0) {
-        alert('Por favor, selecciona al menos un registro.');
-        return;
-    }
-
-    // ✅ SI articuloSeleccionado NO está marcado, abrir modal técnico
-    if (!articuloSeleccionado.checked) {
-        $('#modalSeleccionTecnico').modal('show');
-    } else {
-        // ✅ SI está marcado, guardar info + generar PDF
-        document.getElementById('tecnico_recibe').value = asignarA;
-        manejarGeneracionPDF(); // esto incluye guardar y generar PDF
-    }
-});
-
-// ✅ Confirmar técnico (solo guarda, NO genera PDF)
-document.getElementById('confirmarTecnico').addEventListener('click', function () {
-    const tecnico = document.getElementById('selectTecnico').value;
-    const tecnicoTexto = document.getElementById('selectTecnico').options[document.getElementById('selectTecnico').selectedIndex].text;
-
-    if (!tecnico) {
-        alert('Por favor selecciona un técnico.');
-        return;
-    }
-
-    document.getElementById('tecnico_recibe').value = tecnicoTexto;
-    $('#modalSeleccionTecnico').modal('hide');
-
-    // ✅ Solo guardar datos, SIN generar PDF
-    actualizarRegistros(idsActualizar, tecnicoTexto);
-});
-
-
-// Función para generar el PDF con los datos
-function generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA) {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({
-        orientation: 'portrait', // Orientación horizontal
-        unit: 'mm', // Unidad de medida
-        format: [210, 297] // Media carta (ancho x alto)
-    });
-
-    // Encabezado de la empresa
-    const pageWidth = 210; // Ancho total de la hoja en mm
-
-    doc.setFontSize(14);
-    doc.text('SMARTLED COLOMBIA', pageWidth / 2, 10, { align: 'center' });
-
-    doc.setFontSize(12);
-    doc.text('Salida de Artículos del Almacén', pageWidth / 2, 18, { align: 'center' });
-
-    // Información adicional
-    doc.setFontSize(10);
-    doc.text(`Fecha: ${fecha}`, 10, 30);
-    doc.text(`# Documento: ${contadorSalida}`, 10, 35);
-    doc.text(`Almacén destino: ${almacenDestino}`, 10, 40);
-    doc.text(`Asignar a: ${asignarA}`, 10, 45);
-
-    // Crear la tabla con autoTable
-    doc.autoTable({
-        head: [['Cantidad', 'Producto', 'Referencia', 'Observación']], // Encabezados
-        body: registrosSeleccionados, // Datos de la tabla
-        startY: 55, // Posición inicial
-        styles: { fontSize: 8 }, // Tamaño de fuente
-        columnStyles: {
-            0: { cellWidth: 20 },  // Cantidad
-            1: { cellWidth: 50 },  // Producto
-            2: { cellWidth: 50 },  // Referencia
-            3: { cellWidth: 60 }   // Observación
-        },
-        theme: 'grid',
-        margin: { left: 10, right: 10 } // Márgenes laterales
-    });
-
-    // Agregar líneas para firmas
-    const finalY = doc.lastAutoTable.finalY + 15; // Posición después de la tabla
-
-    doc.line(20, finalY, 70, finalY); // Línea para "Entrega"
-    doc.line(100, finalY, 150, finalY); // Línea para "Recibe"
-
-    // Agregar textos para firmas
-    doc.setFontSize(10);
-    doc.text("Entrega", 35, finalY + 5); // Texto debajo de la línea de "Entrega"
-    doc.text("Recibe", 115, finalY + 5); // Texto debajo de la línea de "Recibe"
-
-    // Guardar el PDF
-    doc.save('material_validado.pdf');
-}
-
-function actualizarRegistros(ids) {
-    console.log('IDs enviados al servidor:', ids); // Verifica los IDs enviados
-    fetch('actualizar_registros.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ids: ids })
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Respuesta del servidor:', data); // Verifica la respuesta del servidor
-            if (data.success) {
-                alert('Los registros se han actualizado correctamente.');
-            } else {
-                alert('Hubo un problema al actualizar los registros: ' + (data.message || 'Error desconocido.'));
-            }
-        })
-        .catch(error => console.error('Error:', error));
-}
-</script>
--->
-
 <script>
     const entradaMd = document.getElementById('entrada_md');
     const existencia = document.getElementById('existencia');
@@ -1320,47 +985,187 @@ function actualizarRegistros(ids) {
 </script>
 
 <script>
+let registrosSeleccionados = [];
+let idsActualizar = [];
+let fecha = new Date().toLocaleDateString();
+
+// Recolecta los datos seleccionados
+function obtenerDatosSeleccionados() {
+    debugger;
+    console.log("Ejecutando: obtenerDatosSeleccionados");
+
+    registrosSeleccionados = [];
+    idsActualizar = [];
+
+    const filas = document.querySelectorAll('tr');
+    console.log("Total de filas encontradas:", filas.length);
+
+    filas.forEach(fila => {
+        const checkbox = fila.querySelector('input[type="checkbox"][name="articuloSeleccionado[]"]');
+        if (checkbox) {
+            const cantidad = fila.querySelector('.cantidad1')?.value || '';
+            const producto = fila.querySelector('.producto1')?.value || '';
+            const referencia = fila.querySelector('.referencia2')?.value || '';
+            const observacion = fila.querySelector('.observacion2')?.value || '';
+
+            registrosSeleccionados.push([cantidad, producto, referencia, observacion]);
+            idsActualizar.push(checkbox.dataset.id);
+
+            console.log("Fila agregada:", { cantidad, producto, referencia, observacion, id: checkbox.dataset.id });
+        }
+    });
+
+    console.log("Registros seleccionados para PDF:", registrosSeleccionados);
+    console.log("IDs a actualizar:", idsActualizar);
+}
+
+// Función principal para generar PDF y actualizar
+function manejarGeneracionPDF() {
+    debugger;
+    console.log("Ejecutando: manejarGeneracionPDF");
+
+    const contadorSalida = document.getElementById('contador_sale')?.value || "Sin número";
+    const asignarA = document.getElementById('op_destino')?.value || "Sin asignar";
+
+    console.log("contadorSalida:", contadorSalida, "asignarA:", asignarA);
+
+    const select = document.getElementById('selectTecnico');
+    const tecnicoID = select.value;
+    const tecnicoAsignado = select.options[select.selectedIndex].text || "Sin técnico";
+
+    console.log("Técnico asignado:", tecnicoAsignado, "ID:", tecnicoID);
+
+    const almacenSelect = document.getElementById('almacen_entrada_md');
+    const almacenID = almacenSelect.value;
+    let almacenDestino = "Sin destino";
+
+    if (almacenID) {
+        const selectedOption = almacenSelect.options[almacenSelect.selectedIndex];
+        almacenDestino = selectedOption.dataset.nombre || selectedOption.text;
+    }
+
+    console.log("Almacén destino:", almacenDestino);
+
+    generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA, tecnicoAsignado);
+    actualizarRegistros(idsActualizar, tecnicoID);
+
+    registrosSeleccionados = [];
+    idsActualizar = [];
+
+    console.log("Proceso completado y variables limpiadas.");
+}
+
+// Función para generar PDF
+function generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA, tecnicoAsignado) {
+    debugger;
+    console.log("Generando PDF con los datos:", {
+        registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA, tecnicoAsignado
+    });
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: [210, 297] });
+
+    const pageWidth = 210;
+
+    doc.setFontSize(14);
+    doc.text('SMARTLED COLOMBIA', pageWidth / 2, 10, { align: 'center' });
+    doc.setFontSize(12);
+    doc.text('Salida de Artículos del Almacén', pageWidth / 2, 18, { align: 'center' });
+
+    doc.setFontSize(10);
+    doc.text(`Fecha: ${fecha}`, 10, 30);
+    doc.text(`# Documento: ${contadorSalida}`, 10, 35);
+    doc.text(`Almacén destino: ${almacenDestino}`, 10, 40);
+    doc.text(`Asignar a: ${asignarA}`, 10, 45);
+    doc.text(`Técnico Asignado: ${tecnicoAsignado}`, 10, 50);
+
+    doc.autoTable({
+        head: [['Cantidad', 'Producto', 'Referencia', 'Observación']],
+        body: registrosSeleccionados,
+        startY: 55,
+        styles: { fontSize: 8 },
+        columnStyles: {
+            0: { cellWidth: 20 },
+            1: { cellWidth: 50 },
+            2: { cellWidth: 50 },
+            3: { cellWidth: 60 }
+        },
+        theme: 'grid',
+        margin: { left: 10, right: 10 }
+    });
+
+    const finalY = doc.lastAutoTable.finalY + 15;
+    doc.line(40, finalY, 90, finalY);
+    doc.line(120, finalY, 170, finalY);
+    doc.setFontSize(10);
+    doc.text("Entrega", 60, finalY + 5);
+    doc.text("Recibe", 140, finalY + 5);
+
+    doc.save('material_validado.pdf');
+}
+
+// Validación de artículos
 document.getElementById('generarPdf').addEventListener('click', function (e) {
-    e.preventDefault(); // Detiene el envío del formulario si lo hay
+    debugger;
+    console.log("Click en botón generar PDF");
 
-    // PASO 1: Recolectar los checkboxes
+    e.preventDefault();
+
     const checkboxes = document.querySelectorAll('input[name="articuloSeleccionado[]"]');
-
     let marcado = false;
+
+    // Recorremos los checkboxes para saber si hay alguno marcado
     checkboxes.forEach(cb => {
-        if (cb.checked && cb.value === "1") {
+        if (cb.checked) {
             marcado = true;
         }
     });
 
-    console.log("¿Checkbox marcado?:", marcado);
+    console.log("¿Al menos un checkbox marcado?", marcado);
 
+    // Si no hay ningún checkbox marcado, mostramos el modal de selección de técnico
     if (!marcado) {
-        console.log("Abriendo modal porque no hay artículo seleccionado...");
-        $('#modalSeleccionTecnico').modal('show'); // Mostrar el modal con jQuery + Bootstrap
-        return;
+        console.log("Ningún checkbox marcado. Mostrando modal de selección de técnico.");
+        $('#modalSeleccionTecnico').modal('show');
+        return; // Detenemos la ejecución para esperar la selección del técnico
     }
 
-    console.log("Checkbox marcado. Continuando con la generación del PDF...");
-    // Aquí iría el código para continuar normalmente (enviar formulario, generar PDF, etc.)
+    // Si hay checkboxes marcados, solo actualizamos los registros sin generar PDF ni mostrar modal
+    obtenerDatosSeleccionados();  // Recolectamos los datos de las filas seleccionadas
+    actualizarRegistros(idsActualizar, null);  // Actualizamos los registros sin técnico (null como técnicoID)
+
+    // Limpiamos los arrays de registros seleccionados y IDs a actualizar
+    registrosSeleccionados = []; // Limpiamos el arreglo de registros seleccionados
+    idsActualizar = []; // Limpiamos los IDs de los registros a actualizar
+
+    console.log("Datos actualizados sin técnico para los artículos seleccionados.");
 });
 
+// Confirmar técnico desde el modal
 document.getElementById('btnConfirmarTecnico').addEventListener('click', function () {
-    const tecnicoSeleccionado = document.getElementById('selectTecnico').value;
+    debugger;
+    console.log("Click en confirmar técnico");
 
-    if (!tecnicoSeleccionado) {
+    const select = document.getElementById('selectTecnico');
+    const tecnicoID = select.value;
+    const tecnicoNombre = select.options[select.selectedIndex].text;
+
+    console.log("Técnico seleccionado:", tecnicoNombre, "ID:", tecnicoID);
+
+    if (!tecnicoID) {
         alert("Por favor selecciona un técnico.");
         return;
     }
 
-    // Guardar valor en el input oculto
-    document.getElementById('tecnico_recibe').value = tecnicoSeleccionado;
+    // Guardamos el ID del técnico seleccionado en un campo oculto
+    document.getElementById('tecnico_recibe').value = tecnicoID;
 
-    console.log("Técnico asignado:", tecnicoSeleccionado);
-
-    // Cerrar el modal
+    // Cerramos el modal de selección de técnico
     $('#modalSeleccionTecnico').modal('hide');
 
+    // Obtenemos los datos seleccionados y generamos el PDF
+    obtenerDatosSeleccionados();
+    manejarGeneracionPDF();
 });
-</script>
 
+</script>
