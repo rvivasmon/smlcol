@@ -64,8 +64,6 @@ include('../../../layout/admin/parte1.php');
                             </div>
                         </div>
 
-
-
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="table_stcs" class="table table-striped table-hover table-bordered">

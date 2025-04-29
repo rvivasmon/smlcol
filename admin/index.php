@@ -65,8 +65,10 @@ include('../layout/admin/parte1.php');
 
         <br>
 
-        <?php if ($id_rol_sesion_usuario == 7 || $id_rol_sesion_usuario == 14): ?>
-          <div class="row">
+        <div class="row">
+
+          <?php if ($id_rol_sesion_usuario == 7 || $id_rol_sesion_usuario == 14): ?>
+
             <div class="col-lg-2 col-6">
               <div class="small-box bg-warning">
                 <div class="inner">
@@ -79,19 +81,19 @@ include('../layout/admin/parte1.php');
                   <h3><?php echo $contador_de_usuarios; ?></h3>
                   <p>Usuarios Registrados</p>
                 </div>
-                  <a href="<?php echo $URL; ?>admin/ti_usuarios/create.php">
+                  <a href="<?php echo $URL; ?>admin/ti/usuarios/create.php">
                     <div class="icon">
                       <i class="fas fa-user-plus"></i>
                     </div>
                   </a>
-                  <a href="<?php echo $URL; ?>admin/ti_usuarios" class="small-box-footer">
+                  <a href="<?php echo $URL; ?>admin/ti/usuarios" class="small-box-footer">
                   Más Información <i class="fas fa-arrow-circle-right"></i>
                   </a>
               </div>
             </div>
 
             <div class="col-lg-2 col-6">
-              <div class="small-box bg-info">
+              <div class="small-box bg-secondary">
                 <div class="inner">
                   <?php
                   $contador_de_usuarios = 0;
@@ -108,6 +110,102 @@ include('../layout/admin/parte1.php');
                     </div>
                   </a>
                   <a href="<?php echo $URL; ?>admin/ti_usuarios" class="small-box-footer">
+                  Más Información <i class="fas fa-arrow-circle-right"></i>
+                  </a>
+              </div>
+            </div>
+
+            <div class="col-lg-2 col-6">
+              <div class="small-box bg-primary">
+                <div class="inner">
+                  <?php
+                  $contador_de_usuarios = 0;
+                  foreach ($usuarios_datos as $usuario_dato){
+                      $contador_de_usuarios = $contador_de_usuarios + 1;
+                  }
+                  ?>
+                  <h3><?php echo $contador_de_usuarios; ?></h3>
+                  <p>Usuarios Registrados</p>
+                </div>
+                  <a href="<?php echo $URL; ?>admin/ti_usuarios/create.php">
+                    <div class="icon">
+                      <i class="fas fa-user-plus"></i>
+                    </div>
+                  </a>
+                  <a href="<?php echo $URL; ?>admin/ti_usuarios" class="small-box-footer">
+                  Más Información <i class="fas fa-arrow-circle-right"></i>
+                  </a>
+              </div>
+            </div>
+
+            <div class="col-lg-2 col-6">
+              <div class="small-box bg-dark">
+                <div class="inner">
+                  <?php
+                  $contador_de_usuarios = 0;
+                  foreach ($usuarios_datos as $usuario_dato){
+                      $contador_de_usuarios = $contador_de_usuarios + 1;
+                  }
+                  ?>
+                  <h3><?php echo $contador_de_usuarios; ?></h3>
+                  <p>Usuarios Registrados</p>
+                </div>
+                  <a href="<?php echo $URL; ?>admin/ti_usuarios/create.php">
+                    <div class="icon">
+                      <i class="fas fa-user-plus"></i>
+                    </div>
+                  </a>
+                  <a href="<?php echo $URL; ?>admin/ti_usuarios" class="small-box-footer">
+                  Más Información <i class="fas fa-arrow-circle-right"></i>
+                  </a>
+              </div>
+            </div>
+
+            <div class="col-lg-2 col-6">
+              <div class="small-box bg-light">
+                <div class="inner">
+                  <?php
+                  $contador_de_usuarios = 0;
+                  foreach ($usuarios_datos as $usuario_dato){
+                      $contador_de_usuarios = $contador_de_usuarios + 1;
+                  }
+                  ?>
+                  <h3><?php echo $contador_de_usuarios; ?></h3>
+                  <p>Usuarios Registrados</p>
+                </div>
+                  <a href="<?php echo $URL; ?>admin/ti_usuarios/create.php">
+                    <div class="icon">
+                      <i class="fas fa-user-plus"></i>
+                    </div>
+                  </a>
+                  <a href="<?php echo $URL; ?>admin/ti_usuarios" class="small-box-footer">
+                  Más Información <i class="fas fa-arrow-circle-right"></i>
+                  </a>
+              </div>
+            </div>
+
+          <?php endif; ?>
+
+          <?php if ($id_rol_sesion_usuario == 7 || $id_rol_sesion_usuario == 16): ?>
+
+            <div class="col-lg-2 col-6">
+              <div class="small-box bg-info">
+                <div class="inner">
+                  <?php
+                  $contador_de_solicitudes = 0;
+                  foreach ($solicitudes_datos as $solicitud_dato){
+                      $contador_de_solicitudes = $contador_de_solicitudes + 1;
+                  }
+                  ?>
+                  <h3><?php echo $contador_de_solicitudes; ?></h3>
+                  <p>Nuevas</p>
+                </div>
+                  <a href="<?php echo $URL; ?>admin/techled/tracking_chi/solicitud">
+                    <div class="icon">
+                      <i class="fas fa-user-plus"></i>
+                    </div>
+                  </a>
+                  <a href="<?php echo $URL; ?>admin/techled/tracking_chi/solicitud" class="small-box-footer">
                   Más Información <i class="fas fa-arrow-circle-right"></i>
                   </a>
               </div>
@@ -117,28 +215,52 @@ include('../layout/admin/parte1.php');
               <div class="small-box bg-success">
                 <div class="inner">
                   <?php
-                  $contador_de_usuarios = 0;
-                  foreach ($usuarios_datos as $usuario_dato){
-                      $contador_de_usuarios = $contador_de_usuarios + 1;
+                  $contador_de_terminar = 0;
+                  foreach ($terminar_solicitudes_datos as $terminar_solicitud_dato){
+                      $contador_de_terminar = $contador_de_terminar + 1;
                   }
                   ?>
-                  <h3><?php echo $contador_de_usuarios; ?></h3>
-                  <p>Usuarios Registrados</p>
+                  <h3><?php echo $contador_de_terminar; ?></h3>
+                  <p>Procesar</p>
                 </div>
-                  <a href="<?php echo $URL; ?>admin/ti_usuarios/create.php">
+                  <a href="<?php echo $URL; ?>admin/techled/tracking_chi/terminar">
                     <div class="icon">
                       <i class="fas fa-user-plus"></i>
                     </div>
                   </a>
-                  <a href="<?php echo $URL; ?>admin/ti_usuarios" class="small-box-footer">
+                  <a href="<?php echo $URL; ?>admin/techled/tracking_chi/terminar" class="small-box-footer">
                   Más Información <i class="fas fa-arrow-circle-right"></i>
                   </a>
               </div>
             </div>
-          </div>
 
-        <?php endif; ?>
+            <div class="col-lg-2 col-6">
+              <div class="small-box bg-danger">
+                <div class="inner">
+                  <?php
+                  $contador_de_envios = 0;
+                  foreach ($enviars_datos as $enviar_dato){
+                      $contador_de_envios = $contador_de_envios + 1;
+                  }
+                  ?>
+                  <h3><?php echo $contador_de_envios; ?></h3>
+                  <p>Facturar</p>
+                </div>
+                  <a href="<?php echo $URL; ?>admin/techled/tracking_chi/enviar">
+                    <div class="icon">
+                      <i class="fas fa-user-plus"></i>
+                    </div>
+                  </a>
+                  <a href="<?php echo $URL; ?>admin/techled/tracking_chi/enviar" class="small-box-footer">
+                  Más Información <i class="fas fa-arrow-circle-right"></i>
+                  </a>
+              </div>
+            </div>
 
+          <?php endif; ?>
+
+
+        </div>
     </div>
 </section>
 

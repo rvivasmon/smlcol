@@ -39,7 +39,7 @@ try {
     $contadorFormateado = str_pad($nuevoContador, 3, '0', STR_PAD_LEFT);
 
     // Generar código final
-    $codigoFinal = "{$solicitante_siglas}-{$ano_mes}-{$contadorFormateado}";
+    $codigoFinal = "{$solicitante_siglas}-SMC-{$ano_mes}-{$contadorFormateado}";
 
     // Enviar respuesta en formato JSON
     echo json_encode([

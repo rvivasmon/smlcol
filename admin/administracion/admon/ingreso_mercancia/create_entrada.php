@@ -698,48 +698,68 @@ include('../../../../layout/admin/parte1.php');
     });
 
     function agregarFila() {
-        // Obtener valores de los inputs y selects, asegurando que si están vacíos, sean ""
-        const cantidadEntradaMd = document.querySelector('input[name="entrada_md[]"]').value || "";
-        const producto = document.querySelector('select[name="producto[]"] option:checked')?.value || "";
-        const pitch = document.querySelector('select[name="pitch[]"] option:checked')?.value || "";
-        const serieModulo = document.querySelector('select[name="serie_modulo[]"] option:checked')?.value || "";
-        const campoReferencia = document.querySelector('input[name="campo_referencia[]"]')?.value || "";
-        const campoSerie = document.getElementById("id_serie_modulo")?.value || "";
-        const marcaControl = document.querySelector('select[name="marca_control[]"] option:checked')?.value || "";
-        const referenciaControl35 = document.querySelector('select[name="referencia_control35[]"] option:checked')?.value || "";
-        const marcaFuente = document.querySelector('select[name="marca_fuente[]"] option:checked')?.value || "";
-        const modeloFuente35 = document.querySelector('select[name="modelo_fuente35[]"] option:checked')?.value || "";
-        const justificacion = document.querySelector('textarea[name="justificacion[]"]').value || "";
+    // Obtener valores y textos
+    const cantidadEntradaMd = document.querySelector('input[name="entrada_md[]"]').value || "";
 
-        // Agregar una nueva fila a la tabla
-        const tableBody = document.getElementById("table_body");
-        const newRow = document.createElement("tr");
-        newRow.innerHTML = generarFilaHTML(producto, pitch, serieModulo, campoReferencia, campoSerie, marcaControl, referenciaControl35, marcaFuente, modeloFuente35, cantidadEntradaMd, justificacion);
-        tableBody.appendChild(newRow);
+    const productoSelect = document.querySelector('select[name="producto[]"]');
+    const productoTexto = productoSelect.options[productoSelect.selectedIndex]?.text || "";
+    const productoValor = productoSelect.value || "";
 
-        actualizarNumeracion(); // Actualiza los números de las filas
-    }
+    const pitchSelect = document.querySelector('select[name="pitch[]"]');
+    const pitchTexto = pitchSelect.options[pitchSelect.selectedIndex]?.text || "";
+    const pitchValor = pitchSelect.value || "";
 
-    function generarFilaHTML(producto, pitch, serieModulo, campoReferencia, campoSerie, marcaControl, referenciaControl35, marcaFuente, modeloFuente35, cantidadEntradaMd, justificacion) {
-        return `
-            <td></td> <!-- Se ajustará el número automáticamente -->
-            <td>${producto}</td>
-            <td>${pitch}</td>
-            <td>${campoSerie}</td>
-            <td>${campoReferencia}</td>
-            <td>${marcaControl}</td>
-            <td>${referenciaControl35}</td>
-            <td>${marcaFuente}</td>
-            <td>${modeloFuente35}</td>
-            <td>${justificacion}</td>
-            <td>${cantidadEntradaMd}</td>
-            <td>
-                <center>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>
-                </center>
-            </td>
-        `;
-    }
+    const serieModuloSelect = document.querySelector('select[name="serie_modulo[]"]');
+    const serieModuloTextoCompleto = serieModuloSelect.options[serieModuloSelect.selectedIndex]?.text || "";
+    const serieModuloValor = serieModuloSelect.value || "";
+    const serieModuloTexto = serieModuloTextoCompleto.split(' / ')[0] || "";  // Solo la serie antes de " / "
+
+    const campoReferencia = document.querySelector('input[name="campo_referencia[]"]').value || "";
+    const campoSerie = document.getElementById("id_serie_modulo")?.value || "";
+
+    const marcaControlSelect = document.querySelector('select[name="marca_control[]"]');
+    const marcaControlTexto = marcaControlSelect.options[marcaControlSelect.selectedIndex]?.text || "";
+    const marcaControlValor = marcaControlSelect.value || "";
+
+    const referenciaControlSelect = document.querySelector('select[name="referencia_control35[]"]');
+    const referenciaControlTexto = referenciaControlSelect.options[referenciaControlSelect.selectedIndex]?.text || "";
+    const referenciaControlValor = referenciaControlSelect.value || "";
+
+    const marcaFuenteSelect = document.querySelector('select[name="marca_fuente[]"]');
+    const marcaFuenteTexto = marcaFuenteSelect.options[marcaFuenteSelect.selectedIndex]?.text || "";
+    const marcaFuenteValor = marcaFuenteSelect.value || "";
+
+    const modeloFuenteSelect = document.querySelector('select[name="modelo_fuente35[]"]');
+    const modeloFuenteTexto = modeloFuenteSelect.options[modeloFuenteSelect.selectedIndex]?.text || "";
+    const modeloFuenteValor = modeloFuenteSelect.value || "";
+
+    const justificacion = document.querySelector('textarea[name="justificacion[]"]').value || "";
+
+    const tableBody = document.getElementById("table_body");
+    const newRow = document.createElement("tr");
+
+    newRow.innerHTML = `
+        <td></td>
+        <td data-id-producto="${productoValor}">${productoTexto}</td>
+        <td data-id-pitch="${pitchValor}">${pitchTexto}</td>
+        <td data-id-seriemodulo="${serieModuloValor}">${serieModuloTexto}</td> <!-- SOLO LA SERIE -->
+        <td>${campoReferencia}</td>
+        <td data-id-marcacontrol="${marcaControlValor}">${marcaControlTexto}</td>
+        <td data-id-referenciacontrol="${referenciaControlValor}">${referenciaControlTexto}</td>
+        <td data-id-marcafuente="${marcaFuenteValor}">${marcaFuenteTexto}</td>
+        <td data-id-modelofuente="${modeloFuenteValor}">${modeloFuenteTexto}</td>
+        <td>${justificacion}</td>
+        <td>${cantidadEntradaMd}</td>
+        <td>
+            <center>
+                <button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>
+            </center>
+        </td>
+    `;
+
+    tableBody.appendChild(newRow);
+    actualizarNumeracion();
+}
 
     function limpiarCampos() {
         document.querySelector('input[name="entrada_md[]"]').value = '';
@@ -770,29 +790,30 @@ include('../../../../layout/admin/parte1.php');
 
     // **Código para guardar los datos de la tabla en el campo oculto antes de enviar el formulario**
     document.getElementById('formulario_creacion_producto').addEventListener('submit', function() {
-        const rows = document.querySelectorAll('#table_body tr');
-        const itemData = [];
+    const rows = document.querySelectorAll('#table_body tr');
+    const itemData = [];
 
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            const rowData = {
-                item: cells[0].innerText,
-                producto: cells[1].innerText,
-                pitch: cells[2].innerText,
-                id_serie_modulo: cells[3].innerText,  // 👈 Asegúrate de que la columna correcta lo almacene
-                campo_referencia: cells[4].innerText,
-                marca_control: cells[5].innerText,
-                referencia_control35: cells[6].innerText,
-                marca_fuente: cells[7].innerText,
-                modelo_fuente35: cells[8].innerText,
-                justificacion: cells[9].innerText,
-                cantidad_entrada_md: cells[10].innerText
-            };
-            itemData.push(rowData);
-        });
-
-        document.getElementById('item_data').value = JSON.stringify(itemData);
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const rowData = {
+            item: cells[0].innerText,
+            producto: cells[1].dataset.idProducto || "",     // 👈 Aquí obtienes el ID
+            pitch: cells[2].dataset.idPitch || "",
+            id_serie_modulo: cells[3].dataset.idSeriemodulo || "",
+            campo_referencia: cells[4].innerText,
+            marca_control: cells[5].dataset.idMarcacontrol || "",
+            referencia_control35: cells[6].dataset.idReferenciacontrol || "",
+            marca_fuente: cells[7].dataset.idMarcafuente || "",
+            modelo_fuente35: cells[8].dataset.idModelofuente || "",
+            justificacion: cells[9].innerText,
+            cantidad_entrada_md: cells[10].innerText
+        };
+        itemData.push(rowData);
     });
+
+    document.getElementById('item_data').value = JSON.stringify(itemData);
+});
+
 });
 
     </script>

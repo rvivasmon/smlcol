@@ -984,6 +984,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 </script>
 
+
+<!-- PDF y actualización de registros -->
 <script>
 let registrosSeleccionados = [];
 let idsActualizar = [];
@@ -1168,4 +1170,273 @@ document.getElementById('btnConfirmarTecnico').addEventListener('click', functio
     manejarGeneracionPDF();
 });
 
+</script>
+
+
+<!-- GENERAR EL PDF DE MATERIAL SEPARADO DEL ALMACEN -->
+<script>
+    document.getElementById('btnValidarMaterial').addEventListener('click', function () {
+        fetch('validar_registros.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'validar_material' })
+})
+    .then(response => response.json())
+    .then(data => {
+        console.log('Respuesta del servidor:', data);  // Verifica la respuesta completa
+        if (data.success) {
+            console.log('Registros obtenidos:', data.registros);  // Verifica los registros obtenidos
+            let contenidoTabla = `<table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Separar</th>
+                                <th>Producto</th>
+                                <th>Referencia</th>
+                                <th>Cantidad</th>
+                                <th>Observaciones</th>
+                                <th>Asignado a:</th>
+                                <th>N° Movimiento</th>
+                                <th>Almacen Destino</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+data.registros.forEach(registro => {
+    contenidoTabla += `<tr>
+                        <td>
+                            <input type="checkbox" class="checkbox-material" data-id="${registro.id_movimiento_diario}">
+                        </td>
+                        <td>${registro.nombre_producto}</td>
+                        <td>${registro.nombre_referencia_2}</td>
+                        <td>${registro.cantidad_entrada}</td>
+                        <td>${registro.observaciones}</td>
+                        <td>${registro.op}</td>
+                        <td>${registro.consecu_sale}</td>
+                        <td>${registro.almacen_destino}</td>
+                        </tr>`;
+});
+
+contenidoTabla += `</tbody></table>`;
+document.getElementById('contenidoTablaMaterial').innerHTML = contenidoTabla;
+
+        } else {
+            alert('No se encontraron registros.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+
+    });
+
+    document.getElementById('btnGenerarPdfModal').addEventListener('click', function () {
+    const checkboxes = document.querySelectorAll('.checkbox-material:checked');
+    const registrosSeleccionados = [];
+    const idsActualizar = [];
+
+    // Inicializa variables para los datos adicionales
+    let fecha = new Date().toLocaleDateString();
+    let contadorSalida = "N/A";
+    let almacenDestino = "N/A";
+    let asignarA = "N/A";
+
+    checkboxes.forEach(checkbox => {
+        const fila = checkbox.closest('tr');
+        const columnas = Array.from(fila.querySelectorAll('td'));
+
+        // Asignar manualmente los valores que deseas extraer
+        const cantidad = columnas[3]?.textContent || "N/A"; // Cantidad
+        const producto = columnas[1]?.textContent || "N/A"; // Producto
+        const referencia = columnas[2]?.textContent || "N/A"; // Referencia
+        const observacion = columnas[4]?.textContent || "N/A"; // Observación
+
+         // Solo toma los datos adicionales del primer registro (si son comunes a todos)
+        if (!contadorSalida || contadorSalida === "N/A") contadorSalida = columnas[6]?.textContent || "N/A";
+        if (!almacenDestino || almacenDestino === "N/A") almacenDestino = columnas[7]?.textContent || "N/A";
+        if (!asignarA || asignarA === "N/A") asignarA = columnas[5]?.textContent || "N/A";
+
+        registrosSeleccionados.push([cantidad, producto, referencia, observacion]);
+
+        // También puedes asignar columnas específicas directamente a variables globales, si es necesario
+        idsActualizar.push(checkbox.dataset.id); // Almacenar el ID seleccionado
+    });
+
+    if (registrosSeleccionados.length === 0) {
+        alert('Por favor, selecciona al menos un registro.');
+        return;
+    }
+
+    // Generar el PDF con los datos seleccionados
+    generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA);
+
+    // Llamar a la función para actualizar registros en la base de datos
+    actualizarRegistros(idsActualizar);
+});
+
+// Función para generar el PDF con los datos
+function generarPDF(registrosSeleccionados, fecha, contadorSalida, almacenDestino, asignarA) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+        orientation: 'portrait', // Orientación horizontal
+        unit: 'mm', // Unidad de medida
+        format: [210, 297] // Media carta (ancho x alto)
+    });
+
+    // Encabezado de la empresa
+    const pageWidth = 210; // Ancho total de la hoja en mm
+
+    doc.setFontSize(14);
+    doc.text('SMARTLED COLOMBIA', pageWidth / 2, 10, { align: 'center' });
+
+    doc.setFontSize(12);
+    doc.text('Salida de Artículos del Almacén', pageWidth / 2, 18, { align: 'center' });
+
+    // Información adicional
+    doc.setFontSize(10);
+    doc.text(`Fecha: ${fecha}`, 10, 30);
+    doc.text(`# Documento: ${contadorSalida}`, 10, 35);
+    doc.text(`Almacén destino: ${almacenDestino}`, 10, 40);
+    doc.text(`Asignar a: ${asignarA}`, 10, 45);
+
+    // Crear la tabla con autoTable
+    doc.autoTable({
+        head: [['Cantidad', 'Producto', 'Referencia', 'Observación']], // Encabezados
+        body: registrosSeleccionados, // Datos de la tabla
+        startY: 55, // Posición inicial
+        styles: { fontSize: 8 }, // Tamaño de fuente
+        columnStyles: {
+            0: { cellWidth: 20 },  // Cantidad
+            1: { cellWidth: 50 },  // Producto
+            2: { cellWidth: 50 },  // Referencia
+            3: { cellWidth: 60 }   // Observación
+        },
+        theme: 'grid',
+        margin: { left: 10, right: 10 } // Márgenes laterales
+    });
+
+    // Agregar líneas para firmas
+    const finalY = doc.lastAutoTable.finalY + 15; // Posición después de la tabla
+
+    doc.line(20, finalY, 70, finalY); // Línea para "Entrega"
+    doc.line(100, finalY, 150, finalY); // Línea para "Recibe"
+
+    // Agregar textos para firmas
+    doc.setFontSize(10);
+    doc.text("Entrega", 35, finalY + 5); // Texto debajo de la línea de "Entrega"
+    doc.text("Recibe", 115, finalY + 5); // Texto debajo de la línea de "Recibe"
+
+    // Guardar el PDF
+    doc.save('material_validado.pdf');
+}
+
+function actualizarRegistros(ids) {
+    console.log('IDs enviados al servidor:', ids); // Verifica los IDs enviados
+    fetch('actualizar_registros.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: ids })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta del servidor:', data); // Verifica la respuesta del servidor
+            if (data.success) {
+                alert('Los registros se han actualizado correctamente.');
+            } else {
+                alert('Hubo un problema al actualizar los registros: ' + (data.message || 'Error desconocido.'));
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+</script>
+
+<!-- GENERAR PDF DE SALIDA DE ARTICULOS -->
+<script>
+    document.getElementById('generarPdf').addEventListener('click', function () {
+
+        // Obtener el valor del checkbox (asegúrate de que el id de tu checkbox sea correcto)
+        const checkbox = document.getElementById('articuloSeleccionado'); // Cambia 'checkbox_id' por el id de tu checkbox
+        const isChecked = checkbox.checked ? "1" : "0"; // Si está marcado, es "1", si no, es "0"
+
+        // Validar si el checkbox está marcado (si es "1", no generamos el PDF)
+        if (isChecked === "1") {
+            alert("No se puede generar el PDF porque el checkbox está marcado.");
+            return; // Detener el proceso de generación del PDF
+        }
+
+        // Crea una nueva instancia de jsPDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+            orientation: 'portrait', // Establece la orientación horizontal
+            unit: 'mm', // Unidad de medida
+            format: [210, 297] // Formato de la hoja
+        });
+
+        // Datos adicionales
+        const fecha = new Date().toLocaleDateString();
+        const contadorSalida = document.getElementById('contador_sale').value || "N/A";
+        const almacenDestino = document.getElementById('almacen_entrada_md').options[document.getElementById('almacen_entrada_md').selectedIndex].text || "N/A";
+        const asignarA = document.getElementById('op_destino').value || "N/A";
+
+        // Encabezado de la empresa
+        const pageWidth = 210; // Ancho total de la hoja en mm
+
+        doc.setFontSize(14);
+        doc.text('SMARTLED COLOMBIA', pageWidth / 2, 10, { align: 'center' });
+
+        doc.setFontSize(12);
+        doc.text('Salida de Artículos del Almacén', pageWidth / 2, 18, { align: 'center' });
+
+        // Información adicional
+        doc.setFontSize(10);
+        doc.text(`Fecha: ${fecha}`, 10, 30);
+        doc.text(`# Documento: ${contadorSalida}`, 10, 35);
+        doc.text(`Almacén destino: ${almacenDestino}`, 10, 40);
+        doc.text(`Asignar a: ${asignarA}`, 10, 45);
+
+        // Crear los datos para la tabla
+        const tablaArticulos = document.getElementById('tabla-articulos').getElementsByTagName('tbody')[0];
+        const datosTabla = []; // Aquí almacenaremos las filas de datos
+
+        for (let i = 0; i < tablaArticulos.rows.length; i++) {
+            const fila = tablaArticulos.rows[i];
+
+            // Extraer valores de los inputs en las celdas
+            const cantidad = fila.querySelector('.cantidad1').value || "";
+            const producto = fila.querySelector('.producto1').value || "";
+            const referencia = fila.querySelector('.referencia2').value || "";
+            const observacion = fila.querySelector('.observacion2').value || "";
+
+            // Agregar la fila de datos como un array
+            datosTabla.push([cantidad, producto, referencia, observacion]);
+        }
+
+        // Usar autoTable para crear la tabla
+        doc.autoTable({
+            head: [['Cantidad', 'Producto', 'Referencia', 'Observación']], // Encabezados
+            body: datosTabla, // Datos de la tabla
+            startY: 55, // Posición inicial
+            styles: { fontSize: 8 }, // Tamaño de fuente
+            columnStyles: {
+            0: { cellWidth: 20 },  // Cantidad
+            1: { cellWidth: 50 },  // Producto
+            2: { cellWidth: 50 },  // Referencia
+            3: { cellWidth: 60 }   // Observación
+        },
+            theme: 'grid', // Tema con bordes para la tabla
+            margin: { left: 10, right: 10 } // Márgenes laterales
+        });
+
+        // Agregar líneas para firma
+        const finalY = doc.lastAutoTable.finalY + 15; // Obtener la posición final de la tabla y dar espacio
+
+        // Dibujar líneas horizontales
+        doc.line(20, finalY, 70, finalY); // Línea para "Entrega"
+        doc.line(100, finalY, 150, finalY); // Línea para "Recibe"
+
+        // Agregar textos debajo de las líneas
+        doc.setFontSize(10);
+        doc.text("Entrega", 35, finalY + 5); // Texto debajo de la línea de "Entrega"
+        doc.text("Recibe", 115, finalY + 5); // Texto debajo de la línea de "Recibe"
+
+        // Guardar el PDF con un nombre específico
+        doc.save('reporte_articulos.pdf');
+    });
 </script>

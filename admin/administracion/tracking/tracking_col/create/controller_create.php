@@ -37,8 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             // Preparar la consulta de inserción
-            $sql = "INSERT INTO tracking (date, solicitante, codigo_generado, contador_colombia, fecha_oc, origen, origen_cliente, ano_mes, usuario, producto, cantidad, uso, pitch, modelo_nombre, category, x_mm, y_mm, resol_x, resol_y, pixel_modulo, marca_control, ref_control, marca_fuente, modelo_fuente, observaciones_colombia)
-                    VALUES (:fecha_ingreso, :solicitante, :codigo_generado, :contador_colombia, :fecha_oc, :origen, :origen_cliente, :ano_mes, :usuario_operador, :producto, :cantidad, :uso, :pitch, :modelo_nombre, :modelo, :x_mm, :y_mm, :resol_x, :resol_y, :pixel_modulo, :marca_control, :referencia_control35, :marca_fuente, :modelo_fuente35, :obscolombia)";
+            $sql = "INSERT INTO tracking (date, solicitante, codigo_generado, contador_colombia, fecha_oc, origen, origen_cliente, ano_mes, usuario, producto, cantidad, uso, pitch, modelo_nombre, category, x_mm, y_mm, resol_x, resol_y, pixel_modulo, marca_control, ref_control, marca_fuente, modelo_fuente, observaciones_colombia, pop, almacen)
+                    VALUES (:fecha_ingreso, :solicitante, :codigo_generado, :contador_colombia, :fecha_oc, :origen, :origen_cliente, :ano_mes, :usuario_operador, :producto, :cantidad, :uso, :pitch, :modelo_nombre, :modelo, :x_mm, :y_mm, :resol_x, :resol_y, :pixel_modulo, :marca_control, :referencia_control35, :marca_fuente, :modelo_fuente35, :obscolombia, :pop_numero, :almacen_grupo)";
             
             $stmt = $pdo->prepare($sql);
 
@@ -69,7 +69,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     ':referencia_control35' => $item['referencia_control35'] ?? null,
                     ':marca_fuente' => $item['marca_fuente'] ?? null,
                     ':modelo_fuente35' => $item['modelo_fuente35'] ?? null,
-                    ':obscolombia' => $item['justificacion'] ?? null
+                    ':obscolombia' => $item['justificacion'] ?? null,
+                    ':pop_numero' => $item['pop_numero'] ?? null,
+                    ':almacen_grupo' => $item['almacen_grupo'] ?? null
                 ]);
                 
             }

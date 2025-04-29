@@ -1,13 +1,13 @@
 <?php 
 
-include('../../../../app/config/config.php');
-include('../../../../app/config/conexion.php');
+include('../../../../../app/config/config.php');
+include('../../../../../app/config/conexion.php');
 
-include('../../../../layout/admin/sesion.php');
-include('../../../../layout/admin/datos_sesion_user.php');
+include('../../../../../layout/admin/sesion.php');
+include('../../../../../layout/admin/datos_sesion_user.php');
 
 
-include('../../../../layout/admin/parte1.php');
+include('../../../../../layout/admin/parte1.php');
 
 ?>
 
@@ -16,34 +16,16 @@ include('../../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col">
-                <h1 class="m-0">Solicitudes Mercancía a China (SMC)</h1>
+                <h1 class="m-0">Solicitudes Recibidas TLCH / SMCOL</h1>
                     <div class="card card-blue">
                         <div class="card-header">
-                            ACTIVAS
+                            RECIBIDOS
                         </div>
-                        <button id="processSelected" class="btn btn-warning">Procesar Seleccionados</button>
 
                         <hr>
 
-                        <div class="container mb-2">
-                            <div class="row align-items-center">
-                                <!-- Botón Izquierda -->
-                                <div class="col text-start">
-                                    <a href="create/create.php" class="btn btn-warning">
-                                        <i class="bi bi-plus-square"></i> Crear nueva solicitud
-                                    </a>
-                                </div>
-
-                                <!-- Botón Centro -->
-                                <div class="col text-center">
-                                    <a href="historico" class="btn btn-secondary">
-                                        <i class="bi bi-clock-history"></i> Histórico
-                                    </a>
-                                </div>
-
-                                <!-- Espacio Derecha (opcional, para mantener centrado) -->
-                                <div class="col"></div>
-                            </div>
+                        <div class="card-tools ml-4">
+                            <a href=".." class="btn btn-warning"><i class="bi bi-plus-square"></i> Regresar</a>
                         </div>
 
                         <div class="card-body">
@@ -54,11 +36,10 @@ include('../../../../layout/admin/parte1.php');
                                             <th>ID</th>
                                             <th>Fecha</th>
                                             <th>Id Solicitud</th>
-                                            <th>Tipo Solicitud</th>
+                                            <th>Origen</th>
                                             <th>Fecha Oc</th>
                                             <th>Producto</th>
-                                            <th>Modelo</th>
-                                            <th>Procesar</th>
+                                            <th>Procesado</th>
                                             <th>Fecha Procesado</th>
                                             <th>Observación Colombia</th>
                                             <th>Inicio de Fabricación</th>
@@ -73,7 +54,7 @@ include('../../../../layout/admin/parte1.php');
                                     <tbody>
                                         <?php
                                         $contador = 0;
-                                        $query = $pdo->prepare('SELECT * FROM tracking WHERE recibido = "1"');
+                                        $query = $pdo->prepare('SELECT * FROM tracking WHERE recibido = "2"');
 
                                         $query->execute();
                                         $trackings = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -84,7 +65,6 @@ include('../../../../layout/admin/parte1.php');
                                             $type = $tracking['origen'];
                                             $category = $tracking['fecha_oc'];
                                             $quantitly = $tracking['producto'];
-                                            $modelo = $tracking['modelo_nombre'];
                                             $status = $tracking['status'];
                                             $date_status = $tracking['date_status'];
                                             $obscolombia = $tracking['observaciones_colombia'];
@@ -116,7 +96,6 @@ include('../../../../layout/admin/parte1.php');
                                                 <td><?php echo $type; ?></td>
                                                 <td><?php echo $category; ?></td>
                                                 <td><?php echo $quantitly; ?></td>
-                                                <td><?php echo $modelo; ?></td>
                                                 <td>
                                                     <input type="checkbox" class="tracking-checkbox" name="tracking_ids[]" value="<?php echo $id; ?>"
                                                     <?php echo ($status == 2) ? 'checked disabled' : ''; ?>>
@@ -148,7 +127,6 @@ include('../../../../layout/admin/parte1.php');
                                                                 Editar <i class="fas fa-pen"></i>
                                                             </a>
                                                         <?php endif; ?>
-                                                        <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm">Borrar <i class="fas fa-trash"></i></a>
                                                     </center>
                                                 </td>
                                             </tr>
@@ -216,7 +194,7 @@ include('../../../../layout/admin/parte1.php');
 </div>
 
 
-<?php include('../../../../layout/admin/parte2.php');?>
+<?php include('../../../../../layout/admin/parte2.php');?>
 
 <script>
     $(function () {

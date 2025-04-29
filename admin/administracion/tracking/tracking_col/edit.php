@@ -138,7 +138,7 @@ foreach ($trackings as $tracking){
                                                                     $solicitantes = $query_solicitante->fetchAll(PDO::FETCH_ASSOC);
 
                                                                 foreach($solicitantes as $solu) {
-                                                                    $selected1 = ($solu['id_uso'] == $uso) ? 'selected' : '';
+                                                                    $selected1 = ($solu['producto_uso'] == $uso) ? 'selected' : '';
                                                                     echo '<option value="' . $solu['id_uso'] . '" ' . $selected1 . '>' . $solu['producto_uso'] . '</option>';
                                                                 }
                                                                 ?>
@@ -157,7 +157,7 @@ foreach ($trackings as $tracking){
 
                                                                 foreach($modelos as $modu) {
                                                                     $selected2 = ($modu['modelo_modulo'] == $category) ? 'selected' : '';
-                                                                    echo '<option value="' . $modu['modelo_modulo'] . '" ' . $selected2 . '>' . $modu['modelo_modulo'] . '</option>';
+                                                                    echo '<option value="' . $modu['id'] . '" ' . $selected2 . '>' . $modu['modelo_modulo'] . '</option>';
                                                                 }
                                                                 ?>
                                                             </select>

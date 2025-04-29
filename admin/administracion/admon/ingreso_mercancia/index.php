@@ -43,6 +43,9 @@ include('../../../../layout/admin/parte1.php');
                                             <th># Movimiento</th>
                                             <th>Origen</th>
                                             <th>Almacén Destino</th>
+                                            <th>Producto</th>
+                                            <th>Modelo</th>
+                                            <th>Cantidad</th>
                                             <th>Usuario</th>
                                             <th><center>Acciones</center></th>
                                         </tr>
@@ -52,29 +55,48 @@ include('../../../../layout/admin/parte1.php');
 $contador = 1;
 
 $query = $pdo->prepare('
-    SELECT 
-        mvd.almacen_destino1,
-        mvd.consecu_entra,
-        MAX(mvd.id_entrada) AS id_entrada, -- Se obtiene el ID de entrada más reciente del grupo
-        COUNT(*) AS total_registros,
-        GROUP_CONCAT(mvd.id_movimiento_admon ORDER BY mvd.id_movimiento_admon ASC) AS ids_movimientos,
-        MAX(mvd.fecha) AS fecha,
-        MAX(mvd.id_usuario) AS id_usuario,
-        MAX(almacen_origen.nombre_almacen) AS almacen_origen, 
-        MAX(almacen_destino.siglas) AS nombre_almacen_destino
-    FROM movimiento_admon AS mvd
-    LEFT JOIN t_asignar_todos_almacenes AS almacen_origen 
-        ON mvd.almacen_origen1 = almacen_origen.id_asignacion
-    LEFT JOIN almacenes_grupo AS almacen_destino 
-        ON mvd.almacen_destino1 = almacen_destino.id
-    LEFT JOIN t_bodegas AS bg 
-        ON mvd.bodega = bg.id
-    LEFT JOIN t_sub_almacen AS sua 
-        ON mvd.sub_almacen = sua.id
-    GROUP BY mvd.almacen_destino1, mvd.consecu_entra
-    ORDER BY mvd.almacen_destino1, mvd.consecu_entra;
+SELECT 
+    p.tipo_producto AS nombre_producto,
+    mvd.almacen_destino1,
+    mvd.consecu_entra,
+    mvd.id_entrada AS id_entrada,
+    COUNT(*) AS total_registros,
+    GROUP_CONCAT(mvd.id_movimiento_admon ORDER BY mvd.id_movimiento_admon ASC) AS ids_movimientos,
+    mvd.fecha AS fecha,
+    mvd.id_usuario AS id_usuario,
+    mvd.tipo_producto AS tipo_producto, -- <--- Agregado
+    mvd.referencia_2 AS referencia_2,    -- <--- Agregado
+    mvd.cantidad_entrada AS cantidad_entrada, -- <--- Agregado
+    almacen_origen.nombre_almacen AS almacen_origen, 
+    almacen_destino.siglas AS nombre_almacen_destino,
+    CASE
+        WHEN mvd.tipo_producto = 1 THEN tmc.serie
+        WHEN mvd.tipo_producto = 2 THEN caraccontrol.referencia
+        WHEN mvd.tipo_producto = 3 THEN caracfuentes.modelo_fuente
+        ELSE NULL
+    END AS nombre_referencia_2
+FROM movimiento_admon AS mvd
+INNER JOIN
+    t_productos AS p ON mvd.tipo_producto = p.id_producto
+LEFT JOIN
+    t_asignar_todos_almacenes AS almacen_origen ON mvd.almacen_origen1 = almacen_origen.id_asignacion
+LEFT JOIN
+    almacenes_grupo AS almacen_destino ON mvd.almacen_destino1 = almacen_destino.id
+LEFT JOIN
+    t_bodegas AS bg ON mvd.bodega = bg.id
+LEFT JOIN
+    t_sub_almacen AS sua ON mvd.sub_almacen = sua.id
+LEFT JOIN
+    producto_modulo_creado AS tmc ON mvd.referencia_2 = tmc.id AND mvd.tipo_producto = 1
+LEFT JOIN
+    referencias_control AS caraccontrol ON mvd.referencia_2 = caraccontrol.id_referencia AND mvd.tipo_producto = 2
+LEFT JOIN
+    referencias_fuente AS caracfuentes ON mvd.referencia_2 = caracfuentes.id_referencias_fuentes AND mvd.tipo_producto = 3
+GROUP BY
+    mvd.almacen_destino1, mvd.consecu_entra
+ORDER BY
+    mvd.almacen_destino1, mvd.consecu_entra DESC;
 ');
-
 
 $query->execute();
 $movidiarios = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -86,7 +108,9 @@ foreach ($movidiarios as $movidiario) {
     $almacen_origen1 = $movidiario['almacen_origen'];
     $almacen_destino1 = $movidiario['nombre_almacen_destino'];
     $id_usuario = $movidiario['id_usuario'];
-
+    $producto = $movidiario['nombre_producto'];
+    $modelo = $movidiario['nombre_referencia_2'];
+    $cantidad = $movidiario['cantidad_entrada'];
     // Si solo necesitas un ID para los enlaces (ejemplo: el primero)
     $id_unico = $ids[0];
 
@@ -96,6 +120,9 @@ foreach ($movidiarios as $movidiario) {
     echo "<td>" . htmlspecialchars($movimiento) . "</td>";
     echo "<td>" . htmlspecialchars($almacen_origen1) . "</td>";
     echo "<td>" . htmlspecialchars($almacen_destino1) . "</td>";
+    echo "<td>" . htmlspecialchars($producto) . "</td>";
+    echo "<td>" . htmlspecialchars($modelo) . "</td>";
+    echo "<td>" . htmlspecialchars($cantidad) . "</td>";
     //echo "<td>" . implode(', ', $ids) . "</td>"; // Muestra todos los IDs en una celda
     echo "<td>" . htmlspecialchars($id_usuario) . "</td>";
     echo "<td>

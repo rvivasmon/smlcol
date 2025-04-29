@@ -15,7 +15,7 @@ include('../../../../../layout/admin/parte1.php');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Solicitud Mercancia a China</h1>
+                    <h1 class="m-0">Solicitud Mercancia a China (SMC)</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
@@ -72,21 +72,15 @@ include('../../../../../layout/admin/parte1.php');
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="origen">OC</label>
-                                                    <input type="text" id="origen" name="origen" class="form-control" placeholder="OC" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="origen_cliente">CLIENTE</label>
-                                                    <select id="origen_cliente" name="origen_cliente" class="form-control" required>
-                                                        <option value="">Seleccione un Cliente</option>
+                                                    <label for="origen">TIPO DE SOLICITUD</label>
+                                                    <select id="origen" name="origen" class="form-control" required>
+                                                        <option value="">Seleccione un Tipo</option>
                                                             <?php
-                                                            $query_solicitante = $pdo->prepare('SELECT id, nombre_comercial FROM clientes WHERE nombre_comercial IS NOT NULL AND nombre_comercial != "" ORDER BY nombre_comercial ASC');
+                                                            $query_solicitante = $pdo->prepare('SELECT id, ts FROM tipo_solicitud WHERE ts IS NOT NULL AND ts != "" ORDER BY ts ASC');
                                                             $query_solicitante->execute();
                                                         $solicitantes = $query_solicitante->fetchAll(PDO::FETCH_ASSOC);
                                                         foreach($solicitantes as $solicitud) {
-                                                            echo '<option value="' . $solicitud['id'] . '">' . $solicitud['nombre_comercial'] . '</option>';
+                                                            echo '<option value="' . $solicitud['ts'] . '">' . $solicitud['ts'] . '</option>';
                                                         }
                                                         ?>
                                                     </select>
@@ -128,9 +122,33 @@ include('../../../../../layout/admin/parte1.php');
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label for="entrada_md" class="d-block mb-0">Cantidad</label>
-                                                        <input type="number" id="entrada_md" name="entrada_md[]" class="form-control">
+                                                        <input type="number" id="entrada_md" name="entrada_md[]" min="1" class="form-control">
                                                     </div>
                                                 </div>
+                                                <!-- Campo POP -->
+                                                <div class="col-md-2">
+                                                    <div class="form-group" id="campo_pop" style="display: none;">
+                                                        <label for="pop_numero" class="d-block mb-0">POP #</label>
+                                                        <input type="text" id="pop_numero" name="pop_numero[]" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <!-- Select de almacenes_grupo -->
+                                                <div class="col-md-3">
+                                                    <div class="form-group" id="campo_reposicion" style="display: none;">
+                                                        <label for="almacen_grupo" class="d-block mb-0">Grupo de Almacén</label>
+                                                        <select id="almacen_grupo" name="almacen_grupo[]" class="form-control">
+                                                            <option value=""></option>
+                                                            <?php
+                                                            $query = $pdo->prepare("SELECT id, almacenes FROM almacenes_grupo ORDER BY almacenes ASC");
+                                                            $query->execute();
+                                                            $grupos = $query->fetchAll(PDO::FETCH_ASSOC);
+                                                            foreach ($grupos as $grupo) {
+                                                                echo '<option value="' . $grupo['id'] . '">' . $grupo['almacenes'] . '</option>';
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                </div>                                                
                                             </div>
 
                                             <!-- MODULO -->
@@ -357,14 +375,14 @@ include('../../../../../layout/admin/parte1.php');
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Categoría</th>
+                                                    <th>Producto</th>
                                                     <th>Marca - Modelo / Referencia - Pitch</th>                                                  
-                                                    <th>Marca</th>
+                                                    <th>Marca Controladora</th>
                                                     <th>Referencia</th>
-                                                    <th>Marca</th>
-                                                    <th>Modelo</th>
+                                                    <th>Marca Fuente</th>
+                                                    <th>Modelo Fuente</th>
                                                     <th>Uso</th>
-                                                    <th>Modelo</th>
+                                                    <th>Modelo Módulo</th>
                                                     <th>Pitch</th>
                                                     <th>Tamaño X</th>
                                                     <th>Tamaño Y</th>
@@ -373,6 +391,8 @@ include('../../../../../layout/admin/parte1.php');
                                                     <th>Pixel TOTAL</th>
                                                     <th>Cantidad</th>
                                                     <th>Justificaión</th>
+                                                    <th>POP</th>
+                                                    <th>Almacén</th>
                                                     <th><center>Acciones</center></th>
                                                 </tr>
                                             </thead>
@@ -485,10 +505,10 @@ include('../../../../../layout/admin/parte1.php');
         // Función para limpiar todos los campos del formulario, excluyendo el campo 'producto'
         function limpiarCampos() {
             // Limpiar todos los inputs de texto, select y textarea, excepto el campo 'producto'
-            $('input[type="text"]').not('#idUsuario, #items, #contador, #ano_mes, #codigo_generado, #fecha_oc, #origen').val('');  // Limpiar campos de texto excepto 'producto'
+            $('input[type="text"]').not('#idUsuario, #items, #contador, #ano_mes, #codigo_generado, #fecha_oc, #pop_numero').val('');  // Limpiar campos de texto excepto 'producto'
             $('input[type="number"]').val(''); // Limpiar campos numéricos
             $('input[type="file"]').val(''); // Limpiar campo de archivo
-            $('select').not('#solicitante, #origen_cliente, #producto').val(''); // Limpiar selects excepto 'producto'
+            $('select').not('#solicitante, #origen, #producto, #almacen_grupo').val(''); // Limpiar selects excepto 'producto'
             $('textarea').val(''); // Limpiar textareas
 
             // También puedes vaciar los campos ocultos, si es necesario
@@ -729,6 +749,7 @@ include('../../../../../layout/admin/parte1.php');
             const referenciaControl35 = document.querySelector('select[name="referencia_control35[]"] option:checked')?.text || "";
             const marcaFuente = document.querySelector('select[name="marca_fuente[]"] option:checked')?.text || "";
             const modeloFuente35 = document.querySelector('select[name="modelo_fuente35[]"] option:checked')?.text || "";
+            const almacenGrupo = document.querySelector('select[name="almacen_grupo[]"] option:checked')?.text || "";
             const justificacion = document.querySelector('textarea[name="justificacion[]"]').value || "";
 
             // Obtener id de los inputs y selects, asegurando que si están vacíos, sean ""
@@ -745,6 +766,7 @@ include('../../../../../layout/admin/parte1.php');
             const referenciaControl35Id = document.querySelector('select[name="referencia_control35[]"] option:checked')?.value || "";
             const marcaFuenteId = document.querySelector('select[name="marca_fuente[]"] option:checked')?.value || "";
             const modeloFuente35Id = document.querySelector('select[name="modelo_fuente35[]"] option:checked')?.value || "";
+            const popNumero = document.querySelector('input[name="pop_numero[]"]')?.value || "";
 
             // Determinar el valor de "Modelo/Nombre"
             let modeloNombre = "N/A"; // Valor por defecto
@@ -775,6 +797,8 @@ include('../../../../../layout/admin/parte1.php');
                 <td>${pixel_moduloId}</td>
                 <td>${cantidadEntradaMd}</td>
                 <td>${justificacion}</td>
+                <td>${popNumero}</td>
+                <td>${almacenGrupo}</td>
                 <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>
                 </td>
             `;
@@ -784,7 +808,7 @@ include('../../../../../layout/admin/parte1.php');
         }
 
         function limpiarCampos() {
-    document.querySelectorAll('input:not(#idUsuario, #items, #contador, #ano_mes, #codigo_generado, #fecha_oc, #origen, #fecha_ingreso), select:not(#solicitante, #origen_cliente), textarea:not(#textarea_excluido)').forEach(el => el.value = '');
+    document.querySelectorAll('input:not(#idUsuario, #items, #contador, #ano_mes, #codigo_generado, #fecha_oc, #fecha_ingreso, #pop_numero), select:not(#solicitante, #origen, #almacen_grupo), textarea:not(#textarea_excluido)').forEach(el => el.value = '');
 }
 
 
@@ -832,6 +856,8 @@ include('../../../../../layout/admin/parte1.php');
             pixel_modulo: cells[14].innerText,
             cantidad_entrada_md: cells[15].innerText,
             justificacion: cells[16].innerText,
+            pop_numero: cells[17].innerText,
+            almacen_grupo: cells[18].innerText,
         };
         itemData.push(rowData);
     });
@@ -841,3 +867,26 @@ include('../../../../../layout/admin/parte1.php');
 
     });
     </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const origenSelect = document.getElementById('origen');
+  const campoPOP = document.getElementById('campo_pop');
+  const campoReposicion = document.getElementById('campo_reposicion');
+
+  origenSelect.addEventListener('change', function () {
+    const valor = this.value;
+
+    if (valor === 'REQUISICIÓN POP') {
+      campoPOP.style.display = 'block';
+      campoReposicion.style.display = 'none';
+    } else if (valor === 'REPOSICIÓN') {
+      campoPOP.style.display = 'none';
+      campoReposicion.style.display = 'block';
+    } else {
+      campoPOP.style.display = 'none';
+      campoReposicion.style.display = 'none';
+    }
+  });
+});
+</script>

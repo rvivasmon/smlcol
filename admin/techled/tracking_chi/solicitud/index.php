@@ -1,13 +1,13 @@
 <?php 
 
-include('../../../app/config/config.php');
-include('../../../app/config/conexion.php');
+include('../../../../app/config/config.php');
+include('../../../../app/config/conexion.php');
 
-include('../../../layout/admin/sesion.php');
-include('../../../layout/admin/datos_sesion_user.php');
+include('../../../../layout/admin/sesion.php');
+include('../../../../layout/admin/datos_sesion_user.php');
 
 
-include('../../../layout/admin/parte1.php');
+include('../../../../layout/admin/parte1.php');
 
 
 ?>
@@ -21,7 +21,7 @@ include('../../../layout/admin/parte1.php');
                 <h1 class="m-0">Solicitudes Mercancía (SMC)</h1>
                       <div class="card card-blue">
                         <div class="card-header">
-                          ENVIADAS
+                          NUEVAS
                         </div>
 
                         <button id="edit-selected" class="btn btn-warning btn-sm" disabled>Enviar Seleccionados</button>
@@ -32,10 +32,24 @@ include('../../../layout/admin/parte1.php');
                             <!-- Contenedor principal para los botones -->
                             <div class="card-tools d-flex justify-content-center w-100">
 
+                                <!-- Botón existente para regresar -->
+                                <div class="form-group mx-2">
+                                    <a href="../../../" class="btn btn-secondary">
+                                        <i class="bi bi-plus-square"></i> REGRESAR
+                                    </a>
+                                </div>
+
+                                <!-- Primer botón adicional -->
+                                <div class="form-group mx-2">
+                                    <a href="../terminar" class="btn btn-success">
+                                        <i class="bi bi-plus-square"></i> POR TERMINAR
+                                    </a>
+                                </div>
+
                                 <!-- Segundo botón adicional -->
                                 <div class="form-group mx-2">
-                                    <a href="../.." class="btn btn-success">
-                                        <i class="bi bi-plus-square"></i> REGRESAR
+                                    <a href="../enviar" class="btn btn-danger">
+                                        <i class="bi bi-plus-square"></i> POR ENVIAR
                                     </a>
                                 </div>
 
@@ -51,20 +65,19 @@ include('../../../layout/admin/parte1.php');
                                   <th>Fecha</th>
                                   <th>ID POP</th>
                                   <th>Tipo</th>
-                                  <th>Producto</th>
                                   <th>Cantidad</th>
                                   <th>Observación</th>
-                                  <th>Por fabricar</th>
-                                  <th>Por facturar</th>
-                                  <th>Por enviar</th>
+                                  <th>En fabricación</th>
+                                  <th>Terminado</th>
+                                  <th>Enviado</th>
                                   <th><center>Acciones</center></th>
-                                  <th><!--input type="checkbox" id="select-all"-->Envío</th> <!-- Checkbox para seleccionar todos -->
+                                  <th><input type="checkbox" id="select-all"> Envío</th> <!-- Checkbox para seleccionar todos -->
                                 </tr>
                               </thead>
                               <tbody>
                                 <?php
                                 $contador = 0;
-                                $query = $pdo->prepare('SELECT * FROM tracking WHERE enviar = "1" ORDER BY id DESC');
+                                $query = $pdo->prepare('SELECT * FROM tracking WHERE status = "2" AND inicio_produccion IS NULL');
 
                                 $query->execute();
                                 $trackings = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -73,7 +86,6 @@ include('../../../layout/admin/parte1.php');
                                   $date = $tracking['date_status'];
                                   $id_solicitud = $tracking['codigo_generado'];
                                   $type = $tracking['producto'];
-                                  $modelo_nombre = $tracking['modelo_nombre'];
                                   $category = $tracking['category'];
                                   $quantitly = $tracking['cantidad'];
                                   $obscolombia = $tracking['observaciones_colombia'];
@@ -99,14 +111,13 @@ include('../../../layout/admin/parte1.php');
                                   $disable_enviar = ($finished == 1 && intval($enviar) == 0) ? '' : 'disabled';
 
                                   // Habilitar y deshabilitar Checkbox
-                                  $disable_checkbox = ($finished == 1 && intval($enviar) == 0) ? '' : 'disabled';
+                                  $disable_checkbox = ($en_ejecucion == 1 && intval($enviar) == 0) ? '' : 'disabled';
                                 ?>
                                   <tr>
                                       <td><a href="<?php echo $URL; ?>admin/techled/tracking_chi/show.php?id=<?php echo $id; ?>"><?php echo $contador; ?></a></td>
                                       <td><?php echo $date; ?></td>
                                       <td><?php echo $id_solicitud; ?></td>
                                       <td><?php echo $type; ?></td>
-                                      <td><?php echo $modelo_nombre; ?></td>
                                       <td><?php echo $quantitly; ?></td>
                                       <td><?php echo $obscolombia; ?></td>
                                       <td><?php echo $en_ejecucion_text; ?></td> <!-- Mostrar el texto en_ejecucion -->
@@ -115,8 +126,6 @@ include('../../../layout/admin/parte1.php');
                                       <td>
                                         <center>
                                           <button onclick="confirmarProduccion(<?php echo $id; ?>)" class="btn btn-info btn-sm" <?php echo $disable_procesar; ?>>Procesar <i class="fas fa-eye"></i></button>
-                                          <button onclick="terminarProduccion(<?php echo $id; ?>, <?php echo $en_ejecucion; ?>)" class="btn btn-success btn-sm" <?php echo $disable_terminar; ?>>Terminar <i class="fas fa-pen"></i></button>
-                                          <a href="envio.php?id=<?php echo $id; ?>" class="btn btn-danger btn-sm" <?php echo $disable_enviar; ?>>Enviar <i class="fas fa-ship"></i></a>
                                         </center>
                                       </td>
                                       <td>
@@ -175,10 +184,6 @@ include('../../../layout/admin/parte1.php');
             <label for="obschina">Observations from China</label>
             <textarea class="form-control" id="obschina" name="obschina" required></textarea>
           </div>
-          <div class="form-group">
-            <label for="doc_envio">Documento de Envío</label>
-            <input type="text" class="form-control" id="doc_envio" name="doc_envio" required>
-          </div>
           <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>
       </div>
@@ -187,7 +192,7 @@ include('../../../layout/admin/parte1.php');
 </div>
 
 
-<?php include('../../../layout/admin/parte2.php');?>
+<?php include('../../../../layout/admin/parte2.php');?>
 
 <script>
     $(function () {
@@ -252,7 +257,7 @@ include('../../../layout/admin/parte1.php');
     function confirmarProduccion(id) {
         if (confirm("Desea iniciar la fabricación del producto?")) {
             // Si el usuario selecciona "SÍ"
-            window.location.href = "procesar_produccion.php?id=" + id;
+            window.location.href = "controller_solicitud.php?id=" + id;
         }
         // Si el usuario selecciona "NO", no se hace nada y permanece en la página
     }
