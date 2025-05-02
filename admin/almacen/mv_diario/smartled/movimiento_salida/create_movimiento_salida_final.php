@@ -443,15 +443,12 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                 </div>
                             </div>
 
-                            <!-- Modal de Selección de Técnico -->
-                            <div id="modalSeleccionTecnico" class="modal fade" tabindex="-1">y
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Seleccione un Técnico</h5>
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        </div>
-                                        <div class="modal-body">
+<!-- Modal Técnico -->
+<div class="modal fade" id="modalTecnico" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Seleccionar Técnico</h5></div>
+      <div class="modal-body">
                                             <select id="selectTecnico" class="form-control">
                                                 <option value="">Seleccione un técnico</option>
                                                 <?php 
@@ -462,15 +459,15 @@ $contadorFormateado = str_pad($nuevoContador, 4, '0', STR_PAD_LEFT);
                                                     }
                                                 ?>
                                             </select>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button id="btnConfirmarTecnico" class="btn btn-primary">Guardar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                            </div>
+      <div class="modal-footer">
+        <button type="button" id="confirmarTecnico" class="btn btn-primary">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-                            <!-- Modal de Selección de Técnico -->
+                            <!-- Modal de Selección de Técnico Material separado -->
                             <div id="modalSeleccionTecnicoApartado" class="modal fade" tabindex="-1">y
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -981,11 +978,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-
 </script>
 
 
-<!-- PDF y actualización de registros -->
+<!-- PDF y actualización de registros
 <script>
 let registrosSeleccionados = [];
 let idsActualizar = [];
@@ -1170,10 +1166,10 @@ document.getElementById('btnConfirmarTecnico').addEventListener('click', functio
     manejarGeneracionPDF();
 });
 
-</script>
+</script>-->
 
 
-<!-- GENERAR EL PDF DE MATERIAL SEPARADO DEL ALMACEN -->
+<!-- GENERAR EL PDF DE MATERIAL SEPARADO DEL ALMACEN
 <script>
     document.getElementById('btnValidarMaterial').addEventListener('click', function () {
         fetch('validar_registros.php', {
@@ -1217,6 +1213,7 @@ data.registros.forEach(registro => {
 });
 
 contenidoTabla += `</tbody></table>`;
+
 document.getElementById('contenidoTablaMaterial').innerHTML = contenidoTabla;
 
         } else {
@@ -1345,98 +1342,117 @@ function actualizarRegistros(ids) {
         })
         .catch(error => console.error('Error:', error));
 }
-</script>
+</script>-->
 
-<!-- GENERAR PDF DE SALIDA DE ARTICULOS -->
+<!-- GENERAR PDF DE SALIDA DE ARTICULOS
 <script>
-    document.getElementById('generarPdf').addEventListener('click', function () {
+document.getElementById('generarPdf').addEventListener('click', function () {
+    const checkbox = document.getElementById('articuloSeleccionado');
+    const isChecked = checkbox.checked;
 
-        // Obtener el valor del checkbox (asegúrate de que el id de tu checkbox sea correcto)
-        const checkbox = document.getElementById('articuloSeleccionado'); // Cambia 'checkbox_id' por el id de tu checkbox
-        const isChecked = checkbox.checked ? "1" : "0"; // Si está marcado, es "1", si no, es "0"
+    if (isChecked) {
+        // SOLO guardar en BD, NO generar PDF
+        guardarDatosEnBD(null);
+        alert("Registro guardado. No se genera PDF porque el checkbox está marcado.");
+        return;
+    }
 
-        // Validar si el checkbox está marcado (si es "1", no generamos el PDF)
-        if (isChecked === "1") {
-            alert("No se puede generar el PDF porque el checkbox está marcado.");
-            return; // Detener el proceso de generación del PDF
-        }
+    // Si no está marcado, abrir modal para seleccionar técnico
+    $('#modalTecnico').modal('show');
+});
 
-        // Crea una nueva instancia de jsPDF
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({
-            orientation: 'portrait', // Establece la orientación horizontal
-            unit: 'mm', // Unidad de medida
-            format: [210, 297] // Formato de la hoja
-        });
+// Al confirmar técnico desde el modal
+document.getElementById('confirmarTecnico').addEventListener('click', function () {
+    const tecnicoSelect = document.getElementById('selectTecnico');
+    const tecnicoNombre = tecnicoSelect.options[tecnicoSelect.selectedIndex].text;
+    const tecnicoID = tecnicoSelect.value;
 
-        // Datos adicionales
-        const fecha = new Date().toLocaleDateString();
-        const contadorSalida = document.getElementById('contador_sale').value || "N/A";
-        const almacenDestino = document.getElementById('almacen_entrada_md').options[document.getElementById('almacen_entrada_md').selectedIndex].text || "N/A";
-        const asignarA = document.getElementById('op_destino').value || "N/A";
+    if (!tecnicoID) {
+        alert("Debe seleccionar un técnico.");
+        return;
+    }
 
-        // Encabezado de la empresa
-        const pageWidth = 210; // Ancho total de la hoja en mm
+    // Cerrar modal
+    $('#modalTecnico').modal('hide');
 
-        doc.setFontSize(14);
-        doc.text('SMARTLED COLOMBIA', pageWidth / 2, 10, { align: 'center' });
+    // Guardar datos con técnico
+    guardarDatosEnBD(tecnicoID);
 
-        doc.setFontSize(12);
-        doc.text('Salida de Artículos del Almacén', pageWidth / 2, 18, { align: 'center' });
+    // Generar PDF con datos + técnico
+    generarPDF(tecnicoNombre);
+});
 
-        // Información adicional
-        doc.setFontSize(10);
-        doc.text(`Fecha: ${fecha}`, 10, 30);
-        doc.text(`# Documento: ${contadorSalida}`, 10, 35);
-        doc.text(`Almacén destino: ${almacenDestino}`, 10, 40);
-        doc.text(`Asignar a: ${asignarA}`, 10, 45);
+function guardarDatosEnBD(tecnicoID) {
+    const formData = new FormData();
+    formData.append('tecnico_recibe', tecnicoID || '');
+    formData.append('contador', document.getElementById('contador_sale').value);
+    formData.append('almacen_destino', document.getElementById('almacen_entrada_md').value);
+    formData.append('asignar_a', document.getElementById('op_destino').value);
+    // Agrega más campos si necesitas
 
-        // Crear los datos para la tabla
-        const tablaArticulos = document.getElementById('tabla-articulos').getElementsByTagName('tbody')[0];
-        const datosTabla = []; // Aquí almacenaremos las filas de datos
+    fetch('guardar_datos.php', {
+        method: 'POST',
+        body: formData
+    }).then(response => response.text())
+      .then(data => console.log('Guardado:', data))
+      .catch(error => console.error('Error al guardar:', error));
+}
 
-        for (let i = 0; i < tablaArticulos.rows.length; i++) {
-            const fila = tablaArticulos.rows[i];
+function generarPDF(tecnicoNombre) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: [210, 297] });
 
-            // Extraer valores de los inputs en las celdas
-            const cantidad = fila.querySelector('.cantidad1').value || "";
-            const producto = fila.querySelector('.producto1').value || "";
-            const referencia = fila.querySelector('.referencia2').value || "";
-            const observacion = fila.querySelector('.observacion2').value || "";
+    const fecha = new Date().toLocaleDateString();
+    const contadorSalida = document.getElementById('contador_sale').value || "N/A";
+    const almacenDestino = document.getElementById('almacen_entrada_md').options[document.getElementById('almacen_entrada_md').selectedIndex].text || "N/A";
+    const asignarA = document.getElementById('op_destino').value || "N/A";
 
-            // Agregar la fila de datos como un array
-            datosTabla.push([cantidad, producto, referencia, observacion]);
-        }
+    const pageWidth = 210;
+    doc.setFontSize(14);
+    doc.text('SMARTLED COLOMBIA', pageWidth / 2, 10, { align: 'center' });
+    doc.setFontSize(12);
+    doc.text('Salida de Artículos del Almacén', pageWidth / 2, 18, { align: 'center' });
 
-        // Usar autoTable para crear la tabla
-        doc.autoTable({
-            head: [['Cantidad', 'Producto', 'Referencia', 'Observación']], // Encabezados
-            body: datosTabla, // Datos de la tabla
-            startY: 55, // Posición inicial
-            styles: { fontSize: 8 }, // Tamaño de fuente
-            columnStyles: {
-            0: { cellWidth: 20 },  // Cantidad
-            1: { cellWidth: 50 },  // Producto
-            2: { cellWidth: 50 },  // Referencia
-            3: { cellWidth: 60 }   // Observación
+    doc.setFontSize(10);
+    doc.text(`Fecha: ${fecha}`, 10, 30);
+    doc.text(`# Documento: ${contadorSalida}`, 10, 35);
+    doc.text(`Almacén destino: ${almacenDestino}`, 10, 40);
+    doc.text(`Asignar a: ${asignarA}`, 10, 45);
+    doc.text(`Técnico que recibe: ${tecnicoNombre}`, 10, 50);
+
+    const tablaArticulos = document.getElementById('tabla-articulos').getElementsByTagName('tbody')[0];
+    const datosTabla = [];
+
+    for (let i = 0; i < tablaArticulos.rows.length; i++) {
+        const fila = tablaArticulos.rows[i];
+        const cantidad = fila.querySelector('.cantidad1').value || "";
+        const producto = fila.querySelector('.producto1').value || "";
+        const referencia = fila.querySelector('.referencia2').value || "";
+        const observacion = fila.querySelector('.observacion2').value || "";
+        datosTabla.push([cantidad, producto, referencia, observacion]);
+    }
+
+    doc.autoTable({
+        head: [['Cantidad', 'Producto', 'Referencia', 'Observación']],
+        body: datosTabla,
+        startY: 60,
+        styles: { fontSize: 8 },
+        columnStyles: {
+            0: { cellWidth: 20 },
+            1: { cellWidth: 50 },
+            2: { cellWidth: 50 },
+            3: { cellWidth: 60 }
         },
-            theme: 'grid', // Tema con bordes para la tabla
-            margin: { left: 10, right: 10 } // Márgenes laterales
-        });
-
-        // Agregar líneas para firma
-        const finalY = doc.lastAutoTable.finalY + 15; // Obtener la posición final de la tabla y dar espacio
-
-        // Dibujar líneas horizontales
-        doc.line(20, finalY, 70, finalY); // Línea para "Entrega"
-        doc.line(100, finalY, 150, finalY); // Línea para "Recibe"
-
-        // Agregar textos debajo de las líneas
-        doc.setFontSize(10);
-        doc.text("Entrega", 35, finalY + 5); // Texto debajo de la línea de "Entrega"
-        doc.text("Recibe", 115, finalY + 5); // Texto debajo de la línea de "Recibe"
-
-        // Guardar el PDF con un nombre específico
-        doc.save('reporte_articulos.pdf');
+        theme: 'grid',
+        margin: { left: 10, right: 10 }
     });
-</script>
+
+    const finalY = doc.lastAutoTable.finalY + 15;
+    doc.line(20, finalY, 70, finalY);
+    doc.line(100, finalY, 150, finalY);
+    doc.setFontSize(10);
+    doc.text("Entrega", 35, finalY + 5);
+    doc.text("Recibe", 115, finalY + 5);
+    doc.save(`salida_${contadorSalida}.pdf`);
+}
+</script>-->
